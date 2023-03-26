@@ -1,5 +1,6 @@
 package com.example.starter.verticle;
 
+import com.example.starter.config.Config;
 import com.example.starter.route.handler.PingHandler;
 import com.example.starter.route.handler.UserHandler;
 import io.vertx.core.AbstractVerticle;
@@ -14,15 +15,17 @@ import lombok.extern.java.Log;
 public class ApiVerticle extends AbstractVerticle {
 
   private final UserHandler userHandler;
+  private final Config.HttpConfig httpConfig;
 
   @Inject
-  public ApiVerticle(UserHandler userHandler) {
+  public ApiVerticle(UserHandler userHandler, Config.HttpConfig httpConfig) {
     this.userHandler = userHandler;
+    this.httpConfig = httpConfig;
   }
 
   @Override
   public void start(Promise<Void> startPromise) {
-    log.info("starting");
+    log.info("starting verticle");
 
     HttpServer server = vertx.createHttpServer();
     Router mainRouter = Router.router(vertx);
@@ -43,7 +46,7 @@ public class ApiVerticle extends AbstractVerticle {
     server
         .requestHandler(mainRouter)
         .listen(
-            8080,
+            httpConfig.port(),
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");

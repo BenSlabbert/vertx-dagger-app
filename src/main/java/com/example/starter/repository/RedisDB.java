@@ -1,5 +1,6 @@
 package com.example.starter.repository;
 
+import com.example.starter.config.Config;
 import com.example.starter.entity.User;
 import com.example.starter.route.handler.dto.LoginRequestDto;
 import com.example.starter.route.handler.dto.LoginResponseDto;
@@ -16,10 +17,10 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
-import io.vertx.redis.client.RedisOptions;
 import io.vertx.redis.client.impl.types.BulkType;
 import io.vertx.redis.client.impl.types.NumberType;
 import java.util.List;
+import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -36,10 +37,18 @@ public class RedisDB implements UserRepository {
   private final JWTAuth jwtAuth;
 
   @Inject
-  public RedisDB(Vertx vertx) {
-    Redis client = Redis.createClient(vertx, new RedisOptions());
+  public RedisDB(Vertx vertx, Config.RedisConfig redisConfig) {
+    Redis client = Redis.createClient(vertx, redisConfig.uri());
     redisAPI = RedisAPI.api(client);
-    redisAPI.ping(List.of("")).onSuccess(resp -> log.info("pinged redis"));
+
+    redisAPI
+        .ping(List.of(""))
+        .onFailure(
+            throwable -> {
+              log.log(Level.SEVERE, "failed to ping redis");
+              log.log(Level.SEVERE, throwable.toString());
+            })
+        .onSuccess(resp -> log.info("pinged redis"));
 
     jwtAuth =
         JWTAuth.create(

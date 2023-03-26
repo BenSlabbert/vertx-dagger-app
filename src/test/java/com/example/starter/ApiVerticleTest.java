@@ -2,6 +2,7 @@ package com.example.starter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.starter.config.Config;
 import com.example.starter.route.handler.UserHandler;
 import com.example.starter.verticle.ApiVerticle;
 import io.vertx.core.Vertx;
@@ -17,13 +18,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 @ExtendWith(VertxExtension.class)
-class TestApiVerticle {
+class ApiVerticleTest {
 
   @BeforeEach
-  @DisplayName("Deploy verticle")
   void prepare(Vertx vertx, VertxTestContext testContext) {
     UserHandler userHandler = Mockito.mock(UserHandler.class);
-    vertx.deployVerticle(new ApiVerticle(userHandler), testContext.succeedingThenComplete());
+
+    vertx.deployVerticle(
+        new ApiVerticle(userHandler, new Config.HttpConfig(8080)),
+        testContext.succeedingThenComplete());
   }
 
   @Test

@@ -3,5 +3,6 @@
 target/
 !target/lib
 !target/*.jar
-Dockerfile
-Dockerfile.native
+mvnw*
+.mvn/
+dev-config.json

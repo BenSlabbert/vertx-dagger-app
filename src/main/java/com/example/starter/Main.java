@@ -1,15 +1,24 @@
 package com.example.starter;
 
+import com.example.starter.config.Config;
 import com.example.starter.repository.UserRepositoryModule;
 import com.example.starter.service.UserServiceModule;
 import com.example.starter.verticle.ApiVerticle;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
+import io.netty.resolver.dns.DefaultDnsServerAddressStreamProvider;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.dns.AddressResolverOptions;
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
@@ -19,17 +28,23 @@ import lombok.extern.java.Log;
 @Module
 public class Main {
 
+  private static Config config = Config.defaults();
   private static Vertx vertx;
 
-  public static void main(String[] args) {
-    log.info("starting app");
+  public static void main(String[] args) throws IOException {
+    log.info("starting app: " + Arrays.toString(args));
+
+    parseArgs(args);
+
+    List<String> reachableNameServers = getReachableNameServers();
+    log.info("reachableNameServers: " + reachableNameServers);
 
     vertx =
         Vertx.vertx(
             new VertxOptions()
                 .setPreferNativeTransport(true)
                 .setAddressResolverOptions(
-                    new AddressResolverOptions().addServer("1.1.1.1").addServer("8.8.8.8")));
+                    new AddressResolverOptions().setServers(reachableNameServers)));
 
     Runtime.getRuntime().addShutdownHook(new Thread(getTerminationRunnable(vertx)));
 
@@ -37,10 +52,46 @@ public class Main {
 
     DeploymentOptions deploymentOptions = new DeploymentOptions();
     deploymentOptions.setInstances(2);
+
     vertx
         .deployVerticle(dagger::provideMainVerticle, deploymentOptions)
         .onFailure(throwable -> log.info("deployment id: " + throwable.toString()))
         .onSuccess(id -> log.info("deployment id: " + id));
+  }
+
+  private static List<String> getReachableNameServers() {
+    // not sure if this is still needed
+    // root cause might be in the custom jlink runtime
+    return DefaultDnsServerAddressStreamProvider.defaultAddressList().stream()
+        .filter(
+            ns -> {
+              try {
+                return ns.getAddress().isReachable(1000);
+              } catch (IOException e) {
+                // do nothing
+              }
+              return false;
+            })
+        .map(ns -> ns.getAddress().getHostAddress())
+        .toList();
+  }
+
+  private static void parseArgs(String[] args) throws IOException {
+    if (args.length == 0) return;
+
+    List<String> parsed =
+        Arrays.stream(args).filter(s -> !s.startsWith("-X") && !s.startsWith("-D")).toList();
+
+    if (parsed.isEmpty()) return;
+
+    if (parsed.size() != 1) {
+      log.info("invalid config, only provide 1 path to a config file");
+      System.exit(1);
+    }
+
+    log.info("parsing config from: " + parsed);
+    String s = Files.readString(Paths.get(parsed.get(0)));
+    config = Config.fromJson((JsonObject) Json.decodeValue(s));
   }
 
   public static Runnable getTerminationRunnable(Vertx vertx) {
@@ -82,5 +133,15 @@ public class Main {
   @Provides
   static Vertx providesVertx() {
     return vertx;
+  }
+
+  @Provides
+  static Config.HttpConfig providesHttpConfig() {
+    return config.httpConfig();
+  }
+
+  @Provides
+  static Config.RedisConfig providesRedisConfig() {
+    return config.redisConfig();
   }
 }

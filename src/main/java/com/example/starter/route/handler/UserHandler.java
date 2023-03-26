@@ -7,6 +7,7 @@ import com.example.starter.route.handler.dto.LoginRequestDto;
 import com.example.starter.route.handler.dto.RefreshRequestDto;
 import com.example.starter.route.handler.dto.RegisterRequestDto;
 import com.example.starter.service.UserService;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import javax.inject.Inject;
@@ -38,6 +39,7 @@ public class UserHandler {
             dto ->
                 ctx.response()
                     .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .setStatusCode(HttpResponseStatus.CREATED.code())
                     .end(dto.toJson().toBuffer())
                     .onFailure(ctx::fail));
   }
@@ -56,6 +58,7 @@ public class UserHandler {
             dto ->
                 ctx.response()
                     .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .setStatusCode(HttpResponseStatus.CREATED.code())
                     .end(dto.toJson().toBuffer())
                     .onFailure(ctx::fail));
   }
@@ -74,7 +77,8 @@ public class UserHandler {
             dto ->
                 ctx.response()
                     .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .end(dto.toJson().toBuffer())
+                    .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
+                    .end()
                     .onFailure(ctx::fail));
   }
 }
