@@ -1,0 +1,7 @@
+.idea/
+.git/
+target/
+!target/lib
+!target/*.jar
+Dockerfile
+Dockerfile.native
