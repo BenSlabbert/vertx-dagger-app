@@ -17,7 +17,19 @@ jobs:
       with:
         java-version: "17"
         distribution: "zulu"
-    - name: "make"
-      run: "make"
-    - name: "make native"
-      run: "make native"
+    - run: "make"
+    - run: "make native"
+    - run: "make dockerSave"
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: docker-save-jvm
+        path: iam-jvm_latest.tar.gz
+        retention-days: 30
+
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: docker-save-native
+        path: iam-native_latest.tar.gz
+        retention-days: 30

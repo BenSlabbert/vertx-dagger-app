@@ -6,3 +6,4 @@ target/
 mvnw*
 .mvn/
 dev-config.json
+*.tar.gz

@@ -20,6 +20,11 @@ native: wrapper
 	# test the native image
 	${M} install -DtestImageTag=native
 
+.PHONY: dockerSave
+dockerSave:
+	docker save iam:jvm-latest | gzip > iam-jvm_latest.tar.gz
+	docker save iam:native-latest | gzip > iam-native_latest.tar.gz
+
 .PHONY: clean
 clean:
 	${M} clean
