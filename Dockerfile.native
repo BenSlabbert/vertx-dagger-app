@@ -15,7 +15,7 @@ RUN curl -L http://more.musl.cc/10/x86_64-linux-musl/x86_64-linux-musl-native.tg
 
 COPY . .
 # /app as thats the current workdir
-RUN export PATH=$PATH:/app/x86_64-linux-musl-native/bin ; ./mvnw package -DskipTests=true -Pnative
+RUN export PATH=$PATH:/app/x86_64-linux-musl-native/bin ; ./mvnw package -DskipTests=true -Ddocker.skip=true -Pnative
 
 FROM scratch
 

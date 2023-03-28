@@ -4,9 +4,7 @@ M := "mvn"
 
 .PHONY: build
 build: clean fmt
-	${M} install -DskipTests
-	docker buildx build . -t vertx:jvm-latest
-	${M} install ${MVN_FLAGS}
+	${M} install
 
 .PHONY: fmt
 fmt:
@@ -19,6 +17,8 @@ wrapper:
 .PHONY: native
 native: wrapper
 	docker buildx build -f Dockerfile.native . -t vertx:native-latest
+	# test the native image
+	${M} install -DtestImageTag=native
 
 .PHONY: clean
 clean:

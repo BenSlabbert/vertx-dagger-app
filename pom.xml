@@ -15,6 +15,7 @@
 
     <!--or native-->
     <testImageTag>jvm</testImageTag>
+    <docker.skip>false</docker.skip>
 
     <!--deps-->
     <vertx.version>4.4.0</vertx.version>
@@ -282,9 +283,27 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>${exec-maven-plugin.version}</version>
-        <configuration>
-          <mainClass>${exec.mainClass}</mainClass>
-        </configuration>
+        <executions>
+          <execution>
+            <id>docker-build</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <skip>${docker.skip}</skip>
+              <executable>docker</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>buildx</argument>
+                <argument>build</argument>
+                <argument>.</argument>
+                <argument>-t</argument>
+                <argument>vertx:jvm-latest</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
