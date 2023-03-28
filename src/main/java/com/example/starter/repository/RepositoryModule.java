@@ -5,7 +5,7 @@ import dagger.Module;
 import javax.inject.Singleton;
 
 @Module
-public interface UserRepositoryModule {
+public interface RepositoryModule {
 
   @Binds
   @Singleton

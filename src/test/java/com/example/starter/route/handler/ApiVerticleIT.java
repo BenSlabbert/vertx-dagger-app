@@ -40,8 +40,9 @@ class ApiVerticleIT {
 
   @Container
   public GenericContainer app =
-      // todo test both the jvm and native images
-      new GenericContainer(DockerImageName.parse("vertx:jvm-latest"))
+      new GenericContainer(
+              DockerImageName.parse(
+                  "vertx:" + System.getProperty("testImageTag", "jvm") + "-latest"))
           .withExposedPorts(8080)
           .withNetwork(network)
           .withNetworkAliases("app")

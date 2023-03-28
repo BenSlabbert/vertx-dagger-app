@@ -1,8 +1,8 @@
 package com.example.starter;
 
 import com.example.starter.config.Config;
-import com.example.starter.repository.UserRepositoryModule;
-import com.example.starter.service.UserServiceModule;
+import com.example.starter.repository.RepositoryModule;
+import com.example.starter.service.ServiceModule;
 import com.example.starter.verticle.ApiVerticle;
 import dagger.Component;
 import dagger.Module;
@@ -125,7 +125,7 @@ public class Main {
   }
 
   @Singleton
-  @Component(modules = {UserRepositoryModule.class, UserServiceModule.class, Main.class})
+  @Component(modules = {RepositoryModule.class, ServiceModule.class, Main.class})
   interface Provider {
     ApiVerticle provideMainVerticle();
   }
