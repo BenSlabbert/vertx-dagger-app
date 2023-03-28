@@ -16,7 +16,7 @@ wrapper:
 
 .PHONY: native
 native: wrapper
-	docker buildx build -f Dockerfile.native . -t vertx:native-latest
+	docker buildx build -f Dockerfile.native . -t iam:native-latest
 	# test the native image
 	${M} install -DtestImageTag=native
 

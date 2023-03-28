@@ -10,7 +10,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
 
-    <finalName>vertx</finalName>
+    <finalName>iam</finalName>
     <exec.mainClass>com.example.starter.Main</exec.mainClass>
 
     <!--or native-->
@@ -291,7 +291,7 @@
                 <argument>build</argument>
                 <argument>.</argument>
                 <argument>-t</argument>
-                <argument>vertx:jvm-latest</argument>
+                <argument>iam:jvm-latest</argument>
               </arguments>
             </configuration>
           </execution>

@@ -21,8 +21,8 @@ FROM scratch
 
 WORKDIR /app
 
-COPY --from=builder /app/target/vertx .
-COPY --from=builder /app/target/vertx.build_artifacts.txt .
+COPY --from=builder /app/target/iam .
+COPY --from=builder /app/target/iam.build_artifacts.txt .
 
 EXPOSE 8080
-ENTRYPOINT ["./vertx"]
+ENTRYPOINT ["./iam"]

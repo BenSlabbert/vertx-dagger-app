@@ -41,8 +41,7 @@ class ApiVerticleIT {
   @Container
   public GenericContainer app =
       new GenericContainer(
-              DockerImageName.parse(
-                  "vertx:" + System.getProperty("testImageTag", "jvm") + "-latest"))
+              DockerImageName.parse("iam:" + System.getProperty("testImageTag", "jvm") + "-latest"))
           .withExposedPorts(8080)
           .withNetwork(network)
           .withNetworkAliases("app")

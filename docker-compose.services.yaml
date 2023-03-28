@@ -2,10 +2,10 @@
 version: "3"
 services:
   jvm:
-    image: "vertx:jvm-latest"
+    image: "iam:jvm-latest"
     ports:
     - "8080:8080"
   native:
-    image: "vertx:native-latest"
+    image: "iam:native-latest"
     ports:
     - "8080:8080"

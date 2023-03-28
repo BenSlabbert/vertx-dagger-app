@@ -2,7 +2,7 @@ FROM azul/zulu-openjdk-alpine:17-latest as builder
 
 WORKDIR /app
 
-COPY target/vertx.jar app.jar
+COPY target/iam.jar app.jar
 
 COPY target/lib lib
 
