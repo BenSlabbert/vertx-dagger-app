@@ -1,11 +1,12 @@
 package com.example.starter.entity;
 
+import com.example.starter.json.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import lombok.Builder;
 
 @Builder
-public record User(String username, String password, String refreshToken) {
+public record User(String username, String password, String refreshToken) implements JsonWriter {
 
   public static final String USERNAME_FIELD = "username";
   public static final String PASSWORD_FIELD = "password";
@@ -18,6 +19,7 @@ public record User(String username, String password, String refreshToken) {
         Objects.requireNonNull(jsonObject.getString(REFRESH_TOKEN_FIELD)));
   }
 
+  @Override
   public JsonObject toJson() {
     return new JsonObject()
         .put(USERNAME_FIELD, username)

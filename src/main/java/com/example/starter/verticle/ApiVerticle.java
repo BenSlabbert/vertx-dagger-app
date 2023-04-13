@@ -59,7 +59,7 @@ public class ApiVerticle extends AbstractVerticle {
 
   @Override
   public void stop(Promise<Void> stopPromise) {
-    log.info("stopping");
+    log.warning("stopping");
     stopPromise.complete();
   }
 }

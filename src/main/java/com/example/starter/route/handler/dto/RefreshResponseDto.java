@@ -1,11 +1,12 @@
 package com.example.starter.route.handler.dto;
 
+import com.example.starter.json.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import lombok.Builder;
 
 @Builder
-public record RefreshResponseDto(String token, String refreshToken) {
+public record RefreshResponseDto(String token, String refreshToken) implements JsonWriter {
 
   public RefreshResponseDto(JsonObject jsonObject) {
     this(
@@ -13,6 +14,7 @@ public record RefreshResponseDto(String token, String refreshToken) {
         Objects.requireNonNull(jsonObject.getString("refreshToken")));
   }
 
+  @Override
   public JsonObject toJson() {
     return new JsonObject().put("token", token).put("refreshToken", refreshToken);
   }

@@ -1,5 +1,7 @@
 package com.example.starter.repository;
 
+import static java.util.logging.Level.SEVERE;
+
 import com.example.starter.config.Config;
 import com.example.starter.entity.User;
 import com.example.starter.route.handler.dto.LoginRequestDto;
@@ -20,7 +22,6 @@ import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.impl.types.BulkType;
 import io.vertx.redis.client.impl.types.NumberType;
 import java.util.List;
-import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -43,11 +44,7 @@ public class RedisDB implements UserRepository {
 
     redisAPI
         .ping(List.of(""))
-        .onFailure(
-            throwable -> {
-              log.log(Level.SEVERE, "failed to ping redis");
-              log.log(Level.SEVERE, throwable.toString());
-            })
+        .onFailure(throwable -> log.log(SEVERE, "failed to ping redis", throwable))
         .onSuccess(resp -> log.info("pinged redis"));
 
     jwtAuth =

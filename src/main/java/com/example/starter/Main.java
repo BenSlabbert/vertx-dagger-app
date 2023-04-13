@@ -1,5 +1,8 @@
 package com.example.starter;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
+
 import com.example.starter.config.Config;
 import com.example.starter.repository.RepositoryModule;
 import com.example.starter.service.ServiceModule;
@@ -32,12 +35,12 @@ public class Main {
   private static Vertx vertx;
 
   public static void main(String[] args) throws IOException {
-    log.info("starting app: " + Arrays.toString(args));
+    log.log(INFO, "starting app: {0}", new Object[] {Arrays.toString(args)});
 
     parseArgs(args);
 
     List<String> reachableNameServers = getReachableNameServers();
-    log.info("reachableNameServers: " + reachableNameServers);
+    log.log(INFO, "reachableNameServers: {0}", new Object[] {reachableNameServers});
 
     vertx =
         Vertx.vertx(
@@ -55,8 +58,8 @@ public class Main {
 
     vertx
         .deployVerticle(dagger::provideMainVerticle, deploymentOptions)
-        .onFailure(throwable -> log.info("deployment id: " + throwable.toString()))
-        .onSuccess(id -> log.info("deployment id: " + id));
+        .onFailure(throwable -> log.log(SEVERE, "error while deploying verticle", throwable))
+        .onSuccess(id -> log.log(INFO, "deployment id: {0}", new Object[] {id}));
   }
 
   private static List<String> getReachableNameServers() {
@@ -89,12 +92,12 @@ public class Main {
       System.exit(1);
     }
 
-    log.info("parsing config from: " + parsed);
+    log.log(INFO, "parsing config from: {0}", new Object[] {parsed});
     String s = Files.readString(Paths.get(parsed.get(0)));
     config = Config.fromJson((JsonObject) Json.decodeValue(s));
   }
 
-  public static Runnable getTerminationRunnable(Vertx vertx) {
+  private static Runnable getTerminationRunnable(Vertx vertx) {
     return () -> {
       // cannot use logger here
       System.err.println("running shutdown hook");
@@ -133,6 +136,11 @@ public class Main {
   @Provides
   static Vertx providesVertx() {
     return vertx;
+  }
+
+  @Provides
+  static Config providesConfig() {
+    return config;
   }
 
   @Provides

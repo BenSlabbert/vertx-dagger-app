@@ -2,6 +2,7 @@ package com.example.starter.route.handler;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
+import static java.util.logging.Level.SEVERE;
 
 import com.example.starter.route.handler.dto.LoginRequestDto;
 import com.example.starter.route.handler.dto.RefreshRequestDto;
@@ -32,7 +33,7 @@ public class UserHandler {
         .login(new LoginRequestDto(body))
         .onFailure(
             throwable -> {
-              log.info(throwable.toString());
+              log.log(SEVERE, "failed to login user", throwable);
               ctx.end().onFailure(ctx::fail);
             })
         .onSuccess(
@@ -51,7 +52,7 @@ public class UserHandler {
         .refresh(new RefreshRequestDto(body))
         .onFailure(
             throwable -> {
-              log.info(throwable.toString());
+              log.log(SEVERE, "failed to refresh user", throwable);
               ctx.end().onFailure(ctx::fail);
             })
         .onSuccess(
@@ -70,7 +71,7 @@ public class UserHandler {
         .register(new RegisterRequestDto(body))
         .onFailure(
             throwable -> {
-              log.info(throwable.toString());
+              log.log(SEVERE, "failed to register user", throwable);
               ctx.end().onFailure(ctx::fail);
             })
         .onSuccess(
