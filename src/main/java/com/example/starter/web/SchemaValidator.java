@@ -2,6 +2,7 @@ package com.example.starter.web;
 
 import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
+import static java.util.logging.Level.WARNING;
 
 import com.example.starter.config.Config;
 import com.example.starter.web.route.dto.LoginRequestDto;
@@ -17,7 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.extern.java.Log;
 
+@Log
 @Singleton
 public class SchemaValidator {
 
@@ -67,7 +70,10 @@ public class SchemaValidator {
   public Boolean validate(Class<? extends JsonWriter> clazz, JsonObject jsonObject) {
     JsonSchema schema = REGISTRY.get(clazz);
 
-    if (null == schema) return Boolean.FALSE;
+    if (null == schema) {
+      log.log(WARNING, "no schema found for: {0}", new Object[] {clazz});
+      return Boolean.FALSE;
+    }
 
     OutputUnit outputUnit = repository.validator(schema).validate(jsonObject);
     return outputUnit.getValid();
