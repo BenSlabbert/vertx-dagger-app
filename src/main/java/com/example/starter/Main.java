@@ -7,7 +7,6 @@ import com.example.starter.config.Config;
 import com.example.starter.repository.RepositoryModule;
 import com.example.starter.service.ServiceModule;
 import com.example.starter.verticle.ApiVerticle;
-import com.example.starter.web.route.dto.LoginRequestDto;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
@@ -37,7 +36,6 @@ public class Main {
 
   public static void main(String[] args) throws IOException {
     log.log(INFO, "starting app: {0}", new Object[] {Arrays.toString(args)});
-    Class<LoginRequestDto> loginRequestDtoClass = LoginRequestDto.class;
     parseArgs(args);
 
     List<String> reachableNameServers = getReachableNameServers();

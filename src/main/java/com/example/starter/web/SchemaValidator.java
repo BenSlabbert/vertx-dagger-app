@@ -21,7 +21,7 @@ import javax.inject.Singleton;
 @Singleton
 public class SchemaValidator {
 
-  public static final Map<Class<? extends JsonWriter>, JsonSchema> REGISTRY = new HashMap<>();
+  private static final Map<Class<? extends JsonWriter>, JsonSchema> REGISTRY = new HashMap<>();
 
   static {
     REGISTRY.put(
@@ -31,6 +31,7 @@ public class SchemaValidator {
                 .requiredProperty(LoginRequestDto.USERNAME_FIELD, stringSchema())
                 .requiredProperty(LoginRequestDto.PASSWORD_FIELD, stringSchema())
                 .toJson()));
+
     REGISTRY.put(
         RefreshRequestDto.class,
         JsonSchema.of(
@@ -38,6 +39,7 @@ public class SchemaValidator {
                 .requiredProperty(RefreshRequestDto.USERNAME_FIELD, stringSchema())
                 .requiredProperty(RefreshRequestDto.TOKEN_FIELD, stringSchema())
                 .toJson()));
+
     REGISTRY.put(
         RegisterRequestDto.class,
         JsonSchema.of(
@@ -63,11 +65,11 @@ public class SchemaValidator {
   }
 
   public Boolean validate(Class<? extends JsonWriter> clazz, JsonObject jsonObject) {
-    JsonSchema jsonSchema = REGISTRY.get(clazz);
+    JsonSchema schema = REGISTRY.get(clazz);
 
-    if (jsonSchema == null) return Boolean.FALSE;
+    if (null == schema) return Boolean.FALSE;
 
-    OutputUnit outputUnit = repository.validator(jsonSchema).validate(jsonObject);
+    OutputUnit outputUnit = repository.validator(schema).validate(jsonObject);
     return outputUnit.getValid();
   }
 }
