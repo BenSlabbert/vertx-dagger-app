@@ -1,5 +1,7 @@
 package com.example.starter.verticle;
 
+import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+
 import com.example.starter.config.Config;
 import com.example.starter.web.route.handler.PingHandler;
 import com.example.starter.web.route.handler.UserHandler;
@@ -48,6 +50,9 @@ public class ApiVerticle extends AbstractVerticle {
     apiRouter.post("/login").handler(userHandler::login);
     apiRouter.post("/refresh").handler(userHandler::refresh);
     apiRouter.post("/register").handler(userHandler::register);
+
+    // all unmatched requests go here
+    mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
     server
         .requestHandler(mainRouter)

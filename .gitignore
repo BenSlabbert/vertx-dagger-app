@@ -7,3 +7,4 @@ mvnw*
 .mvn/
 dev-config.json
 *.tar.gz
+file-uploads

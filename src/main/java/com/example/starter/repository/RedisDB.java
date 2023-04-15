@@ -1,5 +1,6 @@
 package com.example.starter.repository;
 
+import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.starter.config.Config;
@@ -15,6 +16,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.JWTOptions;
 import io.vertx.ext.auth.PubSecKeyOptions;
+import io.vertx.ext.auth.authentication.TokenCredentials;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.redis.client.Redis;
@@ -30,12 +32,9 @@ import lombok.extern.java.Log;
 @Singleton
 public class RedisDB implements UserRepository {
 
-  private static final JWTOptions TOKEN_JWT_OPTIONS = new JWTOptions().setExpiresInMinutes(1);
-  private static final JWTOptions REFRESH_TOKEN_JWT_OPTIONS =
-      new JWTOptions().setExpiresInMinutes(10);
-
   private final RedisAPI redisAPI;
   private final JWTAuth jwtAuth;
+  private final JWTAuth jwtRefresh;
 
   @Inject
   public RedisDB(Vertx vertx, Config.RedisConfig redisConfig) {
@@ -51,11 +50,45 @@ public class RedisDB implements UserRepository {
         JWTAuth.create(
             vertx,
             new JWTAuthOptions()
-                .setJWTOptions(TOKEN_JWT_OPTIONS)
+                .setJWTOptions(
+                    new JWTOptions().setExpiresInMinutes(1).setIssuer("iam").setSubject("iam"))
                 .addPubSecKey(
                     new PubSecKeyOptions()
+                        .setId("authKey1")
                         .setAlgorithm("HS256")
-                        .setBuffer("123supersecretkey789")));
+                        .setBuffer("123supersecretkey789"))
+                .addPubSecKey(
+                    new PubSecKeyOptions()
+                        .setId("authKey2")
+                        .setAlgorithm("HS256")
+                        .setBuffer("321supersecretkey987")));
+
+    jwtRefresh =
+        JWTAuth.create(
+            vertx,
+            new JWTAuthOptions()
+                .setJWTOptions(
+                    new JWTOptions().setExpiresInMinutes(10).setIssuer("iam").setSubject("iam"))
+                .addPubSecKey(
+                    new PubSecKeyOptions()
+                        .setId("refreshKey1")
+                        .setAlgorithm("HS256")
+                        .setBuffer("123anothersupersecretkey789")));
+
+    String test = generateToken(jwtAuth, "test");
+
+    jwtAuth
+        .authenticate(new TokenCredentials(test))
+        .onSuccess(
+            user -> {
+              // principal contains issuer and everything added in jwtAuth.generateToken below
+              log.log(INFO, "user: {0}", new Object[] {user.principal()});
+            })
+        .onFailure(
+            err -> {
+              // Failed!
+              log.log(SEVERE, "failed", err);
+            });
   }
 
   @Override
@@ -135,16 +168,19 @@ public class RedisDB implements UserRepository {
                             requestDto.password(),
                             User.REFRESH_TOKEN_FIELD,
                             refreshToken))
-                    .map(resp -> new RegisterResponseDto(new JsonObject()))
+                    .map(resp -> new RegisterResponseDto())
                     .onComplete(resp -> log.info("user registered")));
   }
 
   private String authToken(String username) {
-    return jwtAuth.generateToken(new JsonObject().put("add-id", "iam").put("sub", username));
+    return generateToken(jwtAuth, username);
   }
 
   private String refreshToken(String username) {
-    return jwtAuth.generateToken(
-        new JsonObject().put("app-id", "iam").put("sub", username), REFRESH_TOKEN_JWT_OPTIONS);
+    return generateToken(jwtRefresh, username);
+  }
+
+  private String generateToken(JWTAuth jwtAuth, String username) {
+    return jwtAuth.generateToken(new JsonObject().put("app-id", "iam").put("sub", username));
   }
 }
