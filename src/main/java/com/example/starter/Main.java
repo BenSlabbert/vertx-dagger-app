@@ -56,7 +56,7 @@ public class Main {
     deploymentOptions.setInstances(config.verticleConfig().numberOfInstances());
 
     vertx
-        .deployVerticle(dagger::provideMainVerticle, deploymentOptions)
+        .deployVerticle(dagger::provideApiVerticle, deploymentOptions)
         .onFailure(throwable -> log.log(SEVERE, "error while deploying verticle", throwable))
         .onSuccess(id -> log.log(INFO, "deployment id: {0}", new Object[] {id}));
   }
@@ -129,7 +129,7 @@ public class Main {
   @Singleton
   @Component(modules = {RepositoryModule.class, ServiceModule.class, Main.class})
   interface Provider {
-    ApiVerticle provideMainVerticle();
+    ApiVerticle provideApiVerticle();
   }
 
   @Provides
