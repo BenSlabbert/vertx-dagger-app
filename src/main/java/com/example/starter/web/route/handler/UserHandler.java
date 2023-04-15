@@ -1,14 +1,17 @@
-package com.example.starter.route.handler;
+package com.example.starter.web.route.handler;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
+import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
+import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
+import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static java.util.logging.Level.SEVERE;
 
-import com.example.starter.route.handler.dto.LoginRequestDto;
-import com.example.starter.route.handler.dto.RefreshRequestDto;
-import com.example.starter.route.handler.dto.RegisterRequestDto;
 import com.example.starter.service.UserService;
-import io.netty.handler.codec.http.HttpResponseStatus;
+import com.example.starter.web.SchemaValidator;
+import com.example.starter.web.route.dto.LoginRequestDto;
+import com.example.starter.web.route.dto.RefreshRequestDto;
+import com.example.starter.web.route.dto.RegisterRequestDto;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import javax.inject.Inject;
@@ -20,14 +23,23 @@ import lombok.extern.java.Log;
 public class UserHandler {
 
   private final UserService userService;
+  private final SchemaValidator schemaValidator;
 
   @Inject
-  public UserHandler(UserService userService) {
+  public UserHandler(UserService userService, SchemaValidator schemaValidator) {
     this.userService = userService;
+    this.schemaValidator = schemaValidator;
   }
 
   public void login(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
+    Boolean valid = schemaValidator.validate(LoginRequestDto.class, body);
+
+    if (Boolean.FALSE.equals(valid)) {
+      log.log(SEVERE, "invalid login request params");
+      ctx.response().setStatusCode(BAD_REQUEST.code()).end();
+      return;
+    }
 
     userService
         .login(new LoginRequestDto(body))
@@ -40,13 +52,20 @@ public class UserHandler {
             dto ->
                 ctx.response()
                     .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(HttpResponseStatus.CREATED.code())
+                    .setStatusCode(CREATED.code())
                     .end(dto.toJson().toBuffer())
                     .onFailure(ctx::fail));
   }
 
   public void refresh(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
+    Boolean valid = schemaValidator.validate(RefreshRequestDto.class, body);
+
+    if (Boolean.FALSE.equals(valid)) {
+      log.log(SEVERE, "invalid refresh request params");
+      ctx.response().setStatusCode(BAD_REQUEST.code()).end();
+      return;
+    }
 
     userService
         .refresh(new RefreshRequestDto(body))
@@ -59,13 +78,20 @@ public class UserHandler {
             dto ->
                 ctx.response()
                     .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(HttpResponseStatus.CREATED.code())
+                    .setStatusCode(CREATED.code())
                     .end(dto.toJson().toBuffer())
                     .onFailure(ctx::fail));
   }
 
   public void register(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
+    Boolean valid = schemaValidator.validate(RegisterRequestDto.class, body);
+
+    if (Boolean.FALSE.equals(valid)) {
+      log.log(SEVERE, "invalid register request params");
+      ctx.response().setStatusCode(BAD_REQUEST.code()).end();
+      return;
+    }
 
     userService
         .register(new RegisterRequestDto(body))
@@ -78,7 +104,7 @@ public class UserHandler {
             dto ->
                 ctx.response()
                     .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
+                    .setStatusCode(NO_CONTENT.code())
                     .end()
                     .onFailure(ctx::fail));
   }

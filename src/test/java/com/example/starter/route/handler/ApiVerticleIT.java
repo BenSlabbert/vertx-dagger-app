@@ -2,11 +2,11 @@ package com.example.starter.route.handler;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.starter.route.handler.dto.LoginRequestDto;
-import com.example.starter.route.handler.dto.LoginResponseDto;
-import com.example.starter.route.handler.dto.RefreshRequestDto;
-import com.example.starter.route.handler.dto.RefreshResponseDto;
-import com.example.starter.route.handler.dto.RegisterRequestDto;
+import com.example.starter.web.route.dto.LoginRequestDto;
+import com.example.starter.web.route.dto.LoginResponseDto;
+import com.example.starter.web.route.dto.RefreshRequestDto;
+import com.example.starter.web.route.dto.RefreshResponseDto;
+import com.example.starter.web.route.dto.RegisterRequestDto;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

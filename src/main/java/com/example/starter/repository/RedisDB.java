@@ -4,12 +4,12 @@ import static java.util.logging.Level.SEVERE;
 
 import com.example.starter.config.Config;
 import com.example.starter.entity.User;
-import com.example.starter.route.handler.dto.LoginRequestDto;
-import com.example.starter.route.handler.dto.LoginResponseDto;
-import com.example.starter.route.handler.dto.RefreshRequestDto;
-import com.example.starter.route.handler.dto.RefreshResponseDto;
-import com.example.starter.route.handler.dto.RegisterRequestDto;
-import com.example.starter.route.handler.dto.RegisterResponseDto;
+import com.example.starter.web.route.dto.LoginRequestDto;
+import com.example.starter.web.route.dto.LoginResponseDto;
+import com.example.starter.web.route.dto.RefreshRequestDto;
+import com.example.starter.web.route.dto.RefreshResponseDto;
+import com.example.starter.web.route.dto.RegisterRequestDto;
+import com.example.starter.web.route.dto.RegisterResponseDto;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;

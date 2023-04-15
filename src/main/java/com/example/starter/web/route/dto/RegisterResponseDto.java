@@ -1,6 +1,6 @@
-package com.example.starter.route.handler.dto;
+package com.example.starter.web.route.dto;
 
-import com.example.starter.json.JsonWriter;
+import com.example.starter.web.JsonWriter;
 import io.vertx.core.json.JsonObject;
 
 public record RegisterResponseDto() implements JsonWriter {

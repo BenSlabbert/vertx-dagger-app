@@ -1,4 +1,4 @@
-package com.example.starter.json;
+package com.example.starter.web;
 
 import io.vertx.core.json.JsonObject;
 

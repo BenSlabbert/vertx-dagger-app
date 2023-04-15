@@ -1,10 +1,11 @@
 package com.example.starter.verticle;
 
 import com.example.starter.config.Config;
-import com.example.starter.route.handler.PingHandler;
-import com.example.starter.route.handler.UserHandler;
+import com.example.starter.web.route.handler.PingHandler;
+import com.example.starter.web.route.handler.UserHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -15,11 +16,14 @@ import lombok.extern.java.Log;
 public class ApiVerticle extends AbstractVerticle {
 
   private final UserHandler userHandler;
+  private final PingHandler pingHandler;
   private final Config.HttpConfig httpConfig;
 
   @Inject
-  public ApiVerticle(UserHandler userHandler, Config.HttpConfig httpConfig) {
+  public ApiVerticle(
+      UserHandler userHandler, PingHandler pingHandler, Config.HttpConfig httpConfig) {
     this.userHandler = userHandler;
+    this.pingHandler = pingHandler;
     this.httpConfig = httpConfig;
   }
 
@@ -32,10 +36,12 @@ public class ApiVerticle extends AbstractVerticle {
     Router apiRouter = Router.router(vertx);
 
     // 100kB max body size
-    mainRouter.route().handler(BodyHandler.create().setBodyLimit(1024L * 100L));
+    mainRouter
+        .route(HttpMethod.POST, "/*")
+        .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
     // main routes
-    mainRouter.get("/ping").handler(new PingHandler());
+    mainRouter.get("/ping").handler(pingHandler);
     mainRouter.route("/api/*").subRouter(apiRouter);
 
     // api routes

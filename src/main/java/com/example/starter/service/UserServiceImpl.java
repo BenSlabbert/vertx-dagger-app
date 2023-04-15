@@ -1,12 +1,12 @@
 package com.example.starter.service;
 
 import com.example.starter.repository.UserRepository;
-import com.example.starter.route.handler.dto.LoginRequestDto;
-import com.example.starter.route.handler.dto.LoginResponseDto;
-import com.example.starter.route.handler.dto.RefreshRequestDto;
-import com.example.starter.route.handler.dto.RefreshResponseDto;
-import com.example.starter.route.handler.dto.RegisterRequestDto;
-import com.example.starter.route.handler.dto.RegisterResponseDto;
+import com.example.starter.web.route.dto.LoginRequestDto;
+import com.example.starter.web.route.dto.LoginResponseDto;
+import com.example.starter.web.route.dto.RefreshRequestDto;
+import com.example.starter.web.route.dto.RefreshResponseDto;
+import com.example.starter.web.route.dto.RegisterRequestDto;
+import com.example.starter.web.route.dto.RegisterResponseDto;
 import io.vertx.core.Future;
 import javax.inject.Inject;
 import javax.inject.Singleton;
