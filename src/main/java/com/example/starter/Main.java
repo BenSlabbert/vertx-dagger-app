@@ -54,7 +54,7 @@ public class Main {
     Provider dagger = DaggerMain_Provider.create();
 
     DeploymentOptions deploymentOptions = new DeploymentOptions();
-    deploymentOptions.setInstances(2);
+    deploymentOptions.setInstances(config.verticleConfig().numberOfInstances());
 
     vertx
         .deployVerticle(dagger::provideMainVerticle, deploymentOptions)
@@ -146,6 +146,11 @@ public class Main {
   @Provides
   static Config.HttpConfig providesHttpConfig() {
     return config.httpConfig();
+  }
+
+  @Provides
+  static Config.VerticleConfig providesVerticleConfig() {
+    return config.verticleConfig();
   }
 
   @Provides
