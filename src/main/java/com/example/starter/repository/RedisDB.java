@@ -30,7 +30,7 @@ import lombok.extern.java.Log;
 
 @Log
 @Singleton
-public class RedisDB implements UserRepository {
+public class RedisDB implements UserRepository, AutoCloseable {
 
   private final RedisAPI redisAPI;
   private final JWTAuth jwtAuth;
@@ -89,6 +89,11 @@ public class RedisDB implements UserRepository {
               // Failed!
               log.log(SEVERE, "failed", err);
             });
+  }
+
+  @Override
+  public void close() {
+    redisAPI.close();
   }
 
   @Override

@@ -5,6 +5,7 @@ import static java.util.logging.Level.SEVERE;
 
 import com.example.starter.config.Config;
 import com.example.starter.repository.RepositoryModule;
+import com.example.starter.service.ServiceLifecycleManagement;
 import com.example.starter.service.ServiceModule;
 import com.example.starter.verticle.ApiVerticle;
 import com.example.starter.verticle.GrpcVerticle;
@@ -49,12 +50,12 @@ public class Main {
                 .setAddressResolverOptions(
                     new AddressResolverOptions().setServers(reachableNameServers)));
 
-    Runtime.getRuntime().addShutdownHook(new Thread(getTerminationRunnable(vertx)));
-
     Provider dagger = com.example.starter.DaggerMain_Provider.create();
 
-    DeploymentOptions deploymentOptions = new DeploymentOptions();
-    deploymentOptions.setInstances(config.verticleConfig().numberOfInstances());
+    Runtime.getRuntime().addShutdownHook(new Thread(getTerminationRunnable(vertx, dagger)));
+
+    DeploymentOptions deploymentOptions =
+        new DeploymentOptions().setInstances(config.verticleConfig().numberOfInstances());
 
     vertx
         .deployVerticle(dagger::provideApiVerticle, deploymentOptions)
@@ -102,10 +103,14 @@ public class Main {
     config = Config.fromJson((JsonObject) Json.decodeValue(s));
   }
 
-  private static Runnable getTerminationRunnable(Vertx vertx) {
+  private static Runnable getTerminationRunnable(Vertx vertx, Provider dagger) {
     return () -> {
       // cannot use logger here
       System.err.println("running shutdown hook");
+
+      System.err.println("closing created resources...");
+      dagger.providesServiceLifecycleManagement().close();
+      System.err.println("closing created resources...done");
 
       if (null == vertx) return;
 
@@ -138,6 +143,8 @@ public class Main {
     ApiVerticle provideApiVerticle();
 
     GrpcVerticle provideGrpcVerticle();
+
+    ServiceLifecycleManagement providesServiceLifecycleManagement();
   }
 
   @Provides

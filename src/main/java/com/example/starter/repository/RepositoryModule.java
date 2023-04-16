@@ -2,12 +2,16 @@ package com.example.starter.repository;
 
 import dagger.Binds;
 import dagger.Module;
-import javax.inject.Singleton;
+import dagger.multibindings.IntoSet;
 
 @Module
 public interface RepositoryModule {
 
   @Binds
-  @Singleton
   UserRepository create(RedisDB redisDB);
+
+  // https://stackoverflow.com/a/62025382
+  @Binds
+  @IntoSet
+  AutoCloseable asAutoCloseable(RedisDB redisDB);
 }
