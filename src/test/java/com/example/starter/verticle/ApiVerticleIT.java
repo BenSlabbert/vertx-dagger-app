@@ -1,7 +1,8 @@
-package com.example.starter.route.handler;
+package com.example.starter.verticle;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.starter.TestcontainerLogConsumer;
 import com.example.starter.web.route.dto.LoginRequestDto;
 import com.example.starter.web.route.dto.LoginResponseDto;
 import com.example.starter.web.route.dto.RefreshRequestDto;
@@ -31,16 +32,17 @@ class ApiVerticleIT {
   @Rule public Network network = Network.newNetwork();
 
   @Container
-  public GenericContainer redis =
-      new GenericContainer(DockerImageName.parse("redis:7-alpine"))
+  public GenericContainer<?> redis =
+      new GenericContainer<>(DockerImageName.parse("redis:7-alpine"))
           .withExposedPorts(6379)
           .withNetwork(network)
           .withNetworkAliases("redis")
-          .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1));
+          .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
+          .withLogConsumer(new TestcontainerLogConsumer());
 
   @Container
-  public GenericContainer app =
-      new GenericContainer(
+  public GenericContainer<?> app =
+      new GenericContainer<>(
               DockerImageName.parse("iam:" + System.getProperty("testImageTag", "jvm") + "-latest"))
           .withExposedPorts(8080)
           .withNetwork(network)
@@ -48,7 +50,8 @@ class ApiVerticleIT {
           .dependsOn(redis)
           .waitingFor(Wait.forLogMessage(".*deployment id.*", 1))
           .withClasspathResourceMapping("it-config.json", "/config.json", BindMode.READ_ONLY)
-          .withCommand("/config.json");
+          .withCommand("/config.json")
+          .withLogConsumer(new TestcontainerLogConsumer());
 
   @BeforeEach
   public void before() {

@@ -8,9 +8,10 @@ import com.example.starter.web.route.handler.UserHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import java.util.logging.Level;
 import javax.inject.Inject;
 import lombok.extern.java.Log;
 
@@ -31,9 +32,11 @@ public class ApiVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    log.info("starting verticle");
+    log.log(
+        Level.INFO,
+        "starting api verticle on port: {0}",
+        new Object[] {Integer.toString(httpConfig.port())});
 
-    HttpServer server = vertx.createHttpServer();
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 
@@ -54,15 +57,16 @@ public class ApiVerticle extends AbstractVerticle {
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
-    server
+    vertx
+        .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
         .requestHandler(mainRouter)
         .listen(
-            httpConfig.port(),
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");
                 startPromise.complete();
               } else {
+                log.log(Level.SEVERE, "failed to start verticle", res.cause());
                 startPromise.fail(res.cause());
               }
             });

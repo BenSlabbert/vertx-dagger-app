@@ -5,7 +5,10 @@ import lombok.Builder;
 
 @Builder
 public record Config(
-    HttpConfig httpConfig, RedisConfig redisConfig, VerticleConfig verticleConfig) {
+    HttpConfig httpConfig,
+    GrpcConfig grpcConfig,
+    RedisConfig redisConfig,
+    VerticleConfig verticleConfig) {
 
   public static Config defaults() {
     return Config.builder()
@@ -16,11 +19,13 @@ public record Config(
 
   public static Config fromJson(JsonObject jsonObject) {
     JsonObject httpConfig = jsonObject.getJsonObject("httpConfig");
+    JsonObject grpcConfig = jsonObject.getJsonObject("grpcConfig");
     JsonObject redisConfig = jsonObject.getJsonObject("redisConfig");
     JsonObject verticleConfig = jsonObject.getJsonObject("verticleConfig", new JsonObject());
 
     return Config.builder()
         .httpConfig(HttpConfig.builder().port(httpConfig.getInteger("port")).build())
+        .grpcConfig(GrpcConfig.builder().port(grpcConfig.getInteger("port")).build())
         .redisConfig(
             RedisConfig.builder()
                 .host(redisConfig.getString("host"))
@@ -39,6 +44,9 @@ public record Config(
 
   @Builder
   public record HttpConfig(int port) {}
+
+  @Builder
+  public record GrpcConfig(int port) {}
 
   @Builder
   public record RedisConfig(String host, int port, int database) {

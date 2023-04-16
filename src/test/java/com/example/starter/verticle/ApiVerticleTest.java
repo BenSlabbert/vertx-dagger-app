@@ -1,13 +1,13 @@
-package com.example.starter;
+package com.example.starter.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.vertx.core.http.HttpMethod.GET;
 import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.starter.HttpServerTest;
 import com.example.starter.config.Config;
 import com.example.starter.service.UserService;
-import com.example.starter.verticle.ApiVerticle;
 import com.example.starter.web.SchemaValidator;
 import com.example.starter.web.route.dto.LoginRequestDto;
 import com.example.starter.web.route.dto.RefreshRequestDto;

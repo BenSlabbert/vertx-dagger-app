@@ -7,6 +7,7 @@ import com.example.starter.config.Config;
 import com.example.starter.repository.RepositoryModule;
 import com.example.starter.service.ServiceModule;
 import com.example.starter.verticle.ApiVerticle;
+import com.example.starter.verticle.GrpcVerticle;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
@@ -50,13 +51,18 @@ public class Main {
 
     Runtime.getRuntime().addShutdownHook(new Thread(getTerminationRunnable(vertx)));
 
-    Provider dagger = DaggerMain_Provider.create();
+    Provider dagger = com.example.starter.DaggerMain_Provider.create();
 
     DeploymentOptions deploymentOptions = new DeploymentOptions();
     deploymentOptions.setInstances(config.verticleConfig().numberOfInstances());
 
     vertx
         .deployVerticle(dagger::provideApiVerticle, deploymentOptions)
+        .onFailure(throwable -> log.log(SEVERE, "error while deploying verticle", throwable))
+        .onSuccess(id -> log.log(INFO, "deployment id: {0}", new Object[] {id}));
+
+    vertx
+        .deployVerticle(dagger::provideGrpcVerticle, deploymentOptions)
         .onFailure(throwable -> log.log(SEVERE, "error while deploying verticle", throwable))
         .onSuccess(id -> log.log(INFO, "deployment id: {0}", new Object[] {id}));
   }
@@ -130,6 +136,8 @@ public class Main {
   @Component(modules = {RepositoryModule.class, ServiceModule.class, Main.class})
   interface Provider {
     ApiVerticle provideApiVerticle();
+
+    GrpcVerticle provideGrpcVerticle();
   }
 
   @Provides
@@ -145,6 +153,11 @@ public class Main {
   @Provides
   static Config.HttpConfig providesHttpConfig() {
     return config.httpConfig();
+  }
+
+  @Provides
+  static Config.GrpcConfig providesGrpcConfig() {
+    return config.grpcConfig();
   }
 
   @Provides
