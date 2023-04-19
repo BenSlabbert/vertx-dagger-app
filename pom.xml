@@ -221,6 +221,7 @@
               <style>GOOGLE</style>
               <reflowLongStrings>true</reflowLongStrings>
             </googleJavaFormat>
+            <formatAnnotations />
           </java>
         </configuration>
       </plugin>

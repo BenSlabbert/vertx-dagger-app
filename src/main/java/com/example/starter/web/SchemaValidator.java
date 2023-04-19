@@ -5,6 +5,7 @@ import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 import static java.util.logging.Level.WARNING;
 
 import com.example.starter.config.Config;
+import com.example.starter.web.route.dto.JsonWriter;
 import com.example.starter.web.route.dto.LoginRequestDto;
 import com.example.starter.web.route.dto.RefreshRequestDto;
 import com.example.starter.web.route.dto.RegisterRequestDto;

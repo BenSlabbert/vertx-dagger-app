@@ -1,8 +1,12 @@
 package com.example.starter.verticle;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import com.example.starter.TestcontainerLogConsumer;
+import com.example.starter.grpc.echo.CheckSessionRequest;
+import com.example.starter.grpc.echo.CheckSessionResponse;
+import com.example.starter.grpc.echo.IamGrpc;
 import com.example.starter.web.route.dto.LoginRequestDto;
 import com.example.starter.web.route.dto.LoginResponseDto;
 import com.example.starter.web.route.dto.RefreshRequestDto;
@@ -11,7 +15,13 @@ import com.example.starter.web.route.dto.RegisterRequestDto;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.net.SocketAddress;
+import io.vertx.grpc.client.GrpcClient;
+import io.vertx.grpc.common.GrpcReadStream;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.java.Log;
 import org.junit.Rule;
 import org.junit.jupiter.api.AfterEach;
@@ -44,7 +54,7 @@ class ApiVerticleIT {
   public GenericContainer<?> app =
       new GenericContainer<>(
               DockerImageName.parse("iam:" + System.getProperty("testImageTag", "jvm") + "-latest"))
-          .withExposedPorts(8080)
+          .withExposedPorts(8080, 50051)
           .withNetwork(network)
           .withNetworkAliases("app")
           .dependsOn(redis)
@@ -56,7 +66,7 @@ class ApiVerticleIT {
   @BeforeEach
   public void before() {
     RestAssured.baseURI = "http://" + app.getHost();
-    RestAssured.port = app.getFirstMappedPort();
+    RestAssured.port = app.getMappedPort(8080);
     log.info("RestAssured.port: " + RestAssured.port);
   }
 
@@ -66,7 +76,7 @@ class ApiVerticleIT {
   }
 
   @Test
-  void pingTest() {
+  void apiPingTest() {
     String body =
         RestAssured.get("/ping")
             .then()
@@ -78,7 +88,7 @@ class ApiVerticleIT {
   }
 
   @Test
-  void fullHappyPath() {
+  void fullHappyPath() throws InterruptedException {
     String register = new RegisterRequestDto("name", "pswd").toJson().encode();
     String login = new LoginRequestDto("name", "pswd").toJson().encode();
 
@@ -90,7 +100,7 @@ class ApiVerticleIT {
         .assertThat()
         .statusCode(HttpResponseStatus.NO_CONTENT.code());
 
-    String response =
+    String stringJsonResponse =
         RestAssured.given()
             .contentType(ContentType.JSON)
             .body(login)
@@ -101,14 +111,14 @@ class ApiVerticleIT {
             .extract()
             .asString();
 
-    var loginResponseDto = new LoginResponseDto(new JsonObject(response));
+    var loginResponseDto = new LoginResponseDto(new JsonObject(stringJsonResponse));
     assertThat(loginResponseDto.token()).isNotNull();
     assertThat(loginResponseDto.refreshToken()).isNotNull();
 
     String refresh =
         new RefreshRequestDto("name", loginResponseDto.refreshToken()).toJson().encode();
 
-    response =
+    stringJsonResponse =
         RestAssured.given()
             .contentType(ContentType.JSON)
             .body(refresh)
@@ -119,8 +129,42 @@ class ApiVerticleIT {
             .extract()
             .asString();
 
-    var refreshResponseDto = new RefreshResponseDto(new JsonObject(response));
+    var refreshResponseDto = new RefreshResponseDto(new JsonObject(stringJsonResponse));
     assertThat(refreshResponseDto.token()).isNotNull();
     assertThat(refreshResponseDto.refreshToken()).isNotNull();
+
+    CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    GrpcClient.client(Vertx.vertx())
+        .request(
+            SocketAddress.inetSocketAddress(app.getMappedPort(50051), "localhost"),
+            IamGrpc.getCheckSessionMethod())
+        .compose(
+            request -> {
+              var checkSessionRequest =
+                  CheckSessionRequest.newBuilder()
+                      .setUserId("name")
+                      .setUserToken(refreshResponseDto.token())
+                      .build();
+              request.end(checkSessionRequest);
+              return request.response().compose(GrpcReadStream::last);
+            })
+        .onComplete(
+            asyncResult -> {
+              if (asyncResult.failed()) {
+                fail("request failed", asyncResult.cause());
+              }
+
+              try {
+                CheckSessionResponse response = asyncResult.result();
+                assertThat(response).isNotNull();
+                assertThat(response.getValid()).isTrue();
+              } finally {
+                countDownLatch.countDown();
+              }
+            });
+
+    var cnt = countDownLatch.await(5L, TimeUnit.SECONDS);
+    assertThat(cnt).isTrue();
   }
 }

@@ -58,14 +58,14 @@ public class Main {
         new DeploymentOptions().setInstances(config.verticleConfig().numberOfInstances());
 
     vertx
-        .deployVerticle(dagger::provideApiVerticle, deploymentOptions)
-        .onFailure(throwable -> log.log(SEVERE, "error while deploying verticle", throwable))
-        .onSuccess(id -> log.log(INFO, "deployment id: {0}", new Object[] {id}));
+        .deployVerticle(dagger::provideNewApiVerticle, deploymentOptions)
+        .onFailure(throwable -> log.log(SEVERE, "error while deploying api verticle", throwable))
+        .onSuccess(id -> log.log(INFO, "api deployment id: {0}", new Object[] {id}));
 
     vertx
-        .deployVerticle(dagger::provideGrpcVerticle, deploymentOptions)
-        .onFailure(throwable -> log.log(SEVERE, "error while deploying verticle", throwable))
-        .onSuccess(id -> log.log(INFO, "deployment id: {0}", new Object[] {id}));
+        .deployVerticle(dagger::provideNewGrpcVerticle, deploymentOptions)
+        .onFailure(throwable -> log.log(SEVERE, "error while deploying grpc verticle", throwable))
+        .onSuccess(id -> log.log(INFO, "grpc deployment id: {0}", new Object[] {id}));
   }
 
   private static List<String> getReachableNameServers() {
@@ -140,9 +140,9 @@ public class Main {
   @Singleton
   @Component(modules = {RepositoryModule.class, ServiceModule.class, Main.class})
   interface Provider {
-    ApiVerticle provideApiVerticle();
+    ApiVerticle provideNewApiVerticle();
 
-    GrpcVerticle provideGrpcVerticle();
+    GrpcVerticle provideNewGrpcVerticle();
 
     ServiceLifecycleManagement providesServiceLifecycleManagement();
   }

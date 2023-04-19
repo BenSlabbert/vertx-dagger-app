@@ -35,4 +35,9 @@ public class UserServiceImpl implements UserService {
   public Future<RegisterResponseDto> register(RegisterRequestDto user) {
     return userRepository.register(user);
   }
+
+  @Override
+  public Future<Boolean> isValidToken(String username, String token) {
+    return userRepository.isValidToken(username, token);
+  }
 }

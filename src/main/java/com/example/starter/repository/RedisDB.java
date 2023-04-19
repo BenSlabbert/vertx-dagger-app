@@ -118,6 +118,8 @@ public class RedisDB implements UserRepository, AutoCloseable {
                     .hset(
                         List.of(
                             requestDto.username(),
+                            User.TOKEN_FIELD,
+                            loginResponseDto.token(),
                             User.REFRESH_TOKEN_FIELD,
                             loginResponseDto.refreshToken()))
                     .map(resp -> loginResponseDto)
@@ -145,6 +147,8 @@ public class RedisDB implements UserRepository, AutoCloseable {
                     .hset(
                         List.of(
                             requestDto.username(),
+                            User.TOKEN_FIELD,
+                            loginResponseDto.token(),
                             User.REFRESH_TOKEN_FIELD,
                             loginResponseDto.refreshToken()))
                     .map(resp -> loginResponseDto)
@@ -153,6 +157,8 @@ public class RedisDB implements UserRepository, AutoCloseable {
 
   @Override
   public Future<RegisterResponseDto> register(RegisterRequestDto requestDto) {
+    record Tokens(String token, String refreshToken) {}
+
     return redisAPI
         .exists(List.of(requestDto.username()))
         .map(
@@ -161,20 +167,30 @@ public class RedisDB implements UserRepository, AutoCloseable {
                 throw new IllegalArgumentException("user already exists");
               }
 
-              return refreshToken(requestDto.username());
+              return new Tokens(
+                  authToken(requestDto.username()), refreshToken(requestDto.username()));
             })
         .flatMap(
-            refreshToken ->
+            tokens ->
                 redisAPI
                     .hset(
                         List.of(
                             requestDto.username(),
                             User.PASSWORD_FIELD,
                             requestDto.password(),
+                            User.TOKEN_FIELD,
+                            tokens.token(),
                             User.REFRESH_TOKEN_FIELD,
-                            refreshToken))
+                            tokens.refreshToken()))
                     .map(resp -> new RegisterResponseDto())
                     .onComplete(resp -> log.info("user registered")));
+  }
+
+  @Override
+  public Future<Boolean> isValidToken(String username, String token) {
+    return redisAPI
+        .hget(username, User.TOKEN_FIELD)
+        .map(response -> response instanceof BulkType bt && bt.toString().equals(token));
   }
 
   private String authToken(String username) {

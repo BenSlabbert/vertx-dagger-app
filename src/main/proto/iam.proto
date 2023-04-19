@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.starter.grpc.echo";
+option java_outer_classname = "EchoProto";
+option objc_class_prefix = "RTG";
+
+package echo;
+
+service Iam {
+  rpc Ping(PingRequest) returns (PingResponse) {}
+  rpc CheckSession(CheckSessionRequest) returns (CheckSessionResponse) {}
+}
+
+message PingRequest {
+}
+
+message PingResponse {
+  string message = 1;
+}
+
+message CheckSessionRequest {
+  string user_id = 1;
+  string user_token = 2;
+}
+
+message CheckSessionResponse {
+  bool valid = 1;
+}
