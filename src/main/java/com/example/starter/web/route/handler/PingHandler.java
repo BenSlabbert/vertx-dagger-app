@@ -12,7 +12,9 @@ import javax.inject.Singleton;
 public class PingHandler implements Handler<RoutingContext> {
 
   @Inject
-  public PingHandler() {}
+  public PingHandler() {
+    // no args constructor required for @Inject
+  }
 
   @Override
   public void handle(RoutingContext ctx) {
