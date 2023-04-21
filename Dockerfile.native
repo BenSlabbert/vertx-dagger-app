@@ -4,7 +4,7 @@ RUN gu install native-image
 
 # https://github.com/graalvm/graalvm-demos/tree/master/tiny-java-containers
 # https://www.graalvm.org/latest/reference-manual/native-image/guides/build-static-executables/
-RUN curl -L http://more.musl.cc/10/x86_64-linux-musl/x86_64-linux-musl-native.tgz -o x86_64-linux-musl-native.tgz && \
+RUN curl -L https://more.musl.cc/10/x86_64-linux-musl/x86_64-linux-musl-native.tgz -o x86_64-linux-musl-native.tgz && \
     tar -xvf x86_64-linux-musl-native.tgz && \
     curl -L https://zlib.net/zlib-1.2.13.tar.gz -o zlib-1.2.13.tar.gz && \
     tar -xvf zlib-1.2.13.tar.gz && \
