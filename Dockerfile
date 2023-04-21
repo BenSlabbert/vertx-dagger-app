@@ -9,3 +9,4 @@ COPY target/lib lib
 ENTRYPOINT ["java", "-cp", "lib", "-jar", "app.jar"]
 
 EXPOSE 8080
+EXPOSE 50051

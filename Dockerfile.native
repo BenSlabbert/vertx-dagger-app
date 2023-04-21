@@ -25,4 +25,6 @@ COPY --from=builder /app/target/iam .
 COPY --from=builder /app/target/iam.build_artifacts.txt .
 
 EXPOSE 8080
+EXPOSE 50051
+
 ENTRYPOINT ["./iam"]

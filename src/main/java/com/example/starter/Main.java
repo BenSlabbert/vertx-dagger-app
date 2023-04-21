@@ -4,12 +4,8 @@ import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.starter.config.Config;
-import com.example.starter.repository.RepositoryModule;
-import com.example.starter.service.ServiceLifecycleManagement;
-import com.example.starter.service.ServiceModule;
-import com.example.starter.verticle.ApiVerticle;
-import com.example.starter.verticle.GrpcVerticle;
-import dagger.Component;
+import com.example.starter.ioc.DaggerProvider;
+import com.example.starter.ioc.Provider;
 import dagger.Module;
 import dagger.Provides;
 import io.netty.resolver.dns.DefaultDnsServerAddressStreamProvider;
@@ -26,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import javax.inject.Singleton;
 import lombok.extern.java.Log;
 
 @Log
@@ -50,7 +45,7 @@ public class Main {
                 .setAddressResolverOptions(
                     new AddressResolverOptions().setServers(reachableNameServers)));
 
-    Provider dagger = com.example.starter.DaggerMain_Provider.create();
+    Provider dagger = DaggerProvider.create();
 
     Runtime.getRuntime().addShutdownHook(new Thread(getTerminationRunnable(vertx, dagger)));
 
@@ -135,16 +130,6 @@ public class Main {
         throw new IllegalStateException(e);
       }
     };
-  }
-
-  @Singleton
-  @Component(modules = {RepositoryModule.class, ServiceModule.class, Main.class})
-  interface Provider {
-    ApiVerticle provideNewApiVerticle();
-
-    GrpcVerticle provideNewGrpcVerticle();
-
-    ServiceLifecycleManagement providesServiceLifecycleManagement();
   }
 
   @Provides
