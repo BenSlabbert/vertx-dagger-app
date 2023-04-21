@@ -1,24 +1,14 @@
 package com.example.starter.repository;
 
-import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.starter.config.Config;
 import com.example.starter.entity.User;
-import com.example.starter.web.route.dto.LoginRequestDto;
 import com.example.starter.web.route.dto.LoginResponseDto;
-import com.example.starter.web.route.dto.RefreshRequestDto;
 import com.example.starter.web.route.dto.RefreshResponseDto;
-import com.example.starter.web.route.dto.RegisterRequestDto;
 import com.example.starter.web.route.dto.RegisterResponseDto;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.JWTOptions;
-import io.vertx.ext.auth.PubSecKeyOptions;
-import io.vertx.ext.auth.authentication.TokenCredentials;
-import io.vertx.ext.auth.jwt.JWTAuth;
-import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.impl.types.BulkType;
@@ -33,8 +23,6 @@ import lombok.extern.java.Log;
 public class RedisDB implements UserRepository, AutoCloseable {
 
   private final RedisAPI redisAPI;
-  private final JWTAuth jwtAuth;
-  private final JWTAuth jwtRefresh;
 
   @Inject
   public RedisDB(Vertx vertx, Config.RedisConfig redisConfig) {
@@ -45,50 +33,6 @@ public class RedisDB implements UserRepository, AutoCloseable {
         .ping(List.of(""))
         .onFailure(throwable -> log.log(SEVERE, "failed to ping redis", throwable))
         .onSuccess(resp -> log.info("pinged redis"));
-
-    jwtAuth =
-        JWTAuth.create(
-            vertx,
-            new JWTAuthOptions()
-                .setJWTOptions(
-                    new JWTOptions().setExpiresInMinutes(1).setIssuer("iam").setSubject("iam"))
-                .addPubSecKey(
-                    new PubSecKeyOptions()
-                        .setId("authKey1")
-                        .setAlgorithm("HS256")
-                        .setBuffer("123supersecretkey789"))
-                .addPubSecKey(
-                    new PubSecKeyOptions()
-                        .setId("authKey2")
-                        .setAlgorithm("HS256")
-                        .setBuffer("321supersecretkey987")));
-
-    jwtRefresh =
-        JWTAuth.create(
-            vertx,
-            new JWTAuthOptions()
-                .setJWTOptions(
-                    new JWTOptions().setExpiresInMinutes(10).setIssuer("iam").setSubject("iam"))
-                .addPubSecKey(
-                    new PubSecKeyOptions()
-                        .setId("refreshKey1")
-                        .setAlgorithm("HS256")
-                        .setBuffer("123anothersupersecretkey789")));
-
-    String test = generateToken(jwtAuth, "test");
-
-    jwtAuth
-        .authenticate(new TokenCredentials(test))
-        .onSuccess(
-            user -> {
-              // principal contains issuer and everything added in jwtAuth.generateToken below
-              log.log(INFO, "user: {0}", new Object[] {user.principal()});
-            })
-        .onFailure(
-            err -> {
-              // Failed!
-              log.log(SEVERE, "failed", err);
-            });
   }
 
   @Override
@@ -97,18 +41,15 @@ public class RedisDB implements UserRepository, AutoCloseable {
   }
 
   @Override
-  public Future<LoginResponseDto> login(LoginRequestDto requestDto) {
+  public Future<LoginResponseDto> login(
+      String username, String password, String token, String refreshToken) {
     return redisAPI
-        .hget(requestDto.username(), User.PASSWORD_FIELD)
+        .hget(username, User.PASSWORD_FIELD)
         .map(
             response -> {
-              if (!(response instanceof BulkType bt
-                  && bt.toString().equals(requestDto.password()))) {
+              if (!(response instanceof BulkType bt && bt.toString().equals(password))) {
                 throw new IllegalArgumentException("user not found");
               }
-
-              String token = authToken(requestDto.username());
-              String refreshToken = refreshToken(requestDto.username());
 
               return new LoginResponseDto(token, refreshToken);
             })
@@ -117,91 +58,59 @@ public class RedisDB implements UserRepository, AutoCloseable {
                 redisAPI
                     .hset(
                         List.of(
-                            requestDto.username(),
-                            User.TOKEN_FIELD,
-                            loginResponseDto.token(),
-                            User.REFRESH_TOKEN_FIELD,
-                            loginResponseDto.refreshToken()))
+                            username, User.REFRESH_TOKEN_FIELD, loginResponseDto.refreshToken()))
                     .map(resp -> loginResponseDto)
                     .onComplete(resp -> log.info("user logged in")));
   }
 
   @Override
-  public Future<RefreshResponseDto> refresh(RefreshRequestDto requestDto) {
+  public Future<RefreshResponseDto> refresh(
+      String username, String oldRefreshToken, String newToken, String newRefreshToken) {
     return redisAPI
-        .hget(requestDto.username(), User.REFRESH_TOKEN_FIELD)
+        .hget(username, User.REFRESH_TOKEN_FIELD)
         .map(
             response -> {
-              if (!(response instanceof BulkType bt && bt.toString().equals(requestDto.token()))) {
+              if (!(response instanceof BulkType bt && bt.toString().equals(oldRefreshToken))) {
                 throw new IllegalArgumentException("invalid token refresh");
               }
 
-              String token = authToken(requestDto.username());
-              String refreshToken = refreshToken(requestDto.username());
-
-              return new RefreshResponseDto(token, refreshToken);
+              return new RefreshResponseDto(newToken, newRefreshToken);
             })
         .flatMap(
             loginResponseDto ->
                 redisAPI
                     .hset(
                         List.of(
-                            requestDto.username(),
-                            User.TOKEN_FIELD,
-                            loginResponseDto.token(),
-                            User.REFRESH_TOKEN_FIELD,
-                            loginResponseDto.refreshToken()))
+                            username, User.REFRESH_TOKEN_FIELD, loginResponseDto.refreshToken()))
                     .map(resp -> loginResponseDto)
                     .onComplete(resp -> log.info("user refreshed")));
   }
 
   @Override
-  public Future<RegisterResponseDto> register(RegisterRequestDto requestDto) {
-    record Tokens(String token, String refreshToken) {}
+  public Future<RegisterResponseDto> register(
+      String username, String password, String token, String refreshToken) {
 
     return redisAPI
-        .exists(List.of(requestDto.username()))
+        .exists(List.of(username))
         .map(
             resp -> {
               if (!(resp instanceof NumberType nt && nt.toLong() == 0L)) {
                 throw new IllegalArgumentException("user already exists");
               }
 
-              return new Tokens(
-                  authToken(requestDto.username()), refreshToken(requestDto.username()));
+              return null;
             })
         .flatMap(
             tokens ->
                 redisAPI
                     .hset(
                         List.of(
-                            requestDto.username(),
+                            username,
                             User.PASSWORD_FIELD,
-                            requestDto.password(),
-                            User.TOKEN_FIELD,
-                            tokens.token(),
+                            password,
                             User.REFRESH_TOKEN_FIELD,
-                            tokens.refreshToken()))
+                            refreshToken))
                     .map(resp -> new RegisterResponseDto())
                     .onComplete(resp -> log.info("user registered")));
-  }
-
-  @Override
-  public Future<Boolean> isValidToken(String username, String token) {
-    return redisAPI
-        .hget(username, User.TOKEN_FIELD)
-        .map(response -> response instanceof BulkType bt && bt.toString().equals(token));
-  }
-
-  private String authToken(String username) {
-    return generateToken(jwtAuth, username);
-  }
-
-  private String refreshToken(String username) {
-    return generateToken(jwtRefresh, username);
-  }
-
-  private String generateToken(JWTAuth jwtAuth, String username) {
-    return jwtAuth.generateToken(new JsonObject().put("app-id", "iam").put("sub", username));
   }
 }

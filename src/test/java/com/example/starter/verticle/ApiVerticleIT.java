@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import com.example.starter.TestcontainerLogConsumer;
-import com.example.starter.grpc.echo.CheckSessionRequest;
-import com.example.starter.grpc.echo.CheckSessionResponse;
+import com.example.starter.grpc.echo.CheckTokenRequest;
+import com.example.starter.grpc.echo.CheckTokenResponse;
 import com.example.starter.grpc.echo.IamGrpc;
 import com.example.starter.web.route.dto.LoginRequestDto;
 import com.example.starter.web.route.dto.LoginResponseDto;
@@ -138,14 +138,11 @@ class ApiVerticleIT {
     GrpcClient.client(Vertx.vertx())
         .request(
             SocketAddress.inetSocketAddress(app.getMappedPort(50051), "localhost"),
-            IamGrpc.getCheckSessionMethod())
+            IamGrpc.getCheckTokenMethod())
         .compose(
             request -> {
               var checkSessionRequest =
-                  CheckSessionRequest.newBuilder()
-                      .setUserId("name")
-                      .setUserToken(refreshResponseDto.token())
-                      .build();
+                  CheckTokenRequest.newBuilder().setToken(refreshResponseDto.token()).build();
               request.end(checkSessionRequest);
               return request.response().compose(GrpcReadStream::last);
             })
@@ -156,7 +153,7 @@ class ApiVerticleIT {
               }
 
               try {
-                CheckSessionResponse response = asyncResult.result();
+                CheckTokenResponse response = asyncResult.result();
                 assertThat(response).isNotNull();
                 assertThat(response.getValid()).isTrue();
               } finally {

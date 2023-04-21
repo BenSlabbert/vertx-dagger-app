@@ -7,5 +7,8 @@ import dagger.Module;
 public interface ServiceModule {
 
   @Binds
-  UserService create(UserServiceImpl userService);
+  UserService createUserService(UserServiceImpl userService);
+
+  @Binds
+  TokenService createTokenService(JwtService jwtService);
 }

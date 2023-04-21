@@ -15,29 +15,32 @@ import javax.inject.Singleton;
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
+  private final TokenService tokenService;
 
   @Inject
-  public UserServiceImpl(UserRepository userRepository) {
+  public UserServiceImpl(UserRepository userRepository, TokenService tokenService) {
     this.userRepository = userRepository;
+    this.tokenService = tokenService;
   }
 
   @Override
   public Future<LoginResponseDto> login(LoginRequestDto user) {
-    return userRepository.login(user);
+    String token = tokenService.authToken(user.username());
+    String refreshToken = tokenService.refreshToken(user.username());
+    return userRepository.login(user.username(), user.password(), token, refreshToken);
   }
 
   @Override
   public Future<RefreshResponseDto> refresh(RefreshRequestDto user) {
-    return userRepository.refresh(user);
+    String token = tokenService.authToken(user.username());
+    String refreshToken = tokenService.refreshToken(user.username());
+    return userRepository.refresh(user.username(), user.token(), token, refreshToken);
   }
 
   @Override
   public Future<RegisterResponseDto> register(RegisterRequestDto user) {
-    return userRepository.register(user);
-  }
-
-  @Override
-  public Future<Boolean> isValidToken(String username, String token) {
-    return userRepository.isValidToken(username, token);
+    String token = tokenService.authToken(user.username());
+    String refreshToken = tokenService.refreshToken(user.username());
+    return userRepository.register(user.username(), user.password(), token, refreshToken);
   }
 }

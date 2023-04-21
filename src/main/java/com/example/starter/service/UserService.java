@@ -15,6 +15,4 @@ public interface UserService {
   Future<RefreshResponseDto> refresh(RefreshRequestDto user);
 
   Future<RegisterResponseDto> register(RegisterRequestDto user);
-
-  Future<Boolean> isValidToken(String username, String token);
 }

@@ -1,14 +1,13 @@
 package com.example.starter.verticle;
 
 import com.example.starter.config.Config;
-import com.example.starter.grpc.echo.CheckSessionResponse;
+import com.example.starter.grpc.echo.CheckTokenResponse;
 import com.example.starter.grpc.echo.IamGrpc;
 import com.example.starter.grpc.echo.PingResponse;
-import com.example.starter.service.UserService;
+import com.example.starter.service.TokenService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.grpc.common.GrpcStatus;
 import io.vertx.grpc.server.GrpcServer;
 import java.util.logging.Level;
 import javax.inject.Inject;
@@ -18,12 +17,12 @@ import lombok.extern.java.Log;
 public class GrpcVerticle extends AbstractVerticle {
 
   private final Config.GrpcConfig grpcConfig;
-  private final UserService userService;
+  private final TokenService tokenService;
 
   @Inject
-  public GrpcVerticle(Config.GrpcConfig grpcConfig, UserService userService) {
+  public GrpcVerticle(Config.GrpcConfig grpcConfig, TokenService tokenService) {
     this.grpcConfig = grpcConfig;
-    this.userService = userService;
+    this.tokenService = tokenService;
   }
 
   @Override
@@ -45,24 +44,24 @@ public class GrpcVerticle extends AbstractVerticle {
                       request.response().end(PingResponse.newBuilder().setMessage("pong").build());
                     }))
         .callHandler(
-            IamGrpc.getCheckSessionMethod(),
+            IamGrpc.getCheckTokenMethod(),
             request ->
                 request.handler(
                     check -> {
-                      log.info("check session");
-                      userService
-                          .isValidToken(check.getUserId(), check.getUserToken())
+                      log.info("check token");
+                      tokenService
+                          .isValidToken(check.getToken())
                           .onSuccess(
-                              valid -> {
-                                var response =
-                                    CheckSessionResponse.newBuilder().setValid(valid).build();
-                                request.response().end(response);
-                              })
+                              valid ->
+                                  request
+                                      .response()
+                                      .end(CheckTokenResponse.newBuilder().setValid(true).build()))
                           .onFailure(
-                              throwable -> {
-                                log.log(Level.SEVERE, "unable to check request", throwable);
-                                request.response().status(GrpcStatus.INTERNAL).end();
-                              });
+                              throwable ->
+                                  request
+                                      .response()
+                                      .end(
+                                          CheckTokenResponse.newBuilder().setValid(false).build()));
                     }));
 
     vertx

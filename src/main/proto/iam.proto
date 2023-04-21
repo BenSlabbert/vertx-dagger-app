@@ -9,7 +9,7 @@ package echo;
 
 service Iam {
   rpc Ping(PingRequest) returns (PingResponse) {}
-  rpc CheckSession(CheckSessionRequest) returns (CheckSessionResponse) {}
+  rpc CheckToken(CheckTokenRequest) returns (CheckTokenResponse) {}
 }
 
 message PingRequest {
@@ -19,11 +19,10 @@ message PingResponse {
   string message = 1;
 }
 
-message CheckSessionRequest {
-  string user_id = 1;
-  string user_token = 2;
+message CheckTokenRequest {
+  string token = 2;
 }
 
-message CheckSessionResponse {
+message CheckTokenResponse {
   bool valid = 1;
 }
