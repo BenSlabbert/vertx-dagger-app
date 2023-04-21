@@ -3,7 +3,6 @@ package com.example.starter.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.starter.config.Config;
-import com.example.starter.web.route.handler.PingHandler;
 import com.example.starter.web.route.handler.UserHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
@@ -19,14 +18,11 @@ import lombok.extern.java.Log;
 public class ApiVerticle extends AbstractVerticle {
 
   private final UserHandler userHandler;
-  private final PingHandler pingHandler;
   private final Config.HttpConfig httpConfig;
 
   @Inject
-  public ApiVerticle(
-      UserHandler userHandler, PingHandler pingHandler, Config.HttpConfig httpConfig) {
+  public ApiVerticle(UserHandler userHandler, Config.HttpConfig httpConfig) {
     this.userHandler = userHandler;
-    this.pingHandler = pingHandler;
     this.httpConfig = httpConfig;
   }
 
@@ -46,7 +42,6 @@ public class ApiVerticle extends AbstractVerticle {
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
     // main routes
-    mainRouter.get("/ping").handler(pingHandler);
     mainRouter.route("/api/*").subRouter(apiRouter);
 
     // api routes

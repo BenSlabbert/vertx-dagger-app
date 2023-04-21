@@ -1,7 +1,6 @@
 package com.example.starter.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
-import static io.vertx.core.http.HttpMethod.GET;
 import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,17 +11,14 @@ import com.example.starter.web.SchemaValidator;
 import com.example.starter.web.route.dto.LoginRequestDto;
 import com.example.starter.web.route.dto.RefreshRequestDto;
 import com.example.starter.web.route.dto.RegisterRequestDto;
-import com.example.starter.web.route.handler.PingHandler;
 import com.example.starter.web.route.handler.UserHandler;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpClientResponse;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -37,25 +33,8 @@ class ApiVerticleTest extends HttpServerTest {
     vertx.deployVerticle(
         new ApiVerticle(
             new UserHandler(Mockito.mock(UserService.class), Mockito.mock(SchemaValidator.class)),
-            new PingHandler(),
             new Config.HttpConfig(port)),
         testContext.succeedingThenComplete());
-  }
-
-  @Test
-  void ping(Vertx vertx, VertxTestContext testContext) {
-    vertx
-        .createHttpClient()
-        .request(GET, port, "localhost", "/ping")
-        .compose(req -> req.send().compose(HttpClientResponse::body))
-        .onComplete(
-            testContext.succeeding(
-                buffer ->
-                    testContext.verify(
-                        () -> {
-                          assertThat(buffer).hasToString("pong");
-                          testContext.completeNow();
-                        })));
   }
 
   static Stream<Arguments> loginInvalidRequestSource() {

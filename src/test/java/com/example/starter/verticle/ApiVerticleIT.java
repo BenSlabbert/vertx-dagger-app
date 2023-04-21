@@ -76,18 +76,6 @@ class ApiVerticleIT {
   }
 
   @Test
-  void apiPingTest() {
-    String body =
-        RestAssured.get("/ping")
-            .then()
-            .assertThat()
-            .statusCode(HttpResponseStatus.OK.code())
-            .extract()
-            .asString();
-    assertThat(body).isEqualTo("pong");
-  }
-
-  @Test
   void fullHappyPath() throws InterruptedException {
     String register = new RegisterRequestDto("name", "pswd").toJson().encode();
     String login = new LoginRequestDto("name", "pswd").toJson().encode();
