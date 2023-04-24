@@ -13,11 +13,18 @@ This repo also builds two docker images:
   "httpConfig": {
     "port": 8080
   },
+  "grpcConfig": {
+    "port": 50051
+  },
   "redisConfig": {
     "host": "localhost",
     "port": 6379,
     "database": 0
+  },
+  "verticleConfig": {
+    "numberOfInstances": 1
   }
 }
+
 ```
 
