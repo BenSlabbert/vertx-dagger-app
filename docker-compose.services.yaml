@@ -5,7 +5,19 @@ services:
     image: "iam:jvm-latest"
     ports:
     - "8080:8080"
+    volumes:
+    - "./docker-config.json:/config.json"
+    command:
+    - "/config.json"
+    depends_on:
+    - "redis"
   native:
     image: "iam:native-latest"
     ports:
     - "8080:8080"
+    volumes:
+    - "./docker-config.json:/config.json"
+    command:
+    - "/config.json"
+    depends_on:
+    - "redis"

@@ -6,6 +6,7 @@ target/
 mvnw*
 .mvn/
 dev-config.json
+docker-config.json
 *.tar.gz
 file-uploads
 .attach_pid*
