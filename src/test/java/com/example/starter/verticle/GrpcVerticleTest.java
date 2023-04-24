@@ -5,9 +5,9 @@ import static org.mockito.Mockito.when;
 
 import com.example.starter.HttpServerTest;
 import com.example.starter.config.Config;
-import com.example.starter.grpc.echo.CheckTokenRequest;
-import com.example.starter.grpc.echo.IamGrpc;
-import com.example.starter.grpc.echo.PingRequest;
+import com.example.starter.grpc.iam.CheckTokenRequest;
+import com.example.starter.grpc.iam.IamGrpc;
+import com.example.starter.grpc.iam.PingRequest;
 import com.example.starter.service.TokenService;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;

@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import com.example.starter.TestcontainerLogConsumer;
-import com.example.starter.grpc.echo.CheckTokenRequest;
-import com.example.starter.grpc.echo.CheckTokenResponse;
-import com.example.starter.grpc.echo.IamGrpc;
+import com.example.starter.grpc.iam.CheckTokenRequest;
+import com.example.starter.grpc.iam.CheckTokenResponse;
+import com.example.starter.grpc.iam.IamGrpc;
 import com.example.starter.web.route.dto.LoginRequestDto;
 import com.example.starter.web.route.dto.LoginResponseDto;
 import com.example.starter.web.route.dto.RefreshRequestDto;

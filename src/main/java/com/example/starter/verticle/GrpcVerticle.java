@@ -1,14 +1,16 @@
 package com.example.starter.verticle;
 
 import com.example.starter.config.Config;
-import com.example.starter.grpc.echo.CheckTokenResponse;
-import com.example.starter.grpc.echo.IamGrpc;
-import com.example.starter.grpc.echo.PingResponse;
+import com.example.starter.grpc.iam.CheckTokenResponse;
+import com.example.starter.grpc.iam.IamGrpc;
+import com.example.starter.grpc.iam.PingResponse;
 import com.example.starter.service.TokenService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.grpc.common.GrpcStatus;
 import io.vertx.grpc.server.GrpcServer;
+import io.vertx.grpc.server.GrpcServerRequest;
 import java.util.logging.Level;
 import javax.inject.Inject;
 import lombok.extern.java.Log;
@@ -37,18 +39,17 @@ public class GrpcVerticle extends AbstractVerticle {
     grpcServer
         .callHandler(
             IamGrpc.getPingMethod(),
-            request ->
-                request.handler(
-                    echo -> {
-                      log.info("get an echo request");
-                      request.response().end(PingResponse.newBuilder().setMessage("pong").build());
-                    }))
+            request -> {
+              request.handler(
+                  pingRequest ->
+                      request.response().end(PingResponse.newBuilder().setMessage("pong").build()));
+              request.exceptionHandler(throwable -> setInternalStatusError(request, throwable));
+            })
         .callHandler(
             IamGrpc.getCheckTokenMethod(),
-            request ->
-                request.handler(
-                    check -> {
-                      log.info("check token");
+            request -> {
+              request.handler(
+                  check ->
                       tokenService
                           .isValidToken(check.getToken())
                           .onSuccess(
@@ -61,8 +62,11 @@ public class GrpcVerticle extends AbstractVerticle {
                                   request
                                       .response()
                                       .end(
-                                          CheckTokenResponse.newBuilder().setValid(false).build()));
-                    }));
+                                          CheckTokenResponse.newBuilder()
+                                              .setValid(false)
+                                              .build())));
+              request.exceptionHandler(throwable -> setInternalStatusError(request, throwable));
+            });
 
     vertx
         .createHttpServer(new HttpServerOptions().setPort(grpcConfig.port()).setHost("0.0.0.0"))
@@ -77,6 +81,11 @@ public class GrpcVerticle extends AbstractVerticle {
                 startPromise.fail(res.cause());
               }
             });
+  }
+
+  private void setInternalStatusError(GrpcServerRequest<?, ?> request, Throwable throwable) {
+    log.log(Level.SEVERE, "exception while handling request", throwable);
+    request.response().status(GrpcStatus.INTERNAL).end();
   }
 
   @Override
