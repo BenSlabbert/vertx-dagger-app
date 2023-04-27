@@ -1,18 +1,20 @@
 #!make
 
-IMAGE_NAME := iam-spa
+IMAGE_NAME := iam-sveltekit
 IMAGE_TAG := latest
 
 .PHONY: install
 install:
 	yarn
+	yarn install
 
-.PHONY: build
-build:
-	yarn run build
+.PHONY: buildDev
+buildDev:
+	yarn run buildDev
 
 .PHONY: buildDocker
 buildDocker:
+	yarn run buildDocker
 	docker buildx build . -t ${IMAGE_NAME}:${IMAGE_TAG}
 
 .PHONY: dockerSave
@@ -24,8 +26,8 @@ check:
 	yarn run check
 
 .PHONY: run
-run:
-	yarn run dev
+run: fmt
+	BASE_URL="" BROWSER=firefox yarn run dev
 
 .PHONY: lint
 lint:
