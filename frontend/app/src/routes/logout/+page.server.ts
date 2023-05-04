@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import routes from '../routes';
 import loggerFactory from '$lib/logger';
+import { COOKIE_ID } from '$lib/constants';
 const logger = loggerFactory(import.meta.url);
 
 export const load: PageServerLoad = async () => {
@@ -15,7 +16,7 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default({ cookies }) {
 		// eat the cookie
-		cookies.set('sessionId', '', {
+		cookies.set(COOKIE_ID, '', {
 			path: routes.home,
 			expires: new Date(0)
 		});

@@ -1,6 +1,7 @@
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import routes from './routes/routes';
 import loggerFactory from '$lib/logger';
+import { COOKIE_ID } from '$lib/constants';
 const logger = loggerFactory(import.meta.url);
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -11,7 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	// handle client requests to the server
 
-	const sessionId = event.cookies.get('sessionId');
+	const sessionId = event.cookies.get(COOKIE_ID);
 
 	// should be redirected to login page
 	if (!sessionId) {
@@ -33,13 +34,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// login handler will set the session on the cookie
 	// we can set this from the cookie or get data from another service
 	// maybe cookie must not have data, just an ID
-	const cookie = event.cookies.get('sessionId');
+	const cookie = event.cookies.get(COOKIE_ID);
 	logger.info(`cookie ${cookie}`);
 	const c = JSON.parse(cookie ? cookie : '{}');
 
 	event.locals.user = {
 		name: c.name,
-		role: c.role
+		role: c.role,
+		token: c.token,
+		refreshToken: c.refreshToken
 	};
 
 	return await resolve(event);

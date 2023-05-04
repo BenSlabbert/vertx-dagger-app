@@ -13,7 +13,8 @@
 		console.log('input', input);
 		console.log('loading', loading);
 
-		return async ({ update }) => {
+		return async ({ update, result }) => {
+			console.log('result.status', result.status);
 			// do something after the form submits
 			loading = false;
 			console.log('loading', loading);
@@ -21,6 +22,12 @@
 		};
 	};
 </script>
+
+{#if form?.errors?.server}
+	<div>
+		<p>{form?.errors?.server}</p>
+	</div>
+{/if}
 
 <form method="POST" use:enhance={processLogin}>
 	<input type="text" name="user" value={form?.data?.user ?? ''} />

@@ -6,10 +6,11 @@ declare namespace App {
 		user: {
 			name: string;
 			role: string;
+			token: string;
+			refreshToken: string;
 		};
 	}
 	// interface Error {}
-	// interface Locals {}
 	// interface PageData {}
 	// interface Platform {}
 }

@@ -5,6 +5,11 @@
 	import './styles.css';
 </script>
 
+<svelte:head>
+	<title>Home</title>
+	<meta name="description" content="App" />
+</svelte:head>
+
 <header>
 	<Nav />
 </header>

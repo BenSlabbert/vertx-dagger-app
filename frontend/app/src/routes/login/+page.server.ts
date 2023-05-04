@@ -3,6 +3,8 @@ import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { zfd } from 'zod-form-data';
 import routes from '../routes';
 import loggerFactory from '$lib/logger';
+import { factory } from '$lib/api';
+import { COOKIE_ID } from '$lib/constants';
 const logger = loggerFactory(import.meta.url);
 
 async function sleep(ms: number) {
@@ -23,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies, locals }) => {
+	default: async ({ request, cookies, locals, fetch }) => {
 		// redirect user if logged in
 		if (locals.user) {
 			logger.info('user logged in already, redirect');
@@ -53,12 +55,33 @@ export const actions: Actions = {
 			return fail(400, data);
 		}
 
+		const iamApi = factory(fetch);
+
+		// call the iam service
+		const resp = await iamApi.login({
+			username: formData.get('user') as string,
+			password: formData.get('password') as string
+		});
+
+		if (resp instanceof Error) {
+			// failed
+			logger.error(`failed to reach iam api: ${resp}`);
+			// todo display error to user
+			return fail(503, {
+				errors: {
+					server: resp.message
+				}
+			});
+		}
+
 		const cookie = {
 			name: 'cookie-name',
-			role: 'cookie-role'
+			role: 'cookie-role',
+			token: resp.token,
+			refreshToken: resp.refreshToken
 		};
 
-		cookies.set('sessionId', JSON.stringify(cookie), {
+		cookies.set(COOKIE_ID, JSON.stringify(cookie), {
 			// send cookie for every page
 			path: routes.home,
 			// server side only cookie so you can't use `document.cookie`
