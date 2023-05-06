@@ -93,6 +93,8 @@ function isTokenExpired(token: string | null): boolean {
 	}
 
 	const { exp } = getTokenPaylod(token);
+	if (exp === 0) return true;
+
 	const now = Math.floor(Date.now() / 1000);
 	const diff = now - exp;
 	logger.info(`cooking lifetime remaining: ${diff}`);
@@ -100,7 +102,18 @@ function isTokenExpired(token: string | null): boolean {
 }
 
 function getTokenPaylod(token: string): tokenPayload {
-	return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString('utf-8'));
+	const zero = { exp: 0 };
+	if (!token) {
+		return zero;
+	}
+
+	const split = token.split('.');
+
+	if (split.length !== 3) {
+		return zero;
+	}
+
+	return JSON.parse(Buffer.from(split[1], 'base64').toString('utf-8'));
 }
 
 export const handleFetch: HandleFetch = ({ request, fetch }) => {
