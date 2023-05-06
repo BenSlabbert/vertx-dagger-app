@@ -2,13 +2,14 @@
 // for information about these interfaces
 // and what to do when importing types
 declare namespace App {
+	interface User {
+		name: string;
+		role: string;
+		token: string;
+		refreshToken: string;
+	}
 	interface Locals {
-		user: {
-			name: string;
-			role: string;
-			token: string;
-			refreshToken: string;
-		};
+		user: User;
 	}
 	// interface Error {}
 	// interface PageData {}

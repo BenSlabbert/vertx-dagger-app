@@ -7,9 +7,8 @@
 	{#if !$page.data.user}
 		<p>not logged in</p>
 		<a href="/login">login</a>
-	{/if}
-	{#if $page.data.user}
-		<p>logged in</p>
+	{:else}
+		<p>logged in, hello: {$page.data.user.name}!</p>
 		<ul>
 			<li>
 				<a href={routes.home}>Home</a>

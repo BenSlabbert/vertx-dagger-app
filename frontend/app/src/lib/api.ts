@@ -46,10 +46,19 @@ class Test implements IamApi {
 
 	async login(request: LoginRequest): Promise<LoginResponse | Error> {
 		try {
-			const resp = await this.fetch('http://localhost:8080/api/iam');
+			const resp = await this.fetch('http://localhost:8080/api/login', {
+				method: 'POST',
+				body: JSON.stringify({
+					username: request.username,
+					password: request.password
+				})
+			});
+
+			const json = await resp.json();
+
 			return {
-				token: '',
-				refreshToken: ''
+				token: json.token,
+				refreshToken: json.refreshToken
 			};
 		} catch (e) {
 			return this.handleError(e);
@@ -58,10 +67,19 @@ class Test implements IamApi {
 
 	async refresh(request: RefreshRequest): Promise<RefreshResponse | Error> {
 		try {
-			const resp = await this.fetch('/api/iam');
+			const resp = await this.fetch('http://localhost:8080/api/refresh', {
+				method: 'POST',
+				body: JSON.stringify({
+					username: request.username,
+					token: request.token
+				})
+			});
+
+			const json = await resp.json();
+
 			return {
-				token: '',
-				refreshToken: ''
+				token: json.token,
+				refreshToken: json.refreshToken
 			};
 		} catch (e) {
 			return this.handleError(e);
@@ -70,7 +88,14 @@ class Test implements IamApi {
 
 	async register(request: RegisterRequest): Promise<RegisterResponse | Error> {
 		try {
-			const resp = await this.fetch('http://localhost:8080/api/iam');
+			const resp = await this.fetch('http://localhost:8080/api/register', {
+				method: 'POST',
+				body: JSON.stringify({
+					username: request.username,
+					password: request.password
+				})
+			});
+
 			return {};
 		} catch (e) {
 			return this.handleError(e);
@@ -96,24 +121,3 @@ export function factory(
 ) {
 	return new Test(fetch);
 }
-
-// export default {
-// 	login: async (request: LoginRequest) => {
-// 		return {
-// 			token: '',
-// 			refreshToken: ''
-// 		};
-// 	},
-// 	refresh: async (request: RefreshRequest) => {
-// 		return {
-// 			token: '',
-// 			refreshToken: ''
-// 		};
-// 	},
-// 	register: async (request: RegisterRequest) => {
-// 		return {
-// 			token: '',
-// 			refreshToken: ''
-// 		};
-// 	}
-// } satisfies IamApi;

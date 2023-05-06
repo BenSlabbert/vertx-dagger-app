@@ -16,10 +16,7 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default({ cookies }) {
 		// eat the cookie
-		cookies.set(COOKIE_ID, '', {
-			path: routes.home,
-			expires: new Date(0)
-		});
+		cookies.delete(COOKIE_ID, { path: routes.home });
 
 		// redirect the user
 		throw redirect(302, routes.login);

@@ -1,5 +1,5 @@
+---
 version: '3'
-
 services:
   ui:
     image: 'iam-sveltekit:latest'
@@ -7,5 +7,3 @@ services:
       ORIGIN: 'http://localhost:3000'
     ports:
       - '3000:3000'
-    depends_on:
-      - catalog

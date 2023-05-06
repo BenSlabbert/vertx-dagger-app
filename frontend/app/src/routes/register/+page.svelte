@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import type { ActionData } from './$types';
-	import routes from '../routes';
 
 	export let form: ActionData;
 	let loading = false;
@@ -42,10 +41,8 @@
 	{/if}
 
 	<button aria-busy={loading} class:secondary={loading} type="submit">
-		{#if !loading}Login{/if}
+		{#if !loading}Register{/if}
 	</button>
-
-	<a href={routes.register}>new here? register</a>
 </form>
 
 <style>

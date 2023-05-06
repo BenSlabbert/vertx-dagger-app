@@ -7,9 +7,13 @@ import { factory } from '$lib/api';
 import { COOKIE_ID } from '$lib/constants';
 const logger = loggerFactory(import.meta.url);
 
+async function sleep(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export const load: PageServerLoad = async ({ locals }) => {
 	// redirect user if logged in
-	logger.info(`login load, locals.user ${locals.user}`);
+	logger.info(`register load, locals.user ${locals.user}`);
 
 	if (locals.user) {
 		logger.info(`user is already logged in, redirect to ${routes.home}`);
@@ -17,7 +21,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	// if not logged in, just render the page
-	logger.info('user not logged in, just render login page');
+	logger.info('user not logged in, just render register page');
 };
 
 export const actions: Actions = {
@@ -27,6 +31,8 @@ export const actions: Actions = {
 			logger.info('user logged in already, redirect');
 			throw redirect(302, routes.home);
 		}
+
+		await sleep(250);
 
 		// get the form data
 		const formData = await request.formData();
@@ -52,7 +58,7 @@ export const actions: Actions = {
 		const iamApi = factory(fetch);
 
 		// call the iam service
-		const resp = await iamApi.login({
+		const resp = await iamApi.register({
 			username: formData.get('user') as string,
 			password: formData.get('password') as string
 		});
@@ -68,28 +74,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const cookie = {
-			name: formData.get('user'),
-			role: 'cookie-role',
-			token: resp.token,
-			refreshToken: resp.refreshToken
-		};
-
-		cookies.set(COOKIE_ID, JSON.stringify(cookie), {
-			// send cookie for every page
-			path: routes.home,
-			// server side only cookie so you can't use `document.cookie`
-			httpOnly: true,
-			// only requests from same site can send cookies
-			// https://developer.mozilla.org/en-US/docs/Glossary/CSRF
-			sameSite: 'strict',
-			// only sent over HTTPS in production
-			secure: process.env.NODE_ENV === 'production',
-			// set cookie to expire after a month
-			maxAge: 60 * 60 * 24 * 30
-		});
-
-		// redirect the user
-		throw redirect(303, routes.home);
+		// redirect to login
+		throw redirect(303, routes.login);
 	}
 };

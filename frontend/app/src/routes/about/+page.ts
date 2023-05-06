@@ -1,4 +1,3 @@
-// this page requires auth, so it cannot be prerendered
-export const csr = true;
-export const ssr = false;
+export const csr = false;
+export const ssr = true;
 export const prerender = false;

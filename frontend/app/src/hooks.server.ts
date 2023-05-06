@@ -2,7 +2,13 @@ import type { Handle, HandleFetch } from '@sveltejs/kit';
 import routes from './routes/routes';
 import loggerFactory from '$lib/logger';
 import { COOKIE_ID } from '$lib/constants';
+import { Buffer } from 'buffer';
+import { factory } from '$lib/api';
 const logger = loggerFactory(import.meta.url);
+
+type tokenPayload = {
+	exp: number;
+};
 
 export const handle: Handle = async ({ event, resolve }) => {
 	logger.info(`handle request ${event.route.id}`);
@@ -12,10 +18,21 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	// handle client requests to the server
 
-	const sessionId = event.cookies.get(COOKIE_ID);
+	let cookie = event.cookies.get(COOKIE_ID);
+	logger.info(`cookie: ${cookie}`);
+
+	// if the tokens are expired we redirect, however the cookies for the event may
+	// still contain expired tokens
+	if (cookie) {
+		const appUser = JSON.parse(cookie) as App.User;
+		if (isTokenExpired(appUser.token) && isTokenExpired(appUser.refreshToken)) {
+			event.cookies.delete(COOKIE_ID, { path: routes.home });
+			cookie = undefined;
+		}
+	}
 
 	// should be redirected to login page
-	if (!sessionId) {
+	if (!cookie) {
 		if (!event.route) {
 			// no idea why this happens
 			return await resolve(event);
@@ -26,6 +43,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return await resolve(event);
 		}
 
+		if (routes.register === event.route.id) {
+			logger.info('register route, resolve event');
+			return await resolve(event);
+		}
+
+		logger.info('no session, redirect to login page');
+
 		// no session and not loggin in, redirect to login page
 		return Response.redirect(`${import.meta.env.VITE_APP_HOST}${routes.login}`);
 	}
@@ -34,19 +58,50 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// login handler will set the session on the cookie
 	// we can set this from the cookie or get data from another service
 	// maybe cookie must not have data, just an ID
-	const cookie = event.cookies.get(COOKIE_ID);
-	logger.info(`cookie ${cookie}`);
-	const c = JSON.parse(cookie ? cookie : '{}');
+	const appUser = JSON.parse(cookie) as App.User;
 
-	event.locals.user = {
-		name: c.name,
-		role: c.role,
-		token: c.token,
-		refreshToken: c.refreshToken
-	};
+	if (isTokenExpired(appUser.token)) {
+		logger.error('session expired, check refreshToken');
+
+		if (isTokenExpired(appUser.refreshToken)) {
+			logger.error('refreshToken expired, redirect to login');
+			// both tokens expired, redirect to login
+			return Response.redirect(`${import.meta.env.VITE_APP_HOST}${routes.login}`);
+		}
+
+		// refresh the token
+		const iamApi = factory(event.fetch);
+		const resp = await iamApi.refresh({ username: appUser.name, token: appUser.refreshToken });
+		if (resp instanceof Error) {
+			logger.error(`failed to refresh token ${resp}`);
+			return Response.redirect(`${import.meta.env.VITE_APP_HOST}${routes.login}`);
+		}
+
+		// update locals
+		appUser.token = resp.token;
+		appUser.refreshToken = resp.refreshToken;
+	}
+
+	event.locals.user = appUser;
 
 	return await resolve(event);
 };
+
+function isTokenExpired(token: string | null): boolean {
+	if (!token) {
+		return true;
+	}
+
+	const { exp } = getTokenPaylod(token);
+	const now = Math.floor(Date.now() / 1000);
+	const diff = now - exp;
+	logger.info(`cooking lifetime remaining: ${diff}`);
+	return diff > 0;
+}
+
+function getTokenPaylod(token: string): tokenPayload {
+	return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString('utf-8'));
+}
 
 export const handleFetch: HandleFetch = ({ request, fetch }) => {
 	// https://kit.svelte.dev/docs/hooks#server-hooks-handlefetch
