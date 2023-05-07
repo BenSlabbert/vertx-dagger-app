@@ -4,12 +4,7 @@ import { zfd } from 'zod-form-data';
 import routes from '../routes';
 import loggerFactory from '$lib/logger';
 import { factory } from '$lib/api';
-import { COOKIE_ID } from '$lib/constants';
 const logger = loggerFactory(import.meta.url);
-
-async function sleep(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 export const load: PageServerLoad = async ({ locals }) => {
 	// redirect user if logged in
@@ -31,8 +26,6 @@ export const actions: Actions = {
 			logger.info('user logged in already, redirect');
 			throw redirect(302, routes.home);
 		}
-
-		await sleep(250);
 
 		// get the form data
 		const formData = await request.formData();

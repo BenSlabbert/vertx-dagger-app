@@ -6,7 +6,11 @@
 <nav>
 	{#if !$page.data.user}
 		<p>not logged in</p>
-		<a href="/login">login</a>
+		{#if $page.route.id === routes.login}
+			<a href={routes.register}>register</a>
+		{:else}
+			<a href={routes.login}>login</a>
+		{/if}
 	{:else}
 		<p>logged in, hello: {$page.data.user.name}!</p>
 		<ul>

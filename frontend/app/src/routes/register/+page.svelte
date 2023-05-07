@@ -5,8 +5,6 @@
 	export let form: ActionData;
 	let loading = false;
 
-	// for some reason this is using window.fetch and trigger the warning on the console
-	// need to investigate why
 	const processLogin: SubmitFunction = (input) => {
 		loading = true;
 		// do something before the form submits
