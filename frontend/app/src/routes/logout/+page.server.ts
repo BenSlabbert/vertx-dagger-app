@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import routes from '../routes';
+import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
 import { COOKIE_ID } from '$lib/constants';
 const logger = loggerFactory(import.meta.url);

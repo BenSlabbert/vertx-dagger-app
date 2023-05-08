@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import routes from './routes';
+	import routes from '$lib/routes';
 </script>
 
 <nav>

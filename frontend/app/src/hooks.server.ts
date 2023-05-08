@@ -1,5 +1,5 @@
 import type { Handle, HandleFetch } from '@sveltejs/kit';
-import routes from './routes/routes';
+import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
 import { COOKIE_ID } from '$lib/constants';
 import { Buffer } from 'buffer';

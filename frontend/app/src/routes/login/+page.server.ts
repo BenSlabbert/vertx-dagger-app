@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { zfd } from 'zod-form-data';
-import routes from '../routes';
+import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
 import { factory } from '$lib/api';
 import { COOKIE_ID } from '$lib/constants';

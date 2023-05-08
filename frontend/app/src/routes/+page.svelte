@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import routes from './routes';
+	import routes from '$lib/routes';
 
 	function redirectToLogin() {
 		if (browser) {
