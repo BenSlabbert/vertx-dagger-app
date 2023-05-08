@@ -19,7 +19,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// handle client requests to the server
 
 	let cookie = event.cookies.get(COOKIE_ID);
-	logger.info(`cookie: ${cookie}`);
 
 	// if the tokens are expired we redirect, however the cookies for the event may
 	// still contain expired tokens
