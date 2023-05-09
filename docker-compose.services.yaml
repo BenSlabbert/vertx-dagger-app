@@ -1,7 +1,7 @@
 ---
 version: "3"
 services:
-  jvm:
+  ima-jvm:
     image: "iam:jvm-latest"
     ports:
     - "8080:8080"
@@ -11,7 +11,7 @@ services:
     - "/config.json"
     depends_on:
     - "redis"
-  native:
+  ima-native:
     image: "iam:native-latest"
     ports:
     - "8080:8080"

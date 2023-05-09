@@ -1,33 +1,13 @@
-FROM ghcr.io/graalvm/graalvm-ce:22.3.1 as builder
-
-RUN gu install native-image
-
-ARG ZLIB_VERSION="zlib-1.2.13"
-ARG LINUX_MUSL="x86_64-linux-musl"
-
-# https://github.com/graalvm/graalvm-demos/tree/master/tiny-java-containers
-# https://www.graalvm.org/latest/reference-manual/native-image/guides/build-static-executables/
-RUN curl -L https://more.musl.cc/10/"$LINUX_MUSL"/"$LINUX_MUSL"-native.tgz -o "$LINUX_MUSL"-native.tgz && \
-    tar -xvf "$LINUX_MUSL"-native.tgz && \
-    curl -L https://zlib.net/"$ZLIB_VERSION".tar.gz -o "$ZLIB_VERSION".tar.gz && \
-    tar -xvf "$ZLIB_VERSION".tar.gz && \
-    cd "$ZLIB_VERSION" && \
-    ./configure --prefix=/app/"$LINUX_MUSL"-native --static && \
-    make && \
-    make install
-
-COPY . .
-# /app as thats the current workdir
-RUN export PATH=$PATH:/app/"$LINUX_MUSL"-native/bin ; ./mvnw package -DskipTests=true -Ddocker.skip=true -Pnative
-
 FROM scratch
 
 WORKDIR /app
 
-COPY --from=builder /app/iam/target/iam .
-COPY --from=builder /app/iam/target/iam.build_artifacts.txt .
+ARG MODULE
+
+COPY --from=native-parent-builder:latest /app/${MODULE}/target/${MODULE} app
+COPY --from=native-parent-builder:latest /app/${MODULE}/target/${MODULE}.build_artifacts.txt app.build_artifacts.txt
 
 EXPOSE 8080
 EXPOSE 50051
 
-ENTRYPOINT ["./iam"]
+ENTRYPOINT ["./app"]

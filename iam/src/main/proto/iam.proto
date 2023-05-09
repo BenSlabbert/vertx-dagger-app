@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "com.example.starter.grpc.iam";
+option java_package = "com.example.iam.grpc.iam";
 option java_outer_classname = "IamProto";
 option objc_class_prefix = "RTG";
 

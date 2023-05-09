@@ -16,14 +16,18 @@ wrapper:
 
 .PHONY: native
 native: wrapper
-	docker buildx build -f Dockerfile.native . -t iam:native-latest
-	# test the native image
+	docker buildx build -f Dockerfile.native-parent . -t native-parent-builder:latest
+	docker buildx build -f Dockerfile.native . -t iam:native-latest --build-arg MODULE=iam
+	docker buildx build -f Dockerfile.native . -t catalog:native-latest --build-arg MODULE=catalog
+	# test the native images
 	${M} install -DtestImageTag=native
 
 .PHONY: dockerSave
 dockerSave:
 	docker save iam:jvm-latest | gzip > iam-jvm_latest.tar.gz
 	docker save iam:native-latest | gzip > iam-native_latest.tar.gz
+	docker save catalog:jvm-latest | gzip > catalog-jvm_latest.tar.gz
+	docker save catalog:native-latest | gzip > catalog-native_latest.tar.gz
 
 .PHONY: clean
 clean:

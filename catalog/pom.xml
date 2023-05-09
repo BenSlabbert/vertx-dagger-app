@@ -8,11 +8,11 @@
     <version>${revision}</version>
   </parent>
 
-  <artifactId>iam</artifactId>
+  <artifactId>catalog</artifactId>
 
   <properties>
-    <finalName>iam</finalName>
-    <exec.mainClass>com.example.iam.Main</exec.mainClass>
+    <finalName>catalog</finalName>
+    <exec.mainClass>com.example.catalog.Main</exec.mainClass>
 
     <!--or native-->
     <testImageTag>jvm</testImageTag>
@@ -236,7 +236,7 @@
                 <argument>build</argument>
                 <argument>.</argument>
                 <argument>-t</argument>
-                <argument>iam:jvm-latest</argument>
+                <argument>catalog:jvm-latest</argument>
               </arguments>
             </configuration>
           </execution>

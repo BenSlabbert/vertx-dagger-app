@@ -1,7 +1,6 @@
 .idea/
 .git/
 target/
-!target/lib
-!target/*.jar
 iam/Dockerfile
-iam/Dockerfile.native
+catalog/Dockerfile
+Dockerfile.native
