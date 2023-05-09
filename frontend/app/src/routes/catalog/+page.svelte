@@ -1,0 +1,30 @@
+<div>
+	<table>
+		<thead>
+			<tr>
+				<th>one</th>
+				<th>two</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td>foot 1</td>
+				<td>foot 2</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>

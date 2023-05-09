@@ -1,9 +1,9 @@
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
-import { COOKIE_ID } from '$lib/constants';
 import { Buffer } from 'buffer';
 import { factory } from '$lib/api';
+import cookieUtils from '$lib/cookie_utils';
 const logger = loggerFactory(import.meta.url);
 
 type tokenPayload = {
@@ -18,22 +18,23 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	// handle client requests to the server
 
-	let cookie = event.cookies.get(COOKIE_ID);
+	let cookieJSON = cookieUtils.get(event.cookies);
 
 	// if the tokens are expired we redirect, however the cookies for the event may
 	// still contain expired tokens
-	if (cookie) {
-		const appUser = JSON.parse(cookie) as App.User;
+	if (cookieJSON) {
+		const appUser = JSON.parse(cookieJSON) as App.User;
 		if (isTokenExpired(appUser.token) && isTokenExpired(appUser.refreshToken)) {
-			event.cookies.delete(COOKIE_ID, { path: routes.home });
-			cookie = undefined;
+			cookieUtils.clear(event.cookies);
+			cookieJSON = undefined;
 		}
 	}
 
 	// should be redirected to login page
-	if (!cookie) {
+	if (!cookieJSON) {
 		if (!event.route) {
 			// no idea why this happens
+			// might be a 404
 			return await resolve(event);
 		}
 
@@ -57,7 +58,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// login handler will set the session on the cookie
 	// we can set this from the cookie or get data from another service
 	// maybe cookie must not have data, just an ID
-	const appUser = JSON.parse(cookie) as App.User;
+	const appUser = JSON.parse(cookieJSON) as App.User;
 
 	if (isTokenExpired(appUser.token)) {
 		logger.error('session expired, check refreshToken');
@@ -79,6 +80,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// update locals
 		appUser.token = resp.token;
 		appUser.refreshToken = resp.refreshToken;
+
+		// update the cookie
+		// same code as in login server route
+		cookieUtils.set(event.cookies, appUser);
 	}
 
 	event.locals.user = appUser;

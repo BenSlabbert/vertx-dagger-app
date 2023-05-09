@@ -4,7 +4,7 @@ import { zfd } from 'zod-form-data';
 import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
 import { factory } from '$lib/api';
-import { COOKIE_ID } from '$lib/constants';
+import cookieUtils from '$lib/cookie_utils';
 const logger = loggerFactory(import.meta.url);
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -73,21 +73,9 @@ export const actions: Actions = {
 			role: 'cookie-role',
 			token: resp.token,
 			refreshToken: resp.refreshToken
-		};
+		} as App.User;
 
-		cookies.set(COOKIE_ID, JSON.stringify(cookie), {
-			// send cookie for every page
-			path: routes.home,
-			// server side only cookie so you can't use `document.cookie`
-			httpOnly: true,
-			// only requests from same site can send cookies
-			// https://developer.mozilla.org/en-US/docs/Glossary/CSRF
-			sameSite: 'strict',
-			// only sent over HTTPS in production
-			secure: process.env.NODE_ENV === 'production',
-			// set cookie to expire after a month
-			maxAge: 60 * 60 * 24 * 30
-		});
+		cookieUtils.set(cookies, cookie);
 
 		// redirect the user
 		throw redirect(303, routes.home);

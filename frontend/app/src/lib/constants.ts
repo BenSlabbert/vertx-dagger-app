@@ -1,5 +1,3 @@
-const EMPTY_STRING = '';
+export const EMPTY_STRING = '';
 
-const COOKIE_ID = 'session';
-
-export { EMPTY_STRING, COOKIE_ID };
+export const COOKIE_ID = 'session';

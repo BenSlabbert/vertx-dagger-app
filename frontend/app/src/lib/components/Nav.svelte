@@ -18,6 +18,9 @@
 				<a href={routes.home}>Home</a>
 			</li>
 			<li>
+				<a href={routes.catalog}>Catalog</a>
+			</li>
+			<li>
 				<a href={routes.about}>About</a>
 			</li>
 			<li>
