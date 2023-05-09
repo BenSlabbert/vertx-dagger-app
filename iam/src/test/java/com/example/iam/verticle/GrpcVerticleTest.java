@@ -3,8 +3,8 @@ package com.example.iam.verticle;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import com.example.commons.config.Config;
 import com.example.iam.HttpServerTest;
-import com.example.iam.config.Config;
 import com.example.iam.grpc.iam.CheckTokenRequest;
 import com.example.iam.grpc.iam.IamGrpc;
 import com.example.iam.grpc.iam.PingRequest;

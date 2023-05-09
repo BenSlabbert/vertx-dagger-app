@@ -4,8 +4,8 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.commons.config.Config;
 import com.example.iam.HttpServerTest;
-import com.example.iam.config.Config;
 import com.example.iam.service.UserService;
 import com.example.iam.web.SchemaValidator;
 import com.example.iam.web.route.dto.LoginRequestDto;

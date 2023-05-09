@@ -4,7 +4,7 @@ import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 import static java.util.logging.Level.WARNING;
 
-import com.example.iam.config.Config;
+import com.example.commons.config.Config;
 import com.example.iam.web.route.dto.JsonWriter;
 import com.example.iam.web.route.dto.LoginRequestDto;
 import com.example.iam.web.route.dto.RefreshRequestDto;

@@ -1,4 +1,4 @@
-package com.example.iam.config;
+package com.example.commons.config;
 
 import io.vertx.core.json.JsonObject;
 import lombok.Builder;

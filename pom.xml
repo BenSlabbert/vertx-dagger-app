@@ -10,6 +10,7 @@
   <modules>
     <module>iam</module>
     <module>catalog</module>
+    <module>commons</module>
   </modules>
 
   <properties>

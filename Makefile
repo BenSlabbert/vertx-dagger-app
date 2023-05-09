@@ -6,6 +6,10 @@ M := "mvn"
 build: clean fmt
 	${M} install
 
+.PHONY: compile
+compile: clean fmt
+	${M} compile test-compile
+
 .PHONY: fmt
 fmt:
 	${M} spotless:apply

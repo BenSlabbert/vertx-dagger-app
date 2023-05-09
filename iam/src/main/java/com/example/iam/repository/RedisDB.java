@@ -2,7 +2,7 @@ package com.example.iam.repository;
 
 import static java.util.logging.Level.SEVERE;
 
-import com.example.iam.config.Config;
+import com.example.commons.config.Config;
 import com.example.iam.entity.User;
 import com.example.iam.web.route.dto.LoginResponseDto;
 import com.example.iam.web.route.dto.RefreshResponseDto;

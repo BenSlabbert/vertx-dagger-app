@@ -1,6 +1,6 @@
 package com.example.iam.verticle;
 
-import com.example.iam.config.Config;
+import com.example.commons.config.Config;
 import com.example.iam.grpc.iam.CheckTokenResponse;
 import com.example.iam.grpc.iam.IamGrpc;
 import com.example.iam.grpc.iam.PingResponse;
