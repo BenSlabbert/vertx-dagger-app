@@ -3,5 +3,5 @@
 target/
 !target/lib
 !target/*.jar
-backend/Dockerfile
-backend/Dockerfile.native
+iam/Dockerfile
+iam/Dockerfile.native

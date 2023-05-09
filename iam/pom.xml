@@ -4,11 +4,11 @@
 
   <parent>
     <groupId>com.example.iam</groupId>
-    <artifactId>iam-parent</artifactId>
+    <artifactId>parent</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <artifactId>backend</artifactId>
+  <artifactId>iam</artifactId>
 
   <properties>
     <finalName>iam</finalName>

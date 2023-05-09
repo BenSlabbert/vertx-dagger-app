@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.example.iam</groupId>
-  <artifactId>iam-parent</artifactId>
+  <artifactId>parent</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
 
   <modules>
-    <module>backend</module>
+    <module>iam</module>
   </modules>
 
   <properties>

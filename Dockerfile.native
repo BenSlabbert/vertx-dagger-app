@@ -24,8 +24,8 @@ FROM scratch
 
 WORKDIR /app
 
-COPY --from=builder /app/backend/target/iam .
-COPY --from=builder /app/backend/target/iam.build_artifacts.txt .
+COPY --from=builder /app/iam/target/iam .
+COPY --from=builder /app/iam/target/iam.build_artifacts.txt .
 
 EXPOSE 8080
 EXPOSE 50051
