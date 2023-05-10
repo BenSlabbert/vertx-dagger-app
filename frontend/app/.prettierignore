@@ -14,3 +14,7 @@ yarn.lock
 .pnp.*
 /.yarn/
 playwright-report/
+
+*.yml
+*.yaml
+*.md

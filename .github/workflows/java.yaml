@@ -32,7 +32,6 @@ jobs:
         name: "docker-save-native"
         path: "iam-native_latest.tar.gz"
         retention-days: 30
-
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
@@ -44,4 +43,35 @@ jobs:
       with:
         name: "docker-save-native"
         path: "catalog-native_latest.tar.gz"
+        retention-days: 30
+    - uses: "actions/checkout@v3"
+    - name: "Setup node"
+      uses: "actions/setup-node@v3"
+      with:
+        node-version: 18
+    - run: "make -C frontend/app"
+    - run: "make lint -C frontend/app"
+    - run: "make buildDev -C frontend/app"
+    - run: "make buildDocker -C frontend/app"
+    - run: "make dockerSave -C frontend/app"
+    - name: "Install Playwright Browsers"
+      run: "yarn playwright install --with-deps"
+    - run: "make test -C frontend/app"
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
+        name: "ui-build"
+        path: "frontend/app/build/"
+        retention-days: 30
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
+        name: "playwright-report"
+        path: "frontend/app/playwright-report/"
+        retention-days: 30
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
+        name: "docker-save"
+        path: "frontend/app/iam-sveltekit_latest.tar.gz"
         retention-days: 30
