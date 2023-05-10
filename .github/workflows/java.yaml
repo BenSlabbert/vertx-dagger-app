@@ -32,3 +32,16 @@ jobs:
         name: "docker-save-native"
         path: "iam-native_latest.tar.gz"
         retention-days: 30
+
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
+        name: "docker-save-jvm"
+        path: "catalog-jvm_latest.tar.gz"
+        retention-days: 30
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
+        name: "docker-save-native"
+        path: "catalog-native_latest.tar.gz"
+        retention-days: 30
