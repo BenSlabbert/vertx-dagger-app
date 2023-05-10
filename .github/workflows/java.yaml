@@ -55,7 +55,7 @@ jobs:
     - run: "make buildDocker -C frontend/app"
     - run: "make dockerSave -C frontend/app"
     - name: "Install Playwright Browsers"
-      run: "yarn playwright install --with-deps"
+      run: "yarn -cwd frontend/app playwright install --with-deps"
     - run: "make test -C frontend/app"
     - uses: "actions/upload-artifact@v3"
       if: "always()"
