@@ -8,15 +8,7 @@ option objc_class_prefix = "RTG";
 package iam;
 
 service Iam {
-  rpc Ping(PingRequest) returns (PingResponse) {}
   rpc CheckToken(CheckTokenRequest) returns (CheckTokenResponse) {}
-}
-
-message PingRequest {
-}
-
-message PingResponse {
-  string message = 1;
 }
 
 message CheckTokenRequest {

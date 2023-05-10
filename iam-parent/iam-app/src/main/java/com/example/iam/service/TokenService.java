@@ -7,6 +7,8 @@ public interface TokenService {
 
   Future<User> isValidToken(String token);
 
+  Future<User> isValidRefresh(String token);
+
   String authToken(String username);
 
   String refreshToken(String username);

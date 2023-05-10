@@ -7,8 +7,10 @@ import com.example.iam.entity.User;
 import com.example.iam.web.route.dto.LoginResponseDto;
 import com.example.iam.web.route.dto.RefreshResponseDto;
 import com.example.iam.web.route.dto.RegisterResponseDto;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.ext.web.handler.HttpException;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.impl.types.BulkType;
@@ -48,12 +50,12 @@ public class RedisDB implements UserRepository, AutoCloseable {
         .map(
             response -> {
               if (!(response instanceof BulkType bt && bt.toString().equals(password))) {
-                throw new IllegalArgumentException("user not found");
+                throw new HttpException(HttpResponseStatus.NOT_FOUND.code());
               }
 
               return new LoginResponseDto(token, refreshToken);
             })
-        .flatMap(
+        .compose(
             loginResponseDto ->
                 redisAPI
                     .hset(
@@ -71,12 +73,12 @@ public class RedisDB implements UserRepository, AutoCloseable {
         .map(
             response -> {
               if (!(response instanceof BulkType bt && bt.toString().equals(oldRefreshToken))) {
-                throw new IllegalArgumentException("invalid token refresh");
+                throw new HttpException(HttpResponseStatus.BAD_REQUEST.code());
               }
 
               return new RefreshResponseDto(newToken, newRefreshToken);
             })
-        .flatMap(
+        .compose(
             loginResponseDto ->
                 redisAPI
                     .hset(
@@ -95,12 +97,12 @@ public class RedisDB implements UserRepository, AutoCloseable {
         .map(
             resp -> {
               if (!(resp instanceof NumberType nt && nt.toLong() == 0L)) {
-                throw new IllegalArgumentException("user already exists");
+                throw new HttpException(HttpResponseStatus.CONFLICT.code());
               }
 
               return null;
             })
-        .flatMap(
+        .compose(
             tokens ->
                 redisAPI
                     .hset(

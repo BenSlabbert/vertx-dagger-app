@@ -25,6 +25,5 @@ This repo also builds two docker images:
     "numberOfInstances": 1
   }
 }
-
 ```
 

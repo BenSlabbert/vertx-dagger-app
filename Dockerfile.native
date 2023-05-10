@@ -3,9 +3,10 @@ FROM scratch
 WORKDIR /app
 
 ARG MODULE
+ARG BINARY
 
-COPY --from=native-parent-builder:latest /app/${MODULE}/target/${MODULE} app
-COPY --from=native-parent-builder:latest /app/${MODULE}/target/${MODULE}.build_artifacts.txt app.build_artifacts.txt
+COPY --from=native-parent-builder:latest /app/${MODULE}/target/${BINARY} app
+COPY --from=native-parent-builder:latest /app/${MODULE}/target/${BINARY}.build_artifacts.txt app.build_artifacts.txt
 
 EXPOSE 8080
 EXPOSE 50051

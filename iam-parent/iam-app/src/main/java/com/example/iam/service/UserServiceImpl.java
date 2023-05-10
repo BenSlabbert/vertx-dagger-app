@@ -32,9 +32,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Future<RefreshResponseDto> refresh(RefreshRequestDto user) {
-    String token = tokenService.authToken(user.username());
-    String refreshToken = tokenService.refreshToken(user.username());
-    return userRepository.refresh(user.username(), user.token(), token, refreshToken);
+    return tokenService
+        .isValidRefresh(user.token())
+        .compose(
+            u -> {
+              String token = tokenService.authToken(user.username());
+              String refreshToken = tokenService.refreshToken(user.username());
+              return userRepository.refresh(user.username(), user.token(), token, refreshToken);
+            });
   }
 
   @Override

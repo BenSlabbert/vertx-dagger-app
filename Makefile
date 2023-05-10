@@ -21,8 +21,8 @@ wrapper:
 .PHONY: native
 native: wrapper
 	docker buildx build -f Dockerfile.native-parent . -t native-parent-builder:latest
-	docker buildx build -f Dockerfile.native . -t iam:native-latest --build-arg MODULE=iam
-	docker buildx build -f Dockerfile.native . -t catalog:native-latest --build-arg MODULE=catalog
+	docker buildx build -f Dockerfile.native . -t iam:native-latest --build-arg MODULE=iam-parent/iam-app --build-arg BINARY=iam
+	docker buildx build -f Dockerfile.native . -t catalog:native-latest --build-arg MODULE=catalog  --build-arg BINARY=catalog
 	# test the native images
 	${M} install -DtestImageTag=native
 

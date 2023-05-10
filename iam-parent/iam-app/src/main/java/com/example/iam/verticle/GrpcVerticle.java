@@ -3,7 +3,6 @@ package com.example.iam.verticle;
 import com.example.commons.config.Config;
 import com.example.iam.grpc.iam.CheckTokenResponse;
 import com.example.iam.grpc.iam.IamGrpc;
-import com.example.iam.grpc.iam.PingResponse;
 import com.example.iam.service.TokenService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
@@ -36,37 +35,25 @@ public class GrpcVerticle extends AbstractVerticle {
 
     var grpcServer = GrpcServer.server(vertx);
 
-    grpcServer
-        .callHandler(
-            IamGrpc.getPingMethod(),
-            request -> {
-              request.handler(
-                  pingRequest ->
-                      request.response().end(PingResponse.newBuilder().setMessage("pong").build()));
-              request.exceptionHandler(throwable -> setInternalStatusError(request, throwable));
-            })
-        .callHandler(
-            IamGrpc.getCheckTokenMethod(),
-            request -> {
-              request.handler(
-                  check ->
-                      tokenService
-                          .isValidToken(check.getToken())
-                          .onSuccess(
-                              valid ->
-                                  request
-                                      .response()
-                                      .end(CheckTokenResponse.newBuilder().setValid(true).build()))
-                          .onFailure(
-                              throwable ->
-                                  request
-                                      .response()
-                                      .end(
-                                          CheckTokenResponse.newBuilder()
-                                              .setValid(false)
-                                              .build())));
-              request.exceptionHandler(throwable -> setInternalStatusError(request, throwable));
-            });
+    grpcServer.callHandler(
+        IamGrpc.getCheckTokenMethod(),
+        request -> {
+          request.handler(
+              check ->
+                  tokenService
+                      .isValidToken(check.getToken())
+                      .onSuccess(
+                          valid ->
+                              request
+                                  .response()
+                                  .end(CheckTokenResponse.newBuilder().setValid(true).build()))
+                      .onFailure(
+                          throwable ->
+                              request
+                                  .response()
+                                  .end(CheckTokenResponse.newBuilder().setValid(false).build())));
+          request.exceptionHandler(throwable -> setInternalStatusError(request, throwable));
+        });
 
     vertx
         .createHttpServer(new HttpServerOptions().setPort(grpcConfig.port()).setHost("0.0.0.0"))

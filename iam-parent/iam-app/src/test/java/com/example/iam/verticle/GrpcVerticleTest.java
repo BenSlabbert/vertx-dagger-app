@@ -7,7 +7,6 @@ import com.example.commons.config.Config;
 import com.example.iam.HttpServerTest;
 import com.example.iam.grpc.iam.CheckTokenRequest;
 import com.example.iam.grpc.iam.IamGrpc;
-import com.example.iam.grpc.iam.PingRequest;
 import com.example.iam.service.TokenService;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -20,7 +19,6 @@ import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -37,23 +35,6 @@ class GrpcVerticleTest extends HttpServerTest {
     vertx.deployVerticle(
         new GrpcVerticle(new Config.GrpcConfig(port), mockTokenService),
         testContext.succeedingThenComplete());
-  }
-
-  @Test
-  void ping(Vertx vertx, VertxTestContext testContext) {
-    GrpcClient.client(vertx)
-        .request(socketAddress(), IamGrpc.getPingMethod())
-        .compose(
-            request -> {
-              request.end(PingRequest.newBuilder().build());
-              return request.response().compose(GrpcReadStream::last);
-            })
-        .onFailure(testContext::failNow)
-        .onSuccess(
-            reply -> {
-              assertThat(reply.getMessage()).isEqualTo("pong");
-              testContext.completeNow();
-            });
   }
 
   @CsvSource({"true", "false"})

@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>iam</module>
+    <module>iam-parent</module>
     <module>catalog</module>
     <module>commons</module>
   </modules>
@@ -17,6 +17,8 @@
     <revision>1.0.0-SNAPSHOT</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <finalName>iam</finalName>
     <exec.mainClass>com.example.starter.Main</exec.mainClass>
