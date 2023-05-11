@@ -33,6 +33,8 @@ jobs:
         path: "catalog-native_latest.tar.gz"
         retention-days: 30
   build-frontend:
+    runs-on: "ubuntu-latest"
+    steps:
     - uses: "actions/checkout@v3"
     - name: "Setup node"
       uses: "actions/setup-node@v3"
