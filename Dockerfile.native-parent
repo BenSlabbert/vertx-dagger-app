@@ -1,4 +1,4 @@
-FROM ghcr.io/graalvm/graalvm-ce:22.3.1 as builder
+FROM ghcr.io/graalvm/graalvm-ce:22.3.1 AS builder
 
 RUN gu install native-image
 
