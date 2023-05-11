@@ -1,25 +1,9 @@
 # test
 
-yarn
-yarn install
-yarn playwright install
+run docker image locally:
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```shell
+docker container run --rm -it -p 3000:3000 -e VITE_APP_HOST="http://localhost:3000" iam-sveltekit:latest
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
+you must specify `VITE_APP_HOST` otherwise URLs will be broken
