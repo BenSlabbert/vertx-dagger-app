@@ -39,6 +39,7 @@ fmt:
 
 .PHONY: test
 test:
+	yarn playwright install --with-deps
 	yarn run test
 	yarn playwright test
 

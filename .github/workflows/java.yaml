@@ -8,7 +8,7 @@ name: "Java + Maven + Docker"
     branches:
     - "main"
 jobs:
-  build:
+  build-backend:
     runs-on: "ubuntu-latest"
     steps:
     - uses: "actions/checkout@v3"
@@ -23,27 +23,16 @@ jobs:
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
-        name: "docker-save-jvm"
-        path: "iam-jvm_latest.tar.gz"
-        retention-days: 30
-    - uses: "actions/upload-artifact@v3"
-      if: "always()"
-      with:
-        name: "docker-save-native"
+        name: "docker-iam-native"
         path: "iam-native_latest.tar.gz"
         retention-days: 30
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
-        name: "docker-save-jvm"
-        path: "catalog-jvm_latest.tar.gz"
-        retention-days: 30
-    - uses: "actions/upload-artifact@v3"
-      if: "always()"
-      with:
-        name: "docker-save-native"
+        name: "docker-catalog-native"
         path: "catalog-native_latest.tar.gz"
         retention-days: 30
+  build-frontend:
     - uses: "actions/checkout@v3"
     - name: "Setup node"
       uses: "actions/setup-node@v3"
@@ -54,8 +43,6 @@ jobs:
     - run: "make buildDev -C frontend/app"
     - run: "make buildDocker -C frontend/app"
     - run: "make dockerSave -C frontend/app"
-    - name: "Install Playwright Browsers"
-      run: "yarn --cwd frontend/app playwright install --with-deps"
     - run: "make test -C frontend/app"
     - uses: "actions/upload-artifact@v3"
       if: "always()"
@@ -72,6 +59,6 @@ jobs:
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
-        name: "docker-save"
+        name: "ui-docker"
         path: "frontend/app/iam-sveltekit_latest.tar.gz"
         retention-days: 30
