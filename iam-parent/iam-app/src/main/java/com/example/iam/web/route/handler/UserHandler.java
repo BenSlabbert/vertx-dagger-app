@@ -8,7 +8,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.iam.service.UserService;
-import com.example.iam.web.SchemaValidator;
+import com.example.iam.web.SchemaValidatorDelegator;
 import com.example.iam.web.route.dto.LoginRequestDto;
 import com.example.iam.web.route.dto.RefreshRequestDto;
 import com.example.iam.web.route.dto.RegisterRequestDto;
@@ -23,17 +23,17 @@ import lombok.extern.java.Log;
 public class UserHandler {
 
   private final UserService userService;
-  private final SchemaValidator schemaValidator;
+  private final SchemaValidatorDelegator schemaValidatorDelegator;
 
   @Inject
-  public UserHandler(UserService userService, SchemaValidator schemaValidator) {
+  public UserHandler(UserService userService, SchemaValidatorDelegator schemaValidatorDelegator) {
     this.userService = userService;
-    this.schemaValidator = schemaValidator;
+    this.schemaValidatorDelegator = schemaValidatorDelegator;
   }
 
   public void login(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
-    Boolean valid = schemaValidator.validate(LoginRequestDto.class, body);
+    Boolean valid = schemaValidatorDelegator.validate(LoginRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
       log.log(SEVERE, "invalid login request params");
@@ -59,7 +59,7 @@ public class UserHandler {
 
   public void refresh(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
-    Boolean valid = schemaValidator.validate(RefreshRequestDto.class, body);
+    Boolean valid = schemaValidatorDelegator.validate(RefreshRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
       log.log(SEVERE, "invalid refresh request params");
@@ -85,7 +85,7 @@ public class UserHandler {
 
   public void register(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
-    Boolean valid = schemaValidator.validate(RegisterRequestDto.class, body);
+    Boolean valid = schemaValidatorDelegator.validate(RegisterRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
       log.log(SEVERE, "invalid register request params");

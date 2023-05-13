@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.commons.config.Config;
 import com.example.iam.HttpServerTest;
 import com.example.iam.service.UserService;
-import com.example.iam.web.SchemaValidator;
+import com.example.iam.web.SchemaValidatorDelegator;
 import com.example.iam.web.route.dto.LoginRequestDto;
 import com.example.iam.web.route.dto.RefreshRequestDto;
 import com.example.iam.web.route.dto.RegisterRequestDto;
@@ -32,7 +32,8 @@ class ApiVerticleTest extends HttpServerTest {
   void prepare(Vertx vertx, VertxTestContext testContext) {
     vertx.deployVerticle(
         new ApiVerticle(
-            new UserHandler(Mockito.mock(UserService.class), Mockito.mock(SchemaValidator.class)),
+            new UserHandler(
+                Mockito.mock(UserService.class), Mockito.mock(SchemaValidatorDelegator.class)),
             new Config.HttpConfig(port)),
         testContext.succeedingThenComplete());
   }

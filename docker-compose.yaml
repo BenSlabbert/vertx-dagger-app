@@ -5,3 +5,11 @@ services:
     image: "redis:7-alpine"
     ports:
     - "6379:6379"
+  postgres:
+    image: "postgres:15-alpine"
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "db"
+    ports:
+    - "5432:5432"

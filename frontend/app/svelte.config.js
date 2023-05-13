@@ -5,7 +5,12 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			out: 'build',
+			precompress: true,
+			envPrefix: '',
+			polyfill: false
+		}),
 		paths: {
 			assets: '',
 			base: process.env.BASE_URL

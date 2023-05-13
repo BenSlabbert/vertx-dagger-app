@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.java.Log;
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.output.MigrateResult;
 
 @Log
 @Module
@@ -31,6 +33,18 @@ public class Main {
     log.log(INFO, "starting app: {0}", new Object[] {Arrays.toString(args)});
 
     config = ParseConfig.parseArgs(args);
+
+    Flyway flyway =
+        Flyway.configure()
+            .dataSource("jdbc:postgresql://localhost:5432/db", "user", "password")
+            .load();
+
+    // Start the migration
+    MigrateResult result = flyway.migrate();
+    if (!result.success) {
+      log.severe("failed to migrate db");
+      System.exit(1);
+    }
 
     List<String> reachableNameServers = ReachableNameServers.getReachableNameServers();
     log.log(INFO, "reachableNameServers: {0}", new Object[] {reachableNameServers});

@@ -14,7 +14,6 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@picocss/pico": "^1.5.10",
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-node": "^1.2.4",
 		"@sveltejs/kit": "^1.15.8",
@@ -31,10 +30,13 @@
 		"tslib": "^2.5.0",
 		"typescript": "^5.0.4",
 		"vite": "^4.3.2",
-		"vitest": "^0.25.8",
+		"vitest": "^0.25.8"
+	},
+	"type": "module",
+	"dependencies": {
+		"@picocss/pico": "^1.5.10",
 		"winston": "^3.8.2",
 		"zod": "^3.21.4",
 		"zod-form-data": "^2.0.1"
-	},
-	"type": "module"
+	}
 }

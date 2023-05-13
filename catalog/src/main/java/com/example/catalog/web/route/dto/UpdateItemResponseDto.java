@@ -1,9 +1,9 @@
-package com.example.iam.web.route.dto;
+package com.example.catalog.web.route.dto;
 
 import com.example.commons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 
-public record RegisterResponseDto() implements JsonWriter {
+public record UpdateItemResponseDto() implements JsonWriter {
 
   @Override
   public JsonObject toJson() {

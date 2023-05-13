@@ -1,5 +1,6 @@
 package com.example.iam.web.route.dto;
 
+import com.example.commons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import lombok.Builder;
