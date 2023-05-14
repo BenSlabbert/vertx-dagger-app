@@ -46,14 +46,23 @@ class ApiVerticleIT {
           .withLogConsumer(new TestcontainerLogConsumer());
 
   @Container
+  public GenericContainer<?> migrator =
+      new GenericContainer<>(DockerImageName.parse("catalog-migration:jvm-latest"))
+          .withNetwork(network)
+          .withNetworkAliases("migrator")
+          .dependsOn(postgres)
+          .waitingFor(Wait.forLogMessage(".*migration complete.*", 1))
+          .withClasspathResourceMapping("it-config.json", "/config.json", BindMode.READ_ONLY)
+          .withCommand("/config.json")
+          .withLogConsumer(new TestcontainerLogConsumer());
+
+  @Container
   public GenericContainer<?> app =
-      new GenericContainer<>(
-              DockerImageName.parse(
-                  "catalog:" + System.getProperty("testImageTag", "jvm") + "-latest"))
+      new GenericContainer<>(DockerImageName.parse("catalog:native-latest"))
           .withExposedPorts(8080)
           .withNetwork(network)
           .withNetworkAliases("app")
-          .dependsOn(postgres)
+          .dependsOn(postgres, migrator)
           .withEnv("DISABLE_SECURITY", Boolean.TRUE.toString())
           .waitingFor(
               Wait.forLogMessage(".*deployment id.*", 1).withStartupTimeout(Duration.ofSeconds(5L)))

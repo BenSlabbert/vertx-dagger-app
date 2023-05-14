@@ -10,6 +10,6 @@ public record FindOneRequestDto(UUID id) implements JsonWriter {
 
   @Override
   public JsonObject toJson() {
-    return new JsonObject().put(ID_FIELD, id);
+    return new JsonObject().put(ID_FIELD, id.toString());
   }
 }

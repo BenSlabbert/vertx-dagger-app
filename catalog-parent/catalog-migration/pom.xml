@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.example.parent</groupId>
+    <artifactId>catalog-parent</artifactId>
+    <version>${revision}</version>
+  </parent>
+
+  <groupId>com.example.catalog.migration</groupId>
+  <artifactId>catalog-migration</artifactId>
+
+  <properties>
+    <finalName>catalog-migration</finalName>
+    <exec.mainClass>com.example.catalog.migration.Main</exec.mainClass>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.example.commons</groupId>
+      <artifactId>commons</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${finalName}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>${exec.mainClass}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>docker-build</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <skip>${docker.skip}</skip>
+              <executable>docker</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>buildx</argument>
+                <argument>build</argument>
+                <argument>.</argument>
+                <argument>-t</argument>
+                <argument>${finalName}:jvm-latest</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

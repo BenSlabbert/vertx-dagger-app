@@ -2,7 +2,7 @@ FROM azul/zulu-openjdk-alpine:17-latest
 
 WORKDIR /app
 
-COPY target/iam.jar app.jar
+COPY target/catalog-migration.jar app.jar
 
 COPY target/lib lib
 

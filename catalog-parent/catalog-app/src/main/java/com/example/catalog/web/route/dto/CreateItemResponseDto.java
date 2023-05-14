@@ -21,7 +21,7 @@ public record CreateItemResponseDto(UUID id, String name, long priceInCents) imp
   @Override
   public JsonObject toJson() {
     return new JsonObject()
-        .put(ID_FIELD, id)
+        .put(ID_FIELD, id.toString())
         .put(NAME_FIELD, name)
         .put(PRICE_IN_CENTS_FIELD, priceInCents);
   }

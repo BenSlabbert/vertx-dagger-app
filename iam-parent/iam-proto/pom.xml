@@ -7,6 +7,7 @@
     <version>${revision}</version>
   </parent>
 
+  <groupId>com.example.iam</groupId>
   <artifactId>iam-proto</artifactId>
 
   <dependencies>

@@ -9,7 +9,7 @@
 
   <modules>
     <module>iam-parent</module>
-    <module>catalog</module>
+    <module>catalog-parent</module>
     <module>commons</module>
   </modules>
 
@@ -19,12 +19,6 @@
     <java.version>17</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-
-    <finalName>iam</finalName>
-    <exec.mainClass>com.example.starter.Main</exec.mainClass>
-
-    <!--or native-->
-    <testImageTag>jvm</testImageTag>
     <docker.skip>false</docker.skip>
 
     <!--deps-->

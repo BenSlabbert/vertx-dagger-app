@@ -8,6 +8,7 @@
     <version>${revision}</version>
   </parent>
 
+  <groupId>com.example.iam</groupId>
   <artifactId>iam-app</artifactId>
 
   <properties>
@@ -16,12 +17,11 @@
 
     <!--or native-->
     <testImageTag>jvm</testImageTag>
-    <docker.skip>false</docker.skip>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.example.parent</groupId>
+      <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
     </dependency>
@@ -30,7 +30,7 @@
       <artifactId>dagger</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.parent</groupId>
+      <groupId>com.example.iam</groupId>
       <artifactId>iam-proto</artifactId>
       <version>${revision}</version>
     </dependency>
@@ -235,7 +235,7 @@
                 <argument>build</argument>
                 <argument>.</argument>
                 <argument>-t</argument>
-                <argument>iam:jvm-latest</argument>
+                <argument>${finalName}:jvm-latest</argument>
               </arguments>
             </configuration>
           </execution>
@@ -268,6 +268,7 @@
                 <buildArg>--report-unsupported-elements-at-runtime</buildArg>
                 <buildArg>-H:+PrintClassInitialization</buildArg>
                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                <buildArg>-H:+IncludeAllLocales</buildArg>
                 <buildArg>--verbose</buildArg>
                 <buildArg>--static</buildArg>
                 <buildArg>--libc=musl</buildArg>

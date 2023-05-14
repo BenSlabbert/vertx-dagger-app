@@ -4,11 +4,12 @@
 
   <parent>
     <groupId>com.example.parent</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>catalog-parent</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <artifactId>catalog</artifactId>
+  <groupId>com.example.catalog</groupId>
+  <artifactId>catalog-app</artifactId>
 
   <properties>
     <finalName>catalog</finalName>
@@ -16,7 +17,6 @@
 
     <!--or native-->
     <testImageTag>jvm</testImageTag>
-    <docker.skip>false</docker.skip>
   </properties>
 
   <dependencies>
@@ -25,7 +25,7 @@
       <artifactId>client</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.parent</groupId>
+      <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
     </dependency>
@@ -34,11 +34,7 @@
       <artifactId>dagger</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.example.parent</groupId>
+      <groupId>com.example.iam</groupId>
       <artifactId>iam-proto</artifactId>
       <version>${revision}</version>
     </dependency>
@@ -73,6 +69,12 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.example.catalog.migration</groupId>
+      <artifactId>catalog-migration</artifactId>
+      <version>${revision}</version>
       <scope>test</scope>
     </dependency>
     <!--overriding rest-assured transitive deps-->
@@ -230,7 +232,7 @@
                 <argument>build</argument>
                 <argument>.</argument>
                 <argument>-t</argument>
-                <argument>catalog:jvm-latest</argument>
+                <argument>${finalName}:jvm-latest</argument>
               </arguments>
             </configuration>
           </execution>
@@ -263,17 +265,16 @@
                 <buildArg>--report-unsupported-elements-at-runtime</buildArg>
                 <buildArg>-H:+PrintClassInitialization</buildArg>
                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-                <buildArg>-H:IncludeResources="*.sql$"</buildArg>
-                <buildArg>-H:Log=registerResource:3</buildArg>
+                <buildArg>-H:+IncludeAllLocales</buildArg>
                 <buildArg>--verbose</buildArg>
                 <buildArg>--static</buildArg>
                 <buildArg>--libc=musl</buildArg>
                 <!--https://www.graalvm.org/22.0/reference-manual/native-image/MemoryManagement/#java-heap-size-->
                 <!--preconfigure memory if not set-->
                 <buildArg>-H:+AddAllCharsets</buildArg>
-                <buildArg>-R:MinHeapSize=2m</buildArg>
-                <buildArg>-R:MaxHeapSize=10m</buildArg>
-                <buildArg>-R:MaxNewSize=1m</buildArg>
+                <buildArg>-R:MinHeapSize=32m</buildArg>
+                <buildArg>-R:MaxHeapSize=32m</buildArg>
+                <buildArg>-R:MaxNewSize=32m</buildArg>
               </buildArgs>
             </configuration>
             <executions>
