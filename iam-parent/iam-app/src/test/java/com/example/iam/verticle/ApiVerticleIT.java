@@ -20,6 +20,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.grpc.client.GrpcClient;
 import io.vertx.grpc.common.GrpcReadStream;
+import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.java.Log;
@@ -58,7 +59,8 @@ class ApiVerticleIT {
           .withNetwork(network)
           .withNetworkAliases("app")
           .dependsOn(redis)
-          .waitingFor(Wait.forLogMessage(".*deployment id.*", 1))
+          .waitingFor(
+              Wait.forLogMessage(".*deployment id.*", 1).withStartupTimeout(Duration.ofSeconds(5L)))
           .withClasspathResourceMapping("it-config.json", "/config.json", BindMode.READ_ONLY)
           .withCommand("/config.json")
           .withLogConsumer(new TestcontainerLogConsumer());

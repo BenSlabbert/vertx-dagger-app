@@ -5,6 +5,9 @@ import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
+import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
+import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.catalog.service.ItemService;
@@ -15,6 +18,7 @@ import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.HttpException;
+import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -33,66 +37,66 @@ public class ItemHandler {
   }
 
   public void findAll(RoutingContext ctx) {
-    JsonObject body = ctx.body().asJsonObject();
-    Boolean valid = schemaValidatorDelegator.validate(CreateItemRequestDto.class, body);
-
-    if (Boolean.FALSE.equals(valid)) {
-      log.log(SEVERE, "invalid create item request params");
-      ctx.response().setStatusCode(BAD_REQUEST.code()).end();
-      return;
-    }
-
     itemService
-        .findAll(new FindAllRequestDto(body))
+        .findAll(new FindAllRequestDto(new JsonObject()))
         .onFailure(
-            throwable -> {
-              log.log(SEVERE, "failed to find all items", throwable);
+            err -> {
+              log.log(SEVERE, "failed to find all items", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
-              ctx.end();
             })
         .onSuccess(
             dto ->
                 ctx.response()
                     .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(CREATED.code())
+                    .setStatusCode(OK.code())
                     .end(dto.toJson().toBuffer())
                     .onFailure(ctx::fail));
   }
 
-  public void findOne(RoutingContext ctx, long id) {
+  public void findOne(RoutingContext ctx, UUID id) {
     itemService
         .findById(id)
         .onFailure(
-            throwable -> {
-              log.log(SEVERE, "failed to find all items", throwable);
+            err -> {
+              log.log(SEVERE, "failed to find all items", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
-              ctx.end();
             })
         .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(CREATED.code())
-                    .end(dto.toJson().toBuffer())
-                    .onFailure(ctx::fail));
+            dto -> {
+              if (dto.isEmpty()) {
+                ctx.response().setStatusCode(NOT_FOUND.code()).end();
+                return;
+              }
+
+              ctx.response()
+                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                  .setStatusCode(OK.code())
+                  .end(dto.get().toJson().toBuffer())
+                  .onFailure(ctx::fail);
+            });
   }
 
-  public void deleteOne(RoutingContext ctx, long id) {
+  public void deleteOne(RoutingContext ctx, UUID id) {
     itemService
         .delete(id)
         .onFailure(
-            throwable -> {
-              log.log(SEVERE, "failed to find all items", throwable);
+            err -> {
+              log.log(SEVERE, "failed to find all items", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
-              ctx.end();
             })
         .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(CREATED.code())
-                    .end(dto.toJson().toBuffer())
-                    .onFailure(ctx::fail));
+            dto -> {
+              if (dto.isEmpty()) {
+                ctx.response().setStatusCode(NOT_FOUND.code()).end();
+                return;
+              }
+
+              ctx.response()
+                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                  .setStatusCode(NO_CONTENT.code())
+                  .end(dto.get().toJson().toBuffer())
+                  .onFailure(ctx::fail);
+            });
   }
 
   public void create(RoutingContext ctx) {
@@ -108,10 +112,9 @@ public class ItemHandler {
     itemService
         .create(new CreateItemRequestDto(body))
         .onFailure(
-            throwable -> {
-              log.log(SEVERE, "failed to create item", throwable);
+            err -> {
+              log.log(SEVERE, "failed to create item", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
-              ctx.end();
             })
         .onSuccess(
             dto ->
@@ -122,7 +125,7 @@ public class ItemHandler {
                     .onFailure(ctx::fail));
   }
 
-  public void update(RoutingContext ctx, long id) {
+  public void update(RoutingContext ctx, UUID id) {
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(UpdateItemRequestDto.class, body);
 
@@ -135,17 +138,22 @@ public class ItemHandler {
     itemService
         .update(id, new UpdateItemRequestDto(body))
         .onFailure(
-            throwable -> {
-              log.log(SEVERE, "failed to create item", throwable);
+            err -> {
+              log.log(SEVERE, "failed to create item", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
-              ctx.end();
             })
         .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(CREATED.code())
-                    .end(dto.toJson().toBuffer())
-                    .onFailure(ctx::fail));
+            dto -> {
+              if (dto.isEmpty()) {
+                ctx.response().setStatusCode(NOT_FOUND.code()).end();
+                return;
+              }
+
+              ctx.response()
+                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                  .setStatusCode(NO_CONTENT.code())
+                  .end(dto.get().toJson().toBuffer())
+                  .onFailure(ctx::fail);
+            });
   }
 }

@@ -263,6 +263,8 @@
                 <buildArg>--report-unsupported-elements-at-runtime</buildArg>
                 <buildArg>-H:+PrintClassInitialization</buildArg>
                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                <buildArg>-H:IncludeResources="*.sql$"</buildArg>
+                <buildArg>-H:Log=registerResource:3</buildArg>
                 <buildArg>--verbose</buildArg>
                 <buildArg>--static</buildArg>
                 <buildArg>--libc=musl</buildArg>

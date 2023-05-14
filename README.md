@@ -1,5 +1,7 @@
 # iam app
 
+Licensed under Apache 2.0 https://www.apache.org/licenses/LICENSE-2.0.txt
+
 Using [dagger2](https://dagger.dev/) and [vertx](https://vertx.io/) to talk to [redis](https://redis.io/).
 
 This repo also builds two docker images:
@@ -20,6 +22,13 @@ This repo also builds two docker images:
     "host": "localhost",
     "port": 6379,
     "database": 0
+  },
+  "postgresConfig": {
+    "host": "localhost",
+    "username": "user",
+    "password": "password",
+    "port": 5432,
+    "database": "db"
   },
   "verticleConfig": {
     "numberOfInstances": 1

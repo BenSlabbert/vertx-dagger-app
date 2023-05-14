@@ -54,12 +54,12 @@ public class Main {
 
     vertx
         .deployVerticle(dagger::provideNewApiVerticle, deploymentOptions)
-        .onFailure(throwable -> log.log(SEVERE, "error while deploying api verticle", throwable))
+        .onFailure(err -> log.log(SEVERE, "error while deploying api verticle", err))
         .onSuccess(id -> log.log(INFO, "api deployment id: {0}", new Object[] {id}));
 
     vertx
         .deployVerticle(dagger::provideNewGrpcVerticle, deploymentOptions)
-        .onFailure(throwable -> log.log(SEVERE, "error while deploying grpc verticle", throwable))
+        .onFailure(err -> log.log(SEVERE, "error while deploying grpc verticle", err))
         .onSuccess(id -> log.log(INFO, "grpc deployment id: {0}", new Object[] {id}));
   }
 

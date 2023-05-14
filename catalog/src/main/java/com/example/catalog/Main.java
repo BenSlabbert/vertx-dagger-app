@@ -36,10 +36,18 @@ public class Main {
 
     Flyway flyway =
         Flyway.configure()
-            .dataSource("jdbc:postgresql://localhost:5432/db", "user", "password")
+            .locations("classpath:migration")
+            .dataSource(
+                String.format(
+                    "jdbc:postgresql://%s:%d/%s",
+                    config.postgresConfig().host(),
+                    config.postgresConfig().port(),
+                    config.postgresConfig().database()),
+                config.postgresConfig().username(),
+                config.postgresConfig().password())
             .load();
 
-    // Start the migration
+    // fails with graalvm
     MigrateResult result = flyway.migrate();
     if (!result.success) {
       log.severe("failed to migrate db");
@@ -65,7 +73,7 @@ public class Main {
 
     vertx
         .deployVerticle(dagger::provideNewApiVerticle, deploymentOptions)
-        .onFailure(throwable -> log.log(SEVERE, "error while deploying api verticle", throwable))
+        .onFailure(err -> log.log(SEVERE, "error while deploying api verticle", err))
         .onSuccess(id -> log.log(INFO, "api deployment id: {0}", new Object[] {id}));
   }
 
@@ -82,6 +90,11 @@ public class Main {
   @Provides
   static Config.HttpConfig providesHttpConfig() {
     return config.httpConfig();
+  }
+
+  @Provides
+  static Config.PostgresConfig providesPostgresConfig() {
+    return config.postgresConfig();
   }
 
   @Provides

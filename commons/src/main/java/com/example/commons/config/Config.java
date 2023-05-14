@@ -8,6 +8,7 @@ public record Config(
     HttpConfig httpConfig,
     GrpcConfig grpcConfig,
     RedisConfig redisConfig,
+    PostgresConfig postgresConfig,
     VerticleConfig verticleConfig) {
 
   public static Config defaults() {
@@ -20,18 +21,35 @@ public record Config(
   public static Config fromJson(JsonObject jsonObject) {
     JsonObject httpConfig = jsonObject.getJsonObject("httpConfig");
     JsonObject grpcConfig = jsonObject.getJsonObject("grpcConfig");
-    JsonObject redisConfig = jsonObject.getJsonObject("redisConfig");
+    JsonObject redisConfig = jsonObject.getJsonObject("redisConfig", new JsonObject());
+    JsonObject postgresConfig = jsonObject.getJsonObject("postgresConfig", new JsonObject());
     JsonObject verticleConfig = jsonObject.getJsonObject("verticleConfig", new JsonObject());
 
-    return Config.builder()
+    ConfigBuilder builder = Config.builder();
+
+    if (!redisConfig.isEmpty()) {
+      builder.redisConfig(
+          RedisConfig.builder()
+              .host(redisConfig.getString("host"))
+              .port(redisConfig.getInteger("port"))
+              .database(redisConfig.getInteger("database"))
+              .build());
+    }
+
+    if (!postgresConfig.isEmpty()) {
+      builder.postgresConfig(
+          PostgresConfig.builder()
+              .host(postgresConfig.getString("host"))
+              .port(postgresConfig.getInteger("port"))
+              .username(postgresConfig.getString("username"))
+              .password(postgresConfig.getString("password"))
+              .database(postgresConfig.getString("database"))
+              .build());
+    }
+
+    return builder
         .httpConfig(HttpConfig.builder().port(httpConfig.getInteger("port")).build())
         .grpcConfig(GrpcConfig.builder().port(grpcConfig.getInteger("port")).build())
-        .redisConfig(
-            RedisConfig.builder()
-                .host(redisConfig.getString("host"))
-                .port(redisConfig.getInteger("port"))
-                .database(redisConfig.getInteger("database"))
-                .build())
         .verticleConfig(
             VerticleConfig.builder()
                 .numberOfInstances(verticleConfig.getInteger("numberOfInstances", 1))
@@ -55,4 +73,8 @@ public record Config(
       return String.format("redis://%s:%d/%d", host, port, database);
     }
   }
+
+  @Builder
+  public record PostgresConfig(
+      String host, int port, String database, String username, String password) {}
 }

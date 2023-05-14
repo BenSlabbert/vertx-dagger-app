@@ -1,0 +1,18 @@
+{
+  "httpConfig": {
+    "port": 8080
+  },
+  "grpcConfig": {
+    "port": 50051
+  },
+  "postgresConfig": {
+    "host": "postgres",
+    "username": "user",
+    "password": "password",
+    "port": 5432,
+    "database": "db"
+  },
+  "verticleConfig": {
+    "numberOfInstances": 1
+  }
+}

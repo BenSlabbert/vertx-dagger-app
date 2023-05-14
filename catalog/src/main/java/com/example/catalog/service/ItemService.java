@@ -9,6 +9,8 @@ import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemResponseDto;
 import io.vertx.core.Future;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface ItemService {
 
@@ -16,9 +18,9 @@ public interface ItemService {
 
   Future<CreateItemResponseDto> create(CreateItemRequestDto dto);
 
-  Future<FindOneResponseDto> findById(long id);
+  Future<Optional<FindOneResponseDto>> findById(UUID id);
 
-  Future<UpdateItemResponseDto> update(long id, UpdateItemRequestDto item);
+  Future<Optional<UpdateItemResponseDto>> update(UUID id, UpdateItemRequestDto item);
 
-  Future<DeleteOneResponseDto> delete(long id);
+  Future<Optional<DeleteOneResponseDto>> delete(UUID id);
 }

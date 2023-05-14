@@ -11,6 +11,8 @@ import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemResponseDto;
 import io.vertx.core.Future;
 import io.vertx.sqlclient.SqlConnection;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Level;
 import javax.inject.Inject;
@@ -37,9 +39,7 @@ class ItemServiceImpl implements ItemService {
             items ->
                 items.stream()
                     .map(
-                        item ->
-                            new FindOneResponseDto(
-                                item.id(), item.uuid(), item.name(), item.priceInCents()))
+                        item -> new FindOneResponseDto(item.id(), item.name(), item.priceInCents()))
                     .toList())
         .map(FindAllResponseDto::new);
   }
@@ -47,30 +47,28 @@ class ItemServiceImpl implements ItemService {
   @Override
   public Future<CreateItemResponseDto> create(CreateItemRequestDto dto) {
     return doInTransaction(conn -> itemRepository.create(conn, dto.name(), dto.priceInCents()))
-        .map(
-            item ->
-                new CreateItemResponseDto(
-                    item.id(), item.uuid(), item.name(), item.priceInCents()));
+        .map(item -> new CreateItemResponseDto(item.id(), item.name(), item.priceInCents()));
   }
 
   @Override
-  public Future<FindOneResponseDto> findById(long id) {
+  public Future<Optional<FindOneResponseDto>> findById(UUID id) {
     return doInTransaction(conn -> itemRepository.findById(conn, id))
         .map(
-            item ->
-                new FindOneResponseDto(item.id(), item.uuid(), item.name(), item.priceInCents()));
+            maybeItem ->
+                maybeItem.map(
+                    item -> new FindOneResponseDto(item.id(), item.name(), item.priceInCents())));
   }
 
   @Override
-  public Future<UpdateItemResponseDto> update(long id, UpdateItemRequestDto dto) {
+  public Future<Optional<UpdateItemResponseDto>> update(UUID id, UpdateItemRequestDto dto) {
     return doInTransaction(conn -> itemRepository.update(conn, id, dto.name(), dto.priceInCents()))
-        .map(v -> new UpdateItemResponseDto());
+        .map(success -> success ? Optional.of(new UpdateItemResponseDto()) : Optional.empty());
   }
 
   @Override
-  public Future<DeleteOneResponseDto> delete(long id) {
+  public Future<Optional<DeleteOneResponseDto>> delete(UUID id) {
     return doInTransaction(conn -> itemRepository.delete(conn, id))
-        .map(v -> new DeleteOneResponseDto());
+        .map(success -> success ? Optional.of(new DeleteOneResponseDto()) : Optional.empty());
   }
 
   private <T> Future<T> doInTransaction(Function<SqlConnection, Future<T>> futureFunction) {

@@ -9,6 +9,18 @@ public record FindAllResponseDto(List<FindOneResponseDto> dtos) implements JsonW
 
   public static String ITEMS_FIELD = "items";
 
+  public FindAllResponseDto(JsonObject jsonObject) {
+    this(parse(jsonObject.getJsonArray(ITEMS_FIELD)));
+  }
+
+  private static List<FindOneResponseDto> parse(JsonArray jsonArray) {
+    return jsonArray.stream()
+        .filter(JsonObject.class::isInstance)
+        .map(o -> (JsonObject) o)
+        .map(FindOneResponseDto::new)
+        .toList();
+  }
+
   @Override
   public JsonObject toJson() {
     JsonArray array = new JsonArray();

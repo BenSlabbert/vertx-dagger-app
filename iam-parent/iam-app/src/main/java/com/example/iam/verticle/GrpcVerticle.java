@@ -48,7 +48,7 @@ public class GrpcVerticle extends AbstractVerticle {
                                   .response()
                                   .end(CheckTokenResponse.newBuilder().setValid(true).build()))
                       .onFailure(
-                          throwable ->
+                          err ->
                               request
                                   .response()
                                   .end(CheckTokenResponse.newBuilder().setValid(false).build())));

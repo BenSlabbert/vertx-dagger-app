@@ -1,5 +1,6 @@
 package com.example.catalog.service;
 
+import com.example.commons.config.Config;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.pgclient.PgConnectOptions;
@@ -19,14 +20,14 @@ class DBPool implements Pool {
   private final PgPool pool;
 
   @Inject
-  DBPool(Vertx vertx) {
+  DBPool(Vertx vertx, Config.PostgresConfig postgresConfig) {
     PgConnectOptions connectOptions =
         new PgConnectOptions()
-            .setPort(5432)
-            .setHost("localhost")
-            .setDatabase("db")
-            .setUser("user")
-            .setPassword("password")
+            .setPort(postgresConfig.port())
+            .setHost(postgresConfig.host())
+            .setDatabase(postgresConfig.database())
+            .setUser(postgresConfig.username())
+            .setPassword(postgresConfig.password())
             .setReconnectAttempts(5)
             .setReconnectInterval(1000);
 

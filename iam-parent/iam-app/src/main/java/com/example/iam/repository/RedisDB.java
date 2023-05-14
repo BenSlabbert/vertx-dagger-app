@@ -33,7 +33,7 @@ public class RedisDB implements UserRepository, AutoCloseable {
 
     redisAPI
         .ping(List.of(""))
-        .onFailure(throwable -> log.log(SEVERE, "failed to ping redis", throwable))
+        .onFailure(err -> log.log(SEVERE, "failed to ping redis", err))
         .onSuccess(resp -> log.info("pinged redis"));
   }
 

@@ -2,8 +2,9 @@ package com.example.catalog.web.route.dto;
 
 import com.example.commons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
+import java.util.UUID;
 
-public record FindOneRequestDto(long id) implements JsonWriter {
+public record FindOneRequestDto(UUID id) implements JsonWriter {
 
   public static String ID_FIELD = "id";
 

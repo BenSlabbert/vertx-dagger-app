@@ -4,6 +4,8 @@ import com.example.catalog.entity.Item;
 import io.vertx.core.Future;
 import io.vertx.sqlclient.SqlClient;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface ItemRepository {
 
@@ -11,9 +13,9 @@ public interface ItemRepository {
 
   Future<List<Item>> findAll(SqlClient conn);
 
-  Future<Item> findById(SqlClient conn, long id);
+  Future<Optional<Item>> findById(SqlClient conn, UUID id);
 
-  Future<Void> update(SqlClient conn, long id, String name, long priceInCents);
+  Future<Boolean> update(SqlClient conn, UUID id, String name, long priceInCents);
 
-  Future<Void> delete(SqlClient conn, long id);
+  Future<Boolean> delete(SqlClient conn, UUID id);
 }

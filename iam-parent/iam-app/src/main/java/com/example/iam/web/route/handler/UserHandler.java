@@ -44,8 +44,8 @@ public class UserHandler {
     userService
         .login(new LoginRequestDto(body))
         .onFailure(
-            throwable -> {
-              log.log(SEVERE, "failed to login user", throwable);
+            err -> {
+              log.log(SEVERE, "failed to login user", err);
               ctx.end().onFailure(ctx::fail);
             })
         .onSuccess(
@@ -70,8 +70,8 @@ public class UserHandler {
     userService
         .refresh(new RefreshRequestDto(body))
         .onFailure(
-            throwable -> {
-              log.log(SEVERE, "failed to refresh user", throwable);
+            err -> {
+              log.log(SEVERE, "failed to refresh user", err);
               ctx.end().onFailure(ctx::fail);
             })
         .onSuccess(
@@ -96,8 +96,8 @@ public class UserHandler {
     userService
         .register(new RegisterRequestDto(body))
         .onFailure(
-            throwable -> {
-              log.log(SEVERE, "failed to register user", throwable);
+            err -> {
+              log.log(SEVERE, "failed to register user", err);
               ctx.end().onFailure(ctx::fail);
             })
         .onSuccess(
