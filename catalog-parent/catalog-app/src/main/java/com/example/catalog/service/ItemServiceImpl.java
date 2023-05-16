@@ -62,13 +62,21 @@ class ItemServiceImpl implements ItemService {
   @Override
   public Future<Optional<UpdateItemResponseDto>> update(UUID id, UpdateItemRequestDto dto) {
     return doInTransaction(conn -> itemRepository.update(conn, id, dto.name(), dto.priceInCents()))
-        .map(success -> success ? Optional.of(new UpdateItemResponseDto()) : Optional.empty());
+        .map(
+            success ->
+                Boolean.TRUE.equals(success)
+                    ? Optional.of(new UpdateItemResponseDto())
+                    : Optional.empty());
   }
 
   @Override
   public Future<Optional<DeleteOneResponseDto>> delete(UUID id) {
     return doInTransaction(conn -> itemRepository.delete(conn, id))
-        .map(success -> success ? Optional.of(new DeleteOneResponseDto()) : Optional.empty());
+        .map(
+            success ->
+                Boolean.TRUE.equals(success)
+                    ? Optional.of(new DeleteOneResponseDto())
+                    : Optional.empty());
   }
 
   private <T> Future<T> doInTransaction(Function<SqlConnection, Future<T>> futureFunction) {
