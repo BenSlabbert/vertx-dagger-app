@@ -265,6 +265,7 @@
                 <buildArg>--report-unsupported-elements-at-runtime</buildArg>
                 <buildArg>-H:+PrintClassInitialization</buildArg>
                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                <buildArg>-H:DefaultLocale=en_US</buildArg>
                 <buildArg>-H:+IncludeAllLocales</buildArg>
                 <buildArg>--verbose</buildArg>
                 <buildArg>--static</buildArg>

@@ -1,4 +1,7 @@
-FROM ghcr.io/graalvm/graalvm-ce:22.3.1 AS builder
+# https://github.com/graalvm/container/pkgs/container/graalvm-ce
+# https://github.com/oracle/graal/issues/5510 fixes this but it looks like
+# it is not yet available in the docker image
+FROM ghcr.io/graalvm/graalvm-ce:22.3.2 AS builder
 
 RUN gu install native-image
 

@@ -9,11 +9,15 @@ import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
+import com.example.commons.config.Config;
+import com.example.commons.config.ParseConfig;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.vertx.core.json.JsonObject;
+import java.io.IOException;
 import java.time.Duration;
+import java.util.Objects;
 import lombok.extern.java.Log;
 import org.junit.Rule;
 import org.junit.jupiter.api.AfterEach;
@@ -33,9 +37,21 @@ class ApiVerticleIT {
 
   @Rule public Network network = Network.newNetwork();
 
+  static Config config;
+
+  static {
+    try {
+      ClassLoader classLoader = ApiVerticleIT.class.getClassLoader();
+      String path = Objects.requireNonNull(classLoader.getResource("it-config.json")).getPath();
+      config = ParseConfig.parseArgs(new String[] {path});
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   @Container
   public GenericContainer<?> postgres =
-      new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
+      new GenericContainer<>(DockerImageName.parse("postgres:15"))
           .withExposedPorts(5432)
           .withNetwork(network)
           .withEnv("POSTGRES_USER", "user")
@@ -61,7 +77,7 @@ class ApiVerticleIT {
       new GenericContainer<>(
               DockerImageName.parse(
                   "catalog:" + System.getProperty("testImageTag", "jvm") + "-latest"))
-          .withExposedPorts(8080)
+          .withExposedPorts(config.httpConfig().port())
           .withNetwork(network)
           .withNetworkAliases("app")
           .dependsOn(migrator)
@@ -75,7 +91,7 @@ class ApiVerticleIT {
   @BeforeEach
   public void before() {
     RestAssured.baseURI = "http://" + app.getHost();
-    RestAssured.port = app.getMappedPort(8080);
+    RestAssured.port = app.getMappedPort(config.httpConfig().port());
     log.info("RestAssured.port: " + RestAssured.port);
   }
 

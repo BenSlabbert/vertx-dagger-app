@@ -16,8 +16,11 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.dns.AddressResolverOptions;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import lombok.extern.java.Log;
 
 @Log
@@ -29,6 +32,17 @@ public class Main {
 
   public static void main(String[] args) throws IOException {
     log.log(INFO, "starting app: {0}", new Object[] {Arrays.toString(args)});
+
+    Locale locale = Locale.getDefault();
+    log.log(INFO, "default locale: {0}", new Object[] {locale});
+
+    // breaks on native image
+    // https://github.com/oracle/graal/issues/5510
+    LocalDateTime parse =
+        LocalDateTime.parse(
+            "4714-11-24 00:00:00 BC",
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
+    log.log(INFO, "parse: {0}", new Object[] {parse.toString()});
 
     config = ParseConfig.parseArgs(args);
 

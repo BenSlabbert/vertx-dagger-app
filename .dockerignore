@@ -2,6 +2,6 @@
 .git/
 target/
 iam-parent/iam-app/Dockerfile
-catalog/Dockerfile
+catalog-parent/catalog-app/Dockerfile
 Dockerfile.native
 Dockerfile.native-parent
