@@ -58,11 +58,13 @@ class ApiVerticleIT {
 
   @Container
   public GenericContainer<?> app =
-      new GenericContainer<>(DockerImageName.parse("catalog:native-latest"))
+      new GenericContainer<>(
+              DockerImageName.parse(
+                  "catalog:" + System.getProperty("testImageTag", "jvm") + "-latest"))
           .withExposedPorts(8080)
           .withNetwork(network)
           .withNetworkAliases("app")
-          .dependsOn(postgres, migrator)
+          .dependsOn(migrator)
           .withEnv("DISABLE_SECURITY", Boolean.TRUE.toString())
           .waitingFor(
               Wait.forLogMessage(".*deployment id.*", 1).withStartupTimeout(Duration.ofSeconds(5L)))
