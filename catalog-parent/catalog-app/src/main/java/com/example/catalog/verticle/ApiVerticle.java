@@ -17,6 +17,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.HttpException;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import javax.inject.Inject;
@@ -65,54 +66,15 @@ public class ApiVerticle extends AbstractVerticle {
 
     apiRouter
         .get("/:id")
-        .handler(
-            ctx -> {
-              log.info("get one request");
-              UUID id;
-              try {
-                id = UUID.fromString(ctx.pathParam("id"));
-              } catch (IllegalArgumentException e) {
-                log.warning("path param id is not a uuid");
-                ctx.fail(new HttpException(BAD_REQUEST.code()));
-                return;
-              }
-
-              itemHandler.findOne(ctx, id);
-            });
+        .handler(ctx -> processWithRequiredParam(ctx, id -> itemHandler.findOne(ctx, id)));
 
     apiRouter
         .delete("/:id")
-        .handler(
-            ctx -> {
-              log.info("get one request");
-              UUID id;
-              try {
-                id = UUID.fromString(ctx.pathParam("id"));
-              } catch (IllegalArgumentException e) {
-                log.warning("path param id is not a uuid");
-                ctx.fail(new HttpException(BAD_REQUEST.code()));
-                return;
-              }
-
-              itemHandler.deleteOne(ctx, id);
-            });
+        .handler(ctx -> processWithRequiredParam(ctx, id -> itemHandler.deleteOne(ctx, id)));
 
     apiRouter
         .post("/edit/:id")
-        .handler(
-            ctx -> {
-              log.info("edit request");
-              UUID id;
-              try {
-                id = UUID.fromString(ctx.pathParam("id"));
-              } catch (IllegalArgumentException e) {
-                log.warning("path param id is not a uuid");
-                ctx.fail(new HttpException(BAD_REQUEST.code()));
-                return;
-              }
-
-              itemHandler.update(ctx, id);
-            });
+        .handler(ctx -> processWithRequiredParam(ctx, id -> itemHandler.update(ctx, id)));
 
     // https://vertx.io/docs/vertx-health-check/java/
     mainRouter
@@ -135,6 +97,16 @@ public class ApiVerticle extends AbstractVerticle {
                 startPromise.fail(res.cause());
               }
             });
+  }
+
+  private void processWithRequiredParam(RoutingContext ctx, Consumer<UUID> consumer) {
+    try {
+      UUID id = UUID.fromString(ctx.pathParam("id"));
+      consumer.accept(id);
+    } catch (IllegalArgumentException e) {
+      log.warning("path param id is not a uuid");
+      ctx.fail(new HttpException(BAD_REQUEST.code()));
+    }
   }
 
   @Override

@@ -58,7 +58,7 @@ public class ItemHandler {
         .findById(id)
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to find all items", err);
+              log.log(SEVERE, "failed to find item: " + id, err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
@@ -81,7 +81,7 @@ public class ItemHandler {
         .delete(id)
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to find all items", err);
+              log.log(SEVERE, "failed to delete item: " + id, err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
