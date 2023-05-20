@@ -27,7 +27,7 @@ class RedisEmitterIT {
 
   @Container
   public GenericContainer<?> redis =
-      new GenericContainer<>(DockerImageName.parse("redis:7-alpine"))
+      new GenericContainer<>(DockerImageName.parse("redis/redis-stack-server:latest"))
           .withExposedPorts(6379)
           .withNetwork(network)
           .withNetworkAliases("redis")

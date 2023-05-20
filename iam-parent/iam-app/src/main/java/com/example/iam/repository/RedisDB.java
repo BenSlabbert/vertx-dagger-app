@@ -13,8 +13,6 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.handler.HttpException;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
-import io.vertx.redis.client.impl.types.BulkType;
-import io.vertx.redis.client.impl.types.NumberType;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -23,6 +21,10 @@ import lombok.extern.java.Log;
 @Log
 @Singleton
 public class RedisDB implements UserRepository, AutoCloseable {
+
+  private static final String DOCUMENT_ROOT = "$";
+  private static final String SET_IF_DOES_NOT_EXIST = "NX";
+  private static final String SET_IF_EXIST = "XX";
 
   private final RedisAPI redisAPI;
 
@@ -45,47 +47,61 @@ public class RedisDB implements UserRepository, AutoCloseable {
   @Override
   public Future<LoginResponseDto> login(
       String username, String password, String token, String refreshToken) {
+
     return redisAPI
-        .hget(username, User.PASSWORD_FIELD)
+        .jsonGet(List.of("user:" + username, "$." + User.PASSWORD_FIELD))
         .map(
-            response -> {
-              if (!(response instanceof BulkType bt && bt.toString().equals(password))) {
+            resp -> {
+              if (null == resp) {
+                throw new HttpException(HttpResponseStatus.BAD_REQUEST.code());
+              }
+
+              String passwordFromDB = resp.toString();
+
+              if (null == passwordFromDB) {
+                throw new HttpException(HttpResponseStatus.NOT_FOUND.code());
+              }
+
+              // this value is inside a quoted array, remove quotes
+              passwordFromDB = passwordFromDB.substring(2, passwordFromDB.length() - 2);
+
+              if (!password.equals(passwordFromDB)) {
+                // passwords do not match
                 throw new HttpException(HttpResponseStatus.NOT_FOUND.code());
               }
 
               return new LoginResponseDto(token, refreshToken);
             })
-        .compose(
-            loginResponseDto ->
-                redisAPI
-                    .hset(
-                        List.of(
-                            username, User.REFRESH_TOKEN_FIELD, loginResponseDto.refreshToken()))
-                    .map(resp -> loginResponseDto)
-                    .onComplete(resp -> log.info("user logged in")));
+        .compose(loginResponseDto -> updateRefreshToken(username, refreshToken, loginResponseDto))
+        .onSuccess(resp -> log.info("user logged in"));
   }
 
   @Override
   public Future<RefreshResponseDto> refresh(
       String username, String oldRefreshToken, String newToken, String newRefreshToken) {
+
     return redisAPI
-        .hget(username, User.REFRESH_TOKEN_FIELD)
+        .jsonGet(List.of("user:" + username, "$." + User.REFRESH_TOKEN_FIELD))
         .map(
-            response -> {
-              if (!(response instanceof BulkType bt && bt.toString().equals(oldRefreshToken))) {
+            resp -> {
+              if (null == resp) {
                 throw new HttpException(HttpResponseStatus.BAD_REQUEST.code());
+              }
+
+              String refreshTokenFromDb = resp.toString();
+              // this value is inside a quoted array, remove quotes
+              refreshTokenFromDb = refreshTokenFromDb.substring(2, refreshTokenFromDb.length() - 2);
+
+              if (!oldRefreshToken.equals(refreshTokenFromDb)) {
+                // tokens do not match
+                throw new HttpException(HttpResponseStatus.NOT_FOUND.code());
               }
 
               return new RefreshResponseDto(newToken, newRefreshToken);
             })
         .compose(
-            loginResponseDto ->
-                redisAPI
-                    .hset(
-                        List.of(
-                            username, User.REFRESH_TOKEN_FIELD, loginResponseDto.refreshToken()))
-                    .map(resp -> loginResponseDto)
-                    .onComplete(resp -> log.info("user refreshed")));
+            loginResponseDto -> updateRefreshToken(username, newRefreshToken, loginResponseDto))
+        .onSuccess(resp -> log.info("user refreshed"));
   }
 
   @Override
@@ -93,26 +109,33 @@ public class RedisDB implements UserRepository, AutoCloseable {
       String username, String password, String token, String refreshToken) {
 
     return redisAPI
-        .exists(List.of(username))
+        .jsonSet(
+            List.of(
+                "user:" + username,
+                DOCUMENT_ROOT,
+                new User(username, password, refreshToken).toJson().encode(),
+                SET_IF_DOES_NOT_EXIST))
         .map(
             resp -> {
-              if (!(resp instanceof NumberType nt && nt.toLong() == 0L)) {
+              if (null == resp) {
+                // value could not be set
                 throw new HttpException(HttpResponseStatus.CONFLICT.code());
               }
 
-              return null;
+              return new RegisterResponseDto();
             })
-        .compose(
-            tokens ->
-                redisAPI
-                    .hset(
-                        List.of(
-                            username,
-                            User.PASSWORD_FIELD,
-                            password,
-                            User.REFRESH_TOKEN_FIELD,
-                            refreshToken))
-                    .map(resp -> new RegisterResponseDto())
-                    .onComplete(resp -> log.info("user registered")));
+        .onSuccess(resp -> log.info("user registered"));
+  }
+
+  private <T> Future<T> updateRefreshToken(String username, String newRefreshToken, T echo) {
+    return redisAPI
+        .jsonSet(
+            List.of(
+                "user:" + username,
+                "$." + User.REFRESH_TOKEN_FIELD,
+                // must quote values back to redis
+                "\"" + newRefreshToken + "\"",
+                SET_IF_EXIST))
+        .map(resp -> echo);
   }
 }
