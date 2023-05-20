@@ -50,6 +50,15 @@ class ApiVerticleIT {
   }
 
   @Container
+  public GenericContainer<?> redis =
+      new GenericContainer<>(DockerImageName.parse("redis:7-alpine"))
+          .withExposedPorts(6379)
+          .withNetwork(network)
+          .withNetworkAliases("redis")
+          .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
+          .withLogConsumer(new TestcontainerLogConsumer());
+
+  @Container
   public GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15"))
           .withExposedPorts(5432)
@@ -80,7 +89,7 @@ class ApiVerticleIT {
           .withExposedPorts(config.httpConfig().port())
           .withNetwork(network)
           .withNetworkAliases("app")
-          .dependsOn(migrator)
+          .dependsOn(migrator, redis)
           .withEnv("DISABLE_SECURITY", Boolean.TRUE.toString())
           .waitingFor(
               Wait.forLogMessage(".*deployment id.*", 1).withStartupTimeout(Duration.ofSeconds(5L)))

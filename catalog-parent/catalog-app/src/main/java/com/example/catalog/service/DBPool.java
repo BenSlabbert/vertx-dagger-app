@@ -14,11 +14,12 @@ import lombok.extern.java.Log;
 
 @Log
 @Singleton
-class DBPool implements Pool {
+class DBPool implements Pool, AutoCloseable {
 
   private final Vertx vertx;
   private final PgPool pool;
 
+  // todo: maybe replace postgresql with redis as storage to avoid this native-image issue
   @Inject
   DBPool(Vertx vertx, Config.PostgresConfig postgresConfig) {
     PgConnectOptions connectOptions =

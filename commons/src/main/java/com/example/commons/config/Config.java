@@ -20,41 +20,62 @@ public record Config(
 
   public static Config fromJson(JsonObject jsonObject) {
     JsonObject httpConfig = jsonObject.getJsonObject("httpConfig");
-    JsonObject grpcConfig = jsonObject.getJsonObject("grpcConfig");
-    JsonObject redisConfig = jsonObject.getJsonObject("redisConfig", new JsonObject());
-    JsonObject postgresConfig = jsonObject.getJsonObject("postgresConfig", new JsonObject());
     JsonObject verticleConfig = jsonObject.getJsonObject("verticleConfig", new JsonObject());
 
     ConfigBuilder builder = Config.builder();
-
-    if (!redisConfig.isEmpty()) {
-      builder.redisConfig(
-          RedisConfig.builder()
-              .host(redisConfig.getString("host"))
-              .port(redisConfig.getInteger("port"))
-              .database(redisConfig.getInteger("database"))
-              .build());
-    }
-
-    if (!postgresConfig.isEmpty()) {
-      builder.postgresConfig(
-          PostgresConfig.builder()
-              .host(postgresConfig.getString("host"))
-              .port(postgresConfig.getInteger("port"))
-              .username(postgresConfig.getString("username"))
-              .password(postgresConfig.getString("password"))
-              .database(postgresConfig.getString("database"))
-              .build());
-    }
+    addRedisConfig(jsonObject, builder);
+    addPostgresConfig(jsonObject, builder);
+    addGrpcConfig(jsonObject, builder);
 
     return builder
         .httpConfig(HttpConfig.builder().port(httpConfig.getInteger("port")).build())
-        .grpcConfig(GrpcConfig.builder().port(grpcConfig.getInteger("port")).build())
         .verticleConfig(
             VerticleConfig.builder()
                 .numberOfInstances(verticleConfig.getInteger("numberOfInstances", 1))
                 .build())
         .build();
+  }
+
+  private static void addGrpcConfig(JsonObject jsonObject, ConfigBuilder builder) {
+    JsonObject config = jsonObject.getJsonObject("grpcConfig", new JsonObject());
+
+    if (config.isEmpty()) {
+      return;
+    }
+
+    builder.grpcConfig(GrpcConfig.builder().port(config.getInteger("port")).build());
+  }
+
+  private static void addPostgresConfig(JsonObject jsonObject, ConfigBuilder builder) {
+    JsonObject config = jsonObject.getJsonObject("postgresConfig", new JsonObject());
+
+    if (config.isEmpty()) {
+      return;
+    }
+
+    builder.postgresConfig(
+        PostgresConfig.builder()
+            .host(config.getString("host"))
+            .port(config.getInteger("port"))
+            .username(config.getString("username"))
+            .password(config.getString("password"))
+            .database(config.getString("database"))
+            .build());
+  }
+
+  private static void addRedisConfig(JsonObject jsonObject, ConfigBuilder builder) {
+    JsonObject config = jsonObject.getJsonObject("redisConfig", new JsonObject());
+
+    if (config.isEmpty()) {
+      return;
+    }
+
+    builder.redisConfig(
+        RedisConfig.builder()
+            .host(config.getString("host"))
+            .port(config.getInteger("port"))
+            .database(config.getInteger("database"))
+            .build());
   }
 
   @Builder

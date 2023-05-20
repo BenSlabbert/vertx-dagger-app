@@ -29,9 +29,9 @@ public class RedisDB implements UserRepository, AutoCloseable {
   @Inject
   public RedisDB(Vertx vertx, Config.RedisConfig redisConfig) {
     Redis client = Redis.createClient(vertx, redisConfig.uri());
-    redisAPI = RedisAPI.api(client);
+    this.redisAPI = RedisAPI.api(client);
 
-    redisAPI
+    this.redisAPI
         .ping(List.of(""))
         .onFailure(err -> log.log(SEVERE, "failed to ping redis", err))
         .onSuccess(resp -> log.info("pinged redis"));

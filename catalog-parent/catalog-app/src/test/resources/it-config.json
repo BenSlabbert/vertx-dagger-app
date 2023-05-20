@@ -2,8 +2,10 @@
   "httpConfig": {
     "port": 8080
   },
-  "grpcConfig": {
-    "port": 50051
+  "redisConfig": {
+    "host": "redis",
+    "port": 6379,
+    "database": 0
   },
   "postgresConfig": {
     "host": "postgres",

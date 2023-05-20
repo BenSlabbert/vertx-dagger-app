@@ -38,6 +38,9 @@ public class Main {
     vertx =
         Vertx.vertx(
             new VertxOptions()
+                .setInternalBlockingPoolSize(1)
+                .setWorkerPoolSize(1)
+                .setEventLoopPoolSize(1)
                 .setPreferNativeTransport(true)
                 .setAddressResolverOptions(
                     new AddressResolverOptions().setServers(reachableNameServers)));

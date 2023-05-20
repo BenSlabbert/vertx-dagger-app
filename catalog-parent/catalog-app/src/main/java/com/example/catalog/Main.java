@@ -52,13 +52,19 @@ public class Main {
     vertx =
         Vertx.vertx(
             new VertxOptions()
+                .setInternalBlockingPoolSize(1)
+                .setWorkerPoolSize(1)
+                .setEventLoopPoolSize(1)
                 .setPreferNativeTransport(true)
                 .setAddressResolverOptions(
                     new AddressResolverOptions().setServers(reachableNameServers)));
 
     Provider dagger = DaggerProvider.create();
 
-    Runtime.getRuntime().addShutdownHook(ShutdownHookProvider.get(vertx, List.of()));
+    Runtime.getRuntime()
+        .addShutdownHook(
+            ShutdownHookProvider.get(
+                vertx, dagger.providesServiceLifecycleManagement().closeables()));
 
     DeploymentOptions deploymentOptions =
         new DeploymentOptions().setInstances(config.verticleConfig().numberOfInstances());
@@ -82,6 +88,11 @@ public class Main {
   @Provides
   static Config.HttpConfig providesHttpConfig() {
     return config.httpConfig();
+  }
+
+  @Provides
+  static Config.RedisConfig providesRedisConfig() {
+    return config.redisConfig();
   }
 
   @Provides

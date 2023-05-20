@@ -1,5 +1,6 @@
 package com.example.catalog.service;
 
+import com.example.catalog.entity.Item;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
@@ -24,12 +25,14 @@ import lombok.extern.java.Log;
 class ItemServiceImpl implements ItemService {
 
   private final Pool dbPool;
+  private final Emitter emitter;
   private final ItemRepository itemRepository;
 
   @Inject
-  ItemServiceImpl(Pool pool, ItemRepository itemRepository) {
+  ItemServiceImpl(Pool pool, Emitter emitter, ItemRepository itemRepository) {
     this.dbPool = pool;
     this.itemRepository = itemRepository;
+    this.emitter = emitter;
   }
 
   @Override
@@ -47,6 +50,7 @@ class ItemServiceImpl implements ItemService {
   @Override
   public Future<CreateItemResponseDto> create(CreateItemRequestDto dto) {
     return doInTransaction(conn -> itemRepository.create(conn, dto.name(), dto.priceInCents()))
+        .onSuccess(emitter::emit)
         .map(item -> new CreateItemResponseDto(item.id(), item.name(), item.priceInCents()));
   }
 
@@ -62,6 +66,12 @@ class ItemServiceImpl implements ItemService {
   @Override
   public Future<Optional<UpdateItemResponseDto>> update(UUID id, UpdateItemRequestDto dto) {
     return doInTransaction(conn -> itemRepository.update(conn, id, dto.name(), dto.priceInCents()))
+        .onSuccess(
+            success -> {
+              if (Boolean.TRUE.equals(success)) {
+                emitter.emit(new Item(id, dto.name(), dto.priceInCents()));
+              }
+            })
         .map(
             success ->
                 Boolean.TRUE.equals(success)
