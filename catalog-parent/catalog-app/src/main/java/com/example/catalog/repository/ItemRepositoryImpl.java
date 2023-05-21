@@ -1,5 +1,9 @@
 package com.example.catalog.repository;
 
+import static com.example.commons.redis.RedisConstants.DOCUMENT_ROOT;
+import static com.example.commons.redis.RedisConstants.SET_IF_DOES_NOT_EXIST;
+import static com.example.commons.redis.RedisConstants.SET_IF_EXIST;
+import static com.example.commons.redis.RedisConstants.STREAM_GENERATE_ID;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.catalog.entity.Item;
@@ -27,29 +31,12 @@ import lombok.extern.java.Log;
 @Singleton
 class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
+  private static final String CATALOG_STREAM = "catalog-stream";
   private static final String ITEM_SET = "item-set";
   private static final String ITEM_SEQUENCE = "item-sequence";
+  private static final String STREAM_FIELD = "item";
 
   private final RedisAPI redisAPI;
-
-  // TODO:
-  //  rewrite using redis https://redis.io/docs/manual/transactions/
-  //  use watch + multi,exec to prevent competing writes
-  //  watch will ensure that nothing in the transaction is executed
-  //  is the watched objects are changes
-  //  there are no rollbacks
-  //  all commands will be executed even if there are failures
-  //  It's important to note that even when a command fails, all the other commands in the queue are
-  //  processed – Redis will not stop the processing of commands.
-  //  maybe use a pattern like:
-  //  watch the value
-  //  read the value
-  //  multi
-  //  value update
-  //  xadd stream * data updatedValue
-  //  exec
-  //  this way we will only write to the stream the new value if the watched value is unmodified
-  //  and we can remove the emitter
 
   @Inject
   ItemRepositoryImpl(Vertx vertx, Config.RedisConfig redisConfig) {
@@ -67,13 +54,10 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
     // use a counter as a sequence
     UUID id = UUID.randomUUID();
     Item item = new Item(id, name, priceInCents);
+    String encoded = item.toJson().encode();
+
     return redisAPI
-        .jsonSet(
-            List.of(
-                prefixId(id),
-                RedisConstants.DOCUMENT_ROOT,
-                item.toJson().encode(),
-                RedisConstants.SET_IF_DOES_NOT_EXIST))
+        .jsonSet(List.of(prefixId(id), DOCUMENT_ROOT, encoded, SET_IF_DOES_NOT_EXIST))
         .map(
             resp -> {
               if (null == resp) {
@@ -85,31 +69,42 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
             })
         .compose(ignore -> redisAPI.incr(ITEM_SEQUENCE))
         .map(
-            incResp -> {
-              if (incResp.type() != ResponseType.NUMBER) {
+            resp -> {
+              if (resp.type() != ResponseType.NUMBER) {
                 throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
               }
 
-              return incResp.toLong();
+              return resp.toLong();
             })
         .compose(
             sequence ->
                 redisAPI.zadd(
                     List.of(
-                        ITEM_SET,
-                        RedisConstants.SET_IF_DOES_NOT_EXIST,
-                        Long.toString(sequence),
-                        id.toString())))
-        .map(
-            res -> {
-              if (res.type() != ResponseType.NUMBER) {
+                        ITEM_SET, SET_IF_DOES_NOT_EXIST, Long.toString(sequence), id.toString())))
+        .compose(
+            resp -> {
+              if (resp.type() != ResponseType.NUMBER) {
                 throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
               }
 
-              if (res.toLong() != 1L) {
+              if (resp.toLong() != 1L) {
                 // id already exists in the set
                 log.log(Level.WARNING, "item id {0} already exists in the set!", new Object[] {id});
               }
+
+              return redisAPI.xadd(
+                  List.of(CATALOG_STREAM, STREAM_GENERATE_ID, STREAM_FIELD, encoded));
+            })
+        .map(
+            resp -> {
+              if (resp.type() != ResponseType.BULK) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
+
+              log.log(
+                  Level.INFO,
+                  "written new item to stream with id: {0}",
+                  new Object[] {resp.toString()});
 
               return item;
             });
@@ -131,7 +126,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
             ids -> {
               String join =
                   String.join(" ", ids.stream().map(ItemRepositoryImpl::prefixId).toList());
-              return redisAPI.jsonMget(List.of(join, RedisConstants.DOCUMENT_ROOT));
+              return redisAPI.jsonMget(List.of(join, DOCUMENT_ROOT));
             })
         .map(
             resp -> {
@@ -155,7 +150,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
   @Override
   public Future<Optional<Item>> findById(UUID id) {
     return redisAPI
-        .jsonGet(List.of(prefixId(id), RedisConstants.DOCUMENT_ROOT))
+        .jsonGet(List.of(prefixId(id), DOCUMENT_ROOT))
         .map(
             resp -> {
               if (resp == null || resp.type() != ResponseType.BULK) {
@@ -170,6 +165,8 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   @Override
   public Future<Boolean> update(UUID id, String name, long priceInCents) {
+    final String encodedItemUpdate = new Item(id, name, priceInCents).toJson().encode();
+
     return redisAPI
         .watch(List.of(prefixId(id)))
         .compose(
@@ -187,11 +184,16 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
               }
 
               return redisAPI.jsonSet(
-                  List.of(
-                      prefixId(id),
-                      RedisConstants.DOCUMENT_ROOT,
-                      new Item(id, name, priceInCents).toJson().encode(),
-                      RedisConstants.SET_IF_EXIST));
+                  List.of(prefixId(id), DOCUMENT_ROOT, encodedItemUpdate, SET_IF_EXIST));
+            })
+        .compose(
+            resp -> {
+              if (!RedisConstants.QUEUED.equals(resp.toString())) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
+
+              return redisAPI.xadd(
+                  List.of(CATALOG_STREAM, STREAM_GENERATE_ID, STREAM_FIELD, encodedItemUpdate));
             })
         .compose(
             resp -> {
@@ -219,7 +221,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
   @Override
   public Future<Boolean> delete(UUID id) {
     return redisAPI
-        .jsonDel(List.of(prefixId(id), RedisConstants.DOCUMENT_ROOT))
+        .jsonDel(List.of(prefixId(id), DOCUMENT_ROOT))
         .map(
             resp -> {
               if (resp.type() != ResponseType.NUMBER) {

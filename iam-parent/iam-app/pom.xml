@@ -275,7 +275,7 @@
                 <!--https://www.graalvm.org/22.0/reference-manual/native-image/MemoryManagement/#java-heap-size-->
                 <!--preconfigure memory if not set-->
                 <buildArg>-H:+AddAllCharsets</buildArg>
-                <buildArg>-R:MinHeapSize32m</buildArg>
+                <buildArg>-R:MinHeapSize=32m</buildArg>
                 <buildArg>-R:MaxHeapSize=32m</buildArg>
                 <buildArg>-R:MaxNewSize=16m</buildArg>
               </buildArgs>
