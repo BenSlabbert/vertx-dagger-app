@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import lombok.extern.java.Log;
 
 @Log
@@ -98,5 +99,11 @@ public class Main {
   @Provides
   static Config.VerticleConfig providesVerticleConfig() {
     return config.verticleConfig();
+  }
+
+  @Provides
+  static Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig>
+      providesServiceRegistryConfig() {
+    return config.serviceRegistryConfig();
   }
 }
