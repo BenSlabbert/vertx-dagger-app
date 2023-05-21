@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
 public record Config(
@@ -20,10 +21,10 @@ public record Config(
     IAM("iam"),
     CATALOG("catalog");
 
-    private final String name;
+    @Getter private final String serviceName;
 
-    ServiceIdentifier(String name) {
-      this.name = name;
+    ServiceIdentifier(String serviceName) {
+      this.serviceName = serviceName;
     }
 
     static Set<String> names() {
@@ -34,7 +35,7 @@ public record Config(
 
     static ServiceIdentifier fromString(String in) {
       return Arrays.stream(ServiceIdentifier.values())
-          .filter(f -> f.name.equals(in))
+          .filter(f -> f.serviceName.equals(in))
           .findFirst()
           .orElseThrow();
     }
@@ -100,12 +101,14 @@ public record Config(
 
     Map<ServiceIdentifier, ServiceRegistryConfig> map =
         Arrays.stream(ServiceIdentifier.values())
-            .filter(serviceIdentifier -> null != config.getJsonObject(serviceIdentifier.name()))
+            .filter(
+                serviceIdentifier -> null != config.getJsonObject(serviceIdentifier.serviceName()))
             .collect(
                 Collectors.toMap(
                     Function.identity(),
                     serviceIdentifier -> {
-                      JsonObject configJsonObject = config.getJsonObject(serviceIdentifier.name());
+                      JsonObject configJsonObject =
+                          config.getJsonObject(serviceIdentifier.serviceName());
 
                       return ServiceRegistryConfig.builder()
                           .protocol(

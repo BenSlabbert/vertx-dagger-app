@@ -42,7 +42,7 @@ native: wrapper
 	docker buildx build --progress plain -f Dockerfile.native . -t catalog:native-latest --build-arg MODULE=catalog-parent/catalog-app  --build-arg BINARY=catalog
 	# test the native images
 	# https://github.com/oracle/graal/issues/5510 wait for this to be propagated to the docker image
-	${M} install -DtestImageTag=native -DskipTests=true
+	${M} install -DtestImageTag=native
 
 .PHONY: dockerSave
 dockerSave:

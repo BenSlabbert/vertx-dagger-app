@@ -1,8 +1,9 @@
 package com.example.commons.config;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.io.IOException;
 import java.net.URL;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ParseConfigTest {
@@ -13,6 +14,6 @@ class ParseConfigTest {
     System.err.println("resource: " + resource);
     String string = resource.getPath().toString();
     Config config = ParseConfig.parseArgs(new String[] {string});
-    Assertions.assertNotNull(config);
+    assertNotNull(config);
   }
 }

@@ -36,6 +36,8 @@ public class AuthHandler implements Handler<RoutingContext> {
     this.client = GrpcClient.client(vertx);
 
     if (!disableSecurity) {
+      log.info("security enabled, configuring iam service from registry");
+
       Config.ServiceRegistryConfig serviceRegistryConfig =
           serviceIdentifierServiceRegistryConfigMap.get(Config.ServiceIdentifier.IAM);
 
