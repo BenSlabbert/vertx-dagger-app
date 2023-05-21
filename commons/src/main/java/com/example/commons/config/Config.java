@@ -8,7 +8,6 @@ public record Config(
     HttpConfig httpConfig,
     GrpcConfig grpcConfig,
     RedisConfig redisConfig,
-    PostgresConfig postgresConfig,
     VerticleConfig verticleConfig) {
 
   public static Config defaults() {
@@ -24,7 +23,6 @@ public record Config(
 
     ConfigBuilder builder = Config.builder();
     addRedisConfig(jsonObject, builder);
-    addPostgresConfig(jsonObject, builder);
     addGrpcConfig(jsonObject, builder);
 
     return builder
@@ -44,23 +42,6 @@ public record Config(
     }
 
     builder.grpcConfig(GrpcConfig.builder().port(config.getInteger("port")).build());
-  }
-
-  private static void addPostgresConfig(JsonObject jsonObject, ConfigBuilder builder) {
-    JsonObject config = jsonObject.getJsonObject("postgresConfig", new JsonObject());
-
-    if (config.isEmpty()) {
-      return;
-    }
-
-    builder.postgresConfig(
-        PostgresConfig.builder()
-            .host(config.getString("host"))
-            .port(config.getInteger("port"))
-            .username(config.getString("username"))
-            .password(config.getString("password"))
-            .database(config.getString("database"))
-            .build());
   }
 
   private static void addRedisConfig(JsonObject jsonObject, ConfigBuilder builder) {
@@ -94,8 +75,4 @@ public record Config(
       return String.format("redis://%s:%d/%d", host, port, database);
     }
   }
-
-  @Builder
-  public record PostgresConfig(
-      String host, int port, String database, String username, String password) {}
 }

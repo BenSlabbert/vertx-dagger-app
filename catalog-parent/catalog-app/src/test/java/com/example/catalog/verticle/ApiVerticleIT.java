@@ -59,29 +59,6 @@ class ApiVerticleIT {
           .withLogConsumer(new TestcontainerLogConsumer());
 
   @Container
-  public GenericContainer<?> postgres =
-      new GenericContainer<>(DockerImageName.parse("postgres:15"))
-          .withExposedPorts(5432)
-          .withNetwork(network)
-          .withEnv("POSTGRES_USER", "user")
-          .withEnv("POSTGRES_PASSWORD", "password")
-          .withEnv("POSTGRES_DB", "db")
-          .withNetworkAliases("postgres")
-          .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*", 1))
-          .withLogConsumer(new TestcontainerLogConsumer());
-
-  @Container
-  public GenericContainer<?> migrator =
-      new GenericContainer<>(DockerImageName.parse("catalog-migration:jvm-latest"))
-          .withNetwork(network)
-          .withNetworkAliases("migrator")
-          .dependsOn(postgres)
-          .waitingFor(Wait.forLogMessage(".*migration complete.*", 1))
-          .withClasspathResourceMapping("it-config.json", "/config.json", BindMode.READ_ONLY)
-          .withCommand("/config.json")
-          .withLogConsumer(new TestcontainerLogConsumer());
-
-  @Container
   public GenericContainer<?> app =
       new GenericContainer<>(
               DockerImageName.parse(
@@ -89,7 +66,7 @@ class ApiVerticleIT {
           .withExposedPorts(config.httpConfig().port())
           .withNetwork(network)
           .withNetworkAliases("app")
-          .dependsOn(migrator, redis)
+          .dependsOn(redis)
           .withEnv("DISABLE_SECURITY", Boolean.TRUE.toString())
           .waitingFor(
               Wait.forLogMessage(".*deployment id.*", 1).withStartupTimeout(Duration.ofSeconds(5L)))

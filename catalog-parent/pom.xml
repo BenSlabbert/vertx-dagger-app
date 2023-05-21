@@ -12,7 +12,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>catalog-migration</module>
     <module>catalog-app</module>
   </modules>
 

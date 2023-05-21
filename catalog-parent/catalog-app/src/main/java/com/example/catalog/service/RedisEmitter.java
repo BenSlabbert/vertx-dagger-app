@@ -9,7 +9,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
-import io.vertx.redis.client.impl.types.BulkType;
+import io.vertx.redis.client.ResponseType;
 import java.util.List;
 import java.util.logging.Level;
 import javax.inject.Inject;
@@ -47,11 +47,11 @@ public class RedisEmitter implements Emitter, AutoCloseable {
         .onFailure(err -> log.log(SEVERE, "failed to add to stream", err))
         .map(
             resp -> {
-              if (!(resp instanceof BulkType bt)) {
+              if (resp.type() != ResponseType.BULK) {
                 throw new VertxException("unable to handle stream add response", true);
               }
 
-              String generatedId = bt.toString();
+              String generatedId = resp.toString();
               log.log(Level.INFO, "added value to stream: {0}", new Object[] {generatedId});
               return null;
             });

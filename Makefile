@@ -22,6 +22,10 @@ package: clean fmt
 verify: clean fmt
 	${M} verify
 
+.PHONY: fmtCheck
+fmtCheck:
+	${M} spotless:check
+
 .PHONY: fmt
 fmt:
 	${M} spotless:apply

@@ -23,13 +23,6 @@ This repo also builds two docker images:
     "port": 6379,
     "database": 0
   },
-  "postgresConfig": {
-    "host": "localhost",
-    "username": "user",
-    "password": "password",
-    "port": 5432,
-    "database": "db"
-  },
   "verticleConfig": {
     "numberOfInstances": 1
   }

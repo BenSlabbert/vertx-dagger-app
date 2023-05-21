@@ -30,7 +30,7 @@ services:
     command:
     - "/config.json"
     depends_on:
-    - "postgres"
+    - "redis"
   catalog-native:
     image: "catalog:native-latest"
     ports:
@@ -40,4 +40,4 @@ services:
     command:
     - "/config.json"
     depends_on:
-    - "postgres"
+    - "redis"

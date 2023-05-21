@@ -21,10 +21,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.ongres.scram</groupId>
-      <artifactId>client</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
@@ -43,10 +39,6 @@
       <artifactId>lombok</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
     </dependency>
@@ -60,10 +52,6 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-pg-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
       <artifactId>vertx-redis-client</artifactId>
     </dependency>
     <dependency>
@@ -73,12 +61,6 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.example.catalog.migration</groupId>
-      <artifactId>catalog-migration</artifactId>
-      <version>${revision}</version>
       <scope>test</scope>
     </dependency>
     <!--overriding rest-assured transitive deps-->

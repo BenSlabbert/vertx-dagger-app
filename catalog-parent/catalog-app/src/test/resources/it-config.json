@@ -7,13 +7,6 @@
     "port": 6379,
     "database": 0
   },
-  "postgresConfig": {
-    "host": "postgres",
-    "username": "user",
-    "password": "password",
-    "port": 5432,
-    "database": "db"
-  },
   "verticleConfig": {
     "numberOfInstances": 1
   }

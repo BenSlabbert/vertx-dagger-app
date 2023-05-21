@@ -11,15 +11,7 @@ public interface ServiceModule {
   ItemService createItemService(ItemServiceImpl itemService);
 
   @Binds
-  Pool createPool(DBPool dbPool);
-
-  @Binds
   Emitter createEmitter(RedisEmitter emitter);
-
-  // https://stackoverflow.com/a/62025382
-  @Binds
-  @IntoSet
-  AutoCloseable asAutoCloseableDBPool(DBPool dbPool);
 
   // https://stackoverflow.com/a/62025382
   @Binds
