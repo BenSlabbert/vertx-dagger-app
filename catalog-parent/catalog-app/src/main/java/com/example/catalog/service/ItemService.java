@@ -3,7 +3,6 @@ package com.example.catalog.service;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.DeleteOneResponseDto;
-import com.example.catalog.web.route.dto.FindAllRequestDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
@@ -14,7 +13,7 @@ import java.util.UUID;
 
 public interface ItemService {
 
-  Future<FindAllResponseDto> findAll(FindAllRequestDto dto);
+  Future<FindAllResponseDto> findAll(int from, int to);
 
   Future<CreateItemResponseDto> create(CreateItemRequestDto dto);
 

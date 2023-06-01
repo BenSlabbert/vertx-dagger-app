@@ -4,7 +4,6 @@ import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.DeleteOneResponseDto;
-import com.example.catalog.web.route.dto.FindAllRequestDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
@@ -28,7 +27,7 @@ class ItemServiceImpl implements ItemService {
   }
 
   @Override
-  public Future<FindAllResponseDto> findAll(FindAllRequestDto dto) {
+  public Future<FindAllResponseDto> findAll(int from, int to) {
     return itemRepository
         .findAll(0, -1)
         .map(

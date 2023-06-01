@@ -51,11 +51,12 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   @Override
   public Future<Item> create(String name, long priceInCents) {
-    // use a counter as a sequence
     UUID id = UUID.randomUUID();
     Item item = new Item(id, name, priceInCents);
     String encoded = item.toJson().encode();
 
+    // todo run in a multi block
+    //  we need all of these to be executed on the server
     return redisAPI
         .jsonSet(List.of(prefixId(id), DOCUMENT_ROOT, encoded, SET_IF_DOES_NOT_EXIST))
         .map(
@@ -112,6 +113,10 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   @Override
   public Future<List<Item>> findAll(int from, int to) {
+
+    if (from < 0) from = 0;
+    if (to < from || to == 0) to = from + 10;
+
     return redisAPI
         .zrange(List.of(ITEM_SET, Integer.toString(from), Integer.toString(to)))
         .map(
@@ -220,6 +225,8 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   @Override
   public Future<Boolean> delete(UUID id) {
+    // todo run in a multi/watch block
+    //  check if the given dto has the same version of the persisted one
     return redisAPI
         .jsonDel(List.of(prefixId(id), DOCUMENT_ROOT))
         .map(

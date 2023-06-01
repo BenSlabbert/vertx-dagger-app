@@ -48,12 +48,12 @@ class ApiVerticleTest {
   @Test
   void getItemsTest(Vertx vertx, VertxTestContext testContext) {
     FindOneResponseDto responseDto = new FindOneResponseDto(UUID.randomUUID(), "name", 123L);
-    Mockito.when(itemService.findAll(Mockito.argThat(dto -> dto.toJson().toString().equals("{}"))))
+    Mockito.when(itemService.findAll(0, 10))
         .thenReturn(Future.succeededFuture(new FindAllResponseDto(List.of(responseDto))));
 
     vertx
         .createHttpClient()
-        .request(GET, PORT, "localhost", "/api/items")
+        .request(GET, PORT, "localhost", "/api/items?from=0&to=10")
         .compose(HttpClientRequest::send)
         .onComplete(
             testContext.succeeding(

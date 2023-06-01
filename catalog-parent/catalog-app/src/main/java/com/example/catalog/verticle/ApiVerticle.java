@@ -7,6 +7,7 @@ import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
+import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
@@ -16,15 +17,23 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.HttpException;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import lombok.extern.java.Log;
+import org.apache.commons.lang3.math.NumberUtils;
 
 @Log
 public class ApiVerticle extends AbstractVerticle {
+
+  private static Pattern UUID_REGEX =
+      Pattern.compile(
+          "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 
   private final Config.HttpConfig httpConfig;
   private final ItemHandler itemHandler;
@@ -61,20 +70,25 @@ public class ApiVerticle extends AbstractVerticle {
     mainRouter.route("/api/*").subRouter(apiRouter);
 
     // api routes
-    apiRouter.get("/items").handler(itemHandler::findAll);
+    apiRouter
+        .get("/items")
+        .handler(
+            ctx ->
+                processWithPaginationParams(ctx, (from, to) -> itemHandler.findAll(ctx, from, to)));
+
     apiRouter.post("/create").handler(itemHandler::create);
 
     apiRouter
         .get("/:id")
-        .handler(ctx -> processWithRequiredParam(ctx, id -> itemHandler.findOne(ctx, id)));
+        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.findOne(ctx, id)));
 
     apiRouter
         .delete("/:id")
-        .handler(ctx -> processWithRequiredParam(ctx, id -> itemHandler.deleteOne(ctx, id)));
+        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.deleteOne(ctx, id)));
 
     apiRouter
         .post("/edit/:id")
-        .handler(ctx -> processWithRequiredParam(ctx, id -> itemHandler.update(ctx, id)));
+        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.update(ctx, id)));
 
     // https://vertx.io/docs/vertx-health-check/java/
     mainRouter
@@ -99,14 +113,54 @@ public class ApiVerticle extends AbstractVerticle {
             });
   }
 
-  private void processWithRequiredParam(RoutingContext ctx, Consumer<UUID> consumer) {
+  private void processWithRequiredIdParam(RoutingContext ctx, Consumer<UUID> consumer) {
+    String param = ctx.pathParam("id");
+
+    // do some sanity checks to avoid throwing expensive exception
+    if (null == param
+        || "".equals(param)
+        || param.length() != 36
+        // expensive regex check for last resort
+        || !UUID_REGEX.matcher(param).matches()) {
+      log.warning("path param id is not a uuid");
+      ctx.fail(new HttpException(BAD_REQUEST.code()));
+      return;
+    }
+
     try {
-      UUID id = UUID.fromString(ctx.pathParam("id"));
+      UUID id = UUID.fromString(param);
       consumer.accept(id);
     } catch (IllegalArgumentException e) {
       log.warning("path param id is not a uuid");
       ctx.fail(new HttpException(BAD_REQUEST.code()));
     }
+  }
+
+  private void processWithPaginationParams(
+      RoutingContext ctx, BiConsumer<Integer, Integer> consumer) {
+
+    MultiMap entries = ctx.queryParams();
+    Optional<Integer> from = tryParseInteger(entries.get("from"));
+    Optional<Integer> to = tryParseInteger(entries.get("to"));
+
+    if (from.isEmpty() || to.isEmpty()) {
+      ctx.fail(new HttpException(BAD_REQUEST.code()));
+      return;
+    }
+
+    consumer.accept(from.get(), to.get());
+  }
+
+  private Optional<Integer> tryParseInteger(String maybeInt) {
+    if (null == maybeInt || "".equals(maybeInt)) {
+      return Optional.of(0);
+    }
+
+    if (NumberUtils.isCreatable(maybeInt)) {
+      return Optional.of(Integer.parseInt(maybeInt));
+    }
+
+    return Optional.empty();
   }
 
   @Override

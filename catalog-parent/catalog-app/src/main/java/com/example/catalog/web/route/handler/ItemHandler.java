@@ -13,7 +13,6 @@ import static java.util.logging.Level.SEVERE;
 import com.example.catalog.service.ItemService;
 import com.example.catalog.web.SchemaValidatorDelegator;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
-import com.example.catalog.web.route.dto.FindAllRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
@@ -36,9 +35,9 @@ public class ItemHandler {
     this.schemaValidatorDelegator = schemaValidatorDelegator;
   }
 
-  public void findAll(RoutingContext ctx) {
+  public void findAll(RoutingContext ctx, int from, int to) {
     itemService
-        .findAll(new FindAllRequestDto(new JsonObject()))
+        .findAll(from, to)
         .onFailure(
             err -> {
               log.log(SEVERE, "failed to find all items", err);
