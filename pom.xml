@@ -10,6 +10,7 @@
   <modules>
     <module>iam-parent</module>
     <module>catalog-parent</module>
+    <module>shop-parent</module>
     <module>commons</module>
   </modules>
 

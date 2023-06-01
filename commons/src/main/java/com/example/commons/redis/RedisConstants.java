@@ -8,6 +8,7 @@ public class RedisConstants {
   public static final String DOCUMENT_ROOT = "$";
   public static final String SET_IF_DOES_NOT_EXIST = "NX";
   public static final String SET_IF_EXIST = "XX";
+  public static final String CONSUME_NEW_MESSAGES = ">";
 
   private RedisConstants() {}
 }

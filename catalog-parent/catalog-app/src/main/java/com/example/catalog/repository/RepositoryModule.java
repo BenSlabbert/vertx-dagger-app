@@ -13,5 +13,5 @@ public interface RepositoryModule {
   // https://stackoverflow.com/a/62025382
   @Binds
   @IntoSet
-  AutoCloseable asAutoCloseableRedisEmitter(ItemRepositoryImpl itemRepository);
+  AutoCloseable asAutoCloseableItemRepositoryImpl(ItemRepositoryImpl itemRepository);
 }
