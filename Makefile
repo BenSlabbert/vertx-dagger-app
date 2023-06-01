@@ -40,6 +40,7 @@ native: wrapper
 	docker buildx build --progress plain -f Dockerfile.native-parent . -t native-parent-builder:latest
 	docker buildx build --progress plain -f Dockerfile.native . -t iam:native-latest --build-arg MODULE=iam-parent/iam-app --build-arg BINARY=iam
 	docker buildx build --progress plain -f Dockerfile.native . -t catalog:native-latest --build-arg MODULE=catalog-parent/catalog-app  --build-arg BINARY=catalog
+	docker buildx build --progress plain -f Dockerfile.native . -t shop:native-latest --build-arg MODULE=shop-parent/shop-app  --build-arg BINARY=shop
 	# test the native images
 	# https://github.com/oracle/graal/issues/5510 wait for this to be propagated to the docker image
 	${M} install -DtestImageTag=native
@@ -48,6 +49,7 @@ native: wrapper
 dockerSave:
 	docker save iam:native-latest | gzip > iam-native_latest.tar.gz
 	docker save catalog:native-latest | gzip > catalog-native_latest.tar.gz
+	docker save shop:native-latest | gzip > shop-native_latest.tar.gz
 
 .PHONY: clean
 clean:
