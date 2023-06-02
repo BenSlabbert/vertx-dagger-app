@@ -50,7 +50,7 @@ public class AuthHandler implements Handler<RoutingContext> {
               serviceRegistryConfig.port(), serviceRegistryConfig.host());
     } else {
       log.log(Level.WARNING, "security disabled, using local configs for iam service");
-      this.server = SocketAddress.inetSocketAddress(50051, "localhost");
+      this.server = SocketAddress.inetSocketAddress(50050, "localhost");
     }
   }
 

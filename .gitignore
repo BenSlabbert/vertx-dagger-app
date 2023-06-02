@@ -5,7 +5,7 @@ target/
 !target/*.jar
 mvnw*
 .mvn/
-dev-config.json
+*-config.json
 docker-config.json
 *.tar.gz
 file-uploads
