@@ -2,7 +2,7 @@ import type { Handle, HandleFetch } from '@sveltejs/kit';
 import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
 import { Buffer } from 'buffer';
-import { factory } from '$lib/api';
+import { factory } from '$lib/api/iam';
 import cookieUtils from '$lib/cookie_utils';
 const logger = loggerFactory(import.meta.url);
 
@@ -61,7 +61,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const appUser = JSON.parse(cookieJSON) as App.User;
 
 	if (isTokenExpired(appUser.token)) {
-		logger.error('session expired, check refreshToken');
+		logger.warn('session expired, check refreshToken');
 
 		if (isTokenExpired(appUser.refreshToken)) {
 			logger.error('refreshToken expired, redirect to login');
@@ -102,7 +102,8 @@ function isTokenExpired(token: string | null): boolean {
 	const now = Math.floor(Date.now() / 1000);
 	const diff = now - exp;
 	logger.info(`cooking lifetime remaining: ${diff}`);
-	return diff > 0;
+	// refresh if there is less than 5 seconds left
+	return diff > -5;
 }
 
 function getTokenPaylod(token: string): tokenPayload {

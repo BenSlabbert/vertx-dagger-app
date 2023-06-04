@@ -52,7 +52,7 @@ public class AuthHandler implements Handler<RoutingContext> {
               serviceRegistryConfig.port(), serviceRegistryConfig.host());
     } else {
       log.log(Level.WARNING, "security disabled, using local configs for iam service");
-      this.server = SocketAddress.inetSocketAddress(50050, "localhost");
+      this.server = SocketAddress.inetSocketAddress(50051, "localhost");
     }
   }
 
@@ -65,13 +65,19 @@ public class AuthHandler implements Handler<RoutingContext> {
     }
 
     String authHeader = ctx.request().getHeader(HttpHeaders.AUTHORIZATION);
+    // todo: wtf???
+    //  if we do not have this we cannot re-read the request later
+    //  was not needed for tests, but debugging with cURL helped
+    ctx.request().pause();
 
     if (null == authHeader) {
+      log.warning("invalid header: auth header is null");
       ctx.fail(new HttpException(UNAUTHORIZED.code()));
       return;
     }
 
     if (!authHeader.startsWith(BEARER)) {
+      log.warning("invalid header: auth header incorrect prefix");
       ctx.fail(new HttpException(UNAUTHORIZED.code()));
       return;
     }
@@ -85,9 +91,14 @@ public class AuthHandler implements Handler<RoutingContext> {
               request.end(CheckTokenRequest.newBuilder().setToken(token).build());
               return request.response().compose(GrpcReadStream::last);
             })
-        .onFailure(err -> ctx.fail(new HttpException(UNAUTHORIZED.code())))
+        .onFailure(
+            err -> {
+              log.severe("iam call failed");
+              ctx.fail(new HttpException(UNAUTHORIZED.code()));
+            })
         .onSuccess(
             reply -> {
+              log.info("token valid? " + reply.getValid());
               if (reply.getValid()) {
                 ctx.next();
                 return;

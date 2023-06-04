@@ -5,7 +5,8 @@ const routes = {
 	login: `${base}/login`,
 	register: `${base}/register`,
 	about: `${base}/about`,
-	catalog: `${base}/catalog`
+	catalog: `${base}/catalog`,
+	catalogCreate: `${base}/catalog/create`
 };
 
 export default routes;

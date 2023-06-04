@@ -41,7 +41,7 @@ export type {
 	RegisterResponse
 };
 
-class Test implements IamApi {
+class IamApiImpl implements IamApi {
 	fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>;
 
 	async login(request: LoginRequest): Promise<LoginResponse | Error> {
@@ -119,5 +119,5 @@ class Test implements IamApi {
 export function factory(
 	fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>
 ) {
-	return new Test(fetch);
+	return new IamApiImpl(fetch);
 }

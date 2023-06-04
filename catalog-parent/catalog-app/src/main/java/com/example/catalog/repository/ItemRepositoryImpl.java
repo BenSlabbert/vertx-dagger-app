@@ -18,6 +18,7 @@ import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.Response;
 import io.vertx.redis.client.ResponseType;
+import io.vertx.redis.client.impl.types.MultiType;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -129,9 +130,16 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
             })
         .compose(
             ids -> {
-              String join =
-                  String.join(" ", ids.stream().map(ItemRepositoryImpl::prefixId).toList());
-              return redisAPI.jsonMget(List.of(join, DOCUMENT_ROOT));
+              if (ids.isEmpty()) {
+                return Future.succeededFuture(MultiType.EMPTY_MULTI);
+              }
+
+              String[] array =
+                  ids.stream().map(ItemRepositoryImpl::prefixId).toArray(String[]::new);
+              String[] join = new String[array.length + 1];
+              System.arraycopy(array, 0, join, 0, array.length);
+              join[join.length - 1] = DOCUMENT_ROOT;
+              return redisAPI.jsonMget(List.of(join));
             })
         .map(
             resp -> {

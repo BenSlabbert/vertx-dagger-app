@@ -9,7 +9,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
@@ -31,7 +30,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 @Log
 public class ApiVerticle extends AbstractVerticle {
 
-  private static Pattern UUID_REGEX =
+  private static final Pattern UUID_REGEX =
       Pattern.compile(
           "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 
@@ -62,9 +61,7 @@ public class ApiVerticle extends AbstractVerticle {
     mainRouter.route().handler(ctx -> handlerSupplier.get().handle(ctx));
 
     // 100kB max body size
-    mainRouter
-        .route(HttpMethod.POST, "/*")
-        .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
+    mainRouter.route().handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
     // main routes
     mainRouter.route("/api/*").subRouter(apiRouter);

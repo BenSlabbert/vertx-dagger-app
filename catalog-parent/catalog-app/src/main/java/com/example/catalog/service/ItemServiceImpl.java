@@ -29,7 +29,7 @@ class ItemServiceImpl implements ItemService {
   @Override
   public Future<FindAllResponseDto> findAll(int from, int to) {
     return itemRepository
-        .findAll(0, -1)
+        .findAll(from, to)
         .map(
             items ->
                 items.stream()

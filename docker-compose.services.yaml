@@ -2,9 +2,11 @@
 version: "3"
 services:
   iam-jvm:
+    hostname: "iam"
     image: "iam:jvm-latest"
     ports:
     - "8080:8080"
+    - "50051:50051"
     volumes:
     - "./docker-config.json:/config.json"
     command:
@@ -12,9 +14,11 @@ services:
     depends_on:
     - "redis"
   iam-native:
+    hostname: "iam"
     image: "iam:native-latest"
     ports:
     - "8080:8080"
+    - "50051:50051"
     volumes:
     - "./docker-config.json:/config.json"
     command:
@@ -22,6 +26,7 @@ services:
     depends_on:
     - "redis"
   catalog-jvm:
+    hostname: "catalog"
     image: "catalog:jvm-latest"
     ports:
     - "8081:8080"
@@ -32,6 +37,7 @@ services:
     depends_on:
     - "redis"
   catalog-native:
+    hostname: "catalog"
     image: "catalog:native-latest"
     ports:
     - "8081:8080"

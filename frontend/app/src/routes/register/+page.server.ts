@@ -3,7 +3,7 @@ import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { zfd } from 'zod-form-data';
 import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
-import { factory } from '$lib/api';
+import { factory } from '$lib/api/iam';
 const logger = loggerFactory(import.meta.url);
 
 export const load: PageServerLoad = async ({ locals }) => {
