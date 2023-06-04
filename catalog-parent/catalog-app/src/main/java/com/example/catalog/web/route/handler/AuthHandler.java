@@ -23,6 +23,8 @@ import lombok.extern.java.Log;
 @Singleton
 public class AuthHandler implements Handler<RoutingContext> {
 
+  private static final String BEARER = "Bearer ";
+
   private final GrpcClient client;
   private final SocketAddress server;
   private final boolean disableSecurity;
@@ -69,11 +71,18 @@ public class AuthHandler implements Handler<RoutingContext> {
       return;
     }
 
+    if (!authHeader.startsWith(BEARER)) {
+      ctx.fail(new HttpException(UNAUTHORIZED.code()));
+      return;
+    }
+
+    String token = authHeader.substring(BEARER.length());
+
     client
         .request(server, IamGrpc.getCheckTokenMethod())
         .compose(
             request -> {
-              request.end(CheckTokenRequest.newBuilder().setToken(authHeader).build());
+              request.end(CheckTokenRequest.newBuilder().setToken(token).build());
               return request.response().compose(GrpcReadStream::last);
             })
         .onFailure(err -> ctx.fail(new HttpException(UNAUTHORIZED.code())))
