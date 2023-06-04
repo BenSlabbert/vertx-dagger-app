@@ -9,4 +9,12 @@ const routes = {
 	catalogCreate: `${base}/catalog/create`
 };
 
+export function catalogEdit(id: string): string {
+	return `${routes.catalog}/${id}`;
+}
+
+export function catalogDelete(id: string): string {
+	return `${routes.catalog}/${id}/delete`;
+}
+
 export default routes;

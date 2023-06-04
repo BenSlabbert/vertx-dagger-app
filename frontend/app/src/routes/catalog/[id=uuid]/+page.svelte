@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import type { ActionData } from './$types';
+	import type { GetOneItemResponse } from '$lib/api/catalog';
 
+	export let data: GetOneItemResponse;
 	export let form: ActionData;
 	let loading = false;
 
@@ -25,21 +27,23 @@
 	</div>
 {/if}
 
-<div>create item</div>
+<div>edit item: {data.item.id}</div>
 
 <form method="POST" use:enhance={process}>
-	<input type="text" name="name" value={form?.data?.name ?? ''} />
+	<input type="text" name="id" hidden value={data.item.id} />
+
+	<input type="text" name="name" value={data.item.name} />
 	{#if form?.errors?.name}
 		<p class="error">Name is required</p>
 	{/if}
 
-	<input type="number" name="priceInCents" value={form?.data?.priceInCents ?? ''} />
+	<input type="number" name="priceInCents" value={data.item.priceInCents} />
 	{#if form?.errors?.priceInCents}
 		<p class="error">priceInCents is required</p>
 	{/if}
 
 	<button aria-busy={loading} class:secondary={loading} type="submit">
-		{#if !loading}Create{/if}
+		{#if !loading}Submit{/if}
 	</button>
 </form>
 

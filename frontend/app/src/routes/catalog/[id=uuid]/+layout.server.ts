@@ -3,14 +3,14 @@ import loggerFactory from '$lib/logger';
 import { factory } from '$lib/api/catalog';
 const logger = loggerFactory(import.meta.url);
 
-export const load: PageServerLoad = async ({ fetch, locals }) => {
+export const load: PageServerLoad = async ({ locals, fetch, params }) => {
 	const catalogApi = factory(fetch);
 
-	const items = await catalogApi.getItems({ token: locals.user.token, from: 0, to: 10 });
+	const item = await catalogApi.getOneItem({ token: locals.user.token, id: params.id });
 
-	if (items instanceof Error) {
+	if (item instanceof Error) {
 		logger.error('failed to get items');
 	} else {
-		return items;
+		return item;
 	}
 };

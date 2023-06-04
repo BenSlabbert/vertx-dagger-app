@@ -1,6 +1,5 @@
 <script lang="ts">
-	import routes from '$lib/routes';
-	// todo show created items
+	import routes, { catalogEdit, catalogDelete } from '$lib/routes';
 	import type { ItemsResponse } from '$lib/api/catalog';
 	export let data: ItemsResponse;
 </script>
@@ -16,6 +15,7 @@
 				<th>ID</th>
 				<th>Name</th>
 				<th>Price In Cents</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -24,13 +24,19 @@
 					<td>{item.id}</td>
 					<td>{item.name}</td>
 					<td>{item.priceInCents}</td>
+					<td>
+						<a href={catalogEdit(item.id)}>edit</a>
+						<a href={catalogDelete(item.id)}>delete</a>
+					</td>
 				</tr>
 			{/each}
-		</tbody><tfoot>
+		</tbody>
+		<tfoot>
 			<tr>
 				<td>foot 1</td>
 				<td>foot 2</td>
 				<td>foot 3</td>
+				<td>foot 4</td>
 			</tr>
 		</tfoot>
 	</table>
