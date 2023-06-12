@@ -77,8 +77,6 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
               log.log(SEVERE, "failed to create index", err);
             })
         .onSuccess(resp -> log.info("created index"));
-
-    this.searchByName("ame");
   }
 
   @Override
