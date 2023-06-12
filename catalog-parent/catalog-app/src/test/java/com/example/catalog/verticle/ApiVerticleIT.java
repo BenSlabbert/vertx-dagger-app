@@ -99,7 +99,7 @@ class ApiVerticleIT {
   }
 
   @Test
-  void fullHappyPath(Vertx vertx, VertxTestContext testContext) throws InterruptedException {
+  void fullHappyPath(Vertx vertx, VertxTestContext testContext) {
     // find all empty
     String getItemsJsonResponse =
         RestAssured.given()
@@ -185,6 +185,61 @@ class ApiVerticleIT {
                       softly.assertThat(dto.name()).isEqualTo("new_item");
                       softly.assertThat(dto.priceInCents()).isEqualTo(123L);
                     }));
+
+    // search
+    String searchJsonResponse =
+        RestAssured.given()
+            .get("/api/search?s=" + createItemResponseDto.name())
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    assertThat(new FindAllResponseDto(new JsonObject(searchJsonResponse)).dtos())
+        .singleElement()
+        .satisfies(
+            dto ->
+                assertSoftly(
+                    softly -> {
+                      softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
+                      softly.assertThat(dto.name()).isEqualTo("new_item");
+                      softly.assertThat(dto.priceInCents()).isEqualTo(123L);
+                    }));
+
+    searchJsonResponse =
+        RestAssured.given()
+            .get("/api/search?s=" + createItemResponseDto.name().substring(2, 5))
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    assertThat(new FindAllResponseDto(new JsonObject(searchJsonResponse)).dtos())
+        .singleElement()
+        .satisfies(
+            dto ->
+                assertSoftly(
+                    softly -> {
+                      softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
+                      softly.assertThat(dto.name()).isEqualTo("new_item");
+                      softly.assertThat(dto.priceInCents()).isEqualTo(123L);
+                    }));
+
+    searchJsonResponse =
+        RestAssured.given()
+            .get("/api/search?s=bad")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    assertThat(new FindAllResponseDto(new JsonObject(searchJsonResponse)))
+        .extracting(FindAllResponseDto::dtos)
+        .asList()
+        .isEmpty();
 
     // edit
     RestAssured.given()

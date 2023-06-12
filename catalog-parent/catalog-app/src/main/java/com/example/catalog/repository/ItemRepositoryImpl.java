@@ -19,6 +19,8 @@ import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.Response;
 import io.vertx.redis.client.ResponseType;
 import io.vertx.redis.client.impl.types.MultiType;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,8 +36,10 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   private static final String CATALOG_STREAM = "catalog-stream";
   private static final String ITEM_SET = "item-set";
+  private static final String ITEM_NAME_INDEX = "itemNameIdx";
   private static final String ITEM_SEQUENCE = "item-sequence";
   private static final String STREAM_FIELD = "item";
+  private static final String ITEM_PREFIX = "item:";
 
   private final RedisAPI redisAPI;
 
@@ -48,6 +52,33 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
         .ping(List.of(""))
         .onFailure(err -> log.log(SEVERE, "failed to ping redis", err))
         .onSuccess(resp -> log.info("pinged redis"));
+
+    this.redisAPI
+        .ftCreate(
+            List.of(
+                ITEM_NAME_INDEX,
+                "ON",
+                "JSON",
+                "PREFIX",
+                "1",
+                ITEM_PREFIX,
+                "SCHEMA",
+                "$.name",
+                "AS",
+                "name",
+                "TEXT",
+                "WITHSUFFIXTRIE"))
+        .onFailure(
+            err -> {
+              if ("Index already exists".equals(err.toString())) {
+                log.info("index already exists, not an error");
+                return;
+              }
+              log.log(SEVERE, "failed to create index", err);
+            })
+        .onSuccess(resp -> log.info("created index"));
+
+    this.searchByName("ame");
   }
 
   @Override
@@ -161,6 +192,71 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
   }
 
   @Override
+  public Future<List<Item>> searchByName(String name) {
+    return redisAPI
+        .ftSearch(
+            List.of(
+                ITEM_NAME_INDEX,
+                "@name:(*" + name + "*)",
+                "RETURN",
+                "3",
+                "$.id",
+                "$.name",
+                "$.priceInCents",
+                "LIMIT",
+                "0",
+                "10"))
+        .onFailure(err -> log.log(SEVERE, "failed to ping redis", err))
+        .map(
+            resp -> {
+              if (resp.type() != ResponseType.MULTI) {
+                throw new IllegalArgumentException("should be multi");
+              }
+
+              Iterator<Response> respItr = resp.iterator();
+              Response numberOfItems = respItr.next();
+
+              if (numberOfItems.type() != ResponseType.NUMBER) {
+                throw new IllegalArgumentException("should be number");
+              }
+
+              Long numberOfResults = numberOfItems.toLong();
+
+              if (numberOfResults == 0L) return List.of();
+
+              List<Item> items = new ArrayList<>(numberOfResults.intValue());
+
+              for (int i = 0; i < numberOfResults; i++) {
+                Response key = respItr.next();
+                if (key.type() != ResponseType.BULK) {
+                  throw new IllegalArgumentException("should be bulk");
+                }
+
+                Response values = respItr.next();
+                if (values.type() != ResponseType.MULTI) {
+                  throw new IllegalArgumentException("should be multi");
+                }
+
+                Iterator<Response> valuesItr = values.iterator();
+                // every other value
+                valuesItr.next();
+                var id = valuesItr.next();
+                valuesItr.next();
+                var itemName = valuesItr.next();
+                valuesItr.next();
+                var priceInCents = valuesItr.next();
+
+                // strip prefix
+                UUID uuid = UUID.fromString(id.toString());
+                Item item = new Item(uuid, itemName.toString(), priceInCents.toLong());
+                items.add(item);
+              }
+
+              return items;
+            });
+  }
+
+  @Override
   public Future<Optional<Item>> findById(UUID id) {
     return redisAPI
         .jsonGet(List.of(prefixId(id), DOCUMENT_ROOT))
@@ -248,7 +344,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
   }
 
   private static String prefixId(UUID id) {
-    return "item:" + id;
+    return ITEM_PREFIX + id;
   }
 
   @Override

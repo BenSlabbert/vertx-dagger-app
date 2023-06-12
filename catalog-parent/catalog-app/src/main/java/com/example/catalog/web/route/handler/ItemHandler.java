@@ -52,6 +52,23 @@ public class ItemHandler {
                     .onFailure(ctx::fail));
   }
 
+  public void search(RoutingContext ctx, String searchQuery) {
+    itemService
+        .searchByName(searchQuery)
+        .onFailure(
+            err -> {
+              log.log(SEVERE, "failed to search for items", err);
+              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+            })
+        .onSuccess(
+            dto ->
+                ctx.response()
+                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .setStatusCode(OK.code())
+                    .end(dto.toJson().toBuffer())
+                    .onFailure(ctx::fail));
+  }
+
   public void findOne(RoutingContext ctx, UUID id) {
     itemService
         .findById(id)

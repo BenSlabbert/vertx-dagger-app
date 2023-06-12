@@ -40,6 +40,19 @@ class ItemServiceImpl implements ItemService {
   }
 
   @Override
+  public Future<FindAllResponseDto> searchByName(String name) {
+    return itemRepository
+        .searchByName(name)
+        .map(
+            items ->
+                items.stream()
+                    .map(
+                        item -> new FindOneResponseDto(item.id(), item.name(), item.priceInCents()))
+                    .toList())
+        .map(FindAllResponseDto::new);
+  }
+
+  @Override
   public Future<CreateItemResponseDto> create(CreateItemRequestDto dto) {
     return itemRepository
         .create(dto.name(), dto.priceInCents())

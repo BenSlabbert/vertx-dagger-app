@@ -76,6 +76,10 @@ public class ApiVerticle extends AbstractVerticle {
     apiRouter.post("/create").handler(itemHandler::create);
 
     apiRouter
+        .get("/search")
+        .handler(ctx -> processWithRequiredSearchParam(ctx, s -> itemHandler.search(ctx, s)));
+
+    apiRouter
         .get("/:id")
         .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.findOne(ctx, id)));
 
@@ -131,6 +135,18 @@ public class ApiVerticle extends AbstractVerticle {
       log.warning("path param id is not a uuid");
       ctx.fail(new HttpException(BAD_REQUEST.code()));
     }
+  }
+
+  private void processWithRequiredSearchParam(RoutingContext ctx, Consumer<String> consumer) {
+    MultiMap entries = ctx.queryParams();
+    String search = entries.get("s");
+
+    if (null == search || "".equals(search) || search.length() < 2) {
+      ctx.fail(new HttpException(BAD_REQUEST.code()));
+      return;
+    }
+
+    consumer.accept(search);
   }
 
   private void processWithPaginationParams(

@@ -12,6 +12,8 @@ public interface ItemRepository {
 
   Future<List<Item>> findAll(int from, int to);
 
+  Future<List<Item>> searchByName(String name);
+
   Future<Optional<Item>> findById(UUID id);
 
   Future<Boolean> update(UUID id, String name, long priceInCents);
