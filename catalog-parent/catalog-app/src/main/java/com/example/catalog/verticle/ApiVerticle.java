@@ -77,7 +77,10 @@ public class ApiVerticle extends AbstractVerticle {
 
     apiRouter
         .get("/search")
-        .handler(ctx -> processWithRequiredSearchParam(ctx, s -> itemHandler.search(ctx, s)));
+        .handler(
+            ctx ->
+                processWithRequiredSearchParam(
+                    ctx, (s, i1, i2, i3, i4) -> itemHandler.search(ctx, s, i1, i2, i3, i4)));
 
     apiRouter
         .get("/:id")
@@ -137,16 +140,22 @@ public class ApiVerticle extends AbstractVerticle {
     }
   }
 
-  private void processWithRequiredSearchParam(RoutingContext ctx, Consumer<String> consumer) {
+  @FunctionalInterface
+  interface PentaConsumer<A, B, C, D, E> {
+    void accept(A a, B b, C c, D d, E e);
+  }
+
+  private void processWithRequiredSearchParam(
+      RoutingContext ctx, PentaConsumer<String, Integer, Integer, Integer, Integer> consumer) {
     MultiMap entries = ctx.queryParams();
     String search = entries.get("s");
 
-    if (null == search || "".equals(search) || search.length() < 2) {
-      ctx.fail(new HttpException(BAD_REQUEST.code()));
-      return;
-    }
+    Optional<Integer> priceFrom = tryParseInteger(entries.get("priceFrom"));
+    Optional<Integer> priceTo = tryParseInteger(entries.get("priceTo"));
+    Optional<Integer> from = tryParseInteger(entries.get("from"));
+    Optional<Integer> to = tryParseInteger(entries.get("to"));
 
-    consumer.accept(search);
+    consumer.accept(search, priceFrom.get(), priceTo.get(), from.get(), to.get());
   }
 
   private void processWithPaginationParams(

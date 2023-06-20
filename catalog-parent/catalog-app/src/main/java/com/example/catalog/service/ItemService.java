@@ -13,9 +13,10 @@ import java.util.UUID;
 
 public interface ItemService {
 
-  Future<FindAllResponseDto> findAll(int from, int to);
+  Future<FindAllResponseDto> findAll(Integer from, Integer to);
 
-  Future<FindAllResponseDto> searchByName(String name);
+  Future<FindAllResponseDto> search(
+      String name, Integer priceFrom, Integer priceTo, Integer from, Integer to);
 
   Future<CreateItemResponseDto> create(CreateItemRequestDto dto);
 

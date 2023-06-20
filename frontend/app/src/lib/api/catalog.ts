@@ -51,12 +51,26 @@ type DeleteRequest = {
 
 type DeleteResponse = {};
 
+type SearchRequest = {
+	token: string;
+	searchTerm: string | null;
+	priceFrom: number | null;
+	priceTo: number | null;
+	from: number;
+	to: number;
+};
+
+type SearchResponse = {
+	items: Item[];
+};
+
 interface CatalogApi {
 	getItems(request: ItemsRequest): Promise<ItemsResponse | Error>;
 	getOneItem(request: GetOneItemRequest): Promise<GetOneItemResponse | Error>;
 	create(request: CreateRequest): Promise<CreateResponse | Error>;
 	edit(request: EditRequest): Promise<EditResponse | Error>;
 	delete(request: DeleteRequest): Promise<DeleteResponse | Error>;
+	search(request: SearchRequest): Promise<SearchResponse | Error>;
 }
 
 export type {
@@ -182,6 +196,41 @@ class CatalogApiImpl implements CatalogApi {
 			});
 
 			return {};
+		} catch (e) {
+			return this.handleError(e);
+		}
+	}
+
+	async search(request: SearchRequest): Promise<SearchResponse | Error> {
+		try {
+			let query = `from=${request.from}&to=${request.to}`;
+
+			if (request.searchTerm) {
+				query += `&s=${request.searchTerm}`;
+			}
+
+			if (request.priceFrom && request.priceTo) {
+				query += `&priceFrom=${request.priceFrom}&priceTo=${request.priceTo}`;
+			}
+
+			const resp = await this.fetch(`http://localhost:8081/api/search?${query}`, {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + request.token
+				}
+			});
+
+			const json = await resp.json();
+
+			var items: Item[] = json.items.map((j: any) => {
+				return {
+					id: j.id,
+					name: j.name,
+					priceInCents: j.priceInCents
+				};
+			});
+
+			return { items };
 		} catch (e) {
 			return this.handleError(e);
 		}

@@ -35,7 +35,7 @@ public class ItemHandler {
     this.schemaValidatorDelegator = schemaValidatorDelegator;
   }
 
-  public void findAll(RoutingContext ctx, int from, int to) {
+  public void findAll(RoutingContext ctx, Integer from, Integer to) {
     itemService
         .findAll(from, to)
         .onFailure(
@@ -52,9 +52,16 @@ public class ItemHandler {
                     .onFailure(ctx::fail));
   }
 
-  public void search(RoutingContext ctx, String searchQuery) {
+  public void search(
+      RoutingContext ctx,
+      String searchQuery,
+      Integer priceFrom,
+      Integer priceTo,
+      Integer from,
+      Integer to) {
+
     itemService
-        .searchByName(searchQuery)
+        .search(searchQuery, priceFrom, priceTo, from, to)
         .onFailure(
             err -> {
               log.log(SEVERE, "failed to search for items", err);

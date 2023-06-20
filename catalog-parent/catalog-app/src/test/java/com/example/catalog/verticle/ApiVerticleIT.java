@@ -189,7 +189,7 @@ class ApiVerticleIT {
     // search
     String searchJsonResponse =
         RestAssured.given()
-            .get("/api/search?s=" + createItemResponseDto.name())
+            .get("/api/search?s=" + createItemResponseDto.name() + "&from=0&to=1000")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())
@@ -209,7 +209,8 @@ class ApiVerticleIT {
 
     searchJsonResponse =
         RestAssured.given()
-            .get("/api/search?s=" + createItemResponseDto.name().substring(2, 5))
+            .get(
+                "/api/search?s=" + createItemResponseDto.name().substring(2, 5) + "&from=0&to=1000")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())
@@ -229,7 +230,7 @@ class ApiVerticleIT {
 
     searchJsonResponse =
         RestAssured.given()
-            .get("/api/search?s=bad")
+            .get("/api/search?s=bad&from=0&to=1000")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())

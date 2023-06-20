@@ -27,7 +27,7 @@ class ItemServiceImpl implements ItemService {
   }
 
   @Override
-  public Future<FindAllResponseDto> findAll(int from, int to) {
+  public Future<FindAllResponseDto> findAll(Integer from, Integer to) {
     return itemRepository
         .findAll(from, to)
         .map(
@@ -40,9 +40,10 @@ class ItemServiceImpl implements ItemService {
   }
 
   @Override
-  public Future<FindAllResponseDto> searchByName(String name) {
+  public Future<FindAllResponseDto> search(
+      String name, Integer priceFrom, Integer priceTo, Integer from, Integer to) {
     return itemRepository
-        .searchByName(name)
+        .search(name, priceFrom, priceTo, from, to)
         .map(
             items ->
                 items.stream()

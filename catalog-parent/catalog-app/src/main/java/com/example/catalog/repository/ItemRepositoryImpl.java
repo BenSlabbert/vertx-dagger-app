@@ -36,7 +36,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   private static final String CATALOG_STREAM = "catalog-stream";
   private static final String ITEM_SET = "item-set";
-  private static final String ITEM_NAME_INDEX = "itemNameIdx";
+  private static final String ITEM_INDEX = "itemIdx";
   private static final String ITEM_SEQUENCE = "item-sequence";
   private static final String STREAM_FIELD = "item";
   private static final String ITEM_PREFIX = "item:";
@@ -56,7 +56,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
     this.redisAPI
         .ftCreate(
             List.of(
-                ITEM_NAME_INDEX,
+                ITEM_INDEX,
                 "ON",
                 "JSON",
                 "PREFIX",
@@ -67,7 +67,13 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
                 "AS",
                 "name",
                 "TEXT",
-                "WITHSUFFIXTRIE"))
+                "WITHSUFFIXTRIE",
+                "SORTABLE",
+                "UNF",
+                "$.priceInCents",
+                "AS",
+                "priceInCents",
+                "NUMERIC"))
         .onFailure(
             err -> {
               if ("Index already exists".equals(err.toString())) {
@@ -77,6 +83,24 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
               log.log(SEVERE, "failed to create index", err);
             })
         .onSuccess(resp -> log.info("created index"));
+
+    if (Boolean.parseBoolean(System.getenv("SEED"))) {
+      this.redisAPI
+          .eval(List.of("return #redis.pcall('keys', 'item:*')", "0"))
+          .onFailure(err -> log.log(SEVERE, "failed to run eval", err))
+          .onSuccess(
+              resp -> {
+                if (resp.type() != ResponseType.NUMBER) {
+                  throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+                }
+
+                if (resp.toLong() < 25) {
+                  for (int i = 0; i < 25; i++) {
+                    create("seed_" + i, i);
+                  }
+                }
+              });
+    }
   }
 
   @Override
@@ -142,10 +166,16 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
   }
 
   @Override
-  public Future<List<Item>> findAll(int from, int to) {
+  public Future<List<Item>> findAll(Integer from, Integer to) {
+    if (from < 0) {
+      from = 0;
+    }
+    if (to < from || to == 0) {
+      to = from + 10;
+    }
 
-    if (from < 0) from = 0;
-    if (to < from || to == 0) to = from + 10;
+    // zrange is inclusive
+    to--;
 
     return redisAPI
         .zrange(List.of(ITEM_SET, Integer.toString(from), Integer.toString(to)))
@@ -190,20 +220,31 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
   }
 
   @Override
-  public Future<List<Item>> searchByName(String name) {
+  public Future<List<Item>> search(
+      String name, Integer priceFrom, Integer priceTo, Integer from, Integer to) {
+    if (from < 0) {
+      from = 0;
+    }
+    if (to < from || to == 0) {
+      to = from + 10;
+    }
+
     return redisAPI
         .ftSearch(
             List.of(
-                ITEM_NAME_INDEX,
-                "@name:(*" + name + "*)",
+                ITEM_INDEX,
+                getQuery(name, priceFrom, priceTo),
+                "SORTBY",
+                "name",
+                "DESC",
                 "RETURN",
                 "3",
                 "$.id",
                 "$.name",
                 "$.priceInCents",
                 "LIMIT",
-                "0",
-                "10"))
+                from.toString(),
+                Integer.toString((to - from))))
         .onFailure(err -> log.log(SEVERE, "failed to ping redis", err))
         .map(
             resp -> {
@@ -218,13 +259,13 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
                 throw new IllegalArgumentException("should be number");
               }
 
-              Long numberOfResults = numberOfItems.toLong();
+              if (numberOfItems.toLong() == 0L) {
+                return List.of();
+              }
 
-              if (numberOfResults == 0L) return List.of();
+              List<Item> items = new ArrayList<>();
 
-              List<Item> items = new ArrayList<>(numberOfResults.intValue());
-
-              for (int i = 0; i < numberOfResults; i++) {
+              while (respItr.hasNext()) {
                 Response key = respItr.next();
                 if (key.type() != ResponseType.BULK) {
                   throw new IllegalArgumentException("should be bulk");
@@ -252,6 +293,37 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
               return items;
             });
+  }
+
+  private String getQuery(String name, Integer from, Integer to) {
+    boolean searchByName = true;
+    boolean searchByPriceRange = true;
+
+    if (null == name) {
+      // no argument given, exclude from query
+      searchByName = false;
+    }
+
+    if (from == 0 && to == 0) {
+      // no arguments given, exclude from query
+      searchByPriceRange = false;
+    }
+
+    // be careful of the ` back ticks and white space
+    if (searchByName && searchByPriceRange) {
+      return "`@name:(*" + name + "*)" + " " + String.format("@priceInCents:[%d %d]`", from, to);
+    }
+
+    if (searchByName) {
+      return "`@name:(*" + name + "*)`";
+    }
+
+    if (searchByPriceRange) {
+      return String.format("`@priceInCents:[%d %d]`", from, to);
+    }
+
+    // client should specify at least one of these
+    throw new HttpException(HttpResponseStatus.BAD_REQUEST.code());
   }
 
   @Override

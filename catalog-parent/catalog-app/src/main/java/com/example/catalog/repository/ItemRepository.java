@@ -10,9 +10,10 @@ public interface ItemRepository {
 
   Future<Item> create(String name, long priceInCents);
 
-  Future<List<Item>> findAll(int from, int to);
+  Future<List<Item>> findAll(Integer from, Integer to);
 
-  Future<List<Item>> searchByName(String name);
+  Future<List<Item>> search(
+      String name, Integer priceFrom, Integer priceTo, Integer from, Integer to);
 
   Future<Optional<Item>> findById(UUID id);
 
