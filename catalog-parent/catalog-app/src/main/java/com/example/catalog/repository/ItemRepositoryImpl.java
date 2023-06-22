@@ -111,6 +111,8 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
     // todo run in a multi block
     //  we need all of these to be executed on the server
+    // todo replace with index search to get ordering as well
+    //  FT.SEARCH itemIdx * SORTBY name DESC
     return redisAPI
         .jsonSet(List.of(prefixId(id), DOCUMENT_ROOT, encoded, SET_IF_DOES_NOT_EXIST))
         .map(
