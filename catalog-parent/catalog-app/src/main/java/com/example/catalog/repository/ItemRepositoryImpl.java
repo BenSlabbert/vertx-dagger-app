@@ -18,11 +18,9 @@ import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.Response;
 import io.vertx.redis.client.ResponseType;
-import io.vertx.redis.client.impl.types.MultiType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -35,9 +33,7 @@ import lombok.extern.java.Log;
 class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   private static final String CATALOG_STREAM = "catalog-stream";
-  private static final String ITEM_SET = "item-set";
   private static final String ITEM_INDEX = "itemIdx";
-  private static final String ITEM_SEQUENCE = "item-sequence";
   private static final String STREAM_FIELD = "item";
   private static final String ITEM_PREFIX = "item:";
 
@@ -111,8 +107,6 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
     // todo run in a multi block
     //  we need all of these to be executed on the server
-    // todo replace with index search to get ordering as well
-    //  FT.SEARCH itemIdx * SORTBY name DESC
     return redisAPI
         .jsonSet(List.of(prefixId(id), DOCUMENT_ROOT, encoded, SET_IF_DOES_NOT_EXIST))
         .map(
@@ -124,34 +118,9 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
               return item;
             })
-        .compose(ignore -> redisAPI.incr(ITEM_SEQUENCE))
-        .map(
-            resp -> {
-              if (resp.type() != ResponseType.NUMBER) {
-                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-              }
-
-              return resp.toLong();
-            })
         .compose(
-            sequence ->
-                redisAPI.zadd(
-                    List.of(
-                        ITEM_SET, SET_IF_DOES_NOT_EXIST, Long.toString(sequence), id.toString())))
-        .compose(
-            resp -> {
-              if (resp.type() != ResponseType.NUMBER) {
-                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-              }
-
-              if (resp.toLong() != 1L) {
-                // id already exists in the set
-                log.log(Level.WARNING, "item id {0} already exists in the set!", new Object[] {id});
-              }
-
-              return redisAPI.xadd(
-                  List.of(CATALOG_STREAM, STREAM_GENERATE_ID, STREAM_FIELD, encoded));
-            })
+            ignore ->
+                redisAPI.xadd(List.of(CATALOG_STREAM, STREAM_GENERATE_ID, STREAM_FIELD, encoded)))
         .map(
             resp -> {
               if (resp.type() != ResponseType.BULK) {
@@ -176,49 +145,22 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
       to = from + 10;
     }
 
-    // zrange is inclusive
-    to--;
-
     return redisAPI
-        .zrange(List.of(ITEM_SET, Integer.toString(from), Integer.toString(to)))
-        .map(
-            resp -> {
-              if (resp.type() != ResponseType.MULTI) {
-                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-              }
-
-              return resp.stream().map(id -> UUID.fromString(id.toString())).toList();
-            })
-        .compose(
-            ids -> {
-              if (ids.isEmpty()) {
-                return Future.succeededFuture(MultiType.EMPTY_MULTI);
-              }
-
-              String[] array =
-                  ids.stream().map(ItemRepositoryImpl::prefixId).toArray(String[]::new);
-              String[] join = new String[array.length + 1];
-              System.arraycopy(array, 0, join, 0, array.length);
-              join[join.length - 1] = DOCUMENT_ROOT;
-              return redisAPI.jsonMget(List.of(join));
-            })
-        .map(
-            resp -> {
-              if (resp.type() != ResponseType.MULTI) {
-                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-              }
-
-              return resp.stream()
-                  .filter(Objects::nonNull)
-                  .map(
-                      r -> {
-                        String string = r.toString();
-                        string = string.substring(1, string.length() - 1);
-                        return new JsonObject(string);
-                      })
-                  .map(Item::new)
-                  .toList();
-            });
+        .ftSearch(
+            List.of(
+                ITEM_INDEX,
+                "*",
+                "SORTBY",
+                "name",
+                "RETURN",
+                "3",
+                "$.id",
+                "$.name",
+                "$.priceInCents",
+                "LIMIT",
+                from.toString(),
+                Integer.toString((to - from))))
+        .map(this::parseSearchResponse);
   }
 
   @Override
@@ -238,7 +180,6 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
                 getQuery(name, priceFrom, priceTo),
                 "SORTBY",
                 "name",
-                "DESC",
                 "RETURN",
                 "3",
                 "$.id",
@@ -247,54 +188,54 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
                 "LIMIT",
                 from.toString(),
                 Integer.toString((to - from))))
-        .onFailure(err -> log.log(SEVERE, "failed to ping redis", err))
-        .map(
-            resp -> {
-              if (resp.type() != ResponseType.MULTI) {
-                throw new IllegalArgumentException("should be multi");
-              }
+        .map(this::parseSearchResponse);
+  }
 
-              Iterator<Response> respItr = resp.iterator();
-              Response numberOfItems = respItr.next();
+  private List<Item> parseSearchResponse(Response resp) {
+    if (resp.type() != ResponseType.MULTI) {
+      throw new IllegalArgumentException("should be multi");
+    }
 
-              if (numberOfItems.type() != ResponseType.NUMBER) {
-                throw new IllegalArgumentException("should be number");
-              }
+    Iterator<Response> respItr = resp.iterator();
+    Response numberOfItems = respItr.next();
 
-              if (numberOfItems.toLong() == 0L) {
-                return List.of();
-              }
+    if (numberOfItems.type() != ResponseType.NUMBER) {
+      throw new IllegalArgumentException("should be number");
+    }
 
-              List<Item> items = new ArrayList<>();
+    if (numberOfItems.toLong() == 0L) {
+      return List.of();
+    }
 
-              while (respItr.hasNext()) {
-                Response key = respItr.next();
-                if (key.type() != ResponseType.BULK) {
-                  throw new IllegalArgumentException("should be bulk");
-                }
+    List<Item> items = new ArrayList<>();
 
-                Response values = respItr.next();
-                if (values.type() != ResponseType.MULTI) {
-                  throw new IllegalArgumentException("should be multi");
-                }
+    while (respItr.hasNext()) {
+      Response key = respItr.next();
+      if (key.type() != ResponseType.BULK) {
+        throw new IllegalArgumentException("should be bulk");
+      }
 
-                Iterator<Response> valuesItr = values.iterator();
-                // every other value
-                valuesItr.next();
-                var id = valuesItr.next();
-                valuesItr.next();
-                var itemName = valuesItr.next();
-                valuesItr.next();
-                var priceInCents = valuesItr.next();
+      Response values = respItr.next();
+      if (values.type() != ResponseType.MULTI) {
+        throw new IllegalArgumentException("should be multi");
+      }
 
-                // strip prefix
-                UUID uuid = UUID.fromString(id.toString());
-                Item item = new Item(uuid, itemName.toString(), priceInCents.toLong());
-                items.add(item);
-              }
+      Iterator<Response> valuesItr = values.iterator();
+      // every other value
+      valuesItr.next();
+      var id = valuesItr.next();
+      valuesItr.next();
+      var itemName = valuesItr.next();
+      valuesItr.next();
+      var priceInCents = valuesItr.next();
 
-              return items;
-            });
+      // strip prefix
+      UUID uuid = UUID.fromString(id.toString());
+      Item item = new Item(uuid, itemName.toString(), priceInCents.toLong());
+      items.add(item);
+    }
+
+    return items;
   }
 
   private String getQuery(String name, Integer from, Integer to) {
