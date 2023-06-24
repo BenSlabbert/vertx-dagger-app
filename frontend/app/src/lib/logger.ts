@@ -16,7 +16,7 @@ export default (meta_url: string) => {
 		return `${timestamp} [${level}] ${file_path}: ${stack || message}`;
 	});
 
-	const loggerInstance = createLogger({
+	return createLogger({
 		level: 'info',
 		format: combine(
 			timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -27,6 +27,4 @@ export default (meta_url: string) => {
 		defaultMeta: { service: 'user-service' },
 		transports: [new transports.Console({ format: combine(format.colorize(), customFormat) })]
 	});
-
-	return loggerInstance;
 };

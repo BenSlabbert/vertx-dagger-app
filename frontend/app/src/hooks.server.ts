@@ -11,20 +11,22 @@ type tokenPayload = {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-	logger.info(`handle request ${event.route.id}`);
+	logger.info(`handle request event.route.id: ${event.route.id}`);
 
 	// https://kit.svelte.dev/docs/hooks#server-hooks-handle
 	// This function runs every time the SvelteKit server receives a request — whether that happens while the app is running, or during prerendering — and determines the response
 
 	// handle client requests to the server
-
 	let cookieJSON = cookieUtils.get(event.cookies);
 
 	// if the tokens are expired we redirect, however the cookies for the event may
 	// still contain expired tokens
 	if (cookieJSON) {
+		logger.info('we have a cookie, check if tokens are expired');
 		const appUser = JSON.parse(cookieJSON) as App.User;
+		logger.info(`appUser ${appUser}`);
 		if (isTokenExpired(appUser.token) && isTokenExpired(appUser.refreshToken)) {
+			logger.info('all tokens expired, clear cookies');
 			cookieUtils.clear(event.cookies);
 			cookieJSON = undefined;
 		}
@@ -32,20 +34,22 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	// should be redirected to login page
 	if (!cookieJSON) {
+		logger.info('no cookie');
 		if (!event.route) {
+			logger.info('no route');
 			// no idea why this happens
 			// might be a 404
-			return await resolve(event);
+			return resolve(event);
 		}
 
 		if (routes.login === event.route.id) {
 			logger.info('login route, resolve event');
-			return await resolve(event);
+			return resolve(event);
 		}
 
 		if (routes.register === event.route.id) {
 			logger.info('register route, resolve event');
-			return await resolve(event);
+			return resolve(event);
 		}
 
 		logger.info('no session, redirect to login page');
@@ -59,6 +63,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// we can set this from the cookie or get data from another service
 	// maybe cookie must not have data, just an ID
 	const appUser = JSON.parse(cookieJSON) as App.User;
+	logger.info(`appUser ${appUser}`);
 
 	if (isTokenExpired(appUser.token)) {
 		logger.warn('session expired, check refreshToken');
@@ -71,16 +76,20 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		// refresh the token
 		const iamApi = factory(event.fetch);
+		logger.info('refresh token');
 		const resp = await iamApi.refresh({ username: appUser.name, token: appUser.refreshToken });
+		logger.info(`resp ${resp}`);
 		if (resp instanceof Error) {
 			logger.error(`failed to refresh token ${resp}`);
 			return Response.redirect(`${import.meta.env.VITE_APP_HOST}${routes.login}`);
 		}
 
+		logger.info('user refreshed, update locals');
 		// update locals
 		appUser.token = resp.token;
 		appUser.refreshToken = resp.refreshToken;
 
+		logger.info(`appUser ${appUser}`);
 		// update the cookie
 		// same code as in login server route
 		cookieUtils.set(event.cookies, appUser);
@@ -88,7 +97,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.user = appUser;
 
-	return await resolve(event);
+	return resolve(event);
 };
 
 function isTokenExpired(token: string | null): boolean {
