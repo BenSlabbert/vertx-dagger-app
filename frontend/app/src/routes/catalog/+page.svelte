@@ -5,56 +5,33 @@
 	import type { ItemsResponse } from '$lib/api/catalog';
 	export let data: ItemsResponse;
 
-	async function onClickNextPage(event: SubmitEvent) {
-		if (event instanceof PointerEvent) {
-			return;
+	function getPreviousPageUrl(url: URL) {
+		let pageParam = Number(url.searchParams.get('page')) | 0;
+
+		if (pageParam <= 0) {
+			console.log('pageParam is zero, previous redirects to current url');
+			return url.href;
 		}
 
-		const formEl = event.target as HTMLFormElement;
-		const url = new URL(formEl.action);
-		let keys = [];
-		for (const key of url.searchParams.keys()) {
-			keys.push(key);
-		}
-		// clear search params
-		keys.forEach((k) => url.searchParams.delete(k));
+		pageParam--;
+		url.searchParams.set('page', pageParam);
 
-		const submitter = event.submitter as HTMLElement;
-		const submitterName = submitter.getAttribute('name');
-		const formData = new FormData(formEl);
-		let currentPage = Number(formData.get('page') ?? 0) as number;
+		return url.href;
+	}
 
-		// todo: terrible, fix
-		outer: if (submitterName === 'previous') {
-			if (currentPage > 0) {
-				currentPage--;
-			}
-		} else if (submitterName === 'next') {
-			if (data.items.length < 10) {
-				// do nothing
-				break outer;
-			}
+	function getNextPageUrl(url: URL) {
+		let pageParam = Number(url.searchParams.get('page')) | 0;
+		console.log('next pageParam', pageParam);
 
-			if (currentPage >= 0) {
-				currentPage++;
-			} else if (currentPage < 0) {
-				currentPage = 0;
-			}
-		} else {
-			// default start search on page 0
-			currentPage = 0;
+		if (data.items.length < 10) {
+			console.log('last page, next redirects to current url');
+			return url.href;
 		}
 
-		for (const key of formData.keys()) {
-			if (key === 'page') {
-				url.searchParams.set(key, String(currentPage));
-				continue;
-			}
+		pageParam++;
+		url.searchParams.set('page', pageParam);
 
-			url.searchParams.set(key, String(formData.get(key)));
-		}
-
-		goto(url.pathname + '?' + url.searchParams.toString());
+		return url.href;
 	}
 </script>
 
@@ -62,7 +39,7 @@
 	<a href={routes.catalogCreate}>create new</a>
 </div>
 
-<form method="GET" on:submit|preventDefault={onClickNextPage}>
+<form method="GET">
 	<div class="grid">
 		<input type="text" placeholder="name" name="s" value={$page.url.searchParams?.get('s') ?? ''} />
 
@@ -92,11 +69,9 @@
 	</div>
 
 	<div class="grid">
-		<button type="submit" name="previous" class="contrast outline">previous</button>
-
-		<input type="text" name="page" readonly value={$page.url.searchParams?.get('page') ?? 0} />
-
-		<button type="submit" name="next" class="contrast outline">next</button>
+		<a href={getPreviousPageUrl(new URL($page.url))}>prev</a>
+		<p>page: {$page.url.searchParams?.get('page') ?? 0}</p>
+		<a href={getNextPageUrl(new URL($page.url))}>next</a>
 	</div>
 </form>
 
