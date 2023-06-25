@@ -83,6 +83,10 @@ public class ApiVerticle extends AbstractVerticle {
                     ctx, (s, i1, i2, i3, i4) -> itemHandler.search(ctx, s, i1, i2, i3, i4)));
 
     apiRouter
+        .get("/suggest")
+        .handler(ctx -> processWithRequiredSuggestParam(ctx, s -> itemHandler.suggest(ctx, s)));
+
+    apiRouter
         .get("/:id")
         .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.findOne(ctx, id)));
 
@@ -167,6 +171,18 @@ public class ApiVerticle extends AbstractVerticle {
 
     consumer.accept(
         search, priceFrom.get(), priceTo.get(), page.get(), size.get() == 0 ? 10 : size.get());
+  }
+
+  private void processWithRequiredSuggestParam(RoutingContext ctx, Consumer<String> consumer) {
+    MultiMap entries = ctx.queryParams();
+    String search = entries.get("s");
+
+    if (null == search || "".equals(search)) {
+      ctx.fail(new HttpException(BAD_REQUEST.code()));
+      return;
+    }
+
+    consumer.accept(search);
   }
 
   private void processWithPaginationParams(

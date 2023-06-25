@@ -4,6 +4,7 @@ import static com.example.commons.redis.RedisConstants.DOCUMENT_ROOT;
 import static com.example.commons.redis.RedisConstants.SET_IF_DOES_NOT_EXIST;
 import static com.example.commons.redis.RedisConstants.SET_IF_EXIST;
 import static com.example.commons.redis.RedisConstants.STREAM_GENERATE_ID;
+import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.catalog.entity.Item;
@@ -23,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -33,6 +33,7 @@ import lombok.extern.java.Log;
 class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   private static final String CATALOG_STREAM = "catalog-stream";
+  private static final String ITEM_SUGGESTION_DICTIONARY = "item-suggestions";
   private static final String ITEM_INDEX = "itemIdx";
   private static final String STREAM_FIELD = "item";
   private static final String ITEM_PREFIX = "item:";
@@ -105,8 +106,6 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
     Item item = new Item(id, name, priceInCents);
     String encoded = item.toJson().encode();
 
-    // todo run in a multi block
-    //  we need all of these to be executed on the server
     return redisAPI
         .jsonSet(List.of(prefixId(id), DOCUMENT_ROOT, encoded, SET_IF_DOES_NOT_EXIST))
         .map(
@@ -120,6 +119,9 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
             })
         .compose(
             ignore ->
+                redisAPI.ftSugadd(List.of(ITEM_SUGGESTION_DICTIONARY, name, Integer.toString(1))))
+        .compose(
+            ignore ->
                 redisAPI.xadd(List.of(CATALOG_STREAM, STREAM_GENERATE_ID, STREAM_FIELD, encoded)))
         .map(
             resp -> {
@@ -128,11 +130,27 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
               }
 
               log.log(
-                  Level.INFO,
-                  "written new item to stream with id: {0}",
-                  new Object[] {resp.toString()});
+                  INFO, "written new item to stream with id: {0}", new Object[] {resp.toString()});
 
               return item;
+            });
+  }
+
+  @Override
+  public Future<List<String>> suggest(String name) {
+    return redisAPI
+        .ftSugget(List.of(ITEM_SUGGESTION_DICTIONARY, name, "FUZZY", "MAX", Integer.toString(5)))
+        .map(
+            resp -> {
+              if (null == resp) {
+                return List.of();
+              }
+
+              if (resp.type() != ResponseType.MULTI) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
+
+              return resp.stream().map(Response::toString).toList();
             });
   }
 
@@ -368,8 +386,11 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
             })
         .map(
             resp -> {
-              // todo: retry if transaction was aborted due to object being changed
-              //  or send back an erro to client
+              if (null == resp) {
+                // watch key was changed
+                throw new HttpException(HttpResponseStatus.CONFLICT.code());
+              }
+
               if (resp.type() != ResponseType.MULTI) {
                 throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
               }
@@ -383,17 +404,47 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
 
   @Override
   public Future<Boolean> delete(UUID id) {
-    // todo run in a multi/watch block
-    //  check if the given dto has the same version of the persisted one
+    return findById(id)
+        .compose(
+            maybeItem -> {
+              if (maybeItem.isEmpty()) {
+                // cannot find item to delete
+                throw new HttpException(HttpResponseStatus.CONFLICT.code());
+              }
+
+              return delete(maybeItem.get());
+            });
+  }
+
+  private Future<Boolean> delete(Item item) {
     return redisAPI
-        .jsonDel(List.of(prefixId(id), DOCUMENT_ROOT))
+        .jsonDel(List.of(prefixId(item.id()), DOCUMENT_ROOT))
         .map(
             resp -> {
               if (resp.type() != ResponseType.NUMBER) {
                 return Boolean.FALSE;
               }
 
-              return resp.toLong() == 1L;
+              boolean deleted = resp.toLong() == 1L;
+
+              if (deleted) {
+                redisAPI
+                    .ftSugdel(List.of(ITEM_SUGGESTION_DICTIONARY, item.name()))
+                    .onFailure(
+                        err ->
+                            log.log(
+                                SEVERE,
+                                "failed to delete {0} from suggestion dictionary",
+                                new Object[] {item.name()}))
+                    .onSuccess(
+                        r ->
+                            log.log(
+                                INFO,
+                                "deleted {0} from suggestion dictionary",
+                                new Object[] {item.name()}));
+              }
+
+              return deleted;
             });
   }
 

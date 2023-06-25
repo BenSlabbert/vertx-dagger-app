@@ -6,6 +6,7 @@ import com.example.catalog.web.route.dto.DeleteOneResponseDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
+import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemResponseDto;
 import io.vertx.core.Future;
@@ -17,6 +18,8 @@ public interface ItemService {
   Future<PaginatedResponseDto> findAll(int page, int size);
 
   Future<FindAllResponseDto> search(String name, int priceFrom, int priceTo, int page, int size);
+
+  Future<SuggestResponseDto> suggest(String name);
 
   Future<CreateItemResponseDto> create(CreateItemRequestDto dto);
 

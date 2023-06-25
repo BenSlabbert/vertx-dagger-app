@@ -7,6 +7,7 @@ import com.example.catalog.web.route.dto.DeleteOneResponseDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
+import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemResponseDto;
 import io.vertx.core.Future;
@@ -58,6 +59,11 @@ class ItemServiceImpl implements ItemService {
                         item -> new FindOneResponseDto(item.id(), item.name(), item.priceInCents()))
                     .toList())
         .map(FindAllResponseDto::new);
+  }
+
+  @Override
+  public Future<SuggestResponseDto> suggest(String name) {
+    return itemRepository.suggest(name).map(SuggestResponseDto::new);
   }
 
   @Override

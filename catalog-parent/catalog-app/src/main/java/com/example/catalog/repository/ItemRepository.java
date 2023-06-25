@@ -10,6 +10,8 @@ public interface ItemRepository {
 
   Future<Item> create(String name, long priceInCents);
 
+  Future<List<String>> suggest(String name);
+
   Future<Page<Item>> findAll(int page, int size);
 
   Future<List<Item>> search(String name, int priceFrom, int priceTo, int page, int size);

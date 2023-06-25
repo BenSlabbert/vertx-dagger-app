@@ -71,6 +71,23 @@ public class ItemHandler {
                     .onFailure(ctx::fail));
   }
 
+  public void suggest(RoutingContext ctx, String name) {
+    itemService
+        .suggest(name)
+        .onFailure(
+            err -> {
+              log.log(SEVERE, "failed to find suggestion: " + name, err);
+              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+            })
+        .onSuccess(
+            dto ->
+                ctx.response()
+                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .setStatusCode(OK.code())
+                    .end(dto.toJson().toBuffer())
+                    .onFailure(ctx::fail));
+  }
+
   public void findOne(RoutingContext ctx, UUID id) {
     itemService
         .findById(id)

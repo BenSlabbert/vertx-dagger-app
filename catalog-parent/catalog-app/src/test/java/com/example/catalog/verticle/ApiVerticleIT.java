@@ -10,6 +10,7 @@ import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
+import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.commons.config.Config;
 import com.example.commons.config.ParseConfig;
@@ -97,6 +98,57 @@ class ApiVerticleIT {
   @AfterEach
   public void after() {
     RestAssured.reset();
+  }
+
+  @Test
+  void suggestionTest() {
+    String createItemJsonResponse =
+        RestAssured.given()
+            .contentType(ContentType.JSON)
+            .body(new CreateItemRequestDto("new_item", 123L).toJson().encode())
+            .post("/api/create")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.CREATED.code())
+            .extract()
+            .asString();
+
+    CreateItemResponseDto createItemResponseDto =
+        new CreateItemResponseDto(new JsonObject(createItemJsonResponse));
+
+    String suggestJsonResponse =
+        RestAssured.given()
+            .get("/api/suggest?s=new")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    assertThat(new SuggestResponseDto(new JsonObject(suggestJsonResponse)))
+        .isNotNull()
+        .extracting(SuggestResponseDto::suggestions)
+        .satisfies(dtos -> assertThat(dtos).isNotEmpty());
+
+    RestAssured.given()
+        .delete("/api/" + createItemResponseDto.id())
+        .then()
+        .assertThat()
+        .statusCode(HttpResponseStatus.NO_CONTENT.code());
+
+    suggestJsonResponse =
+        RestAssured.given()
+            .get("/api/suggest?s=new")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    assertThat(new SuggestResponseDto(new JsonObject(suggestJsonResponse)))
+        .isNotNull()
+        .extracting(SuggestResponseDto::suggestions)
+        .satisfies(dtos -> assertThat(dtos).isEmpty());
   }
 
   @Test
