@@ -5,6 +5,7 @@ import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.DeleteOneResponseDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
+import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemResponseDto;
 import io.vertx.core.Future;
@@ -13,10 +14,9 @@ import java.util.UUID;
 
 public interface ItemService {
 
-  Future<FindAllResponseDto> findAll(Integer from, Integer to);
+  Future<PaginatedResponseDto> findAll(int page, int size);
 
-  Future<FindAllResponseDto> search(
-      String name, Integer priceFrom, Integer priceTo, Integer from, Integer to);
+  Future<FindAllResponseDto> search(String name, int priceFrom, int priceTo, int page, int size);
 
   Future<CreateItemResponseDto> create(CreateItemRequestDto dto);
 

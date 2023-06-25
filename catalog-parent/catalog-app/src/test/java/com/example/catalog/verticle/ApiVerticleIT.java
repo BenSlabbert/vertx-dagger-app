@@ -9,6 +9,7 @@ import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
+import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.commons.config.Config;
 import com.example.commons.config.ParseConfig;
@@ -149,21 +150,22 @@ class ApiVerticleIT {
             .extract()
             .asString();
 
-    assertThat(new FindAllResponseDto(new JsonObject(getItemsJsonResponse)))
+    assertThat(new PaginatedResponseDto(new JsonObject(getItemsJsonResponse)))
         .isNotNull()
-        .extracting(FindAllResponseDto::dtos)
+        .extracting(PaginatedResponseDto::items)
         .satisfies(
-            dtos ->
-                assertThat(dtos)
-                    .singleElement()
-                    .satisfies(
-                        dto ->
-                            assertSoftly(
-                                softly -> {
-                                  softly.assertThat(dto.id()).isNotNull();
-                                  softly.assertThat(dto.name()).isEqualTo("new_item");
-                                  softly.assertThat(dto.priceInCents()).isEqualTo(123L);
-                                })));
+            items -> {
+              assertThat(items)
+                  .singleElement()
+                  .satisfies(
+                      dto ->
+                          assertSoftly(
+                              softly -> {
+                                softly.assertThat(dto.id()).isNotNull();
+                                softly.assertThat(dto.name()).isEqualTo("new_item");
+                                softly.assertThat(dto.priceInCents()).isEqualTo(123L);
+                              }));
+            });
 
     // find one
     String findOneJsonResponse =
@@ -189,7 +191,7 @@ class ApiVerticleIT {
     // search
     String searchJsonResponse =
         RestAssured.given()
-            .get("/api/search?s=" + createItemResponseDto.name() + "&from=0&to=1000")
+            .get("/api/search?s=" + createItemResponseDto.name() + "&page=0&size=1000")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())
@@ -210,7 +212,9 @@ class ApiVerticleIT {
     searchJsonResponse =
         RestAssured.given()
             .get(
-                "/api/search?s=" + createItemResponseDto.name().substring(2, 5) + "&from=0&to=1000")
+                "/api/search?s="
+                    + createItemResponseDto.name().substring(2, 5)
+                    + "&page=0&size=1000")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())
@@ -230,7 +234,7 @@ class ApiVerticleIT {
 
     searchJsonResponse =
         RestAssured.given()
-            .get("/api/search?s=bad&from=0&to=1000")
+            .get("/api/search?s=bad&page=0&size=1000")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())

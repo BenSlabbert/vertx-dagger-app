@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.catalog.service.ItemService;
 import com.example.catalog.web.SchemaValidatorDelegator;
-import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
+import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import io.vertx.core.Future;
@@ -49,7 +49,13 @@ class ApiVerticleTest {
   void getItemsTest(Vertx vertx, VertxTestContext testContext) {
     FindOneResponseDto responseDto = new FindOneResponseDto(UUID.randomUUID(), "name", 123L);
     Mockito.when(itemService.findAll(0, 10))
-        .thenReturn(Future.succeededFuture(new FindAllResponseDto(List.of(responseDto))));
+        .thenReturn(
+            Future.succeededFuture(
+                new PaginatedResponseDto(
+                    0,
+                    List.of(responseDto).size(),
+                    List.of(responseDto).size(),
+                    List.of(responseDto))));
 
     vertx
         .createHttpClient()
@@ -66,10 +72,10 @@ class ApiVerticleTest {
                               .onFailure(testContext::failNow)
                               .onSuccess(
                                   buff -> {
-                                    FindAllResponseDto findAllResponseDto =
-                                        new FindAllResponseDto(new JsonObject(buff));
-                                    assertThat(findAllResponseDto).isNotNull();
-                                    assertThat(findAllResponseDto.dtos())
+                                    PaginatedResponseDto paginatedResponseDto =
+                                        new PaginatedResponseDto(new JsonObject(buff));
+                                    assertThat(paginatedResponseDto).isNotNull();
+                                    assertThat(paginatedResponseDto.items())
                                         .singleElement()
                                         .usingRecursiveComparison()
                                         .isEqualTo(responseDto);

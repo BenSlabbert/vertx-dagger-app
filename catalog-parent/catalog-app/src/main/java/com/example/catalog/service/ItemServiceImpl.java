@@ -6,9 +6,11 @@ import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.DeleteOneResponseDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
+import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemResponseDto;
 import io.vertx.core.Future;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
@@ -27,23 +29,28 @@ class ItemServiceImpl implements ItemService {
   }
 
   @Override
-  public Future<FindAllResponseDto> findAll(Integer from, Integer to) {
+  public Future<PaginatedResponseDto> findAll(int page, int size) {
     return itemRepository
-        .findAll(from, to)
+        .findAll(page, size)
         .map(
-            items ->
-                items.stream()
-                    .map(
-                        item -> new FindOneResponseDto(item.id(), item.name(), item.priceInCents()))
-                    .toList())
-        .map(FindAllResponseDto::new);
+            pageOfItems -> {
+              List<FindOneResponseDto> items =
+                  pageOfItems.items().stream()
+                      .map(
+                          item ->
+                              new FindOneResponseDto(item.id(), item.name(), item.priceInCents()))
+                      .toList();
+
+              return new PaginatedResponseDto(
+                  pageOfItems.page(), pageOfItems.size(), pageOfItems.total(), items);
+            });
   }
 
   @Override
   public Future<FindAllResponseDto> search(
-      String name, Integer priceFrom, Integer priceTo, Integer from, Integer to) {
+      String name, int priceFrom, int priceTo, int page, int size) {
     return itemRepository
-        .search(name, priceFrom, priceTo, from, to)
+        .search(name, priceFrom, priceTo, page, size)
         .map(
             items ->
                 items.stream()

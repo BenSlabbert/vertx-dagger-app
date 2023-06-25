@@ -152,25 +152,36 @@ public class ApiVerticle extends AbstractVerticle {
 
     Optional<Integer> priceFrom = tryParseInteger(entries.get("priceFrom"));
     Optional<Integer> priceTo = tryParseInteger(entries.get("priceTo"));
-    Optional<Integer> from = tryParseInteger(entries.get("from"));
-    Optional<Integer> to = tryParseInteger(entries.get("to"));
+    Optional<Integer> page = tryParseInteger(entries.get("page"));
+    Optional<Integer> size = tryParseInteger(entries.get("size"));
 
-    consumer.accept(search, priceFrom.get(), priceTo.get(), from.get(), to.get());
+    if (page.isEmpty() || size.isEmpty()) {
+      ctx.fail(new HttpException(BAD_REQUEST.code()));
+      return;
+    }
+
+    if (priceFrom.isEmpty() || priceTo.isEmpty()) {
+      ctx.fail(new HttpException(BAD_REQUEST.code()));
+      return;
+    }
+
+    consumer.accept(
+        search, priceFrom.get(), priceTo.get(), page.get(), size.get() == 0 ? 10 : size.get());
   }
 
   private void processWithPaginationParams(
       RoutingContext ctx, BiConsumer<Integer, Integer> consumer) {
 
     MultiMap entries = ctx.queryParams();
-    Optional<Integer> from = tryParseInteger(entries.get("from"));
-    Optional<Integer> to = tryParseInteger(entries.get("to"));
+    Optional<Integer> page = tryParseInteger(entries.get("page"));
+    Optional<Integer> size = tryParseInteger(entries.get("size"));
 
-    if (from.isEmpty() || to.isEmpty()) {
+    if (page.isEmpty() || size.isEmpty()) {
       ctx.fail(new HttpException(BAD_REQUEST.code()));
       return;
     }
 
-    consumer.accept(from.get(), to.get());
+    consumer.accept(page.get(), size.get() == 0 ? 10 : size.get());
   }
 
   private Optional<Integer> tryParseInteger(String maybeInt) {

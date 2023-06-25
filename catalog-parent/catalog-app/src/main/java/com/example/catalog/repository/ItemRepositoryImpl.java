@@ -137,41 +137,78 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
   }
 
   @Override
-  public Future<List<Item>> findAll(Integer from, Integer to) {
-    if (from < 0) {
-      from = 0;
-    }
-    if (to < from || to == 0) {
-      to = from + 10;
-    }
+  public Future<Page<Item>> findAll(int page, int size) {
+    int from = page * size;
+    int to = from + size;
 
     return redisAPI
-        .ftSearch(
-            List.of(
-                ITEM_INDEX,
-                "*",
-                "SORTBY",
-                "name",
-                "RETURN",
-                "3",
-                "$.id",
-                "$.name",
-                "$.priceInCents",
-                "LIMIT",
-                from.toString(),
-                Integer.toString((to - from))))
-        .map(this::parseSearchResponse);
+        .multi()
+        .compose(
+            resp -> {
+              if (!RedisConstants.OK.equals(resp.toString())) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
+              return redisAPI.ftSearch(
+                  List.of(
+                      ITEM_INDEX,
+                      "*",
+                      "SORTBY",
+                      "name",
+                      "RETURN",
+                      "3",
+                      "$.id",
+                      "$.name",
+                      "$.priceInCents",
+                      "LIMIT",
+                      Integer.toString(from),
+                      Integer.toString((to - from))));
+            })
+        .compose(
+            resp -> {
+              if (!RedisConstants.QUEUED.equals(resp.toString())) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
+              return redisAPI.ftInfo(List.of(ITEM_INDEX));
+            })
+        .compose(
+            resp -> {
+              if (!RedisConstants.QUEUED.equals(resp.toString())) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
+
+              return redisAPI.exec();
+            })
+        .map(
+            resp -> {
+              if (resp.type() != ResponseType.MULTI) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
+
+              Iterator<Response> mainRespItr = resp.iterator();
+              List<Item> arr = parseSearchResponse(mainRespItr.next());
+              Long numberOfDocs = parseInfoResponse(mainRespItr.next());
+
+              return new Page<>(page, arr.size(), numberOfDocs, arr);
+            });
+  }
+
+  private static Long parseInfoResponse(Response resp) {
+    if (resp.type() != ResponseType.MULTI) {
+      throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+    }
+
+    Response numDocs = resp.get("num_docs");
+    if (numDocs.type() != ResponseType.NUMBER) {
+      throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+    }
+
+    return numDocs.toLong();
   }
 
   @Override
-  public Future<List<Item>> search(
-      String name, Integer priceFrom, Integer priceTo, Integer from, Integer to) {
-    if (from < 0) {
-      from = 0;
-    }
-    if (to < from || to == 0) {
-      to = from + 10;
-    }
+  public Future<List<Item>> search(String name, int priceFrom, int priceTo, int page, int size) {
+    int from = page * size;
+    int to = from + size;
 
     return redisAPI
         .ftSearch(
@@ -186,7 +223,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
                 "$.name",
                 "$.priceInCents",
                 "LIMIT",
-                from.toString(),
+                Integer.toString(from),
                 Integer.toString((to - from))))
         .map(this::parseSearchResponse);
   }
@@ -238,7 +275,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
     return items;
   }
 
-  private String getQuery(String name, Integer from, Integer to) {
+  private String getQuery(String name, int priceFrom, int priceTo) {
     boolean searchByName = true;
     boolean searchByPriceRange = true;
 
@@ -247,14 +284,18 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
       searchByName = false;
     }
 
-    if (from == 0 && to == 0) {
+    if (priceFrom == 0 && priceTo == 0) {
       // no arguments given, exclude from query
       searchByPriceRange = false;
     }
 
     // be careful of the ` back ticks and white space
     if (searchByName && searchByPriceRange) {
-      return "`@name:(*" + name + "*)" + " " + String.format("@priceInCents:[%d %d]`", from, to);
+      return "`@name:(*"
+          + name
+          + "*)"
+          + " "
+          + String.format("@priceInCents:[%d %d]`", priceFrom, priceTo);
     }
 
     if (searchByName) {
@@ -262,7 +303,7 @@ class ItemRepositoryImpl implements ItemRepository, AutoCloseable {
     }
 
     if (searchByPriceRange) {
-      return String.format("`@priceInCents:[%d %d]`", from, to);
+      return String.format("`@priceInCents:[%d %d]`", priceFrom, priceTo);
     }
 
     // client should specify at least one of these
