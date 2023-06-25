@@ -68,14 +68,16 @@ export const actions: Actions = {
 			});
 		}
 
-		const cookie = {
+		const appUser = {
 			name: formData.get('user'),
 			role: 'cookie-role',
 			token: resp.token,
 			refreshToken: resp.refreshToken
 		} as App.User;
 
-		cookieUtils.set(cookies, cookie);
+		console.log('updated refresh token', resp.refreshToken);
+
+		await cookieUtils.set(cookies, appUser);
 
 		// redirect the user
 		throw redirect(303, routes.home);

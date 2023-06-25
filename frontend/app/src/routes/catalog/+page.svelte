@@ -35,10 +35,6 @@
 	}
 </script>
 
-<div>
-	<a href={routes.catalogCreate}>create new</a>
-</div>
-
 <form method="GET">
 	<div class="grid">
 		<input type="text" placeholder="name" name="s" value={$page.url.searchParams?.get('s') ?? ''} />
@@ -64,8 +60,11 @@
 			readonly
 			value={$page.url.searchParams?.get('page') ?? 0}
 		/>
+	</div>
 
+	<div class="grid">
 		<button type="submit"> Submit </button>
+		<a href={routes.catalogCreate}>create new</a>
 	</div>
 
 	<div class="grid">

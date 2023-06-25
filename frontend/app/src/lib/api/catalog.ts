@@ -1,7 +1,7 @@
 type ItemsRequest = {
 	token: string;
-	from: number;
-	to: number;
+	page: number;
+	size: number;
 };
 
 type Item = {
@@ -56,8 +56,8 @@ type SearchRequest = {
 	searchTerm: string | null;
 	priceFrom: number | null;
 	priceTo: number | null;
-	from: number;
-	to: number;
+	page: number;
+	size: number;
 };
 
 type SearchResponse = {
@@ -94,7 +94,7 @@ class CatalogApiImpl implements CatalogApi {
 	async getItems(request: ItemsRequest): Promise<ItemsResponse | Error> {
 		try {
 			const resp = await this.fetch(
-				`http://localhost:8081/api/items?from=${request.from}&to=${request.to}`,
+				`http://localhost:8081/api/items?page=${request.page}&size=${request.size}`,
 				{
 					method: 'GET',
 					headers: {
@@ -203,7 +203,7 @@ class CatalogApiImpl implements CatalogApi {
 
 	async search(request: SearchRequest): Promise<SearchResponse | Error> {
 		try {
-			let query = `from=${request.from}&to=${request.to}`;
+			let query = `page=${request.page}&size=${request.size}`;
 
 			if (request.searchTerm) {
 				query += `&s=${request.searchTerm}`;

@@ -14,9 +14,9 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	default({ cookies }) {
+	async default({ cookies }) {
 		// eat the cookie
-		cookieUtils.clear(cookies);
+		await cookieUtils.clear(cookies);
 
 		// redirect the user
 		throw redirect(302, routes.login);

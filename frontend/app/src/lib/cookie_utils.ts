@@ -2,7 +2,7 @@ import type { Cookies } from '@sveltejs/kit';
 import { COOKIE_ID } from '$lib/constants';
 import routes from '$lib/routes';
 
-function set(cookies: Cookies, appUser: App.User) {
+async function set(cookies: Cookies, appUser: App.User) {
 	cookies.set(COOKIE_ID, JSON.stringify(appUser), {
 		// send cookie for every page
 		path: routes.home,
@@ -18,11 +18,11 @@ function set(cookies: Cookies, appUser: App.User) {
 	});
 }
 
-function clear(cookies: Cookies) {
+async function clear(cookies: Cookies) {
 	cookies.delete(COOKIE_ID, { path: routes.home });
 }
 
-function get(cookies: Cookies): string | undefined {
+async function get(cookies: Cookies): Promise<string | undefined> {
 	return cookies.get(COOKIE_ID);
 }
 

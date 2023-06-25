@@ -24,7 +24,7 @@
 				<a href={routes.about}>About</a>
 			</li>
 			<li>
-				<form action="/logout" method="POST">
+				<form action={routes.logout} method="POST">
 					<button type="submit">Log out</button>
 				</form>
 			</li>

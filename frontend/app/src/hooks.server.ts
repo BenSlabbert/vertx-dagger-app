@@ -10,6 +10,8 @@ type tokenPayload = {
 	exp: number;
 };
 
+// todo: main problem here is that client cookies are not being cleared/updated
+// when their session expires, client still produces old cookies
 export const handle: Handle = async ({ event, resolve }) => {
 	logger.info(`handle request event.route.id: ${event.route.id}`);
 
@@ -17,7 +19,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// This function runs every time the SvelteKit server receives a request — whether that happens while the app is running, or during prerendering — and determines the response
 
 	// handle client requests to the server
-	let cookieJSON = cookieUtils.get(event.cookies);
+	let cookieJSON = await cookieUtils.get(event.cookies);
 
 	// if the tokens are expired we redirect, however the cookies for the event may
 	// still contain expired tokens
@@ -27,7 +29,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		logger.info(`appUser ${appUser}`);
 		if (isTokenExpired(appUser.token) && isTokenExpired(appUser.refreshToken)) {
 			logger.info('all tokens expired, clear cookies');
-			cookieUtils.clear(event.cookies);
+			await cookieUtils.clear(event.cookies);
 			cookieJSON = undefined;
 		}
 	}
@@ -81,6 +83,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		logger.info(`resp ${resp}`);
 		if (resp instanceof Error) {
 			logger.error(`failed to refresh token ${resp}`);
+			await cookieUtils.clear(event.cookies);
 			return Response.redirect(`${import.meta.env.VITE_APP_HOST}${routes.login}`);
 		}
 
@@ -92,7 +95,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		logger.info(`appUser ${appUser}`);
 		// update the cookie
 		// same code as in login server route
-		cookieUtils.set(event.cookies, appUser);
+		await cookieUtils.set(event.cookies, appUser);
 	}
 
 	event.locals.user = appUser;
