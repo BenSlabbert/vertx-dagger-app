@@ -64,6 +64,15 @@ type SearchResponse = {
 	items: Item[];
 };
 
+type SuggestRequest = {
+	token: string;
+	searchTerm: string;
+};
+
+type SuggestResponse = {
+	suggestions: string[];
+};
+
 interface CatalogApi {
 	getItems(request: ItemsRequest): Promise<ItemsResponse | Error>;
 	getOneItem(request: GetOneItemRequest): Promise<GetOneItemResponse | Error>;
@@ -71,6 +80,7 @@ interface CatalogApi {
 	edit(request: EditRequest): Promise<EditResponse | Error>;
 	delete(request: DeleteRequest): Promise<DeleteResponse | Error>;
 	search(request: SearchRequest): Promise<SearchResponse | Error>;
+	suggest(request: SuggestRequest): Promise<SuggestResponse | Error>;
 }
 
 export type {
@@ -231,6 +241,21 @@ class CatalogApiImpl implements CatalogApi {
 			});
 
 			return { items };
+		} catch (e) {
+			return this.handleError(e);
+		}
+	}
+
+	async suggest(request: SuggestRequest): Promise<SuggestResponse | Error> {
+		try {
+			const resp = await this.fetch(`http://localhost:8081/api/suggest?s=${request.searchTerm}`, {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + request.token
+				}
+			});
+
+			return resp.json();
 		} catch (e) {
 			return this.handleError(e);
 		}

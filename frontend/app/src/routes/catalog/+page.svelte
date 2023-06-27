@@ -4,6 +4,9 @@
 	import routes, { catalogEdit, catalogDelete } from '$lib/routes';
 	import type { ItemsResponse } from '$lib/api/catalog';
 	export let data: ItemsResponse;
+	let loading = false;
+
+	let suggestions: string[] = [];
 
 	function getPreviousPageUrl(url: URL) {
 		let pageParam = Number(url.searchParams.get('page')) | 0;
@@ -33,11 +36,32 @@
 
 		return url.href;
 	}
+
+	async function onKeyDown(e) {
+		loading = true;
+		const resp = await fetch(`/api/catalog?s=${e.key}`);
+		const data = await resp.json();
+		loading = false;
+		suggestions = data.suggestions;
+	}
 </script>
 
 <form method="GET">
 	<div class="grid">
-		<input type="text" placeholder="name" name="s" value={$page.url.searchParams?.get('s') ?? ''} />
+		<input
+			list="suggestions"
+			type="text"
+			placeholder="name"
+			name="s"
+			value={$page.url.searchParams?.get('s') ?? ''}
+			on:keydown={onKeyDown}
+		/>
+
+		<datalist id="suggestions">
+			{#each suggestions as sug}
+				<option value={sug} />
+			{/each}
+		</datalist>
 
 		<input
 			type="number"
@@ -63,7 +87,7 @@
 	</div>
 
 	<div class="grid">
-		<button type="submit"> Submit </button>
+		<button type="submit" aria-busy={loading} class:secondary={loading}> Submit </button>
 		<a href={routes.catalogCreate}>create new</a>
 	</div>
 
