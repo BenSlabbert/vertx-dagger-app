@@ -23,7 +23,7 @@
     <docker.skip>false</docker.skip>
 
     <!--deps-->
-    <vertx.version>4.4.3</vertx.version>
+    <vertx.version>4.4.4</vertx.version>
     <junit-jupiter.version>5.9.3</junit-jupiter.version>
     <assertj-core.version>3.24.2</assertj-core.version>
     <lombok.version>1.18.28</lombok.version>
