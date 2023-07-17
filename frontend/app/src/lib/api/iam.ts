@@ -1,3 +1,6 @@
+import loggerFactory from '$lib/logger';
+const logger = loggerFactory(import.meta.url);
+
 type LoginRequest = {
 	username: string;
 	password: string;
@@ -82,6 +85,7 @@ class IamApiImpl implements IamApi {
 				refreshToken: json.refreshToken
 			};
 		} catch (e) {
+			logger.error(`login error`);
 			return this.handleError(e);
 		}
 	}
@@ -104,8 +108,10 @@ class IamApiImpl implements IamApi {
 
 	private handleError(e: any): Error {
 		if (e instanceof Error) {
+			logger.info('retuning original error');
 			return e;
 		}
+		logger.info('retuning new error');
 		return new Error('unknown error');
 	}
 

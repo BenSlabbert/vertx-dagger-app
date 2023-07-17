@@ -1,45 +1,65 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import routes, { catalogEdit, catalogDelete } from '$lib/routes';
-	import type { ItemsResponse } from '$lib/api/catalog';
-	export let data: ItemsResponse;
-	let loading = false;
+	import { type ItemsResponse, Direction } from '$lib/api/catalog';
 
+	export let data: ItemsResponse;
+
+	let loading = false;
 	let suggestions: string[] = [];
+	let search = $page.url.searchParams?.get('s') ?? '';
+	let lastId = 0;
+
+	$: updateableSuggestions = suggestions;
+	$: {
+		if (data && data.items) {
+			if (data.items.length === 0) {
+				lastId = 0;
+			} else {
+				lastId = data.items[data.items.length - 1].sequence;
+			}
+		}
+	}
+	$: console.log('lastId', lastId);
+	$: console.log('data.items', data?.items);
 
 	function getPreviousPageUrl(url: URL) {
-		let pageParam = Number(url.searchParams.get('page')) | 0;
+    // set direction backward
+		url.searchParams.set('direction', Direction.BACKWARD.toString());
 
-		if (pageParam <= 0) {
-			console.log('pageParam is zero, previous redirects to current url');
+		const items = data?.items ?? [];
+    console.log('items', items);
+
+		if (!items || items.length === 0) {
+			url.searchParams.set('lastId', String(0));
 			return url.href;
 		}
 
-		pageParam--;
-		url.searchParams.set('page', pageParam);
+    url.searchParams.set('lastId', String(items[0].sequence));
 
 		return url.href;
 	}
 
 	function getNextPageUrl(url: URL) {
-		let pageParam = Number(url.searchParams.get('page')) | 0;
-		console.log('next pageParam', pageParam);
+    // set direction forward
+    url.searchParams.set('direction', Direction.FORWARD.toString());
 
-		if (data.items.length < 10) {
-			console.log('last page, next redirects to current url');
+		const items = data?.items ?? [];
+    console.log('items', items);
+
+		if (!items || items.length === 0) {
+			url.searchParams.set('lastId', String(0));
 			return url.href;
 		}
 
-		pageParam++;
-		url.searchParams.set('page', pageParam);
+    url.searchParams.set('lastId', String(items[items.length-1].sequence));
 
 		return url.href;
 	}
 
-	async function onKeyDown(e) {
+	async function onKeyUp(ignore) {
 		loading = true;
-		const resp = await fetch(`/api/catalog?s=${e.key}`);
+		const resp = await fetch(`/api/catalog?s=${search}`);
 		const data = await resp.json();
 		loading = false;
 		suggestions = data.suggestions;
@@ -53,13 +73,13 @@
 			type="text"
 			placeholder="name"
 			name="s"
-			value={$page.url.searchParams?.get('s') ?? ''}
-			on:keydown={onKeyDown}
+			bind:value={search}
+			on:keyup={onKeyUp}
 		/>
 
 		<datalist id="suggestions">
-			{#each suggestions as sug}
-				<option value={sug} />
+			{#each suggestions as sug, i}
+				<option value={sug}>{sug}</option>
 			{/each}
 		</datalist>
 
@@ -76,24 +96,16 @@
 			placeholder="price to"
 			value={$page.url.searchParams?.get('priceTo') ?? null}
 		/>
-
-		<input
-			type="text"
-			hidden
-			name="page"
-			readonly
-			value={$page.url.searchParams?.get('page') ?? 0}
-		/>
 	</div>
 
 	<div class="grid">
-		<button type="submit" aria-busy={loading} class:secondary={loading}> Submit </button>
+		<button type="submit" aria-busy={loading} class:secondary={loading}>Submit</button>
 		<a href={routes.catalogCreate}>create new</a>
 	</div>
 
 	<div class="grid">
 		<a href={getPreviousPageUrl(new URL($page.url))}>prev</a>
-		<p>page: {$page.url.searchParams?.get('page') ?? 0}</p>
+		<p>total: {data.page.total}</p>
 		<a href={getNextPageUrl(new URL($page.url))}>next</a>
 	</div>
 </form>
@@ -102,7 +114,6 @@
 	<table role="grid">
 		<thead>
 			<tr>
-				<th>ID</th>
 				<th>Name</th>
 				<th>Price In Cents</th>
 				<th>Action</th>
@@ -111,11 +122,11 @@
 		<tbody>
 			{#each data.items as item}
 				<tr>
-					<td>{item.id}</td>
 					<td>{item.name}</td>
 					<td>{item.priceInCents}</td>
 					<td>
 						<a href={catalogEdit(item.id)}>edit</a>
+						<!--todo: add confirm modal-->
 						<a href={catalogDelete(item.id)}>delete</a>
 					</td>
 				</tr>
@@ -126,7 +137,6 @@
 				<td>foot 1</td>
 				<td>foot 2</td>
 				<td>foot 3</td>
-				<td>foot 4</td>
 			</tr>
 		</tfoot>
 	</table>

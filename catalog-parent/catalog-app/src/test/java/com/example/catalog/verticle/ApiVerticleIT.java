@@ -5,6 +5,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.example.catalog.TestcontainerLogConsumer;
 import com.example.catalog.entity.Item;
+import com.example.catalog.service.ItemService;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindAllResponseDto;
@@ -152,6 +153,153 @@ class ApiVerticleIT {
   }
 
   @Test
+  void pagination(Vertx ignore, VertxTestContext testContext) {
+    // create items
+    for (int i = 0; i < 8; i++) {
+      RestAssured.given()
+          .contentType(ContentType.JSON)
+          .body(new CreateItemRequestDto("new_item_" + i, 100L + i).toJson().encode())
+          .post("/api/create")
+          .then()
+          .assertThat()
+          .statusCode(HttpResponseStatus.CREATED.code());
+    }
+
+    // search forwards
+    String searchJsonResponse =
+        RestAssured.given()
+            .get("/api/items?lastId=0&size=5")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    PaginatedResponseDto page1 = new PaginatedResponseDto(new JsonObject(searchJsonResponse));
+    testContext.verify(
+        () -> {
+          assertThat(page1.total()).isEqualTo(8L);
+          assertThat(page1.items()).hasSize(5);
+        });
+
+    long lastSequence = page1.items().get(page1.items().size() - 1).sequence();
+
+    searchJsonResponse =
+        RestAssured.given()
+            .get("/api/items?lastId=" + lastSequence + "&size=5")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    PaginatedResponseDto page2 = new PaginatedResponseDto(new JsonObject(searchJsonResponse));
+    testContext.verify(
+        () -> {
+          assertThat(page2.total()).isEqualTo(8L);
+          assertThat(page2.items()).hasSize(4);
+        });
+
+    assertThat(lastSequence).isEqualTo(page2.items().get(0).sequence());
+    lastSequence = page2.items().get(page2.items().size() - 1).sequence();
+
+    searchJsonResponse =
+        RestAssured.given()
+            .get("/api/items?lastId=" + lastSequence + "&size=5")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    // page 3 is just the last item
+    PaginatedResponseDto page3 = new PaginatedResponseDto(new JsonObject(searchJsonResponse));
+    testContext.verify(
+        () -> {
+          assertThat(page3.total()).isEqualTo(8L);
+          assertThat(page3.items()).hasSize(1);
+        });
+
+    assertThat(lastSequence).isEqualTo(page3.items().get(0).sequence());
+    lastSequence = page3.items().get(page3.items().size() - 1).sequence();
+
+    // search backwards
+    searchJsonResponse =
+        RestAssured.given()
+            .get(
+                "/api/items?lastId="
+                    + lastSequence
+                    + "&size=5&direction="
+                    + ItemService.Direction.BACKWARD.name())
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    PaginatedResponseDto page4 = new PaginatedResponseDto(new JsonObject(searchJsonResponse));
+    testContext.verify(
+        () -> {
+          assertThat(page4.total()).isEqualTo(8L);
+          assertThat(page4.items()).hasSize(5);
+        });
+
+    // lastSequence is now on the last item
+    assertThat(lastSequence).isEqualTo(page4.items().get(page4.items().size() - 1).sequence());
+    // we are paginating backwards, we want lastItem to be first in this list
+    lastSequence = page4.items().get(0).sequence();
+
+    searchJsonResponse =
+        RestAssured.given()
+            .get(
+                "/api/items?lastId="
+                    + lastSequence
+                    + "&size=5&direction="
+                    + ItemService.Direction.BACKWARD.name())
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    PaginatedResponseDto page5 = new PaginatedResponseDto(new JsonObject(searchJsonResponse));
+    testContext.verify(
+        () -> {
+          assertThat(page5.total()).isEqualTo(8L);
+          assertThat(page5.items()).hasSize(4);
+        });
+
+    assertThat(lastSequence).isEqualTo(page5.items().get(page5.items().size() - 1).sequence());
+    lastSequence = page5.items().get(0).sequence();
+
+    searchJsonResponse =
+        RestAssured.given()
+            .get(
+                "/api/items?lastId="
+                    + lastSequence
+                    + "&size=5&direction="
+                    + ItemService.Direction.BACKWARD.name())
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.OK.code())
+            .extract()
+            .asString();
+
+    PaginatedResponseDto page6 = new PaginatedResponseDto(new JsonObject(searchJsonResponse));
+
+    // last page, we should get the first item again as only element
+    testContext.verify(
+        () -> {
+          assertThat(page6.total()).isEqualTo(8L);
+          assertThat(page6.items()).hasSize(1);
+          assertThat(page6.more()).isFalse();
+        });
+
+    assertThat(lastSequence).isEqualTo(page6.items().get(0).sequence());
+    testContext.completeNow();
+  }
+
+  @Test
   void fullHappyPath(Vertx vertx, VertxTestContext testContext) {
     // find all empty
     String getItemsJsonResponse =
@@ -163,9 +311,9 @@ class ApiVerticleIT {
             .extract()
             .asString();
 
-    assertThat(new FindAllResponseDto(new JsonObject(getItemsJsonResponse)))
+    assertThat(new PaginatedResponseDto(new JsonObject(getItemsJsonResponse)))
         .isNotNull()
-        .extracting(FindAllResponseDto::dtos)
+        .extracting(PaginatedResponseDto::items)
         .satisfies(dtos -> assertThat(dtos).isEmpty());
 
     // create
@@ -187,11 +335,13 @@ class ApiVerticleIT {
         .satisfies(
             dto ->
                 assertSoftly(
-                    softly -> {
-                      softly.assertThat(dto.id()).isNotNull();
-                      softly.assertThat(dto.name()).isEqualTo("new_item");
-                      softly.assertThat(dto.priceInCents()).isEqualTo(123L);
-                    }));
+                    softly ->
+                        testContext.verify(
+                            () -> {
+                              softly.assertThat(dto.id()).isNotNull();
+                              softly.assertThat(dto.name()).isEqualTo("new_item");
+                              softly.assertThat(dto.priceInCents()).isEqualTo(123L);
+                            })));
 
     getItemsJsonResponse =
         RestAssured.given()
@@ -206,18 +356,19 @@ class ApiVerticleIT {
         .isNotNull()
         .extracting(PaginatedResponseDto::items)
         .satisfies(
-            items -> {
-              assertThat(items)
-                  .singleElement()
-                  .satisfies(
-                      dto ->
-                          assertSoftly(
-                              softly -> {
-                                softly.assertThat(dto.id()).isNotNull();
-                                softly.assertThat(dto.name()).isEqualTo("new_item");
-                                softly.assertThat(dto.priceInCents()).isEqualTo(123L);
-                              }));
-            });
+            items ->
+                assertThat(items)
+                    .singleElement()
+                    .satisfies(
+                        dto ->
+                            assertSoftly(
+                                softly ->
+                                    testContext.verify(
+                                        () -> {
+                                          softly.assertThat(dto.id()).isNotNull();
+                                          softly.assertThat(dto.name()).isEqualTo("new_item");
+                                          softly.assertThat(dto.priceInCents()).isEqualTo(123L);
+                                        }))));
 
     // find one
     String findOneJsonResponse =
@@ -234,16 +385,18 @@ class ApiVerticleIT {
         .satisfies(
             dto ->
                 assertSoftly(
-                    softly -> {
-                      softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
-                      softly.assertThat(dto.name()).isEqualTo("new_item");
-                      softly.assertThat(dto.priceInCents()).isEqualTo(123L);
-                    }));
+                    softly ->
+                        testContext.verify(
+                            () -> {
+                              softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
+                              softly.assertThat(dto.name()).isEqualTo("new_item");
+                              softly.assertThat(dto.priceInCents()).isEqualTo(123L);
+                            })));
 
     // search
     String searchJsonResponse =
         RestAssured.given()
-            .get("/api/search?s=" + createItemResponseDto.name() + "&page=0&size=1000")
+            .get("/api/search?s=" + createItemResponseDto.name() + "&page=0&size=100")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())
@@ -255,18 +408,20 @@ class ApiVerticleIT {
         .satisfies(
             dto ->
                 assertSoftly(
-                    softly -> {
-                      softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
-                      softly.assertThat(dto.name()).isEqualTo("new_item");
-                      softly.assertThat(dto.priceInCents()).isEqualTo(123L);
-                    }));
+                    softly ->
+                        testContext.verify(
+                            () -> {
+                              softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
+                              softly.assertThat(dto.name()).isEqualTo("new_item");
+                              softly.assertThat(dto.priceInCents()).isEqualTo(123L);
+                            })));
 
     searchJsonResponse =
         RestAssured.given()
             .get(
                 "/api/search?s="
                     + createItemResponseDto.name().substring(2, 5)
-                    + "&page=0&size=1000")
+                    + "&page=0&size=100")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())
@@ -278,15 +433,17 @@ class ApiVerticleIT {
         .satisfies(
             dto ->
                 assertSoftly(
-                    softly -> {
-                      softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
-                      softly.assertThat(dto.name()).isEqualTo("new_item");
-                      softly.assertThat(dto.priceInCents()).isEqualTo(123L);
-                    }));
+                    softly ->
+                        testContext.verify(
+                            () -> {
+                              softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
+                              softly.assertThat(dto.name()).isEqualTo("new_item");
+                              softly.assertThat(dto.priceInCents()).isEqualTo(123L);
+                            })));
 
     searchJsonResponse =
         RestAssured.given()
-            .get("/api/search?s=bad&page=0&size=1000")
+            .get("/api/search?s=bad&page=0&size=100")
             .then()
             .assertThat()
             .statusCode(HttpResponseStatus.OK.code())
@@ -320,11 +477,13 @@ class ApiVerticleIT {
         .satisfies(
             dto ->
                 assertSoftly(
-                    softly -> {
-                      softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
-                      softly.assertThat(dto.name()).isEqualTo("new_item_updated");
-                      softly.assertThat(dto.priceInCents()).isEqualTo(321L);
-                    }));
+                    softly ->
+                        testContext.verify(
+                            () -> {
+                              softly.assertThat(dto.id()).isEqualTo(createItemResponseDto.id());
+                              softly.assertThat(dto.name()).isEqualTo("new_item_updated");
+                              softly.assertThat(dto.priceInCents()).isEqualTo(321L);
+                            })));
 
     // delete
     RestAssured.given()
@@ -365,8 +524,11 @@ class ApiVerticleIT {
         .onFailure(testContext::failNow)
         .onSuccess(
             result -> {
-              assertThat(result.type()).isEqualTo(ResponseType.NUMBER);
-              assertThat(result.toLong()).isEqualTo(2L);
+              testContext.verify(
+                  () -> {
+                    assertThat(result.type()).isEqualTo(ResponseType.NUMBER);
+                    assertThat(result.toLong()).isEqualTo(2L);
+                  });
             });
 
     redisAPI
@@ -374,26 +536,29 @@ class ApiVerticleIT {
         .onFailure(testContext::failNow)
         .onSuccess(
             result -> {
-              assertThat(result.type()).isEqualTo(ResponseType.MULTI);
+              testContext.verify(
+                  () -> {
+                    assertThat(result.type()).isEqualTo(ResponseType.MULTI);
 
-              Response next = result.iterator().next();
-              assertThat(next.type()).isEqualTo(ResponseType.MULTI);
+                    Response next = result.iterator().next();
+                    assertThat(next.type()).isEqualTo(ResponseType.MULTI);
 
-              Iterator<Response> itr = next.iterator();
-              Response streamId = itr.next();
-              System.err.println("streamId: " + streamId);
+                    Iterator<Response> itr = next.iterator();
+                    Response streamId = itr.next();
+                    System.err.println("streamId: " + streamId);
 
-              Response streamMessage = itr.next();
-              Iterator<Response> sItr = streamMessage.iterator();
-              Response next1 = sItr.next();
-              Response next2 = sItr.next();
+                    Response streamMessage = itr.next();
+                    Iterator<Response> sItr = streamMessage.iterator();
+                    Response next1 = sItr.next();
+                    Response next2 = sItr.next();
 
-              assertThat(next1.toString()).hasToString("item");
+                    assertThat(next1.toString()).hasToString("item");
 
-              Item item = new Item(new JsonObject(next2.toString()));
-              assertThat(item).isNotNull();
+                    Item item = new Item(new JsonObject(next2.toString()));
+                    assertThat(item).isNotNull();
 
-              testContext.completeNow();
+                    testContext.completeNow();
+                  });
             });
   }
 }

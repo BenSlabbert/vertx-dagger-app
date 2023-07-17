@@ -1,17 +1,29 @@
+enum Direction {
+  FORWARD = 'FORWARD',
+  BACKWARD= 'BACKWARD',
+}
+
 type ItemsRequest = {
 	token: string;
-	page: number;
+	lastId: number;
+	direction: Direction;
 	size: number;
 };
 
 type Item = {
 	id: string;
+	sequence: number;
 	name: string;
 	priceInCents: number;
 };
 
+type PageInfo = {
+	total: number;
+};
+
 type ItemsResponse = {
 	items: Item[];
+	page: PageInfo;
 };
 
 type GetOneItemRequest = {
@@ -56,12 +68,14 @@ type SearchRequest = {
 	searchTerm: string | null;
 	priceFrom: number | null;
 	priceTo: number | null;
-	page: number;
+	lastId: number;
+	direction: Direction;
 	size: number;
 };
 
 type SearchResponse = {
 	items: Item[];
+	page: PageInfo;
 };
 
 type SuggestRequest = {
@@ -95,7 +109,7 @@ export type {
 	EditResponse,
 	DeleteRequest,
 	DeleteResponse,
-	Item
+	Item,
 };
 
 class CatalogApiImpl implements CatalogApi {
@@ -104,7 +118,7 @@ class CatalogApiImpl implements CatalogApi {
 	async getItems(request: ItemsRequest): Promise<ItemsResponse | Error> {
 		try {
 			const resp = await this.fetch(
-				`http://localhost:8081/api/items?page=${request.page}&size=${request.size}`,
+				`http://localhost:8081/api/items?lastId=${request.lastId}&size=${request.size}&direction=${request.direction}`,
 				{
 					method: 'GET',
 					headers: {
@@ -115,15 +129,21 @@ class CatalogApiImpl implements CatalogApi {
 
 			const json = await resp.json();
 
-			var items: Item[] = json.items.map((j: any) => {
+			const items: Item[] = json.items.map((j: any) => {
 				return {
 					id: j.id,
+					sequence: j.sequence,
 					name: j.name,
 					priceInCents: j.priceInCents
 				};
 			});
 
-			return { items };
+			return {
+				items,
+				page: {
+					total: json.total
+				}
+			};
 		} catch (e) {
 			return this.handleError(e);
 		}
@@ -143,6 +163,7 @@ class CatalogApiImpl implements CatalogApi {
 			return {
 				item: {
 					id: json.id,
+					sequence: json.sequence,
 					name: json.name,
 					priceInCents: json.priceInCents
 				}
@@ -213,7 +234,7 @@ class CatalogApiImpl implements CatalogApi {
 
 	async search(request: SearchRequest): Promise<SearchResponse | Error> {
 		try {
-			let query = `page=${request.page}&size=${request.size}`;
+			let query = `lastId=${request.lastId}&size=${request.size}&direction=${request.direction}`;
 
 			if (request.searchTerm) {
 				query += `&s=${request.searchTerm}`;
@@ -232,15 +253,21 @@ class CatalogApiImpl implements CatalogApi {
 
 			const json = await resp.json();
 
-			var items: Item[] = json.items.map((j: any) => {
+			const items: Item[] = json.items.map((j: any) => {
 				return {
 					id: j.id,
+					sequence: j.sequence,
 					name: j.name,
 					priceInCents: j.priceInCents
 				};
 			});
 
-			return { items };
+			return {
+				items,
+				page: {
+					total: json.total
+				}
+			};
 		} catch (e) {
 			return this.handleError(e);
 		}
@@ -274,6 +301,10 @@ class CatalogApiImpl implements CatalogApi {
 		this.fetch = fetch;
 	}
 }
+
+export {
+  Direction
+};
 
 export function factory(
 	fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>

@@ -3,6 +3,7 @@ package com.example.catalog.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.vertx.core.http.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import com.example.catalog.service.ItemService;
 import com.example.catalog.web.SchemaValidatorDelegator;
@@ -47,15 +48,12 @@ class ApiVerticleTest {
 
   @Test
   void getItemsTest(Vertx vertx, VertxTestContext testContext) {
-    FindOneResponseDto responseDto = new FindOneResponseDto(UUID.randomUUID(), "name", 123L);
-    Mockito.when(itemService.findAll(0, 10))
+    FindOneResponseDto responseDto = new FindOneResponseDto(UUID.randomUUID(), 1L, "name", 123L);
+    when(itemService.findAll(0, 10, ItemService.Direction.FORWARD))
         .thenReturn(
             Future.succeededFuture(
                 new PaginatedResponseDto(
-                    0,
-                    List.of(responseDto).size(),
-                    List.of(responseDto).size(),
-                    List.of(responseDto))));
+                    false, List.of(responseDto).size(), List.of(responseDto))));
 
     vertx
         .createHttpClient()

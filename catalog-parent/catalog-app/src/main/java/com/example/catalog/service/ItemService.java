@@ -3,7 +3,6 @@ package com.example.catalog.service;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.DeleteOneResponseDto;
-import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.SuggestResponseDto;
@@ -15,9 +14,20 @@ import java.util.UUID;
 
 public interface ItemService {
 
-  Future<PaginatedResponseDto> findAll(int page, int size);
+  enum Direction {
+    FORWARD,
+    BACKWARD
+  }
 
-  Future<FindAllResponseDto> search(String name, int priceFrom, int priceTo, int page, int size);
+  Future<PaginatedResponseDto> findAll(long lastId, int size, Direction direction);
+
+  Future<PaginatedResponseDto> search(
+      String name,
+      int priceFrom,
+      int priceTo,
+      ItemService.Direction direction,
+      long lastId,
+      int size);
 
   Future<SuggestResponseDto> suggest(String name);
 

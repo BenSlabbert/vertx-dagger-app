@@ -17,11 +17,12 @@ public record Config(
     Map<ServiceIdentifier, ServiceRegistryConfig> serviceRegistryConfig,
     VerticleConfig verticleConfig) {
 
+  @Getter
   public enum ServiceIdentifier {
     IAM("iam"),
     CATALOG("catalog");
 
-    @Getter private final String serviceName;
+    private final String serviceName;
 
     ServiceIdentifier(String serviceName) {
       this.serviceName = serviceName;

@@ -11,9 +11,20 @@ type tokenPayload = {
 };
 
 // todo: main problem here is that client cookies are not being cleared/updated
-// when their session expires, client still produces old cookies
+//  when their session expires, client still produces old cookies
 export const handle: Handle = async ({ event, resolve }) => {
 	logger.info(`handle request event.route.id: ${event.route.id}`);
+
+	// always allow access to these pages
+	if (routes.login === event.route.id) {
+		logger.info('login route, resolve event');
+		return resolve(event);
+	}
+
+	if (routes.register === event.route.id) {
+		logger.info('register route, resolve event');
+		return resolve(event);
+	}
 
 	// https://kit.svelte.dev/docs/hooks#server-hooks-handle
 	// This function runs every time the SvelteKit server receives a request — whether that happens while the app is running, or during prerendering — and determines the response
@@ -44,19 +55,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return resolve(event);
 		}
 
-		if (routes.login === event.route.id) {
-			logger.info('login route, resolve event');
-			return resolve(event);
-		}
-
-		if (routes.register === event.route.id) {
-			logger.info('register route, resolve event');
-			return resolve(event);
-		}
-
 		logger.info('no session, redirect to login page');
 
-		// no session and not loggin in, redirect to login page
+		// no session and not login in, redirect to login page
 		return Response.redirect(`${import.meta.env.VITE_APP_HOST}${routes.login}`);
 	}
 
@@ -80,13 +81,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const iamApi = factory(event.fetch);
 		logger.info('refresh token');
 		const resp = await iamApi.refresh({ username: appUser.name, token: appUser.refreshToken });
-		logger.info(`resp ${resp}`);
 		if (resp instanceof Error) {
+			logger.error(`resp ${resp}`);
 			logger.error(`failed to refresh token ${resp}`);
+			logger.error(`clear cookies`);
 			await cookieUtils.clear(event.cookies);
-			return Response.redirect(`${import.meta.env.VITE_APP_HOST}${routes.login}`);
+			let url = `${import.meta.env.VITE_APP_HOST}${routes.login}`;
+			logger.error(`redirect to login: ${url}`);
+			return Response.redirect(url);
 		}
 
+		logger.info(`resp ${resp}`);
 		logger.info('user refreshed, update locals');
 		// update locals
 		appUser.token = resp.token;

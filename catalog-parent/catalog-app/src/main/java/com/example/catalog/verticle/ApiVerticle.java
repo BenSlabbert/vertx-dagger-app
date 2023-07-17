@@ -3,6 +3,7 @@ package com.example.catalog.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
+import com.example.catalog.service.ItemService;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import io.vertx.core.AbstractVerticle;
@@ -18,7 +19,6 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.HttpException;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -71,7 +71,8 @@ public class ApiVerticle extends AbstractVerticle {
         .get("/items")
         .handler(
             ctx ->
-                processWithPaginationParams(ctx, (from, to) -> itemHandler.findAll(ctx, from, to)));
+                processWithPaginationParams(
+                    ctx, (from, to, direction) -> itemHandler.findAll(ctx, from, to, direction)));
 
     apiRouter.post("/create").handler(itemHandler::create);
 
@@ -80,7 +81,8 @@ public class ApiVerticle extends AbstractVerticle {
         .handler(
             ctx ->
                 processWithRequiredSearchParam(
-                    ctx, (s, i1, i2, i3, i4) -> itemHandler.search(ctx, s, i1, i2, i3, i4)));
+                    ctx,
+                    (s, i1, i2, i3, i4, i5) -> itemHandler.search(ctx, s, i1, i2, i3, i4, i5)));
 
     apiRouter
         .get("/suggest")
@@ -126,7 +128,6 @@ public class ApiVerticle extends AbstractVerticle {
 
     // do some sanity checks to avoid throwing expensive exception
     if (null == param
-        || "".equals(param)
         || param.length() != 36
         // expensive regex check for last resort
         || !UUID_REGEX.matcher(param).matches()) {
@@ -145,21 +146,23 @@ public class ApiVerticle extends AbstractVerticle {
   }
 
   @FunctionalInterface
-  interface PentaConsumer<A, B, C, D, E> {
-    void accept(A a, B b, C c, D d, E e);
+  interface PentaConsumer<A, B, C, D, E, F> {
+    void accept(A a, B b, C c, D d, E e, F f);
   }
 
   private void processWithRequiredSearchParam(
-      RoutingContext ctx, PentaConsumer<String, Integer, Integer, Integer, Integer> consumer) {
+      RoutingContext ctx,
+      PentaConsumer<String, Integer, Integer, ItemService.Direction, Long, Integer> consumer) {
     MultiMap entries = ctx.queryParams();
     String search = entries.get("s");
 
     Optional<Integer> priceFrom = tryParseInteger(entries.get("priceFrom"));
     Optional<Integer> priceTo = tryParseInteger(entries.get("priceTo"));
-    Optional<Integer> page = tryParseInteger(entries.get("page"));
+    ItemService.Direction direction = getDirection(entries);
     Optional<Integer> size = tryParseInteger(entries.get("size"));
+    Optional<Long> lastId = tryParseLong(entries.get("lastId"));
 
-    if (page.isEmpty() || size.isEmpty()) {
+    if (size.isEmpty()) {
       ctx.fail(new HttpException(BAD_REQUEST.code()));
       return;
     }
@@ -170,14 +173,19 @@ public class ApiVerticle extends AbstractVerticle {
     }
 
     consumer.accept(
-        search, priceFrom.get(), priceTo.get(), page.get(), size.get() == 0 ? 10 : size.get());
+        search,
+        priceFrom.get(),
+        priceTo.get(),
+        direction,
+        lastId.orElse(0L),
+        size.get() == 0 ? 10 : size.get());
   }
 
   private void processWithRequiredSuggestParam(RoutingContext ctx, Consumer<String> consumer) {
     MultiMap entries = ctx.queryParams();
     String search = entries.get("s");
 
-    if (null == search || "".equals(search)) {
+    if (null == search || search.isEmpty()) {
       ctx.fail(new HttpException(BAD_REQUEST.code()));
       return;
     }
@@ -185,28 +193,51 @@ public class ApiVerticle extends AbstractVerticle {
     consumer.accept(search);
   }
 
-  private void processWithPaginationParams(
-      RoutingContext ctx, BiConsumer<Integer, Integer> consumer) {
+  @FunctionalInterface
+  interface TriConsumer<A, B, C> {
+    void accept(A a, B b, C c);
+  }
 
+  private void processWithPaginationParams(
+      RoutingContext ctx, TriConsumer<Long, Integer, ItemService.Direction> consumer) {
     MultiMap entries = ctx.queryParams();
-    Optional<Integer> page = tryParseInteger(entries.get("page"));
+    ItemService.Direction direction = getDirection(entries);
+
+    Optional<Long> lastId = tryParseLong(entries.get("lastId"));
     Optional<Integer> size = tryParseInteger(entries.get("size"));
 
-    if (page.isEmpty() || size.isEmpty()) {
-      ctx.fail(new HttpException(BAD_REQUEST.code()));
-      return;
-    }
+    consumer.accept(lastId.orElse(0L), size.orElse(0) == 0 ? 10 : size.get(), direction);
+  }
 
-    consumer.accept(page.get(), size.get() == 0 ? 10 : size.get());
+  private ItemService.Direction getDirection(MultiMap entries) {
+    String directionQuery =
+        Optional.ofNullable(entries.get("direction")).orElse(ItemService.Direction.FORWARD.name());
+
+    return switch (directionQuery.toUpperCase()) {
+      case "BACKWARD" -> ItemService.Direction.BACKWARD;
+      default -> ItemService.Direction.FORWARD;
+    };
   }
 
   private Optional<Integer> tryParseInteger(String maybeInt) {
-    if (null == maybeInt || "".equals(maybeInt)) {
+    if (null == maybeInt || maybeInt.isEmpty()) {
       return Optional.of(0);
     }
 
     if (NumberUtils.isCreatable(maybeInt)) {
       return Optional.of(Integer.parseInt(maybeInt));
+    }
+
+    return Optional.empty();
+  }
+
+  private Optional<Long> tryParseLong(String maybeInt) {
+    if (null == maybeInt || maybeInt.isEmpty()) {
+      return Optional.of(0L);
+    }
+
+    if (NumberUtils.isCreatable(maybeInt)) {
+      return Optional.of(Long.parseLong(maybeInt));
     }
 
     return Optional.empty();

@@ -11,13 +11,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 	// redirect user if logged in
 	logger.info(`login load, locals.user ${locals.user}`);
 
-	if (locals.user) {
-		logger.info(`user is already logged in, redirect to ${routes.home}`);
-		throw redirect(303, routes.home);
-	}
-
-	// if not logged in, just render the page
-	logger.info('user not logged in, just render login page');
+	// if (locals.user) {
+	// 	logger.info(`user is already logged in, redirect to ${routes.home}`);
+	// 	throw redirect(303, routes.home);
+	// }
+	//
+	// // if not logged in, just render the page
+	// logger.info('user not logged in, just render login page');
 };
 
 export const actions: Actions = {

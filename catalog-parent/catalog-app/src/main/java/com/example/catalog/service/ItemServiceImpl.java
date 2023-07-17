@@ -4,7 +4,6 @@ import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.DeleteOneResponseDto;
-import com.example.catalog.web.route.dto.FindAllResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.SuggestResponseDto;
@@ -30,35 +29,46 @@ class ItemServiceImpl implements ItemService {
   }
 
   @Override
-  public Future<PaginatedResponseDto> findAll(int page, int size) {
+  public Future<PaginatedResponseDto> findAll(long lastId, int size, Direction direction) {
     return itemRepository
-        .findAll(page, size)
+        .findAll(lastId, size, direction)
         .map(
             pageOfItems -> {
               List<FindOneResponseDto> items =
                   pageOfItems.items().stream()
                       .map(
                           item ->
-                              new FindOneResponseDto(item.id(), item.name(), item.priceInCents()))
+                              new FindOneResponseDto(
+                                  item.id(), item.sequence(), item.name(), item.priceInCents()))
                       .toList();
 
-              return new PaginatedResponseDto(
-                  pageOfItems.page(), pageOfItems.size(), pageOfItems.total(), items);
+              return new PaginatedResponseDto(pageOfItems.more(), pageOfItems.total(), items);
             });
   }
 
   @Override
-  public Future<FindAllResponseDto> search(
-      String name, int priceFrom, int priceTo, int page, int size) {
+  public Future<PaginatedResponseDto> search(
+      String name,
+      int priceFrom,
+      int priceTo,
+      ItemService.Direction direction,
+      long lastId,
+      int size) {
+
     return itemRepository
-        .search(name, priceFrom, priceTo, page, size)
+        .search(name, priceFrom, priceTo, direction, lastId, size)
         .map(
-            items ->
-                items.stream()
-                    .map(
-                        item -> new FindOneResponseDto(item.id(), item.name(), item.priceInCents()))
-                    .toList())
-        .map(FindAllResponseDto::new);
+            pageOfItems -> {
+              List<FindOneResponseDto> items =
+                  pageOfItems.items().stream()
+                      .map(
+                          item ->
+                              new FindOneResponseDto(
+                                  item.id(), item.sequence(), item.name(), item.priceInCents()))
+                      .toList();
+
+              return new PaginatedResponseDto(pageOfItems.more(), pageOfItems.total(), items);
+            });
   }
 
   @Override
@@ -80,7 +90,9 @@ class ItemServiceImpl implements ItemService {
         .map(
             maybeItem ->
                 maybeItem.map(
-                    item -> new FindOneResponseDto(item.id(), item.name(), item.priceInCents())));
+                    item ->
+                        new FindOneResponseDto(
+                            item.id(), item.sequence(), item.name(), item.priceInCents())));
   }
 
   @Override
