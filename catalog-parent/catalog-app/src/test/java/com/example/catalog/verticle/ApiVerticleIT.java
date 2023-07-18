@@ -180,6 +180,7 @@ class ApiVerticleIT {
         () -> {
           assertThat(page1.total()).isEqualTo(8L);
           assertThat(page1.items()).hasSize(5);
+          assertThat(page1.more()).isTrue();
         });
 
     long lastSequence = page1.items().get(page1.items().size() - 1).sequence();
@@ -198,6 +199,7 @@ class ApiVerticleIT {
         () -> {
           assertThat(page2.total()).isEqualTo(8L);
           assertThat(page2.items()).hasSize(4);
+          assertThat(page2.more()).isFalse();
         });
 
     assertThat(lastSequence).isEqualTo(page2.items().get(0).sequence());
@@ -218,6 +220,7 @@ class ApiVerticleIT {
         () -> {
           assertThat(page3.total()).isEqualTo(8L);
           assertThat(page3.items()).hasSize(1);
+          assertThat(page3.more()).isFalse();
         });
 
     assertThat(lastSequence).isEqualTo(page3.items().get(0).sequence());
@@ -242,6 +245,7 @@ class ApiVerticleIT {
         () -> {
           assertThat(page4.total()).isEqualTo(8L);
           assertThat(page4.items()).hasSize(5);
+          assertThat(page4.more()).isTrue();
         });
 
     // lastSequence is now on the last item
@@ -267,6 +271,7 @@ class ApiVerticleIT {
         () -> {
           assertThat(page5.total()).isEqualTo(8L);
           assertThat(page5.items()).hasSize(4);
+          assertThat(page5.more()).isFalse();
         });
 
     assertThat(lastSequence).isEqualTo(page5.items().get(page5.items().size() - 1).sequence());
