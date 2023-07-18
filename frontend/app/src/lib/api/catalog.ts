@@ -1,6 +1,6 @@
 enum Direction {
-  FORWARD = 'FORWARD',
-  BACKWARD= 'BACKWARD',
+	FORWARD = 'FORWARD',
+	BACKWARD = 'BACKWARD'
 }
 
 type ItemsRequest = {
@@ -19,6 +19,7 @@ type Item = {
 
 type PageInfo = {
 	total: number;
+	more: boolean;
 };
 
 type ItemsResponse = {
@@ -109,7 +110,7 @@ export type {
 	EditResponse,
 	DeleteRequest,
 	DeleteResponse,
-	Item,
+	Item
 };
 
 class CatalogApiImpl implements CatalogApi {
@@ -141,7 +142,8 @@ class CatalogApiImpl implements CatalogApi {
 			return {
 				items,
 				page: {
-					total: json.total
+					total: json.total,
+					more: json.more
 				}
 			};
 		} catch (e) {
@@ -265,7 +267,8 @@ class CatalogApiImpl implements CatalogApi {
 			return {
 				items,
 				page: {
-					total: json.total
+					total: json.total,
+					more: json.more
 				}
 			};
 		} catch (e) {
@@ -302,9 +305,7 @@ class CatalogApiImpl implements CatalogApi {
 	}
 }
 
-export {
-  Direction
-};
+export { Direction };
 
 export function factory(
 	fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>

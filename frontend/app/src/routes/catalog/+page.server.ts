@@ -8,7 +8,10 @@ export const load: PageServerLoad = async ({ fetch, locals, url }) => {
 	const priceFrom = Number(url.searchParams.get('priceFrom')) | 0;
 	const priceTo = Number(url.searchParams.get('priceTo')) | 0;
 	const lastId = Number(url.searchParams.get('lastId')) | 0;
-	const direction = Direction.BACKWARD.toString() === url.searchParams.get('direction') ? Direction.BACKWARD : Direction.FORWARD;
+	const direction =
+		Direction.BACKWARD.toString() === url.searchParams.get('direction')
+			? Direction.BACKWARD
+			: Direction.FORWARD;
 
 	const catalogApi = factory(fetch);
 
@@ -16,7 +19,7 @@ export const load: PageServerLoad = async ({ fetch, locals, url }) => {
 		const items = await catalogApi.getItems({
 			token: locals.user.token,
 			lastId,
-      direction,
+			direction,
 			size: 10
 		});
 
@@ -34,7 +37,7 @@ export const load: PageServerLoad = async ({ fetch, locals, url }) => {
 		priceFrom,
 		priceTo,
 		lastId,
-    direction,
+		direction,
 		size: 10
 	});
 

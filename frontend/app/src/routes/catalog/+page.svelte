@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import routes, { catalogEdit, catalogDelete } from '$lib/routes';
-	import { type ItemsResponse, Direction } from '$lib/api/catalog';
+	import routes, { catalogDelete, catalogEdit } from '$lib/routes';
+	import { Direction, type ItemsResponse } from '$lib/api/catalog';
 
 	export let data: ItemsResponse;
 
 	let loading = false;
 	let suggestions: string[] = [];
 	let search = $page.url.searchParams?.get('s') ?? '';
+	let direction = $page.url.searchParams?.get('direction') ?? Direction.FORWARD.toString();
 	let lastId = 0;
 
 	$: updateableSuggestions = suggestions;
@@ -20,39 +21,35 @@
 			}
 		}
 	}
-	$: console.log('lastId', lastId);
-	$: console.log('data.items', data?.items);
 
 	function getPreviousPageUrl(url: URL) {
-    // set direction backward
+		// set direction backward
 		url.searchParams.set('direction', Direction.BACKWARD.toString());
 
 		const items = data?.items ?? [];
-    console.log('items', items);
 
 		if (!items || items.length === 0) {
 			url.searchParams.set('lastId', String(0));
 			return url.href;
 		}
 
-    url.searchParams.set('lastId', String(items[0].sequence));
+		url.searchParams.set('lastId', String(items[0].sequence));
 
 		return url.href;
 	}
 
 	function getNextPageUrl(url: URL) {
-    // set direction forward
-    url.searchParams.set('direction', Direction.FORWARD.toString());
+		// set direction forward
+		url.searchParams.set('direction', Direction.FORWARD.toString());
 
 		const items = data?.items ?? [];
-    console.log('items', items);
 
 		if (!items || items.length === 0) {
 			url.searchParams.set('lastId', String(0));
 			return url.href;
 		}
 
-    url.searchParams.set('lastId', String(items[items.length-1].sequence));
+		url.searchParams.set('lastId', String(items[items.length - 1].sequence));
 
 		return url.href;
 	}
