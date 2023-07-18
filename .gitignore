@@ -10,3 +10,4 @@ docker-config.json
 *.tar.gz
 file-uploads
 .attach_pid*
+bin/

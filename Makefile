@@ -57,6 +57,7 @@ dockerSave:
 	docker save iam:native-upx-latest | gzip > iam-native-upx_latest.tar.gz
 	docker save catalog:native-upx-latest | gzip > catalog-native-upx_latest.tar.gz
 	docker save shop:native-upx-latest | gzip > shop-native-upx_latest.tar.gz
+	./extractBinries.sh
 
 .PHONY: clean
 clean:
