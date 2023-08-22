@@ -5,6 +5,7 @@ import static io.vertx.core.http.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import com.example.catalog.TestProvider;
 import com.example.catalog.service.ItemService;
 import com.example.catalog.web.SchemaValidatorDelegator;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
@@ -28,7 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 @ExtendWith(VertxExtension.class)
-class ApiVerticleTest {
+class ApiVerticleTest extends TestProvider {
 
   private static final int PORT = 40001;
 
@@ -37,7 +38,6 @@ class ApiVerticleTest {
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     var httpConfig = new Config.HttpConfig(PORT);
-
     vertx.deployVerticle(
         new ApiVerticle(
             httpConfig,

@@ -11,3 +11,4 @@ docker-config.json
 file-uploads
 .attach_pid*
 bin/
+*.iml
