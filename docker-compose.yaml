@@ -5,3 +5,11 @@ services:
     ports:
     - "6379:6379"
     - "8001:8001"
+  postgres:
+    image: "postgres:15-alpine"
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "postgres"

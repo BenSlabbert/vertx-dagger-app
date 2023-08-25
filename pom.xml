@@ -11,6 +11,7 @@
     <module>iam-parent</module>
     <module>catalog-parent</module>
     <module>shop-parent</module>
+    <module>reactive-test-parent</module>
     <module>commons</module>
   </modules>
 
@@ -21,6 +22,8 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <docker.skip>false</docker.skip>
+
+    <skipJooqGeneration>false</skipJooqGeneration>
 
     <!--deps-->
     <vertx.version>4.4.4</vertx.version>
@@ -35,6 +38,11 @@
     <protoc.version>3.22.3</protoc.version>
     <dagger.version>2.46.1</dagger.version>
     <commons-lang3.version>3.12.0</commons-lang3.version>
+    <flyway.version>9.17.0</flyway.version>
+    <postgresql.version>42.6.0</postgresql.version>
+    <jooq.version>3.18.6</jooq.version>
+    <testcontainers.version>1.18.3</testcontainers.version>
+    <scram.version>2.1</scram.version>
 
     <!--plugins-->
     <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
@@ -48,6 +56,7 @@
     <google-format.version>1.16.0</google-format.version>
     <spotless.version>2.37.0</spotless.version>
     <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
+    <maven-shade-plugin.version>3.5.0</maven-shade-plugin.version>
 
     <!--extensions-->
     <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
@@ -63,6 +72,16 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>com.ongres.scram</groupId>
+        <artifactId>client</artifactId>
+        <version>${scram.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.ongres.scram</groupId>
+        <artifactId>common</artifactId>
+        <version>${scram.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>${commons-lang3.version}</version>
@@ -73,9 +92,60 @@
         <version>${dagger.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-core</artifactId>
+        <version>${flyway.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-meta</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-meta-extensions</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${lombok.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${testcontainers.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${postgresql.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers</artifactId>
+        <version>${testcontainers.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-pg-client</artifactId>
+        <version>${vertx.version}</version>
       </dependency>
       <dependency>
         <groupId>org.assertj</groupId>
@@ -131,12 +201,6 @@
             <artifactId>commons-codec</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.testcontainers</groupId>
-        <artifactId>testcontainers</artifactId>
-        <version>${testcontainers.version}</version>
-        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -215,6 +279,10 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>${maven-jar-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${maven-shade-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

@@ -3,23 +3,23 @@
 M := "mvn"
 
 .PHONY: build
-build: clean fmt
+build: fmt
 	${M} install
 
 .PHONY: compile
-compile: clean fmt
+compile: fmt
 	${M} compile test-compile
 
 .PHONY: test
-test: clean fmt
+test: fmt
 	${M} test
 
 .PHONY: package
-package: clean fmt
+package: fmt
 	${M} package
 
 .PHONY: verify
-verify: clean fmt
+verify: fmt
 	${M} verify
 
 .PHONY: fmtCheck
