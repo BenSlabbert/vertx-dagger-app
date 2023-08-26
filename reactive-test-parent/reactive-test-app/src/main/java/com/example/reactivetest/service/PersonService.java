@@ -7,6 +7,7 @@ import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory;
 import io.vertx.core.Future;
 import io.vertx.pgclient.PgPool;
 import java.util.List;
+import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -32,7 +33,17 @@ public class PersonService extends TransactionBoundary {
         .onSuccess(
             values -> {
               log.info("values: " + values);
-              kafkaProducerService.write();
+              kafkaProducerService
+                  .emitPersonCreated(values.id(), values.name())
+                  .onSuccess(
+                      v -> {
+                        log.info("write success");
+                        log.info("getTopic: " + v.getTopic());
+                        log.info("getPartition: " + v.getPartition());
+                        log.info("getOffset: " + v.getOffset());
+                        log.info("getTimestamp: " + v.getTimestamp());
+                      })
+                  .onFailure(err -> log.log(Level.SEVERE, "failed to write", err));
             })
         .onFailure(err -> log.log(SEVERE, "Transaction failed", err));
   }
