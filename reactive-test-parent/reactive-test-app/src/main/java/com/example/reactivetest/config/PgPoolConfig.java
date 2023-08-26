@@ -46,6 +46,7 @@ class PgPoolConfig implements AutoCloseable {
     return pool;
   }
 
+  @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void close() throws InterruptedException {
     if (null == pool) return;

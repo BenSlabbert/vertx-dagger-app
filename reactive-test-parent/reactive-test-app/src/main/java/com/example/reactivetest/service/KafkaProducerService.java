@@ -88,6 +88,7 @@ public class KafkaProducerService implements AutoCloseable {
         .onFailure(err -> log.log(Level.SEVERE, "failed to write", err));
   }
 
+  @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void close() throws Exception {
     if (null == producer) return;
