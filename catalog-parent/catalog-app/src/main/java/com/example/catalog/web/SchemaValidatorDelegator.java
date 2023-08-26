@@ -9,7 +9,6 @@ import com.example.catalog.web.route.dto.FindOneRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.commons.config.Config;
 import com.example.commons.web.SchemaValidator;
-import com.example.commons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.JsonSchema;
 import java.util.HashMap;
@@ -29,12 +28,12 @@ public class SchemaValidatorDelegator {
     this.schemaValidator = new SchemaValidator(httpConfig, getRegistry());
   }
 
-  public Boolean validate(Class<? extends JsonWriter> clazz, JsonObject jsonObject) {
+  public Boolean validate(Class<?> clazz, JsonObject jsonObject) {
     return schemaValidator.validate(clazz, jsonObject);
   }
 
-  private Map<Class<? extends JsonWriter>, JsonSchema> getRegistry() {
-    Map<Class<? extends JsonWriter>, JsonSchema> map = new HashMap<>();
+  private Map<Class<?>, JsonSchema> getRegistry() {
+    Map<Class<?>, JsonSchema> map = new HashMap<>();
 
     map.put(
         CreateItemRequestDto.class,

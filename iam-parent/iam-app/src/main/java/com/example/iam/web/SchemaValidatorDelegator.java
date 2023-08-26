@@ -5,7 +5,6 @@ import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 
 import com.example.commons.config.Config;
 import com.example.commons.web.SchemaValidator;
-import com.example.commons.web.serialization.JsonWriter;
 import com.example.iam.web.route.dto.LoginRequestDto;
 import com.example.iam.web.route.dto.RefreshRequestDto;
 import com.example.iam.web.route.dto.RegisterRequestDto;
@@ -28,12 +27,12 @@ public class SchemaValidatorDelegator {
     this.schemaValidator = new SchemaValidator(httpConfig, getRegistry());
   }
 
-  public Boolean validate(Class<? extends JsonWriter> clazz, JsonObject jsonObject) {
+  public Boolean validate(Class<?> clazz, JsonObject jsonObject) {
     return schemaValidator.validate(clazz, jsonObject);
   }
 
-  private Map<Class<? extends JsonWriter>, JsonSchema> getRegistry() {
-    Map<Class<? extends JsonWriter>, JsonSchema> map = new HashMap<>();
+  private Map<Class<?>, JsonSchema> getRegistry() {
+    Map<Class<?>, JsonSchema> map = new HashMap<>();
 
     map.put(
         LoginRequestDto.class,

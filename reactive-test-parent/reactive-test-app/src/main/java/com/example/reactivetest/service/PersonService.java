@@ -16,17 +16,24 @@ import lombok.extern.java.Log;
 public class PersonService extends TransactionBoundary {
 
   private final PersonRepository personRepository;
+  private final KafkaProducerService kafkaProducerService;
 
   @Inject
-  PersonService(PgPool pool, PersonRepository personRepository) {
+  PersonService(
+      PgPool pool, PersonRepository personRepository, KafkaProducerService kafkaProducerService) {
     super(pool);
     this.personRepository = personRepository;
+    this.kafkaProducerService = kafkaProducerService;
   }
 
   public Future<PersonProjectionFactory.InsertReturningProjection.PersonProjection> create(
       String name) {
     return doInTransaction(conn -> personRepository.create(conn, name))
-        .onSuccess(values -> log.info("values: " + values))
+        .onSuccess(
+            values -> {
+              log.info("values: " + values);
+              kafkaProducerService.write();
+            })
         .onFailure(err -> log.log(SEVERE, "Transaction failed", err));
   }
 

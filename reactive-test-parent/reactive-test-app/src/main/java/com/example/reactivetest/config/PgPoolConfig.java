@@ -7,14 +7,25 @@ import io.vertx.core.Vertx;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import lombok.extern.java.Log;
 
+@Log
 @Module
-public class PgPoolConfig {
+class PgPoolConfig implements AutoCloseable {
 
-  private PgPoolConfig() {}
+  @Inject
+  PgPoolConfig() {}
+
+  private static PgPool pool = null;
 
   @Provides
-  static PgPool providesPgPool(Vertx vertx, Config config) {
+  static synchronized PgPool providesPgPool(Vertx vertx, Config config) {
+    if (pool != null) return pool;
+
+    log.info("creating pg pool");
     PgConnectOptions connectOptions =
         new PgConnectOptions()
             .setPort(config.postgresConfig().port())
@@ -25,8 +36,31 @@ public class PgPoolConfig {
             .setCachePreparedStatements(true)
             .setPipeliningLimit(256);
 
-    PoolOptions poolOptions = new PoolOptions().setMaxSize(1);
+    PoolOptions poolOptions =
+        new PoolOptions()
+            .setConnectionTimeout(10)
+            .setConnectionTimeoutUnit(TimeUnit.SECONDS)
+            .setMaxSize(1);
 
-    return PgPool.pool(vertx, connectOptions, poolOptions);
+    pool = PgPool.pool(vertx, connectOptions, poolOptions);
+    return pool;
+  }
+
+  @Override
+  public void close() throws InterruptedException {
+    if (null == pool) return;
+
+    CountDownLatch latch = new CountDownLatch(1);
+    System.err.println("closing pg pool");
+    pool.close()
+        .onComplete(
+            r -> {
+              if (r.failed()) {
+                System.err.println("closing pg pool failed: " + r.cause());
+              }
+              latch.countDown();
+            });
+
+    latch.await();
   }
 }

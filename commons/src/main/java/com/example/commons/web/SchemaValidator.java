@@ -3,7 +3,6 @@ package com.example.commons.web;
 import static java.util.logging.Level.WARNING;
 
 import com.example.commons.config.Config;
-import com.example.commons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.Draft;
 import io.vertx.json.schema.JsonSchema;
@@ -16,11 +15,10 @@ import lombok.extern.java.Log;
 @Log
 public class SchemaValidator {
 
-  private final Map<Class<? extends JsonWriter>, JsonSchema> registry;
+  private final Map<Class<?>, JsonSchema> registry;
   private final SchemaRepository repository;
 
-  public SchemaValidator(
-      Config.HttpConfig httpConfig, Map<Class<? extends JsonWriter>, JsonSchema> registry) {
+  public SchemaValidator(Config.HttpConfig httpConfig, Map<Class<?>, JsonSchema> registry) {
     this.registry = registry;
     this.repository =
         SchemaRepository.create(
@@ -33,7 +31,7 @@ public class SchemaValidator {
     }
   }
 
-  public Boolean validate(Class<? extends JsonWriter> clazz, JsonObject jsonObject) {
+  public Boolean validate(Class<?> clazz, JsonObject jsonObject) {
     JsonSchema schema = registry.get(clazz);
 
     if (null == schema) {
