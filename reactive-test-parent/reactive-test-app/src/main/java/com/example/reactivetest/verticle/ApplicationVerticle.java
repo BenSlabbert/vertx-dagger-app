@@ -24,7 +24,8 @@ public class ApplicationVerticle extends AbstractVerticle {
   private final Config.HttpConfig httpConfig;
 
   @Inject
-  public ApplicationVerticle(PersonHandler personHandler, Config config, EventListener eventListener) {
+  public ApplicationVerticle(
+      PersonHandler personHandler, Config config, EventListener eventListener) {
     this.personHandler = personHandler;
     this.httpConfig = config.httpConfig();
     // eventListener here for eager init
@@ -32,6 +33,7 @@ public class ApplicationVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
+    // todo: before start we need to write all the existing messages to kafka
     log.log(
         Level.INFO,
         "starting api verticle on port: {0}",

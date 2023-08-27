@@ -37,8 +37,6 @@ import org.apache.kafka.common.errors.TopicExistsException;
 @Singleton
 public class KafkaProducerService implements AutoCloseable {
 
-  private static final String VERSION_HEADER = "X-Protocol-Version";
-
   private final KafkaProducer<String, Buffer> producer;
 
   @Inject
@@ -87,7 +85,8 @@ public class KafkaProducerService implements AutoCloseable {
     Buffer buffer = Buffer.buffer(bytes);
 
     KafkaProducerRecord<String, Buffer> msg =
-      KafkaProducerRecord.create(producerRecord.topic(), producerRecord.key(), buffer, producerRecord.partition());
+        KafkaProducerRecord.create(
+            producerRecord.topic(), producerRecord.key(), buffer, producerRecord.partition());
     return producer.send(msg);
   }
 

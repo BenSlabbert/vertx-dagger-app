@@ -34,7 +34,9 @@ public class EventListener extends TransactionBoundary {
                               .get(conn, id)
                               .map(KafkaMessageFactory::create)
                               .compose(kafkaProducerService::emitPersonCreated)
-                            .compose(metadata -> outboxRepository.delete(conn, id).map(ignore -> metadata)))
+                              .compose(
+                                  metadata ->
+                                      outboxRepository.delete(conn, id).map(ignore -> metadata)))
                   .onSuccess(
                       metadata -> {
                         log.info("metadata.getTopic: " + metadata.getTopic());
