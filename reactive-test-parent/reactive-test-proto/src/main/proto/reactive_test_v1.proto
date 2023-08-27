@@ -7,8 +7,6 @@ option objc_class_prefix = "RTG";
 
 package reactivetest_v1;
 
-import "google/protobuf/descriptor.proto";
-
 message Person {
   int64 id = 1;
   string name = 2;

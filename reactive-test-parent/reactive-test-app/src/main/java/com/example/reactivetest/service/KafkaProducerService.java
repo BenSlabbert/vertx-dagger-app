@@ -1,5 +1,6 @@
 package com.example.reactivetest.service;
 
+import static com.example.reactivetest.config.KafkaTopics.TOPIC;
 import static org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.CLIENT_ID_CONFIG;
@@ -11,7 +12,6 @@ import static org.apache.kafka.clients.producer.ProducerConfig.REQUEST_TIMEOUT_M
 import static org.apache.kafka.clients.producer.ProducerConfig.RETRIES_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
 
-import com.example.reactivetest.proto.Version;
 import com.example.reactivetest.proto.v1.Person;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -37,7 +37,6 @@ import org.apache.kafka.common.errors.TopicExistsException;
 @Singleton
 public class KafkaProducerService implements AutoCloseable {
 
-  private static final String TOPIC = "TOPIC";
   private static final String VERSION_HEADER = "X-Protocol-Version";
 
   private final KafkaProducer<String, Buffer> producer;
@@ -82,15 +81,13 @@ public class KafkaProducerService implements AutoCloseable {
             });
   }
 
-  public Future<RecordMetadata> emitPersonCreated(long id, String name) {
-    var bytes = Person.newBuilder().setId(id).setName(name).build().toByteArray();
-    Buffer value = Buffer.buffer(bytes);
+  public Future<RecordMetadata> emitPersonCreated(
+      KafkaProducerRecord<String, Person> producerRecord) {
+    byte[] bytes = producerRecord.value().toByteArray();
+    Buffer buffer = Buffer.buffer(bytes);
 
-    log.info("writing to kafka");
     KafkaProducerRecord<String, Buffer> msg =
-        KafkaProducerRecord.create(TOPIC, "key", value, 0)
-            .addHeader(VERSION_HEADER, Version.V1.toString());
-
+      KafkaProducerRecord.create(producerRecord.topic(), producerRecord.key(), buffer, producerRecord.partition());
     return producer.send(msg);
   }
 

@@ -7,7 +7,6 @@ import static org.jooq.conf.ParamType.INLINED;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,9 +47,6 @@ public class PersonProjectionFactory {
 
     @Override
     public String getSql() {
-      Objects.requireNonNull(id);
-      Objects.requireNonNull(name);
-
       return dsl.insertInto(PERSON)
           .columns(PERSON.ID, PERSON.NAME)
           .values(id, name)

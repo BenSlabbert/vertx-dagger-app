@@ -3,6 +3,7 @@ package com.example.reactivetest.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.config.Config;
+import com.example.reactivetest.service.EventListener;
 import com.example.reactivetest.web.handler.PersonHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
@@ -23,9 +24,10 @@ public class ApplicationVerticle extends AbstractVerticle {
   private final Config.HttpConfig httpConfig;
 
   @Inject
-  public ApplicationVerticle(PersonHandler personHandler, Config config) {
+  public ApplicationVerticle(PersonHandler personHandler, Config config, EventListener eventListener) {
     this.personHandler = personHandler;
     this.httpConfig = config.httpConfig();
+    // eventListener here for eager init
   }
 
   @Override
