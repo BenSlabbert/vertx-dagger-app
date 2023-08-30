@@ -3,7 +3,8 @@ package com.example.reactivetest.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.config.Config;
-import com.example.reactivetest.service.EventListener;
+import com.example.reactivetest.service.KafkaOutboxEventListener;
+import com.example.reactivetest.service.StartupService;
 import com.example.reactivetest.web.handler.PersonHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
@@ -22,23 +23,39 @@ public class ApplicationVerticle extends AbstractVerticle {
 
   private final PersonHandler personHandler;
   private final Config.HttpConfig httpConfig;
+  private final StartupService startupService;
 
   @Inject
-  public ApplicationVerticle(
-      PersonHandler personHandler, Config config, EventListener eventListener) {
+  ApplicationVerticle(
+      Config config,
+      PersonHandler personHandler,
+      // eventListener here for eager init
+      KafkaOutboxEventListener kafkaOutboxEventListener,
+      StartupService startupService) {
     this.personHandler = personHandler;
     this.httpConfig = config.httpConfig();
-    // eventListener here for eager init
+    this.startupService = startupService;
   }
 
   @Override
   public void start(Promise<Void> startPromise) {
-    // todo: before start we need to write all the existing messages to kafka
     log.log(
         Level.INFO,
         "starting api verticle on port: {0}",
         new Object[] {Integer.toString(httpConfig.port())});
 
+    log.info("running startup event");
+    startupService
+        .run()
+        .onSuccess(
+            ignore -> {
+              log.info("start up event completed");
+              createRoutes(startPromise);
+            })
+        .onFailure(err -> log.log(Level.SEVERE, "failed to process messages", err));
+  }
+
+  void createRoutes(Promise<Void> startPromise) {
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 

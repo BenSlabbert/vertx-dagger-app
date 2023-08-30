@@ -4,7 +4,9 @@ import static com.example.reactivetest.generator.entity.generated.jooq.tables.Ou
 import static org.jooq.conf.ParamType.INLINED;
 
 import io.vertx.sqlclient.Row;
+import io.vertx.sqlclient.RowIterator;
 import io.vertx.sqlclient.RowSet;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.jooq.DSLContext;
@@ -27,11 +29,44 @@ public class OutboxProjectionFactory {
     return new GetFromOutbox(id);
   }
 
+  public TopFromOutbox next() {
+    return new TopFromOutbox();
+  }
+
   public DeleteFromOutbox delete(long id) {
     return new DeleteFromOutbox(id);
   }
 
-  public class GetFromOutbox implements Projection<GetFromOutbox.GetFromOutboxProjection> {
+  public class TopFromOutbox implements Projection<Optional<GetFromOutboxProjection>> {
+
+    private TopFromOutbox() {}
+
+    @Override
+    public String getSql() {
+      return dsl.select(OUTBOX.ID, OUTBOX.KEY, OUTBOX.HEADERS, OUTBOX.VALUE)
+          .from(OUTBOX)
+          .orderBy(OUTBOX.ID.asc())
+          .limit(1)
+          .getSQL(INLINED);
+    }
+
+    @Override
+    public Optional<GetFromOutboxProjection> parse(RowSet<Row> rowSet) {
+      RowIterator<Row> itr = rowSet.iterator();
+
+      if (!itr.hasNext()) return Optional.empty();
+
+      Row row = itr.next();
+      return Optional.of(
+          new GetFromOutboxProjection(
+              row.getLong(0),
+              row.getString(1),
+              row.getBuffer(2).getBytes(),
+              row.getBuffer(3).getBytes()));
+    }
+  }
+
+  public class GetFromOutbox implements Projection<GetFromOutboxProjection> {
 
     private final long id;
 
@@ -56,27 +91,27 @@ public class OutboxProjectionFactory {
           row.getBuffer(2).getBytes(),
           row.getBuffer(3).getBytes());
     }
+  }
 
-    public record GetFromOutboxProjection(long id, String key, byte[] headers, byte[] value) {
+  public record GetFromOutboxProjection(long id, String key, byte[] headers, byte[] value) {
 
-      @Override
-      public boolean equals(Object obj) {
-        if (obj instanceof Long l) {
-          return id() == l;
-        }
-
-        return false;
+    @Override
+    public boolean equals(Object obj) {
+      if (obj instanceof Long l) {
+        return id() == l;
       }
 
-      @Override
-      public int hashCode() {
-        return Long.hashCode(id());
-      }
+      return false;
+    }
 
-      @Override
-      public String toString() {
-        return Long.toString(id());
-      }
+    @Override
+    public int hashCode() {
+      return Long.hashCode(id());
+    }
+
+    @Override
+    public String toString() {
+      return Long.toString(id());
     }
   }
 

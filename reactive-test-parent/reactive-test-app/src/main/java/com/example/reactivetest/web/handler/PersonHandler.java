@@ -25,8 +25,7 @@ public class PersonHandler {
   private final SchemaValidatorDelegator schemaValidatorDelegator;
 
   @Inject
-  public PersonHandler(
-      PersonService personService, SchemaValidatorDelegator schemaValidatorDelegator) {
+  PersonHandler(PersonService personService, SchemaValidatorDelegator schemaValidatorDelegator) {
     this.personService = personService;
     this.schemaValidatorDelegator = schemaValidatorDelegator;
   }

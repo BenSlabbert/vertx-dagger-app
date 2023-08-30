@@ -5,6 +5,7 @@ import static com.example.reactivetest.dao.sql.projection.ProjectionExecutor.exe
 import com.example.reactivetest.dao.sql.projection.OutboxProjectionFactory;
 import io.vertx.core.Future;
 import io.vertx.sqlclient.SqlClient;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -23,9 +24,12 @@ public class OutboxRepository {
     return execute(conn, outboxProjectionFactory.create(key, headers, body));
   }
 
-  public Future<OutboxProjectionFactory.GetFromOutbox.GetFromOutboxProjection> get(
-      SqlClient conn, long id) {
+  public Future<OutboxProjectionFactory.GetFromOutboxProjection> get(SqlClient conn, long id) {
     return execute(conn, outboxProjectionFactory.get(id));
+  }
+
+  public Future<Optional<OutboxProjectionFactory.GetFromOutboxProjection>> next(SqlClient conn) {
+    return execute(conn, outboxProjectionFactory.next());
   }
 
   public Future<OutboxProjectionFactory.DeleteFromOutbox.DeleteOutboxProjection> delete(

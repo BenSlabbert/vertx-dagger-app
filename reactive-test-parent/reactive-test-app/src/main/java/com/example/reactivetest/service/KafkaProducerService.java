@@ -35,12 +35,12 @@ import org.apache.kafka.common.errors.TopicExistsException;
 
 @Log
 @Singleton
-public class KafkaProducerService implements AutoCloseable {
+class KafkaProducerService implements AutoCloseable {
 
   private final KafkaProducer<String, Buffer> producer;
 
   @Inject
-  public KafkaProducerService(Vertx vertx) {
+  KafkaProducerService(Vertx vertx) {
     Map<String, String> config = new HashMap<>();
     config.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
     config.put(

@@ -9,6 +9,7 @@ import io.vertx.core.Future;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import io.vertx.sqlclient.SqlClient;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -35,6 +36,14 @@ class KafkaOutboxService {
     byte[] headers = Headers.newBuilder().addAllHeaders(headerList).build().toByteArray();
 
     return outboxRepository.insert(conn, key, headers, value);
+  }
+
+  public Future<OutboxProjectionFactory.GetFromOutboxProjection> get(SqlClient conn, long id) {
+    return outboxRepository.get(conn, id);
+  }
+
+  public Future<Optional<OutboxProjectionFactory.GetFromOutboxProjection>> next(SqlClient conn) {
+    return outboxRepository.next(conn);
   }
 
   Future<OutboxProjectionFactory.DeleteFromOutbox.DeleteOutboxProjection> remove(
