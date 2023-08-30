@@ -6,10 +6,14 @@ import com.example.commons.config.Config;
 import com.example.reactivetest.service.KafkaOutboxEventListener;
 import com.example.reactivetest.service.StartupService;
 import com.example.reactivetest.web.handler.PersonHandler;
+import com.example.reactivetest.web.handler.SecurityHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.User;
+import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
@@ -59,6 +63,25 @@ public class ApplicationVerticle extends AbstractVerticle {
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 
+    mainRouter
+        .route()
+        .handler(
+            ctx -> {
+              // authentication start
+              ctx.setUser(
+                  User.create(
+                      new JsonObject().put("username", "test"),
+                      new JsonObject().put("attr-1", "value")));
+              User user = ctx.user();
+              JsonObject principal = user.principal();
+              JsonObject attributes = user.attributes();
+              // add user roles
+              user.authorizations()
+                  .add("role-provider-id", RoleBasedAuthorization.create("my-role"));
+
+              ctx.next();
+            });
+
     // 100kB max body size
     mainRouter
         .route(HttpMethod.POST, "/*")
@@ -66,6 +89,11 @@ public class ApplicationVerticle extends AbstractVerticle {
 
     // main routes
     mainRouter.route("/api/*").subRouter(apiRouter);
+
+    // check permissions
+    apiRouter
+        .route()
+        .handler(ctx -> SecurityHandler.hasRole(ctx, RoleBasedAuthorization.create("my-role")));
 
     // api routes
     apiRouter.get("/persons/all").handler(personHandler::getAll);

@@ -54,7 +54,9 @@ public class OutboxProjectionFactory {
     public Optional<GetFromOutboxProjection> parse(RowSet<Row> rowSet) {
       RowIterator<Row> itr = rowSet.iterator();
 
-      if (!itr.hasNext()) return Optional.empty();
+      if (!itr.hasNext()) {
+        return Optional.empty();
+      }
 
       Row row = itr.next();
       return Optional.of(

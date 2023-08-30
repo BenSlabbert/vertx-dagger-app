@@ -39,17 +39,17 @@ public class PersonService extends TransactionBoundary {
                 personRepository
                     .create(conn, name)
                     .compose(
-                        p ->
+                        projection ->
                             kafkaOutboxService
-                                .insert(conn, KafkaMessageFactory.create(p))
-                                .map(outbox -> new Tuple<>(p, outbox))))
+                                .insert(conn, KafkaMessageFactory.create(projection))
+                                .map(outbox -> new Tuple<>(projection, outbox))))
         .onSuccess(
             tuple -> {
               eventService.publishKafkaOutboxEvent(tuple.r().id());
               log.info("created person: " + tuple.l());
             })
         .onFailure(err -> log.log(SEVERE, "person create Transaction failed", err))
-        .map(Tuple::r);
+        .map(Tuple::l);
   }
 
   public Future<List<PersonProjectionFactory.FindPersonProjection.PersonProjection>> findAll() {
