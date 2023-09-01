@@ -1,33 +1,52 @@
 package com.example.reactivetest.web.handler;
 
+import static io.netty.handler.codec.http.HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN;
+import static io.netty.handler.codec.http.HttpHeaderNames.CACHE_CONTROL;
+import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.util.logging.Level.SEVERE;
 
+import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory.InsertReturningProjection.PersonProjection;
+import com.example.reactivetest.service.EventService;
 import com.example.reactivetest.service.PersonService;
 import com.example.reactivetest.web.SchemaValidatorDelegator;
 import com.example.reactivetest.web.dto.CreatePersonRequest;
 import com.example.reactivetest.web.dto.GetPersonResponse;
 import com.example.reactivetest.web.dto.GetPersonsResponse;
+import com.example.reactivetest.web.dto.SseResponse;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
 
 @Log
 @Singleton
-public class PersonHandler {
+public class PersonHandler implements AutoCloseable {
 
   private final PersonService personService;
   private final SchemaValidatorDelegator schemaValidatorDelegator;
+  private final EventService eventService;
+
+  private final Map<HttpServerResponse, MessageConsumer<PersonProjection>> responseConsumerMap =
+      new ConcurrentHashMap<>();
 
   @Inject
-  PersonHandler(PersonService personService, SchemaValidatorDelegator schemaValidatorDelegator) {
+  PersonHandler(
+      PersonService personService,
+      SchemaValidatorDelegator schemaValidatorDelegator,
+      EventService eventService) {
     this.personService = personService;
     this.schemaValidatorDelegator = schemaValidatorDelegator;
+    this.eventService = eventService;
   }
 
   public void create(RoutingContext ctx) {
@@ -73,5 +92,55 @@ public class PersonHandler {
                   .end(dto.toJson().toBuffer())
                   .onFailure(ctx::fail);
             });
+  }
+
+  // todo move this to the service package
+  public void sse(RoutingContext ctx) {
+    HttpServerResponse response = ctx.response();
+    response.setChunked(true);
+
+    response.headers().add(CONTENT_TYPE, "text/event-stream;charset=UTF-8");
+    response.headers().add(CONNECTION, "keep-alive");
+    response.headers().add(CACHE_CONTROL, "no-cache");
+    response.headers().add(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+
+    MessageConsumer<PersonProjection> consumer =
+        eventService.consumePersonCreatedEvent(
+            projection -> {
+              log.info("received event: " + projection);
+
+              if (response.closed()) {
+                log.info("response closed, not sending event");
+                responseConsumerMap.remove(response);
+                return;
+              }
+
+              Buffer buffer =
+                  new SseResponse(projection.id(), projection.name()).toJson().toBuffer();
+              response.write(buffer);
+              response.write("\n");
+            });
+
+    response.closeHandler(
+        unused -> {
+          log.info("response closed");
+          responseConsumerMap
+              .get(response)
+              .unregister()
+              .onSuccess(ignore -> log.info("unregistered"));
+          responseConsumerMap.remove(response);
+        });
+
+    responseConsumerMap.put(response, consumer);
+  }
+
+  @Override
+  public void close() {
+    responseConsumerMap.forEach(
+        (k, v) -> {
+          v.unregister();
+          k.close();
+        });
+    responseConsumerMap.clear();
   }
 }

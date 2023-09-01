@@ -1,5 +1,6 @@
 package com.example.reactivetest.service;
 
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.pgclient.PgPool;
 import java.util.logging.Level;
 import javax.inject.Inject;
@@ -8,7 +9,9 @@ import lombok.extern.java.Log;
 
 @Log
 @Singleton
-public class KafkaOutboxEventListener extends TransactionBoundary {
+public class KafkaOutboxEventListener extends TransactionBoundary implements AutoCloseable {
+
+  private final MessageConsumer<Long> consumer;
 
   @Inject
   KafkaOutboxEventListener(
@@ -18,24 +21,26 @@ public class KafkaOutboxEventListener extends TransactionBoundary {
       KafkaProducerService kafkaProducerService) {
     super(pool);
 
-    eventService.consumeKafkaOutboxEvent(
-        id ->
-            doInTransaction(
-                    conn ->
-                        kafkaOutboxService
-                            .get(conn, id)
-                            .map(KafkaMessageFactory::create)
-                            .compose(kafkaProducerService::emitPersonCreated)
-                            .compose(
-                                metadata ->
-                                    kafkaOutboxService.remove(conn, id).map(ignore -> metadata)))
-                .onSuccess(
-                    metadata -> {
-                      log.info("metadata.getTopic: " + metadata.getTopic());
-                      log.info("metadata.getOffset: " + metadata.getOffset());
-                      log.info("metadata.getPartition: " + metadata.getPartition());
-                      log.info("metadata.getTimestamp: " + metadata.getTimestamp());
-                    })
-                .onFailure(err -> log.log(Level.SEVERE, "failed to send message", err)));
+    this.consumer =
+        eventService.consumeKafkaOutboxEvent(
+            id ->
+                doInTransaction(
+                        conn ->
+                            kafkaOutboxService
+                                .get(conn, id)
+                                .map(KafkaMessageFactory::create)
+                                .compose(kafkaProducerService::emitPersonCreated)
+                                .compose(
+                                    metadata ->
+                                        kafkaOutboxService
+                                            .remove(conn, id)
+                                            .map(ignore -> metadata)))
+                    .onSuccess(metadata -> log.info("written to kafka: " + metadata))
+                    .onFailure(err -> log.log(Level.SEVERE, "failed to send message", err)));
+  }
+
+  @Override
+  public void close() {
+    consumer.unregister();
   }
 }

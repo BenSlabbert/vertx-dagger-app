@@ -9,5 +9,10 @@ public interface ServiceModule {
 
   @Binds
   @IntoSet
-  AutoCloseable asAutoCloseable(KafkaProducerService kafkaProducerService);
+  AutoCloseable kafkaProducerServiceAutoCloseable(KafkaProducerService kafkaProducerService);
+
+  @Binds
+  @IntoSet
+  AutoCloseable kafkaOutboxEventListenerAutoCloseable(
+      KafkaOutboxEventListener kafkaOutboxEventListener);
 }

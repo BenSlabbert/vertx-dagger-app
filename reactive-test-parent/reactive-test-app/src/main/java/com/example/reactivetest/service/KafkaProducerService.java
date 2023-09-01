@@ -35,7 +35,7 @@ import org.apache.kafka.common.errors.TopicExistsException;
 
 @Log
 @Singleton
-class KafkaProducerService implements AutoCloseable {
+public class KafkaProducerService implements AutoCloseable {
 
   private final KafkaProducer<String, Buffer> producer;
 

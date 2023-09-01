@@ -46,6 +46,7 @@ public class PersonService extends TransactionBoundary {
         .onSuccess(
             tuple -> {
               eventService.publishKafkaOutboxEvent(tuple.r().id());
+              eventService.publishPersonCreatedEvent(tuple.l());
               log.info("created person: " + tuple.l());
             })
         .onFailure(err -> log.log(SEVERE, "person create Transaction failed", err))

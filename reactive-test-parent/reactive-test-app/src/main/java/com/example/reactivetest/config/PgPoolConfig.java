@@ -14,7 +14,7 @@ import lombok.extern.java.Log;
 
 @Log
 @Module
-class PgPoolConfig implements AutoCloseable {
+public class PgPoolConfig implements AutoCloseable {
 
   @Inject
   PgPoolConfig() {}

@@ -98,6 +98,7 @@ public class ApplicationVerticle extends AbstractVerticle {
     // api routes
     apiRouter.get("/persons/all").handler(personHandler::getAll);
     apiRouter.post("/persons/create").handler(personHandler::create);
+    apiRouter.get("/persons/sse").handler(personHandler::sse);
 
     // https://vertx.io/docs/vertx-health-check/java/
     mainRouter
