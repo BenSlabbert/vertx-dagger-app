@@ -43,9 +43,7 @@ public class EventService {
   }
 
   void publishKafkaOutboxEvent(long id) {
-    vertx
-        .eventBus()
-        .publish(KAFKA_OUTBOX_SEND, id);
+    vertx.eventBus().publish(KAFKA_OUTBOX_SEND, id);
   }
 
   public MessageConsumer<Long> consumeKafkaOutboxEvent(Handler<Long> consumer) {

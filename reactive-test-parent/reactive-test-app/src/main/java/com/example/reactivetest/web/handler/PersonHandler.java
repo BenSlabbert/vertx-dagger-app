@@ -23,6 +23,7 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -104,34 +105,37 @@ public class PersonHandler implements AutoCloseable {
     response.headers().add(CACHE_CONTROL, "no-cache");
     response.headers().add(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
 
-    MessageConsumer<PersonProjection> consumer =
-        eventService.consumePersonCreatedEvent(
-            projection -> {
-              log.info("received event: " + projection);
-
-              if (response.closed()) {
-                log.info("response closed, not sending event");
-                responseConsumerMap.remove(response);
-                return;
-              }
-
-              Buffer buffer =
-                  new SseResponse(projection.id(), projection.name()).toJson().toBuffer();
-              response.write(buffer);
-              response.write("\n");
-            });
+    MessageConsumer<PersonProjection> consumer = getMessageConsumer(response);
 
     response.closeHandler(
         unused -> {
           log.info("response closed");
           responseConsumerMap
-              .get(response)
+              .remove(response)
               .unregister()
-              .onSuccess(ignore -> log.info("unregistered"));
-          responseConsumerMap.remove(response);
+              .onSuccess(ignore -> log.info("unregistered consumer"));
         });
 
     responseConsumerMap.put(response, consumer);
+  }
+
+  private MessageConsumer<PersonProjection> getMessageConsumer(HttpServerResponse response) {
+    return eventService.consumePersonCreatedEvent(
+        projection -> {
+          log.info("received event: " + projection);
+
+          if (response.closed()) {
+            log.info("response closed, not sending event");
+            Optional.ofNullable(responseConsumerMap.remove(response))
+                .ifPresent(
+                    c -> c.unregister().onSuccess(ignore -> log.info("unregistered consumer")));
+            return;
+          }
+
+          Buffer buffer = new SseResponse(projection.id(), projection.name()).toJson().toBuffer();
+          response.write(buffer);
+          response.write("\n");
+        });
   }
 
   @Override
