@@ -17,6 +17,7 @@
     <module>reactive-test-generator</module>
     <module>reactive-test-entity</module>
     <module>reactive-test-proto</module>
+    <module>reactive-test-projections</module>
   </modules>
 
 </project>

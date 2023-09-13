@@ -61,6 +61,11 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>com.example.reactive-test.projections</groupId>
+      <artifactId>reactive-test-projections</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.example.reactive-test.proto</groupId>
       <artifactId>reactive-test-proto</artifactId>
       <version>${revision}</version>
