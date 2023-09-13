@@ -3,6 +3,7 @@ package com.example.reactivetest.dao.sql;
 import static com.example.reactivetest.dao.sql.projection.ProjectionExecutor.execute;
 
 import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory;
+import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory.PersonProjection;
 import io.vertx.core.Future;
 import io.vertx.sqlclient.SqlClient;
 import java.util.List;
@@ -21,8 +22,7 @@ public class PersonRepository {
     this.personProjectionFactory = personProjectionFactory;
   }
 
-  public Future<PersonProjectionFactory.InsertReturningProjection.PersonProjection> create(
-      SqlClient conn, String name) {
+  public Future<PersonProjection> create(SqlClient conn, String name) {
     return execute(conn, personProjectionFactory.createNextIdProjection())
         .compose(
             nextId -> {
@@ -33,8 +33,7 @@ public class PersonRepository {
             });
   }
 
-  public Future<List<PersonProjectionFactory.FindPersonProjection.PersonProjection>> findAll(
-      SqlClient conn) {
+  public Future<List<PersonProjection>> findAll(SqlClient conn) {
     return execute(conn, personProjectionFactory.createFindPersonProjection(Integer.MAX_VALUE));
   }
 }

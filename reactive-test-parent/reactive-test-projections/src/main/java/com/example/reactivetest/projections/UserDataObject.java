@@ -10,6 +10,7 @@ import lombok.Data;
 @DataObject
 public class UserDataObject {
 
+  // todo: add test using generated jooq classes to tes the column names
   @Column(name = "id")
   private long id;
 

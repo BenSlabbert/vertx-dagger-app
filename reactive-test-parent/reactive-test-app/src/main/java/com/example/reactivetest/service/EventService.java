@@ -7,7 +7,6 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.MessageCodec;
 import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.eventbus.impl.codecs.LongMessageCodec;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -20,7 +19,6 @@ public class EventService {
   private final Vertx vertx;
   private final PersonProjectionMessageCodec personProjectionMessageCodec =
       new PersonProjectionMessageCodec();
-  private final LongMessageCodec longMessageCodec = new LongMessageCodec();
 
   @Inject
   EventService(Vertx vertx) {

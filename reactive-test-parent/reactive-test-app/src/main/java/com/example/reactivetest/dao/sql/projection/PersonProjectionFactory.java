@@ -34,8 +34,7 @@ public class PersonProjectionFactory {
     return new FindPersonProjection(limit);
   }
 
-  public class InsertReturningProjection
-      implements Projection<InsertReturningProjection.PersonProjection> {
+  public class InsertReturningProjection implements Projection<PersonProjection> {
 
     private final Long id;
     private final String name;
@@ -59,8 +58,6 @@ public class PersonProjectionFactory {
       Row row = rowSet.iterator().next();
       return new PersonProjection(row.getLong(0), row.getString(1));
     }
-
-    public record PersonProjection(long id, String name) {}
   }
 
   public class NextIdProjection implements Projection<Long> {
@@ -78,8 +75,7 @@ public class PersonProjectionFactory {
     }
   }
 
-  public class FindPersonProjection
-      implements Projection<List<FindPersonProjection.PersonProjection>> {
+  public class FindPersonProjection implements Projection<List<PersonProjection>> {
 
     private final long limit;
 
@@ -98,7 +94,7 @@ public class PersonProjectionFactory {
           .map(row -> new PersonProjection(row.getLong(0), row.getString(1)))
           .toList();
     }
-
-    public record PersonProjection(long id, String name) {}
   }
+
+  public record PersonProjection(long id, String name) {}
 }
