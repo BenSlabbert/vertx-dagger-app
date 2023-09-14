@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 2023. */
 package com.example.iam.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;

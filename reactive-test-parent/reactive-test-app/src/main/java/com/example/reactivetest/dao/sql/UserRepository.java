@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.dao.sql;
 
 import static com.example.reactivetest.dao.sql.projection.ProjectionExecutor.execute;

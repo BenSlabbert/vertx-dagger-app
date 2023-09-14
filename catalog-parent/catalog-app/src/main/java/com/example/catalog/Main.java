@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 2023. */
 package com.example.catalog;
 
 import static java.util.logging.Level.INFO;
@@ -16,8 +17,11 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.dns.AddressResolverOptions;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import lombok.extern.java.Log;
 
@@ -33,11 +37,11 @@ public class Main {
 
     // breaks on native image
     // https://github.com/oracle/graal/issues/5510
-    //    LocalDateTime parse =
-    //        LocalDateTime.parse(
-    //            "4714-11-24 00:00:00 BC",
-    //            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
-    //    log.log(INFO, "parse: {0}", new Object[] {parse.toString()});
+    LocalDateTime parse =
+        LocalDateTime.parse(
+            "4714-11-24 00:00:00 BC",
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
+    log.log(INFO, "parse: {0}", new Object[] {parse.toString()});
 
     config = ParseConfig.parseArgs(args);
 

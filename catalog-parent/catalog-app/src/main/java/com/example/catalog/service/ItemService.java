@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 2023. */
 package com.example.catalog.service;
 
 import com.example.catalog.web.route.dto.CreateItemRequestDto;

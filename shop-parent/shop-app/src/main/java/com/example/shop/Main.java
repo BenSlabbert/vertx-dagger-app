@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 2023. */
 package com.example.shop;
 
 import static java.util.logging.Level.INFO;

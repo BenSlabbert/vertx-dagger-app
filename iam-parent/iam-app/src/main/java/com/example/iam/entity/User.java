@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 2023. */
 package com.example.iam.entity;
 
 import static java.util.Objects.requireNonNull;

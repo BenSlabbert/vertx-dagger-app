@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web;
 
 import static io.vertx.json.schema.common.dsl.Schemas.numberSchema;

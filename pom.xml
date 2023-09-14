@@ -280,6 +280,10 @@
                 <reflowLongStrings>true</reflowLongStrings>
               </googleJavaFormat>
               <formatAnnotations />
+              <licenseHeader>
+                <content>/* Licensed under Apache-2.0 $YEAR. */</content>
+                <delimiter>package</delimiter>
+              </licenseHeader>
             </java>
           </configuration>
         </plugin>

@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 2023. */
 package com.example.commons.networking;
 
 import io.netty.resolver.dns.DefaultDnsServerAddressStreamProvider;
