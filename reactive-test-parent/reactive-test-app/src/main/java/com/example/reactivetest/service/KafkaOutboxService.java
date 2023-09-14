@@ -1,7 +1,9 @@
 package com.example.reactivetest.service;
 
 import com.example.reactivetest.dao.sql.OutboxRepository;
-import com.example.reactivetest.dao.sql.projection.OutboxProjectionFactory;
+import com.example.reactivetest.dao.sql.projection.OutboxProjectionFactory.DeleteFromOutbox.DeleteOutboxProjection;
+import com.example.reactivetest.dao.sql.projection.OutboxProjectionFactory.GetFromOutboxProjection;
+import com.example.reactivetest.dao.sql.projection.OutboxProjectionFactory.InsertIntoOutbox.InsertOutboxProjection;
 import com.example.reactivetest.proto.core.Header;
 import com.example.reactivetest.proto.core.Headers;
 import com.example.reactivetest.proto.v1.Person;
@@ -23,8 +25,7 @@ class KafkaOutboxService {
     this.outboxRepository = outboxRepository;
   }
 
-  Future<OutboxProjectionFactory.InsertIntoOutbox.InsertOutboxProjection> insert(
-      SqlClient conn, KafkaProducerRecord<String, Person> msg) {
+  Future<InsertOutboxProjection> insert(SqlClient conn, KafkaProducerRecord<String, Person> msg) {
 
     String key = msg.key();
     byte[] value = msg.value().toByteArray();
@@ -38,16 +39,15 @@ class KafkaOutboxService {
     return outboxRepository.insert(conn, key, headers, value);
   }
 
-  public Future<OutboxProjectionFactory.GetFromOutboxProjection> get(SqlClient conn, long id) {
+  public Future<GetFromOutboxProjection> get(SqlClient conn, long id) {
     return outboxRepository.get(conn, id);
   }
 
-  public Future<Optional<OutboxProjectionFactory.GetFromOutboxProjection>> next(SqlClient conn) {
+  public Future<Optional<GetFromOutboxProjection>> next(SqlClient conn) {
     return outboxRepository.next(conn);
   }
 
-  Future<OutboxProjectionFactory.DeleteFromOutbox.DeleteOutboxProjection> remove(
-      SqlClient conn, long id) {
+  Future<DeleteOutboxProjection> remove(SqlClient conn, long id) {
     return outboxRepository.delete(conn, id);
   }
 }

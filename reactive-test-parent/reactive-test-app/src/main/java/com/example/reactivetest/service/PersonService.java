@@ -4,7 +4,7 @@ import static java.util.logging.Level.SEVERE;
 
 import com.example.commons.util.Tuple;
 import com.example.reactivetest.dao.sql.PersonRepository;
-import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory;
+import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory.PersonProjection;
 import io.vertx.core.Future;
 import io.vertx.pgclient.PgPool;
 import java.util.List;
@@ -32,8 +32,7 @@ public class PersonService extends TransactionBoundary {
     this.kafkaOutboxService = kafkaOutboxService;
   }
 
-  public Future<PersonProjectionFactory.InsertReturningProjection.PersonProjection> create(
-      String name) {
+  public Future<PersonProjection> create(String name) {
     return doInTransaction(
             conn ->
                 personRepository
@@ -53,7 +52,7 @@ public class PersonService extends TransactionBoundary {
         .map(Tuple::l);
   }
 
-  public Future<List<PersonProjectionFactory.FindPersonProjection.PersonProjection>> findAll() {
+  public Future<List<PersonProjection>> findAll() {
     return doInTransaction(personRepository::findAll)
         .onSuccess(values -> log.info("values: " + values))
         .onFailure(err -> log.log(SEVERE, "Transaction failed", err));
