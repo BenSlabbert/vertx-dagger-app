@@ -13,6 +13,8 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: "postgres"
+    volumes:
+    - "./create-all-databases.sql:/docker-entrypoint-initdb.d/create-all-databases.sql"
   zookeeper:
     image: "confluentinc/cp-zookeeper:latest"
     environment:

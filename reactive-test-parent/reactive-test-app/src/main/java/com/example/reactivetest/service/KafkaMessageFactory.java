@@ -3,12 +3,12 @@ package com.example.reactivetest.service;
 
 import static com.example.reactivetest.config.KafkaTopics.TOPIC;
 
-import com.example.reactivetest.dao.sql.projection.OutboxProjectionFactory;
-import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory.PersonProjection;
 import com.example.reactivetest.proto.Version;
 import com.example.reactivetest.proto.core.Header;
 import com.example.reactivetest.proto.core.Headers;
 import com.example.reactivetest.proto.v1.Person;
+import com.example.reactivetest.repository.sql.projection.OutboxProjectionFactory;
+import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import java.util.UUID;
 import lombok.SneakyThrows;

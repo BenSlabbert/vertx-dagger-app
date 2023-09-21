@@ -13,6 +13,9 @@
 
   <modules>
     <module>catalog-app</module>
+    <module>catalog-entity</module>
+    <module>catalog-generator</module>
+    <module>catalog-migration</module>
   </modules>
 
 </project>

@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.service;
 
-import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory.PersonProjection;
+import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;

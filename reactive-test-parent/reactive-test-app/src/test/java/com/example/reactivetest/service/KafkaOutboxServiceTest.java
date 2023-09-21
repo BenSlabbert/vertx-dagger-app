@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.reactivetest.dao.sql.OutboxRepository;
+import com.example.reactivetest.repository.sql.OutboxRepository;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;

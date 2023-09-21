@@ -21,6 +21,17 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.example.catalog.entity</groupId>
+      <artifactId>catalog-entity</artifactId>
+      <version>${revision}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.example.catalog.generator</groupId>
+          <artifactId>catalog-generator</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
@@ -37,10 +48,6 @@
       <groupId>com.example.iam</groupId>
       <artifactId>iam-proto</artifactId>
       <version>${revision}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -61,6 +68,11 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>

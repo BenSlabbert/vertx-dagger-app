@@ -10,7 +10,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.util.logging.Level.SEVERE;
 
-import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory.PersonProjection;
+import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;
 import com.example.reactivetest.service.EventService;
 import com.example.reactivetest.service.PersonService;
 import com.example.reactivetest.web.SchemaValidatorDelegator;

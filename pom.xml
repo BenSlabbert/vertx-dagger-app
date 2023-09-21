@@ -13,6 +13,8 @@
     <module>shop-parent</module>
     <module>reactive-test-parent</module>
     <module>commons</module>
+    <module>migration</module>
+    <module>entity-generator</module>
   </modules>
 
   <properties>
@@ -116,11 +118,6 @@
         <version>${jooq.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>${lombok.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>postgresql</artifactId>
         <version>${testcontainers.version}</version>
@@ -171,6 +168,12 @@
         <groupId>io.vertx</groupId>
         <artifactId>vertx-web-validation</artifactId>
         <version>${vertx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.assertj</groupId>
@@ -308,6 +311,7 @@
           <version>${maven-jar-plugin.version}</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
           <version>${maven-shade-plugin.version}</version>
         </plugin>

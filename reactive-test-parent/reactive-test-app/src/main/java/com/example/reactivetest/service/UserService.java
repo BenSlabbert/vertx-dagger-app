@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.service;
 
-import com.example.reactivetest.dao.sql.UserRepository;
 import com.example.reactivetest.projections.UserDataObject;
+import com.example.reactivetest.repository.sql.UserRepository;
 import io.vertx.core.Future;
 import io.vertx.pgclient.PgPool;
 import java.util.List;

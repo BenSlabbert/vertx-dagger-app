@@ -4,8 +4,8 @@ package com.example.reactivetest.service;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.commons.util.Tuple;
-import com.example.reactivetest.dao.sql.PersonRepository;
-import com.example.reactivetest.dao.sql.projection.PersonProjectionFactory.PersonProjection;
+import com.example.reactivetest.repository.sql.PersonRepository;
+import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;
 import io.vertx.core.Future;
 import io.vertx.pgclient.PgPool;
 import java.util.List;

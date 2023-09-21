@@ -4,23 +4,23 @@
 
   <parent>
     <groupId>com.example.parent</groupId>
-    <artifactId>reactive-test-parent</artifactId>
+    <artifactId>catalog-parent</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <groupId>com.example.reactive-test.entity</groupId>
-  <artifactId>reactive-test-entity</artifactId>
+  <groupId>com.example.catalog.entity</groupId>
+  <artifactId>catalog-entity</artifactId>
 
   <properties>
-    <jooq.generated-sources.package>com.example.reactivetest.generator.entity.generated.jooq</jooq.generated-sources.package>
+    <jooq.generated-sources.package>com.example.catalog.generator.entity.generated.jooq</jooq.generated-sources.package>
     <jooq.generated-sources.directory>${project.build.directory}/generated-sources/jooq</jooq.generated-sources.directory>
     <jooq.pdo-codegen.jar.name>pdo-generator.jar</jooq.pdo-codegen.jar.name>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.example.reactive-test.generator</groupId>
-      <artifactId>reactive-test-generator</artifactId>
+      <groupId>com.example.catalog.generator</groupId>
+      <artifactId>catalog-generator</artifactId>
       <version>${revision}</version>
     </dependency>
   </dependencies>
@@ -34,8 +34,8 @@
           <skip>${skipJooqGeneration}</skip>
           <artifactItems>
             <artifactItem>
-              <groupId>com.example.reactive-test.generator</groupId>
-              <artifactId>reactive-test-generator</artifactId>
+              <groupId>com.example.catalog.generator</groupId>
+              <artifactId>catalog-generator</artifactId>
               <version>${revision}</version>
               <type>jar</type>
               <classifier>jar-with-dependencies</classifier>
@@ -46,8 +46,8 @@
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>com.example.reactive-test.generator</groupId>
-            <artifactId>reactive-test-generator</artifactId>
+            <groupId>com.example.catalog.generator</groupId>
+            <artifactId>catalog-generator</artifactId>
             <version>${revision}</version>
           </dependency>
         </dependencies>
