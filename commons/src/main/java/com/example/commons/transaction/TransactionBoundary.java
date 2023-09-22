@@ -1,19 +1,19 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.reactivetest.service;
+package com.example.commons.transaction;
 
 import io.vertx.core.Future;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.SqlClient;
 import java.util.function.Function;
 
-abstract class TransactionBoundary {
+public abstract class TransactionBoundary {
   private final PgPool pool;
 
-  TransactionBoundary(PgPool pool) {
+  protected TransactionBoundary(PgPool pool) {
     this.pool = pool;
   }
 
-  <T> Future<T> doInTransaction(Function<SqlClient, Future<T>> function) {
+  protected <T> Future<T> doInTransaction(Function<SqlClient, Future<T>> function) {
     return pool.getConnection()
         .compose(
             conn ->

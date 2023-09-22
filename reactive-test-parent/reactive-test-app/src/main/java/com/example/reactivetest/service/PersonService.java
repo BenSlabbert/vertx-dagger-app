@@ -3,6 +3,7 @@ package com.example.reactivetest.service;
 
 import static java.util.logging.Level.SEVERE;
 
+import com.example.commons.transaction.TransactionBoundary;
 import com.example.commons.util.Tuple;
 import com.example.reactivetest.repository.sql.PersonRepository;
 import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;

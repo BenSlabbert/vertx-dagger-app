@@ -4,6 +4,7 @@ package com.example.reactivetest.repository.sql.projection;
 import static com.example.reactivetest.generator.entity.generated.jooq.tables.UserData.USER_DATA;
 import static org.jooq.conf.ParamType.INLINED;
 
+import com.example.commons.sql.Projection;
 import com.example.reactivetest.projections.UserDataObject;
 import com.example.reactivetest.projections.UserDataObjectRowMapper;
 import io.vertx.sqlclient.Row;

@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.repository.sql;
 
-import static com.example.reactivetest.repository.sql.projection.ProjectionExecutor.execute;
+import static com.example.commons.sql.ProjectionExecutor.execute;
 
 import com.example.reactivetest.repository.sql.projection.OutboxProjectionFactory;
 import com.example.reactivetest.repository.sql.projection.OutboxProjectionFactory.DeleteFromOutbox.DeleteOutboxProjection;

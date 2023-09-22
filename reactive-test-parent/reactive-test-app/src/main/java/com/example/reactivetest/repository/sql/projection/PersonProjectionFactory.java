@@ -5,6 +5,7 @@ import static com.example.reactivetest.generator.entity.generated.jooq.Sequences
 import static com.example.reactivetest.generator.entity.generated.jooq.tables.Person.PERSON;
 import static org.jooq.conf.ParamType.INLINED;
 
+import com.example.commons.sql.Projection;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import java.util.List;

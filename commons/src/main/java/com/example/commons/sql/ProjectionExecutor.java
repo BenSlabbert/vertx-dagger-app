@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.reactivetest.repository.sql.projection;
+package com.example.commons.sql;
 
 import io.vertx.core.Future;
 import io.vertx.sqlclient.SqlClient;
