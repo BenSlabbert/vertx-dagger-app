@@ -80,7 +80,6 @@ class ApiVerticleIT {
           .withNetwork(network)
           .withNetworkAliases("app")
           .dependsOn(redis)
-          .withEnv("DISABLE_SECURITY", Boolean.TRUE.toString())
           .waitingFor(
               Wait.forLogMessage(".*deployment id.*", 1).withStartupTimeout(Duration.ofSeconds(5L)))
           .withClasspathResourceMapping("it-config.json", "/config.json", BindMode.READ_ONLY)

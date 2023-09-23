@@ -3,11 +3,11 @@ package com.example.catalog.ioc;
 
 import com.example.catalog.Main;
 import com.example.catalog.config.ConfigModule;
+import com.example.catalog.integration.IntegrationModule;
 import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ServiceLifecycleManagement;
 import com.example.catalog.service.ServiceModule;
 import com.example.catalog.verticle.ApiVerticle;
-import com.example.catalog.web.route.handler.HandlerModule;
 import dagger.Component;
 import javax.inject.Singleton;
 
@@ -16,9 +16,9 @@ import javax.inject.Singleton;
     modules = {
       ServiceModule.class,
       RepositoryModule.class,
-      HandlerModule.class,
       Main.class,
-      ConfigModule.class
+      ConfigModule.class,
+      IntegrationModule.class
     })
 public interface Provider {
 

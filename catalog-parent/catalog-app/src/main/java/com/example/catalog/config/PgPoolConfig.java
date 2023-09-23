@@ -29,6 +29,7 @@ public class PgPoolConfig implements AutoCloseable {
     log.info("creating pg pool");
     PgConnectOptions connectOptions =
         new PgConnectOptions()
+            .setConnectTimeout(5)
             .setPort(config.postgresConfig().port())
             .setHost(config.postgresConfig().host())
             .setDatabase(config.postgresConfig().database())

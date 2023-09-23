@@ -7,6 +7,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.util.logging.Level.SEVERE;
 
@@ -100,18 +101,12 @@ public class ItemHandler {
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
-            dto -> {
-              //              if (dto.isEmpty()) {
-              //                ctx.response().setStatusCode(NOT_FOUND.code()).end();
-              //                return;
-              //              }
-              //
-              //              ctx.response()
-              //                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-              //                  .setStatusCode(NO_CONTENT.code())
-              //                  .end(dto.get().toJson().toBuffer())
-              //                  .onFailure(ctx::fail);
-            });
+            dto ->
+                ctx.response()
+                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .setStatusCode(NO_CONTENT.code())
+                    .end()
+                    .onFailure(ctx::fail));
   }
 
   public void create(RoutingContext ctx) {
@@ -158,17 +153,11 @@ public class ItemHandler {
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
-            dto -> {
-              //              if (dto.isEmpty()) {
-              //                ctx.response().setStatusCode(NOT_FOUND.code()).end();
-              //                return;
-              //              }
-              //
-              //              ctx.response()
-              //                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-              //                  .setStatusCode(NO_CONTENT.code())
-              //                  .end(dto.get().toJson().toBuffer())
-              //                  .onFailure(ctx::fail);
-            });
+            dto ->
+                ctx.response()
+                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .setStatusCode(NO_CONTENT.code())
+                    .end()
+                    .onFailure(ctx::fail));
   }
 }

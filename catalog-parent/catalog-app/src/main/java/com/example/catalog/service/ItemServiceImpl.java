@@ -7,12 +7,10 @@ import com.example.catalog.repository.sql.ItemRepository;
 import com.example.catalog.repository.sql.projection.ItemProjectionFactory.InsertItemProjection.CreatedItemProjection;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
-import com.example.catalog.web.route.dto.DeleteOneResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
-import com.example.catalog.web.route.dto.UpdateItemResponseDto;
 import com.example.commons.transaction.TransactionBoundary;
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;
@@ -84,7 +82,7 @@ class ItemServiceImpl extends TransactionBoundary implements ItemService {
   }
 
   @Override
-  public Future<UpdateItemResponseDto> update(long id, UpdateItemRequestDto dto) {
+  public Future<Void> update(long id, UpdateItemRequestDto dto) {
     Future<ItemProjection> itemProjection =
         doInTransaction(
             conn ->
@@ -103,11 +101,11 @@ class ItemServiceImpl extends TransactionBoundary implements ItemService {
 
     return itemProjection
         .onSuccess(oldItem -> suggestionService.update(oldItem.getName(), dto.name()))
-        .map(ignore -> new UpdateItemResponseDto());
+        .map(ignore -> null);
   }
 
   @Override
-  public Future<DeleteOneResponseDto> delete(long id) {
+  public Future<Void> delete(long id) {
     Future<ItemProjection> itemProjection =
         doInTransaction(
             conn ->
@@ -124,6 +122,6 @@ class ItemServiceImpl extends TransactionBoundary implements ItemService {
 
     return itemProjection
         .onSuccess(item -> suggestionService.delete(item.getName()))
-        .map(ignore -> new DeleteOneResponseDto());
+        .map(ignore -> null);
   }
 }

@@ -4,10 +4,10 @@ package com.example.catalog.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
+import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
@@ -18,12 +18,10 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.HttpException;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.LongConsumer;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 import javax.inject.Inject;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -31,22 +29,16 @@ import org.apache.commons.lang3.math.NumberUtils;
 @Log
 public class ApiVerticle extends AbstractVerticle {
 
-  private static final Pattern UUID_REGEX =
-      Pattern.compile(
-          "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
-
+  private final AuthHandler authHandler;
   private final Config.HttpConfig httpConfig;
   private final ItemHandler itemHandler;
-  private final Supplier<Handler<RoutingContext>> handlerSupplier;
 
   @Inject
   public ApiVerticle(
-      Config.HttpConfig httpConfig,
-      ItemHandler itemHandler,
-      Supplier<Handler<RoutingContext>> handlerSupplier) {
+      Config.HttpConfig httpConfig, ItemHandler itemHandler, AuthHandler authHandler) {
     this.httpConfig = httpConfig;
     this.itemHandler = itemHandler;
-    this.handlerSupplier = handlerSupplier;
+    this.authHandler = authHandler;
   }
 
   @Override
@@ -59,7 +51,7 @@ public class ApiVerticle extends AbstractVerticle {
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 
-    mainRouter.route().handler(ctx -> handlerSupplier.get().handle(ctx));
+    mainRouter.route().handler(authHandler);
 
     // 100kB max body size
     mainRouter.route().handler(BodyHandler.create().setBodyLimit(1024L * 100L));
@@ -80,18 +72,17 @@ public class ApiVerticle extends AbstractVerticle {
         .get("/suggest")
         .handler(ctx -> processWithRequiredSuggestParam(ctx, s -> itemHandler.suggest(ctx, s)));
 
-    //    apiRouter
-    //        .get("/:id")
-    //        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.findOne(ctx, id)));
+    apiRouter
+        .get("/:id")
+        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.findOne(ctx, id)));
 
-    //    apiRouter
-    //        .delete("/:id")
-    //        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.deleteOne(ctx,
-    // id)));
+    apiRouter
+        .delete("/:id")
+        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.deleteOne(ctx, id)));
 
-    //    apiRouter
-    //        .post("/edit/:id")
-    //        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.update(ctx, id)));
+    apiRouter
+        .post("/edit/:id")
+        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.update(ctx, id)));
 
     // https://vertx.io/docs/vertx-health-check/java/
     mainRouter
@@ -116,59 +107,15 @@ public class ApiVerticle extends AbstractVerticle {
             });
   }
 
-  private void processWithRequiredIdParam(RoutingContext ctx, Consumer<UUID> consumer) {
-    String param = ctx.pathParam("id");
+  private void processWithRequiredIdParam(RoutingContext ctx, LongConsumer consumer) {
+    Optional<Long> id = parseLong(ctx.pathParam("id"));
 
-    // do some sanity checks to avoid throwing expensive exception
-    if (null == param
-        || param.length() != 36
-        // expensive regex check for last resort
-        || !UUID_REGEX.matcher(param).matches()) {
-      log.warning("path param id is not a uuid");
+    if (id.isEmpty()) {
       ctx.fail(new HttpException(BAD_REQUEST.code()));
       return;
     }
 
-    try {
-      UUID id = UUID.fromString(param);
-      consumer.accept(id);
-    } catch (IllegalArgumentException e) {
-      log.warning("path param id is not a uuid");
-      ctx.fail(new HttpException(BAD_REQUEST.code()));
-    }
-  }
-
-  @FunctionalInterface
-  interface PentaConsumer<A, B, C, D, E> {
-    void accept(A a, B b, C c, D d, E e);
-  }
-
-  private void processWithRequiredSearchParam(
-      RoutingContext ctx, PentaConsumer<String, Integer, Integer, Long, Integer> consumer) {
-    MultiMap entries = ctx.queryParams();
-    String search = entries.get("s");
-
-    Optional<Integer> priceFrom = tryParseInteger(entries.get("priceFrom"));
-    Optional<Integer> priceTo = tryParseInteger(entries.get("priceTo"));
-    Optional<Integer> size = tryParseInteger(entries.get("size"));
-    Optional<Long> lastId = tryParseLong(entries.get("lastId"));
-
-    if (size.isEmpty()) {
-      ctx.fail(new HttpException(BAD_REQUEST.code()));
-      return;
-    }
-
-    if (priceFrom.isEmpty() || priceTo.isEmpty()) {
-      ctx.fail(new HttpException(BAD_REQUEST.code()));
-      return;
-    }
-
-    consumer.accept(
-        search,
-        priceFrom.get(),
-        priceTo.get(),
-        lastId.orElse(0L),
-        size.get() == 0 ? 10 : size.get());
+    consumer.accept(id.get());
   }
 
   private void processWithRequiredSuggestParam(RoutingContext ctx, Consumer<String> consumer) {
@@ -186,31 +133,31 @@ public class ApiVerticle extends AbstractVerticle {
   private void processWithPaginationParams(RoutingContext ctx, BiConsumer<Long, Integer> consumer) {
     MultiMap entries = ctx.queryParams();
 
-    Optional<Long> lastId = tryParseLong(entries.get("lastId"));
-    Optional<Integer> size = tryParseInteger(entries.get("size"));
+    Optional<Long> lastId = parseLong(entries.get("lastId"));
+    Optional<Integer> size = parseInteger(entries.get("size"));
 
-    consumer.accept(lastId.orElse(0L), size.orElse(0) == 0 ? 10 : size.get());
+    consumer.accept(lastId.orElse(0L), size.orElse(10));
   }
 
-  private Optional<Integer> tryParseInteger(String maybeInt) {
+  private Optional<Integer> parseInteger(String maybeInt) {
     if (null == maybeInt || maybeInt.isEmpty()) {
-      return Optional.of(0);
+      return Optional.empty();
     }
 
     if (NumberUtils.isCreatable(maybeInt)) {
-      return Optional.of(Integer.parseInt(maybeInt));
+      return Optional.of(NumberUtils.createInteger(maybeInt));
     }
 
     return Optional.empty();
   }
 
-  private Optional<Long> tryParseLong(String maybeInt) {
+  private Optional<Long> parseLong(String maybeInt) {
     if (null == maybeInt || maybeInt.isEmpty()) {
-      return Optional.of(0L);
+      return Optional.empty();
     }
 
     if (NumberUtils.isCreatable(maybeInt)) {
-      return Optional.of(Long.parseLong(maybeInt));
+      return Optional.of(NumberUtils.createLong(maybeInt));
     }
 
     return Optional.empty();

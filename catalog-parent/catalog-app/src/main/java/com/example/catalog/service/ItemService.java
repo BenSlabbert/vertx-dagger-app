@@ -3,12 +3,10 @@ package com.example.catalog.service;
 
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
-import com.example.catalog.web.route.dto.DeleteOneResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
-import com.example.catalog.web.route.dto.UpdateItemResponseDto;
 import io.vertx.core.Future;
 import java.util.Optional;
 
@@ -22,7 +20,7 @@ public interface ItemService {
 
   Future<Optional<FindOneResponseDto>> findById(long id);
 
-  Future<UpdateItemResponseDto> update(long id, UpdateItemRequestDto item);
+  Future<Void> update(long id, UpdateItemRequestDto item);
 
-  Future<DeleteOneResponseDto> delete(long id);
+  Future<Void> delete(long id);
 }
