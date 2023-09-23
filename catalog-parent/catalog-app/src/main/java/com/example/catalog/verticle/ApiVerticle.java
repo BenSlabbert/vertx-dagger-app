@@ -4,7 +4,6 @@ package com.example.catalog.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
-import com.example.catalog.service.ItemService;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import io.vertx.core.AbstractVerticle;
@@ -20,6 +19,7 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.HttpException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -72,34 +72,26 @@ public class ApiVerticle extends AbstractVerticle {
         .get("/items")
         .handler(
             ctx ->
-                processWithPaginationParams(
-                    ctx, (from, to, direction) -> itemHandler.findAll(ctx, from, to, direction)));
+                processWithPaginationParams(ctx, (from, to) -> itemHandler.findAll(ctx, from, to)));
 
     apiRouter.post("/create").handler(itemHandler::create);
-
-    apiRouter
-        .get("/search")
-        .handler(
-            ctx ->
-                processWithRequiredSearchParam(
-                    ctx,
-                    (s, i1, i2, i3, i4, i5) -> itemHandler.search(ctx, s, i1, i2, i3, i4, i5)));
 
     apiRouter
         .get("/suggest")
         .handler(ctx -> processWithRequiredSuggestParam(ctx, s -> itemHandler.suggest(ctx, s)));
 
-    apiRouter
-        .get("/:id")
-        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.findOne(ctx, id)));
+    //    apiRouter
+    //        .get("/:id")
+    //        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.findOne(ctx, id)));
 
-    apiRouter
-        .delete("/:id")
-        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.deleteOne(ctx, id)));
+    //    apiRouter
+    //        .delete("/:id")
+    //        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.deleteOne(ctx,
+    // id)));
 
-    apiRouter
-        .post("/edit/:id")
-        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.update(ctx, id)));
+    //    apiRouter
+    //        .post("/edit/:id")
+    //        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.update(ctx, id)));
 
     // https://vertx.io/docs/vertx-health-check/java/
     mainRouter
@@ -147,19 +139,17 @@ public class ApiVerticle extends AbstractVerticle {
   }
 
   @FunctionalInterface
-  interface PentaConsumer<A, B, C, D, E, F> {
-    void accept(A a, B b, C c, D d, E e, F f);
+  interface PentaConsumer<A, B, C, D, E> {
+    void accept(A a, B b, C c, D d, E e);
   }
 
   private void processWithRequiredSearchParam(
-      RoutingContext ctx,
-      PentaConsumer<String, Integer, Integer, ItemService.Direction, Long, Integer> consumer) {
+      RoutingContext ctx, PentaConsumer<String, Integer, Integer, Long, Integer> consumer) {
     MultiMap entries = ctx.queryParams();
     String search = entries.get("s");
 
     Optional<Integer> priceFrom = tryParseInteger(entries.get("priceFrom"));
     Optional<Integer> priceTo = tryParseInteger(entries.get("priceTo"));
-    ItemService.Direction direction = getDirection(entries);
     Optional<Integer> size = tryParseInteger(entries.get("size"));
     Optional<Long> lastId = tryParseLong(entries.get("lastId"));
 
@@ -177,7 +167,6 @@ public class ApiVerticle extends AbstractVerticle {
         search,
         priceFrom.get(),
         priceTo.get(),
-        direction,
         lastId.orElse(0L),
         size.get() == 0 ? 10 : size.get());
   }
@@ -194,30 +183,13 @@ public class ApiVerticle extends AbstractVerticle {
     consumer.accept(search);
   }
 
-  @FunctionalInterface
-  interface TriConsumer<A, B, C> {
-    void accept(A a, B b, C c);
-  }
-
-  private void processWithPaginationParams(
-      RoutingContext ctx, TriConsumer<Long, Integer, ItemService.Direction> consumer) {
+  private void processWithPaginationParams(RoutingContext ctx, BiConsumer<Long, Integer> consumer) {
     MultiMap entries = ctx.queryParams();
-    ItemService.Direction direction = getDirection(entries);
 
     Optional<Long> lastId = tryParseLong(entries.get("lastId"));
     Optional<Integer> size = tryParseInteger(entries.get("size"));
 
-    consumer.accept(lastId.orElse(0L), size.orElse(0) == 0 ? 10 : size.get(), direction);
-  }
-
-  private ItemService.Direction getDirection(MultiMap entries) {
-    String directionQuery =
-        Optional.ofNullable(entries.get("direction")).orElse(ItemService.Direction.FORWARD.name());
-
-    return switch (directionQuery.toUpperCase()) {
-      case "BACKWARD" -> ItemService.Direction.BACKWARD;
-      default -> ItemService.Direction.FORWARD;
-    };
+    consumer.accept(lastId.orElse(0L), size.orElse(0) == 0 ? 10 : size.get());
   }
 
   private Optional<Integer> tryParseInteger(String maybeInt) {

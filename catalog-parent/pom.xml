@@ -16,6 +16,7 @@
     <module>catalog-entity</module>
     <module>catalog-generator</module>
     <module>catalog-migration</module>
+    <module>catalog-projection</module>
   </modules>
 
 </project>

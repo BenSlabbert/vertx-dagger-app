@@ -1,7 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.service;
 
-import com.example.catalog.repository.ItemRepository;
+import com.example.catalog.projection.item.ItemProjection;
+import com.example.catalog.repository.SuggestionService;
+import com.example.catalog.repository.sql.ItemRepository;
+import com.example.catalog.repository.sql.projection.ItemProjectionFactory.InsertItemProjection.CreatedItemProjection;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.DeleteOneResponseDto;
@@ -10,111 +13,117 @@ import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemResponseDto;
+import com.example.commons.transaction.TransactionBoundary;
 import io.vertx.core.Future;
+import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.pgclient.PgPool;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
 
 @Log
 @Singleton
-class ItemServiceImpl implements ItemService {
+class ItemServiceImpl extends TransactionBoundary implements ItemService {
 
   private final ItemRepository itemRepository;
+  private final SuggestionService suggestionService;
 
   @Inject
-  ItemServiceImpl(ItemRepository itemRepository) {
+  ItemServiceImpl(PgPool pool, ItemRepository itemRepository, SuggestionService cache) {
+    super(pool);
     this.itemRepository = itemRepository;
+    this.suggestionService = cache;
   }
 
   @Override
-  public Future<PaginatedResponseDto> findAll(long lastId, int size, Direction direction) {
-    return itemRepository
-        .findAll(lastId, size, direction)
-        .map(
-            pageOfItems -> {
-              List<FindOneResponseDto> items =
-                  pageOfItems.items().stream()
-                      .map(
-                          item ->
-                              new FindOneResponseDto(
-                                  item.id(), item.sequence(), item.name(), item.priceInCents()))
-                      .toList();
+  public Future<PaginatedResponseDto> findAll(long lastId, int size) {
+    Future<List<ItemProjection>> page =
+        doInTransaction(conn -> itemRepository.getPage(conn, lastId, size));
 
-              return new PaginatedResponseDto(pageOfItems.more(), pageOfItems.total(), items);
-            });
-  }
+    return page.map(
+        itemProjections -> {
+          List<FindOneResponseDto> items =
+              itemProjections.stream()
+                  .map(
+                      item ->
+                          new FindOneResponseDto(
+                              item.getId(), item.getName(), item.getPriceInCents()))
+                  .toList();
 
-  @Override
-  public Future<PaginatedResponseDto> search(
-      String name,
-      int priceFrom,
-      int priceTo,
-      ItemService.Direction direction,
-      long lastId,
-      int size) {
-
-    return itemRepository
-        .search(name, priceFrom, priceTo, direction, lastId, size)
-        .map(
-            pageOfItems -> {
-              List<FindOneResponseDto> items =
-                  pageOfItems.items().stream()
-                      .map(
-                          item ->
-                              new FindOneResponseDto(
-                                  item.id(), item.sequence(), item.name(), item.priceInCents()))
-                      .toList();
-
-              return new PaginatedResponseDto(pageOfItems.more(), pageOfItems.total(), items);
-            });
+          return new PaginatedResponseDto(true, items.size(), items);
+        });
   }
 
   @Override
   public Future<SuggestResponseDto> suggest(String name) {
-    return itemRepository.suggest(name).map(SuggestResponseDto::new);
+    return suggestionService.suggest(name).map(SuggestResponseDto::new);
   }
 
   @Override
   public Future<CreateItemResponseDto> create(CreateItemRequestDto dto) {
-    return itemRepository
-        .create(dto.name(), dto.priceInCents())
-        .map(item -> new CreateItemResponseDto(item.id(), item.name(), item.priceInCents()));
+    Future<CreatedItemProjection> createdItem =
+        doInTransaction(conn -> itemRepository.create(conn, dto.name(), dto.priceInCents()));
+
+    return createdItem
+        .onSuccess(item -> suggestionService.create(dto.name()))
+        .map(item -> new CreateItemResponseDto(item.id(), dto.name(), dto.priceInCents()));
   }
 
   @Override
-  public Future<Optional<FindOneResponseDto>> findById(UUID id) {
-    return itemRepository
-        .findById(id)
-        .map(
-            maybeItem ->
-                maybeItem.map(
-                    item ->
-                        new FindOneResponseDto(
-                            item.id(), item.sequence(), item.name(), item.priceInCents())));
+  public Future<Optional<FindOneResponseDto>> findById(long id) {
+    Future<Optional<ItemProjection>> itemProjection =
+        doInTransaction(conn -> itemRepository.findById(conn, id));
+
+    return itemProjection.map(
+        maybeItem ->
+            maybeItem.map(
+                item ->
+                    new FindOneResponseDto(item.getId(), item.getName(), item.getPriceInCents())));
   }
 
   @Override
-  public Future<Optional<UpdateItemResponseDto>> update(UUID id, UpdateItemRequestDto dto) {
-    return itemRepository
-        .update(id, dto.name(), dto.priceInCents())
-        .map(
-            success ->
-                Boolean.TRUE.equals(success)
-                    ? Optional.of(new UpdateItemResponseDto())
-                    : Optional.empty());
+  public Future<UpdateItemResponseDto> update(long id, UpdateItemRequestDto dto) {
+    Future<ItemProjection> itemProjection =
+        doInTransaction(
+            conn ->
+                itemRepository
+                    .findById(conn, id)
+                    .compose(
+                        maybeItem -> {
+                          if (maybeItem.isEmpty()) {
+                            throw new NoStackTraceException("no item for id: " + id);
+                          }
+
+                          return itemRepository
+                              .update(conn, id, dto.name(), dto.priceInCents())
+                              .map(ignore -> maybeItem.get());
+                        }));
+
+    return itemProjection
+        .onSuccess(oldItem -> suggestionService.update(oldItem.getName(), dto.name()))
+        .map(ignore -> new UpdateItemResponseDto());
   }
 
   @Override
-  public Future<Optional<DeleteOneResponseDto>> delete(UUID id) {
-    return itemRepository
-        .delete(id)
-        .map(
-            success ->
-                Boolean.TRUE.equals(success)
-                    ? Optional.of(new DeleteOneResponseDto())
-                    : Optional.empty());
+  public Future<DeleteOneResponseDto> delete(long id) {
+    Future<ItemProjection> itemProjection =
+        doInTransaction(
+            conn ->
+                itemRepository
+                    .findById(conn, id)
+                    .compose(
+                        maybeItem -> {
+                          if (maybeItem.isEmpty()) {
+                            throw new NoStackTraceException("no item for id: " + id);
+                          }
+
+                          return itemRepository.delete(conn, id).map(ignore -> maybeItem.get());
+                        }));
+
+    return itemProjection
+        .onSuccess(item -> suggestionService.delete(item.getName()))
+        .map(ignore -> new DeleteOneResponseDto());
   }
 }

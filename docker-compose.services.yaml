@@ -27,21 +27,6 @@ services:
   catalog-jvm:
     hostname: "catalog"
     image: "catalog:jvm-latest"
-    environment:
-      SEED: "true"
-    ports:
-    - "8081:8080"
-    volumes:
-    - "./docker-config.json:/config.json"
-    command:
-    - "/config.json"
-    depends_on:
-    - "redis"
-  catalog-native:
-    hostname: "catalog"
-    image: "catalog:native-latest"
-    environment:
-      SEED: "true"
     ports:
     - "8081:8080"
     volumes:

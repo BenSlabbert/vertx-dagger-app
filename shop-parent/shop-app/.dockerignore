@@ -1,4 +1,0 @@
-target/
-!target/lib
-!target/*.jar
-Dockerfile

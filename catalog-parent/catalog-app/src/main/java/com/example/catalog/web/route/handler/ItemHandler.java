@@ -7,7 +7,6 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
-import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.util.logging.Level.SEVERE;
 
@@ -18,7 +17,6 @@ import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.HttpException;
-import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -36,37 +34,12 @@ public class ItemHandler {
     this.schemaValidatorDelegator = schemaValidatorDelegator;
   }
 
-  public void findAll(RoutingContext ctx, long lastId, int size, ItemService.Direction direction) {
+  public void findAll(RoutingContext ctx, long lastId, int size) {
     itemService
-        .findAll(lastId, size, direction)
+        .findAll(lastId, size)
         .onFailure(
             err -> {
               log.log(SEVERE, "failed to find all items", err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
-            })
-        .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(OK.code())
-                    .end(dto.toJson().toBuffer())
-                    .onFailure(ctx::fail));
-  }
-
-  public void search(
-      RoutingContext ctx,
-      String searchQuery,
-      int priceFrom,
-      int priceTo,
-      ItemService.Direction direction,
-      long lastId,
-      int size) {
-
-    itemService
-        .search(searchQuery, priceFrom, priceTo, direction, lastId, size)
-        .onFailure(
-            err -> {
-              log.log(SEVERE, "failed to search for items", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
@@ -95,7 +68,7 @@ public class ItemHandler {
                     .onFailure(ctx::fail));
   }
 
-  public void findOne(RoutingContext ctx, UUID id) {
+  public void findOne(RoutingContext ctx, long id) {
     itemService
         .findById(id)
         .onFailure(
@@ -118,7 +91,7 @@ public class ItemHandler {
             });
   }
 
-  public void deleteOne(RoutingContext ctx, UUID id) {
+  public void deleteOne(RoutingContext ctx, long id) {
     itemService
         .delete(id)
         .onFailure(
@@ -128,16 +101,16 @@ public class ItemHandler {
             })
         .onSuccess(
             dto -> {
-              if (dto.isEmpty()) {
-                ctx.response().setStatusCode(NOT_FOUND.code()).end();
-                return;
-              }
-
-              ctx.response()
-                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                  .setStatusCode(NO_CONTENT.code())
-                  .end(dto.get().toJson().toBuffer())
-                  .onFailure(ctx::fail);
+              //              if (dto.isEmpty()) {
+              //                ctx.response().setStatusCode(NOT_FOUND.code()).end();
+              //                return;
+              //              }
+              //
+              //              ctx.response()
+              //                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+              //                  .setStatusCode(NO_CONTENT.code())
+              //                  .end(dto.get().toJson().toBuffer())
+              //                  .onFailure(ctx::fail);
             });
   }
 
@@ -167,7 +140,7 @@ public class ItemHandler {
                     .onFailure(ctx::fail));
   }
 
-  public void update(RoutingContext ctx, UUID id) {
+  public void update(RoutingContext ctx, long id) {
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(UpdateItemRequestDto.class, body);
 
@@ -186,16 +159,16 @@ public class ItemHandler {
             })
         .onSuccess(
             dto -> {
-              if (dto.isEmpty()) {
-                ctx.response().setStatusCode(NOT_FOUND.code()).end();
-                return;
-              }
-
-              ctx.response()
-                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                  .setStatusCode(NO_CONTENT.code())
-                  .end(dto.get().toJson().toBuffer())
-                  .onFailure(ctx::fail);
+              //              if (dto.isEmpty()) {
+              //                ctx.response().setStatusCode(NOT_FOUND.code()).end();
+              //                return;
+              //              }
+              //
+              //              ctx.response()
+              //                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+              //                  .setStatusCode(NO_CONTENT.code())
+              //                  .end(dto.get().toJson().toBuffer())
+              //                  .onFailure(ctx::fail);
             });
   }
 }

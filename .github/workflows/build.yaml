@@ -26,12 +26,6 @@ jobs:
         name: "docker-iam-native"
         path: "iam-native_latest.tar.gz"
         retention-days: 30
-    - uses: "actions/upload-artifact@v3"
-      if: "always()"
-      with:
-        name: "docker-catalog-native"
-        path: "catalog-native_latest.tar.gz"
-        retention-days: 30
   build-frontend:
     runs-on: "ubuntu-latest"
     steps:

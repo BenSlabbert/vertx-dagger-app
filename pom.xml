@@ -10,7 +10,6 @@
   <modules>
     <module>iam-parent</module>
     <module>catalog-parent</module>
-    <module>shop-parent</module>
     <module>reactive-test-parent</module>
     <module>commons</module>
     <module>migration</module>

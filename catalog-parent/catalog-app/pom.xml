@@ -14,9 +14,6 @@
   <properties>
     <finalName>catalog</finalName>
     <exec.mainClass>com.example.catalog.Main</exec.mainClass>
-
-    <!--or native-->
-    <testImageTag>jvm</testImageTag>
   </properties>
 
   <dependencies>
@@ -30,6 +27,11 @@
           <artifactId>catalog-generator</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.example.catalog.projection</groupId>
+      <artifactId>catalog-projection</artifactId>
+      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>com.example.commons</groupId>
@@ -210,14 +212,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemProperties>
-            <property>
-              <name>imageTag</name>
-              <value>${testImageTag}</value>
-            </property>
-          </systemProperties>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -246,56 +240,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>native</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.graalvm.buildtools</groupId>
-            <artifactId>native-maven-plugin</artifactId>
-            <configuration>
-              <!--name of the output binary-->
-              <imageName>${finalName}</imageName>
-              <mainClass>${exec.mainClass}</mainClass>
-              <buildArgs>
-                <buildArg>--initialize-at-run-time=io.netty.handler.codec.compression.ZstdOptions,io.netty.handler.ssl.BouncyCastleAlpnSslUtils</buildArg>
-                <buildArg>--install-exit-handlers</buildArg>
-                <!--deprecated-->
-                <buildArg>--enable-all-security-services</buildArg>
-                <buildArg>--enable-http</buildArg>
-                <buildArg>--enable-https</buildArg>
-                <buildArg>--allow-incomplete-classpath</buildArg>
-                <buildArg>-H:EnableURLProtocols=http,https</buildArg>
-                <buildArg>--report-unsupported-elements-at-runtime</buildArg>
-                <buildArg>-H:+PrintClassInitialization</buildArg>
-                <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-                <buildArg>-H:DefaultLocale=en_US</buildArg>
-                <buildArg>-H:+IncludeAllLocales</buildArg>
-                <buildArg>--verbose</buildArg>
-                <buildArg>--static</buildArg>
-                <buildArg>--libc=musl</buildArg>
-                <!--https://www.graalvm.org/22.0/reference-manual/native-image/MemoryManagement/#java-heap-size-->
-                <!--preconfigure memory if not set-->
-                <buildArg>-H:+AddAllCharsets</buildArg>
-                <buildArg>-R:MinHeapSize=32m</buildArg>
-                <buildArg>-R:MaxHeapSize=32m</buildArg>
-                <buildArg>-R:MaxNewSize=16m</buildArg>
-              </buildArgs>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>build</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
 </project>
