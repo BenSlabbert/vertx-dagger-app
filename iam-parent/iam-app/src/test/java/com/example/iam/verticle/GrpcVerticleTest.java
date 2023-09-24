@@ -4,8 +4,8 @@ package com.example.iam.verticle;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import com.example.commons.HttpServerTest;
 import com.example.commons.config.Config;
-import com.example.iam.HttpServerTest;
 import com.example.iam.grpc.iam.CheckTokenRequest;
 import com.example.iam.grpc.iam.IamGrpc;
 import com.example.iam.service.TokenService;
@@ -28,13 +28,15 @@ import org.mockito.Mockito;
 @ExtendWith(VertxExtension.class)
 class GrpcVerticleTest extends HttpServerTest {
 
+  private static final int PORT = getPort();
+
   private TokenService mockTokenService;
 
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     mockTokenService = Mockito.mock(TokenService.class);
     vertx.deployVerticle(
-        new GrpcVerticle(new Config.GrpcConfig(port), mockTokenService),
+        new GrpcVerticle(new Config.GrpcConfig(PORT), mockTokenService),
         testContext.succeedingThenComplete());
   }
 
@@ -71,6 +73,6 @@ class GrpcVerticleTest extends HttpServerTest {
   }
 
   private SocketAddress socketAddress() {
-    return SocketAddress.inetSocketAddress(port, "localhost");
+    return SocketAddress.inetSocketAddress(PORT, "localhost");
   }
 }

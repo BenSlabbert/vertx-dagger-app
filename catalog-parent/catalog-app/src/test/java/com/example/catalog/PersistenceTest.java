@@ -1,27 +1,19 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.catalog.verticle;
+package com.example.catalog;
 
-import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.example.catalog.TestcontainerLogConsumer;
 import com.example.catalog.integration.AuthenticationIntegration;
-import com.example.catalog.ioc.DaggerTestProvider;
-import com.example.catalog.ioc.TestProvider;
-import com.example.catalog.web.route.dto.CreateItemRequestDto;
-import com.example.catalog.web.route.dto.CreateItemResponseDto;
-import com.example.catalog.web.route.dto.FindOneResponseDto;
+import com.example.catalog.ioc.DaggerTestPersistenceProvider;
+import com.example.catalog.ioc.TestPersistenceProvider;
+import com.example.commons.HttpServerTest;
 import com.example.commons.config.Config;
 import com.example.migration.FlywayProvider;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpHeaders;
-import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.Map;
@@ -29,8 +21,6 @@ import org.flywaydb.core.Flyway;
 import org.junit.Rule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.testcontainers.containers.GenericContainer;
@@ -42,16 +32,14 @@ import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 @ExtendWith(VertxExtension.class)
-class ApiVerticleTest {
+public abstract class PersistenceTest extends HttpServerTest {
 
-  private static final int PORT = 40001;
-
-  private ApiVerticle apiVerticle;
+  protected static final int PORT = getPort();
 
   @Rule public Network network = Network.newNetwork();
 
   @Container
-  public GenericContainer<?> redis =
+  protected GenericContainer<?> redis =
       new GenericContainer<>(DockerImageName.parse("redis/redis-stack-server:latest"))
           .withExposedPorts(6379)
           .withNetwork(network)
@@ -60,7 +48,7 @@ class ApiVerticleTest {
           .withLogConsumer(new TestcontainerLogConsumer());
 
   @Container
-  public GenericContainer<?> postgres =
+  protected GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
           .withExposedPorts(5432)
           .withNetwork(network)
@@ -92,19 +80,18 @@ class ApiVerticleTest {
             Map.of(),
             new Config.VerticleConfig(1));
 
-    TestProvider testProvider =
-        DaggerTestProvider.builder()
-            .authenticationIntegration(authHandler)
+    TestPersistenceProvider provider =
+        DaggerTestPersistenceProvider.builder()
             .vertx(vertx)
             .config(config)
             .httpConfig(config.httpConfig())
             .redisConfig(config.redisConfig())
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
+            .authenticationIntegration(authHandler)
             .build();
 
-    apiVerticle = testProvider.provideNewApiVerticle();
-    vertx.deployVerticle(apiVerticle, testContext.succeedingThenComplete());
+    vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
     RestAssured.baseURI = "http://localhost";
     RestAssured.port = PORT;
   }
@@ -114,39 +101,7 @@ class ApiVerticleTest {
     RestAssured.reset();
   }
 
-  @Test
-  void apiTest() {
-    String createResponseJson =
-        RestAssured.given()
-            .contentType(ContentType.JSON)
-            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
-            .body(new CreateItemRequestDto("name", 123L).toJson().encode())
-            .post("/api/create")
-            .then()
-            .assertThat()
-            .statusCode(HttpResponseStatus.CREATED.code())
-            .extract()
-            .asString();
-
-    CreateItemResponseDto createItemResponseDto =
-        new CreateItemResponseDto(new JsonObject(createResponseJson));
-
-    String getResponseJson =
-        RestAssured.given()
-            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
-            .get("/api/" + createItemResponseDto.id())
-            .then()
-            .assertThat()
-            .statusCode(OK.code())
-            .extract()
-            .asString();
-
-    FindOneResponseDto findOneResponseDto = new FindOneResponseDto(new JsonObject(getResponseJson));
-    assertThat(findOneResponseDto).isNotNull();
-  }
-
   @AfterEach
-  @DisplayName("Check that the verticle is still there")
   void lastChecks(Vertx vertx) {
     assertThat(vertx.deploymentIDs()).isNotEmpty().hasSize(1);
   }

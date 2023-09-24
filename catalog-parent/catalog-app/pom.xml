@@ -99,6 +99,14 @@
       <version>${revision}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.example.commons</groupId>
+      <artifactId>commons</artifactId>
+      <version>${revision}</version>
+      <classifier>tests</classifier>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
     <!--overriding rest-assured transitive deps-->
     <dependency>
       <groupId>commons-codec</groupId>

@@ -144,7 +144,7 @@ public class PersonHandler implements AutoCloseable {
     responseConsumerMap.forEach(
         (k, v) -> {
           v.unregister();
-          k.close();
+          k.reset(0L);
         });
     responseConsumerMap.clear();
   }

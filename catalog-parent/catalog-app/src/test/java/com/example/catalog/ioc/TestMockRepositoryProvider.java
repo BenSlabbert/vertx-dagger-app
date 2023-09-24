@@ -1,33 +1,28 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.ioc;
 
-import com.example.catalog.config.ConfigModule;
 import com.example.catalog.integration.AuthenticationIntegration;
-import com.example.catalog.repository.RepositoryModule;
+import com.example.catalog.repository.SuggestionService;
 import com.example.catalog.service.ServiceModule;
 import com.example.commons.config.Config;
 import dagger.BindsInstance;
 import dagger.Component;
 import io.vertx.core.Vertx;
+import io.vertx.pgclient.PgPool;
 import java.util.Map;
+import java.util.Set;
 import javax.inject.Singleton;
+import org.jooq.DSLContext;
 
 @Singleton
 @Component(
     modules = {
-      // do not use Main.class
       ServiceModule.class,
-      RepositoryModule.class,
-      ConfigModule.class,
-      // use builder below instead of the real IAM one
     })
-public interface TestProvider extends Provider {
+public interface TestMockRepositoryProvider extends Provider {
 
   @Component.Builder
   interface Builder {
-
-    @BindsInstance
-    Builder authenticationIntegration(AuthenticationIntegration authenticationIntegration);
 
     @BindsInstance
     Builder vertx(Vertx vertx);
@@ -47,6 +42,21 @@ public interface TestProvider extends Provider {
     @BindsInstance
     Builder serviceRegistryConfig(Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig> map);
 
-    TestProvider build();
+    @BindsInstance
+    Builder authenticationIntegration(AuthenticationIntegration authenticationIntegration);
+
+    @BindsInstance
+    Builder suggestionService(SuggestionService suggestionService);
+
+    @BindsInstance
+    Builder pgPool(PgPool pgPool);
+
+    @BindsInstance
+    Builder closeables(Set<AutoCloseable> closeables);
+
+    @BindsInstance
+    Builder dslContext(DSLContext dslContext);
+
+    TestMockRepositoryProvider build();
   }
 }

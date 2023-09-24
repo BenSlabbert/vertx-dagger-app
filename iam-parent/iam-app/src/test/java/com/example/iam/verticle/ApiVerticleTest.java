@@ -5,8 +5,8 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.commons.HttpServerTest;
 import com.example.commons.config.Config;
-import com.example.iam.HttpServerTest;
 import com.example.iam.service.UserService;
 import com.example.iam.web.SchemaValidatorDelegator;
 import com.example.iam.web.route.dto.LoginRequestDto;
@@ -29,13 +29,15 @@ import org.mockito.Mockito;
 @ExtendWith(VertxExtension.class)
 class ApiVerticleTest extends HttpServerTest {
 
+  private static final int PORT = getPort();
+
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     vertx.deployVerticle(
         new ApiVerticle(
             new UserHandler(
                 Mockito.mock(UserService.class), Mockito.mock(SchemaValidatorDelegator.class)),
-            new Config.HttpConfig(port)),
+            new Config.HttpConfig(PORT)),
         testContext.succeedingThenComplete());
   }
 
@@ -51,7 +53,7 @@ class ApiVerticleTest extends HttpServerTest {
   void loginInvalidRequest(LoginRequestDto dto, Vertx vertx, VertxTestContext testContext) {
     vertx
         .createHttpClient()
-        .request(POST, port, "localhost", "/api/login")
+        .request(POST, PORT, "localhost", "/api/login")
         .compose(req -> req.send(dto.toJson().toBuffer()))
         .onComplete(
             testContext.succeeding(
@@ -75,7 +77,7 @@ class ApiVerticleTest extends HttpServerTest {
   void refreshInvalidRequest(RefreshRequestDto dto, Vertx vertx, VertxTestContext testContext) {
     vertx
         .createHttpClient()
-        .request(POST, port, "localhost", "/api/refresh")
+        .request(POST, PORT, "localhost", "/api/refresh")
         .compose(req -> req.send(dto.toJson().toBuffer()))
         .onComplete(
             testContext.succeeding(
@@ -99,7 +101,7 @@ class ApiVerticleTest extends HttpServerTest {
   void registerInvalidRequest(RegisterRequestDto dto, Vertx vertx, VertxTestContext testContext) {
     vertx
         .createHttpClient()
-        .request(POST, port, "localhost", "/api/register")
+        .request(POST, PORT, "localhost", "/api/register")
         .compose(req -> req.send(dto.toJson().toBuffer()))
         .onComplete(
             testContext.succeeding(
