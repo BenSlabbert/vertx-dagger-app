@@ -19,10 +19,10 @@ jobs:
         distribution: "zulu"
     - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m7/maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ -o maven-mvnd-1.0-m7-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m7-m39-linux-amd64.zip\
-        \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 .mvnd"
-    - run: "MVND_PATH='$(pwd)/.mvnd/bin/mvnd' make M=$MVND_PATH"
-    - run: "make M='$(pwd)/.mvnd/bin/mvnd' native"
-    - run: "make M='$(pwd)/.mvnd/bin/mvnd' dockerSave"
+        \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 /tmp/mvnd"
+    - run: "MVND_PATH='/tmp/mvnd/bin/mvnd' make M=$MVND_PATH"
+    - run: "make M='/tmp/mvnd/bin/mvnd' native"
+    - run: "make M='/tmp/mvnd/bin/mvnd' dockerSave"
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
