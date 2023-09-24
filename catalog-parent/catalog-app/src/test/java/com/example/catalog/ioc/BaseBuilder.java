@@ -7,7 +7,8 @@ import dagger.BindsInstance;
 import io.vertx.core.Vertx;
 import java.util.Map;
 
-public interface BaseBuilder<BUILDER, PROVIDER> {
+public interface BaseBuilder<
+    BUILDER extends BaseBuilder<?, ? extends Provider>, PROVIDER extends Provider> {
 
   @BindsInstance
   BUILDER vertx(Vertx vertx);
