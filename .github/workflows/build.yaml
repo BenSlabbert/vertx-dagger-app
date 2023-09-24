@@ -20,6 +20,8 @@ jobs:
     - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m7/maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ -o maven-mvnd-1.0-m7-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 .mvnd"
+    - run: "ls -la .mvnd"
+    - run: "ls -la ~/.mvnd"
     - run: "make M='~/.mvnd/bin/mvnd'"
     - run: "make M='~/.mvnd/bin/mvnd' native"
     - run: "make M='~/.mvnd/bin/mvnd' dockerSave"
