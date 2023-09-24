@@ -5,3 +5,4 @@ iam-parent/iam-app/Dockerfile
 catalog-parent/catalog-app/Dockerfile
 Dockerfile.native
 Dockerfile.native-parent
+Dockerfile.upx

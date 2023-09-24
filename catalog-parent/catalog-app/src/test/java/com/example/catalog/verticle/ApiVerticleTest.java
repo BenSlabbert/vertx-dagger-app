@@ -2,7 +2,6 @@
 package com.example.catalog.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
-import static io.vertx.core.http.HttpMethod.GET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -11,9 +10,14 @@ import com.example.catalog.TestcontainerLogConsumer;
 import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.catalog.ioc.DaggerTestProvider;
 import com.example.catalog.ioc.TestProvider;
+import com.example.catalog.web.route.dto.CreateItemRequestDto;
+import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.commons.config.Config;
 import com.example.migration.FlywayProvider;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpHeaders;
@@ -101,36 +105,44 @@ class ApiVerticleTest {
 
     apiVerticle = testProvider.provideNewApiVerticle();
     vertx.deployVerticle(apiVerticle, testContext.succeedingThenComplete());
+    RestAssured.baseURI = "http://localhost";
+    RestAssured.port = PORT;
+  }
+
+  @AfterEach
+  public void after() {
+    RestAssured.reset();
   }
 
   @Test
-  void getItemsTest(Vertx vertx, VertxTestContext testContext) {
-    System.err.println("running test");
-    vertx
-        .createHttpClient()
-        .request(GET, PORT, "localhost", "/api/1")
-        .compose(
-            req -> {
-              req.putHeader(HttpHeaders.AUTHORIZATION, "Bearer fake");
-              return req.send();
-            })
-        .onComplete(
-            testContext.succeeding(
-                clientResponse ->
-                    testContext.verify(
-                        () -> {
-                          assertThat(clientResponse.statusCode()).isEqualTo(OK.code());
-                          clientResponse
-                              .body()
-                              .onFailure(testContext::failNow)
-                              .onSuccess(
-                                  buff -> {
-                                    FindOneResponseDto paginatedResponseDto =
-                                        new FindOneResponseDto(new JsonObject(buff));
-                                    assertThat(paginatedResponseDto).isNotNull();
-                                    testContext.completeNow();
-                                  });
-                        })));
+  void apiTest() {
+    String createResponseJson =
+        RestAssured.given()
+            .contentType(ContentType.JSON)
+            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
+            .body(new CreateItemRequestDto("name", 123L).toJson().encode())
+            .post("/api/create")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.CREATED.code())
+            .extract()
+            .asString();
+
+    CreateItemResponseDto createItemResponseDto =
+        new CreateItemResponseDto(new JsonObject(createResponseJson));
+
+    String getResponseJson =
+        RestAssured.given()
+            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
+            .get("/api/" + createItemResponseDto.id())
+            .then()
+            .assertThat()
+            .statusCode(OK.code())
+            .extract()
+            .asString();
+
+    FindOneResponseDto findOneResponseDto = new FindOneResponseDto(new JsonObject(getResponseJson));
+    assertThat(findOneResponseDto).isNotNull();
   }
 
   @AfterEach
