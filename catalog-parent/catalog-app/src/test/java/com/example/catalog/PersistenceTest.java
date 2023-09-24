@@ -9,6 +9,7 @@ import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
 import com.example.commons.HttpServerTest;
+import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.migration.FlywayProvider;
 import io.restassured.RestAssured;
@@ -97,7 +98,7 @@ public abstract class PersistenceTest extends HttpServerTest {
   }
 
   @AfterEach
-  public void after() {
+  void after() {
     RestAssured.reset();
   }
 

@@ -4,7 +4,7 @@ package com.example.iam.verticle;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-import com.example.iam.TestcontainerLogConsumer;
+import com.example.commons.TestcontainerLogConsumer;
 import com.example.iam.grpc.iam.CheckTokenRequest;
 import com.example.iam.grpc.iam.CheckTokenResponse;
 import com.example.iam.grpc.iam.IamGrpc;
@@ -67,14 +67,14 @@ class ApiVerticleIT {
           .withLogConsumer(new TestcontainerLogConsumer());
 
   @BeforeEach
-  public void before() {
+  void before() {
     RestAssured.baseURI = "http://" + app.getHost();
     RestAssured.port = app.getMappedPort(8080);
     log.info("RestAssured.port: " + RestAssured.port);
   }
 
   @AfterEach
-  public void after() {
+  void after() {
     RestAssured.reset();
   }
 

@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.catalog;
+package com.example.commons;
 
 import java.util.function.Consumer;
 import java.util.logging.Level;
