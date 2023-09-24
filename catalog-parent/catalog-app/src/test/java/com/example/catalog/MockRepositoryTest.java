@@ -31,7 +31,8 @@ import org.mockito.Mockito;
 @ExtendWith(VertxExtension.class)
 public abstract class MockRepositoryTest extends HttpServerTest {
 
-  protected static final int PORT = getPort();
+  protected static final int HTTP_PORT = getPort();
+  protected static final int GRPC_PORT = getPort();
 
   protected TestMockRepositoryProvider provider;
 
@@ -56,8 +57,8 @@ public abstract class MockRepositoryTest extends HttpServerTest {
 
     Config config =
         new Config(
-            new Config.HttpConfig(PORT),
-            new Config.GrpcConfig(50500),
+            new Config.HttpConfig(HTTP_PORT),
+            new Config.GrpcConfig(GRPC_PORT),
             new Config.RedisConfig("localhost", 6379, 0),
             new Config.PostgresConfig("localhost", 5432, "postgres", "postgres", "postgres"),
             Map.of(),
@@ -85,7 +86,7 @@ public abstract class MockRepositoryTest extends HttpServerTest {
   @BeforeEach
   void before() {
     RestAssured.baseURI = "http://localhost";
-    RestAssured.port = PORT;
+    RestAssured.port = HTTP_PORT;
   }
 
   @AfterEach

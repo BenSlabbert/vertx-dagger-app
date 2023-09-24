@@ -28,7 +28,7 @@ import org.mockito.Mockito;
 @ExtendWith(VertxExtension.class)
 class GrpcVerticleTest extends HttpServerTest {
 
-  private static final int PORT = getPort();
+  private static final int GRPC_PORT = getPort();
 
   private TokenService mockTokenService;
 
@@ -36,7 +36,7 @@ class GrpcVerticleTest extends HttpServerTest {
   void prepare(Vertx vertx, VertxTestContext testContext) {
     mockTokenService = Mockito.mock(TokenService.class);
     vertx.deployVerticle(
-        new GrpcVerticle(new Config.GrpcConfig(PORT), mockTokenService),
+        new GrpcVerticle(new Config.GrpcConfig(GRPC_PORT), mockTokenService),
         testContext.succeedingThenComplete());
   }
 
@@ -73,6 +73,6 @@ class GrpcVerticleTest extends HttpServerTest {
   }
 
   private SocketAddress socketAddress() {
-    return SocketAddress.inetSocketAddress(PORT, "localhost");
+    return SocketAddress.inetSocketAddress(GRPC_PORT, "localhost");
   }
 }

@@ -29,7 +29,7 @@ import org.mockito.Mockito;
 @ExtendWith(VertxExtension.class)
 class ApiVerticleTest extends HttpServerTest {
 
-  private static final int PORT = getPort();
+  private static final int HTTP_PORT = getPort();
 
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
@@ -37,7 +37,7 @@ class ApiVerticleTest extends HttpServerTest {
         new ApiVerticle(
             new UserHandler(
                 Mockito.mock(UserService.class), Mockito.mock(SchemaValidatorDelegator.class)),
-            new Config.HttpConfig(PORT)),
+            new Config.HttpConfig(HTTP_PORT)),
         testContext.succeedingThenComplete());
   }
 
@@ -53,7 +53,7 @@ class ApiVerticleTest extends HttpServerTest {
   void loginInvalidRequest(LoginRequestDto dto, Vertx vertx, VertxTestContext testContext) {
     vertx
         .createHttpClient()
-        .request(POST, PORT, "localhost", "/api/login")
+        .request(POST, HTTP_PORT, "localhost", "/api/login")
         .compose(req -> req.send(dto.toJson().toBuffer()))
         .onComplete(
             testContext.succeeding(
@@ -77,7 +77,7 @@ class ApiVerticleTest extends HttpServerTest {
   void refreshInvalidRequest(RefreshRequestDto dto, Vertx vertx, VertxTestContext testContext) {
     vertx
         .createHttpClient()
-        .request(POST, PORT, "localhost", "/api/refresh")
+        .request(POST, HTTP_PORT, "localhost", "/api/refresh")
         .compose(req -> req.send(dto.toJson().toBuffer()))
         .onComplete(
             testContext.succeeding(
@@ -101,7 +101,7 @@ class ApiVerticleTest extends HttpServerTest {
   void registerInvalidRequest(RegisterRequestDto dto, Vertx vertx, VertxTestContext testContext) {
     vertx
         .createHttpClient()
-        .request(POST, PORT, "localhost", "/api/register")
+        .request(POST, HTTP_PORT, "localhost", "/api/register")
         .compose(req -> req.send(dto.toJson().toBuffer()))
         .onComplete(
             testContext.succeeding(
