@@ -21,10 +21,10 @@ jobs:
         \ -o maven-mvnd-1.0-m7-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 .mvnd"
     - run: "ls -la .mvnd"
-    - run: "ls -la ~/.mvnd"
-    - run: "make M='~/.mvnd/bin/mvnd'"
-    - run: "make M='~/.mvnd/bin/mvnd' native"
-    - run: "make M='~/.mvnd/bin/mvnd' dockerSave"
+    - run: "ls -la $(pwd)/.mvnd"
+    - run: "make M='$(pwd)/.mvnd/bin/mvnd'"
+    - run: "make M='$(pwd)/.mvnd/bin/mvnd' native"
+    - run: "make M='$(pwd)/.mvnd/bin/mvnd' dockerSave"
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
