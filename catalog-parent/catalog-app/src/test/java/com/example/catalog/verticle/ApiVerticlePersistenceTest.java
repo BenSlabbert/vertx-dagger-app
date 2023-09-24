@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.verticle;
 
+import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,7 +9,6 @@ import com.example.catalog.PersistenceTest;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.vertx.core.http.HttpHeaders;
@@ -27,7 +27,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
             .post("/api/create")
             .then()
             .assertThat()
-            .statusCode(HttpResponseStatus.CREATED.code())
+            .statusCode(CREATED.code())
             .extract()
             .asString();
 

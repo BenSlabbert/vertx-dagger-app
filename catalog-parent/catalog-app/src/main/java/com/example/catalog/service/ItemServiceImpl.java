@@ -2,8 +2,8 @@
 package com.example.catalog.service;
 
 import com.example.catalog.projection.item.ItemProjection;
+import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
-import com.example.catalog.repository.sql.ItemRepository;
 import com.example.catalog.repository.sql.projection.ItemProjectionFactory.InsertItemProjection.CreatedItemProjection;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;

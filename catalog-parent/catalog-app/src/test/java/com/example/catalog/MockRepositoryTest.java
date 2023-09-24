@@ -8,14 +8,18 @@ import static org.mockito.Mockito.when;
 import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.catalog.ioc.DaggerTestMockRepositoryProvider;
 import com.example.catalog.ioc.TestMockRepositoryProvider;
+import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
 import com.example.commons.HttpServerTest;
 import com.example.commons.config.Config;
+import io.restassured.RestAssured;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.SqlConnection;
+import io.vertx.sqlclient.Transaction;
 import java.util.Map;
 import java.util.Set;
 import org.jooq.DSLContext;
@@ -31,18 +35,24 @@ public abstract class MockRepositoryTest extends HttpServerTest {
 
   protected TestMockRepositoryProvider provider;
 
-  protected SuggestionService suggestionService;
-  protected DSLContext dslContext;
-  protected PgPool pgPool;
+  protected SuggestionService suggestionService = Mockito.mock(SuggestionService.class);
+  protected ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
+  protected DSLContext dslContext = Mockito.mock(DSLContext.class);
+  protected PgPool pgPool = Mockito.mock(PgPool.class);
 
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     AuthenticationIntegration authHandler = Mockito.mock(AuthenticationIntegration.class);
     when(authHandler.isTokenValid(anyString())).thenReturn(Future.succeededFuture(true));
 
-    suggestionService = Mockito.mock(SuggestionService.class);
-    pgPool = Mockito.mock(PgPool.class);
-    dslContext = Mockito.mock(DSLContext.class);
+    // needed for transaction boundary
+    SqlConnection sqlConnection = Mockito.mock(SqlConnection.class);
+    Transaction transaction = Mockito.mock(Transaction.class);
+
+    when(pgPool.getConnection()).thenReturn(Future.succeededFuture(sqlConnection));
+    when(sqlConnection.begin()).thenReturn(Future.succeededFuture(transaction));
+    when(sqlConnection.close()).thenReturn(Future.succeededFuture());
+    when(transaction.commit()).thenReturn(Future.succeededFuture());
 
     Config config =
         new Config(
@@ -63,12 +73,24 @@ public abstract class MockRepositoryTest extends HttpServerTest {
             .serviceRegistryConfig(config.serviceRegistryConfig())
             .authenticationIntegration(authHandler)
             .suggestionService(suggestionService)
+            .itemRepository(itemRepository)
             .pgPool(pgPool)
             .closeables(Set.of())
             .dslContext(dslContext)
             .build();
 
     vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
+  }
+
+  @BeforeEach
+  void before() {
+    RestAssured.baseURI = "http://localhost";
+    RestAssured.port = PORT;
+  }
+
+  @AfterEach
+  void after() {
+    RestAssured.reset();
   }
 
   @AfterEach

@@ -93,6 +93,10 @@ public abstract class PersistenceTest extends HttpServerTest {
             .build();
 
     vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
+  }
+
+  @BeforeEach
+  void before() {
     RestAssured.baseURI = "http://localhost";
     RestAssured.port = PORT;
   }

@@ -70,7 +70,6 @@ class ApiVerticleIT {
   void before() {
     RestAssured.baseURI = "http://" + app.getHost();
     RestAssured.port = app.getMappedPort(8080);
-    log.info("RestAssured.port: " + RestAssured.port);
   }
 
   @AfterEach

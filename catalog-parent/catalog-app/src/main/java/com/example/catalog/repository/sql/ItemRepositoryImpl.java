@@ -4,6 +4,7 @@ package com.example.catalog.repository.sql;
 import static com.example.commons.sql.ProjectionExecutor.execute;
 
 import com.example.catalog.projection.item.ItemProjection;
+import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.sql.projection.ItemProjectionFactory;
 import com.example.catalog.repository.sql.projection.ItemProjectionFactory.InsertItemProjection.CreatedItemProjection;
 import io.vertx.core.Future;
@@ -14,12 +15,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class ItemRepository {
+public class ItemRepositoryImpl implements ItemRepository {
 
   private final ItemProjectionFactory itemProjectionFactory;
 
   @Inject
-  public ItemRepository(ItemProjectionFactory itemProjectionFactory) {
+  public ItemRepositoryImpl(ItemProjectionFactory itemProjectionFactory) {
     this.itemProjectionFactory = itemProjectionFactory;
   }
 
