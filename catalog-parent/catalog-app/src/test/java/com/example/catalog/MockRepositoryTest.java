@@ -3,6 +3,7 @@ package com.example.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.example.catalog.integration.AuthenticationIntegration;
@@ -26,7 +27,6 @@ import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 
 @ExtendWith(VertxExtension.class)
 public abstract class MockRepositoryTest extends HttpServerTest {
@@ -36,19 +36,19 @@ public abstract class MockRepositoryTest extends HttpServerTest {
 
   protected TestMockRepositoryProvider provider;
 
-  protected SuggestionService suggestionService = Mockito.mock(SuggestionService.class);
-  protected ItemRepository itemRepository = Mockito.mock(ItemRepository.class);
-  protected DSLContext dslContext = Mockito.mock(DSLContext.class);
-  protected PgPool pgPool = Mockito.mock(PgPool.class);
+  protected SuggestionService suggestionService = mock(SuggestionService.class);
+  protected ItemRepository itemRepository = mock(ItemRepository.class);
+  protected DSLContext dslContext = mock(DSLContext.class);
+  protected PgPool pgPool = mock(PgPool.class);
 
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
-    AuthenticationIntegration authHandler = Mockito.mock(AuthenticationIntegration.class);
+    AuthenticationIntegration authHandler = mock(AuthenticationIntegration.class);
     when(authHandler.isTokenValid(anyString())).thenReturn(Future.succeededFuture(true));
 
     // needed for transaction boundary
-    SqlConnection sqlConnection = Mockito.mock(SqlConnection.class);
-    Transaction transaction = Mockito.mock(Transaction.class);
+    SqlConnection sqlConnection = mock(SqlConnection.class);
+    Transaction transaction = mock(Transaction.class);
 
     when(pgPool.getConnection()).thenReturn(Future.succeededFuture(sqlConnection));
     when(sqlConnection.begin()).thenReturn(Future.succeededFuture(transaction));

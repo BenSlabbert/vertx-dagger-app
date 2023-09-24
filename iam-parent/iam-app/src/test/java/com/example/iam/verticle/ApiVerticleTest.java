@@ -4,6 +4,7 @@ package com.example.iam.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import com.example.commons.HttpServerTest;
 import com.example.commons.config.Config;
@@ -24,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
 
 @ExtendWith(VertxExtension.class)
 class ApiVerticleTest extends HttpServerTest {
@@ -35,8 +35,7 @@ class ApiVerticleTest extends HttpServerTest {
   void prepare(Vertx vertx, VertxTestContext testContext) {
     vertx.deployVerticle(
         new ApiVerticle(
-            new UserHandler(
-                Mockito.mock(UserService.class), Mockito.mock(SchemaValidatorDelegator.class)),
+            new UserHandler(mock(UserService.class), mock(SchemaValidatorDelegator.class)),
             new Config.HttpConfig(HTTP_PORT)),
         testContext.succeedingThenComplete());
   }

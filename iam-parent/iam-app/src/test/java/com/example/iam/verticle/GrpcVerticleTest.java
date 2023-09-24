@@ -2,6 +2,7 @@
 package com.example.iam.verticle;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.example.commons.HttpServerTest;
@@ -23,7 +24,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mockito;
 
 @ExtendWith(VertxExtension.class)
 class GrpcVerticleTest extends HttpServerTest {
@@ -34,7 +34,7 @@ class GrpcVerticleTest extends HttpServerTest {
 
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
-    mockTokenService = Mockito.mock(TokenService.class);
+    mockTokenService = mock(TokenService.class);
     vertx.deployVerticle(
         new GrpcVerticle(new Config.GrpcConfig(GRPC_PORT), mockTokenService),
         testContext.succeedingThenComplete());
@@ -48,7 +48,7 @@ class GrpcVerticleTest extends HttpServerTest {
     when(mockTokenService.isValidToken(checkSessionRequest.getToken()))
         .thenReturn(
             isValid
-                ? Future.succeededFuture(Mockito.mock(User.class))
+                ? Future.succeededFuture(mock(User.class))
                 : Future.failedFuture(new Throwable("expected")));
 
     GrpcClient.client(vertx)
