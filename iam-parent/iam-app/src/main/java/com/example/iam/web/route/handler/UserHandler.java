@@ -5,6 +5,7 @@ import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
+import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static java.util.logging.Level.SEVERE;
 
@@ -99,7 +100,7 @@ public class UserHandler {
         .onFailure(
             err -> {
               log.log(SEVERE, "failed to register user", err);
-              ctx.end().onFailure(ctx::fail);
+              ctx.response().setStatusCode(INTERNAL_SERVER_ERROR.code()).end().onFailure(ctx::fail);
             })
         .onSuccess(
             dto ->
