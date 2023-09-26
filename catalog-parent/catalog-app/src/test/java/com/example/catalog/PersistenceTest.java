@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog;
 
+import static com.example.commons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -10,7 +11,6 @@ import static org.mockito.Mockito.when;
 import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
-import com.example.commons.HttpServerTest;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.transaction.TransactionBoundary;
@@ -39,7 +39,7 @@ import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 @ExtendWith(VertxExtension.class)
-public abstract class PersistenceTest extends HttpServerTest {
+public abstract class PersistenceTest {
 
   protected static final int HTTP_PORT = getPort();
   protected static final int GRPC_PORT = getPort();

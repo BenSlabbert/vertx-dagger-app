@@ -1,11 +1,11 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.verticle;
 
+import static com.example.commons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.example.commons.HttpServerTest;
 import com.example.commons.config.Config;
 import com.example.iam.grpc.iam.CheckTokenRequest;
 import com.example.iam.grpc.iam.IamGrpc;
@@ -26,7 +26,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @ExtendWith(VertxExtension.class)
-class GrpcVerticleTest extends HttpServerTest {
+class GrpcVerticleTest {
 
   private static final int GRPC_PORT = getPort();
 

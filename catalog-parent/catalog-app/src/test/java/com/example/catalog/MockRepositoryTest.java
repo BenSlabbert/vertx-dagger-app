@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog;
 
+import static com.example.commons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -11,7 +12,6 @@ import com.example.catalog.ioc.DaggerTestMockRepositoryProvider;
 import com.example.catalog.ioc.TestMockRepositoryProvider;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
-import com.example.commons.HttpServerTest;
 import com.example.commons.config.Config;
 import io.restassured.RestAssured;
 import io.vertx.core.Future;
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(VertxExtension.class)
-public abstract class MockRepositoryTest extends HttpServerTest {
+public abstract class MockRepositoryTest {
 
   protected static final int HTTP_PORT = getPort();
   protected static final int GRPC_PORT = getPort();

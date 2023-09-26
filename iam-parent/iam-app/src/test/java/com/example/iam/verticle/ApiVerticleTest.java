@@ -1,12 +1,12 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.verticle;
 
+import static com.example.commons.FreePortUtility.getPort;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import com.example.commons.HttpServerTest;
 import com.example.commons.config.Config;
 import com.example.iam.service.UserService;
 import com.example.iam.web.SchemaValidatorDelegator;
@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @ExtendWith(VertxExtension.class)
-class ApiVerticleTest extends HttpServerTest {
+class ApiVerticleTest {
 
   private static final int HTTP_PORT = getPort();
 
