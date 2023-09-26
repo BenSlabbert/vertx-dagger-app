@@ -2,7 +2,6 @@
 package com.example.catalog.repository.sql.projection;
 
 import static com.example.catalog.generator.entity.generated.jooq.tables.Item.ITEM;
-import static org.jooq.conf.ParamType.INLINED;
 
 import com.example.catalog.projection.item.ItemProjection;
 import com.example.commons.sql.Projection;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.jooq.AttachableQueryPart;
 import org.jooq.DSLContext;
 
 @Singleton
@@ -55,8 +55,8 @@ public class ItemProjectionFactory {
     }
 
     @Override
-    public String getSql() {
-      return dsl.deleteFrom(ITEM).where(ITEM.ID.eq(id)).returning(ITEM.ID).getSQL(INLINED);
+    public AttachableQueryPart getSql() {
+      return dsl.deleteFrom(ITEM).where(ITEM.ID.eq(id)).returning(ITEM.ID);
     }
 
     @Override
@@ -84,13 +84,12 @@ public class ItemProjectionFactory {
     }
 
     @Override
-    public String getSql() {
+    public AttachableQueryPart getSql() {
       return dsl.update(ITEM)
           .set(ITEM.NAME, name)
           .set(ITEM.PRICE_IN_CENTS, priceInCents)
           .where(ITEM.ID.eq(id))
-          .returning(ITEM.ID)
-          .getSQL(INLINED);
+          .returning(ITEM.ID);
     }
 
     @Override
@@ -114,11 +113,8 @@ public class ItemProjectionFactory {
     }
 
     @Override
-    public String getSql() {
-      return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS)
-          .from(ITEM)
-          .where(ITEM.ID.eq(id))
-          .getSQL(INLINED);
+    public AttachableQueryPart getSql() {
+      return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS).from(ITEM).where(ITEM.ID.eq(id));
     }
 
     @Override
@@ -146,12 +142,11 @@ public class ItemProjectionFactory {
     }
 
     @Override
-    public String getSql() {
+    public AttachableQueryPart getSql() {
       return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS)
           .from(ITEM)
           .where(ITEM.ID.greaterThan(lastId))
-          .limit(size)
-          .getSQL(INLINED);
+          .limit(size);
     }
 
     @Override
@@ -172,12 +167,11 @@ public class ItemProjectionFactory {
     }
 
     @Override
-    public String getSql() {
+    public AttachableQueryPart getSql() {
       return dsl.insertInto(ITEM)
           .columns(ITEM.NAME, ITEM.PRICE_IN_CENTS)
           .values(name, priceInCents)
-          .returning(ITEM.ID)
-          .getSQL(INLINED);
+          .returning(ITEM.ID);
     }
 
     @Override

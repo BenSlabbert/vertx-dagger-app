@@ -2,7 +2,6 @@
 package com.example.reactivetest.repository.sql.projection;
 
 import static com.example.reactivetest.generator.entity.generated.jooq.tables.UserData.USER_DATA;
-import static org.jooq.conf.ParamType.INLINED;
 
 import com.example.commons.sql.Projection;
 import com.example.reactivetest.projections.UserDataObject;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.jooq.AttachableQueryPart;
 import org.jooq.DSLContext;
 
 @Singleton
@@ -32,11 +32,10 @@ public class UserProjectionFactory {
   public class UserProjection implements Projection<List<UserDataObject>> {
 
     @Override
-    public String getSql() {
+    public AttachableQueryPart getSql() {
       return dsl.select(USER_DATA.ID, USER_DATA.FIRST_NAME, USER_DATA.LAST_NAME)
           .from(USER_DATA)
-          .orderBy(USER_DATA.ID.asc())
-          .getSQL(INLINED);
+          .orderBy(USER_DATA.ID.asc());
     }
 
     @Override

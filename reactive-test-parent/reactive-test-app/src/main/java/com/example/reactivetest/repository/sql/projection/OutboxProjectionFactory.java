@@ -2,7 +2,6 @@
 package com.example.reactivetest.repository.sql.projection;
 
 import static com.example.reactivetest.generator.entity.generated.jooq.tables.Outbox.OUTBOX;
-import static org.jooq.conf.ParamType.INLINED;
 
 import com.example.commons.sql.Projection;
 import io.vertx.sqlclient.Row;
@@ -11,6 +10,7 @@ import io.vertx.sqlclient.RowSet;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.jooq.AttachableQueryPart;
 import org.jooq.DSLContext;
 
 @Singleton
@@ -44,12 +44,11 @@ public class OutboxProjectionFactory {
     private TopFromOutbox() {}
 
     @Override
-    public String getSql() {
+    public AttachableQueryPart getSql() {
       return dsl.select(OUTBOX.ID, OUTBOX.KEY, OUTBOX.HEADERS, OUTBOX.VALUE)
           .from(OUTBOX)
           .orderBy(OUTBOX.ID.asc())
-          .limit(1)
-          .getSQL(INLINED);
+          .limit(1);
     }
 
     @Override
@@ -79,11 +78,10 @@ public class OutboxProjectionFactory {
     }
 
     @Override
-    public String getSql() {
+    public AttachableQueryPart getSql() {
       return dsl.select(OUTBOX.ID, OUTBOX.KEY, OUTBOX.HEADERS, OUTBOX.VALUE)
           .from(OUTBOX)
-          .where(OUTBOX.ID.eq(id))
-          .getSQL(INLINED);
+          .where(OUTBOX.ID.eq(id));
     }
 
     @Override
@@ -128,8 +126,8 @@ public class OutboxProjectionFactory {
     }
 
     @Override
-    public String getSql() {
-      return dsl.deleteFrom(OUTBOX).where(OUTBOX.ID.eq(id)).returning(OUTBOX.ID).getSQL(INLINED);
+    public AttachableQueryPart getSql() {
+      return dsl.deleteFrom(OUTBOX).where(OUTBOX.ID.eq(id)).returning(OUTBOX.ID);
     }
 
     @Override
@@ -154,12 +152,11 @@ public class OutboxProjectionFactory {
     }
 
     @Override
-    public String getSql() {
+    public AttachableQueryPart getSql() {
       return dsl.insertInto(OUTBOX)
           .columns(OUTBOX.KEY, OUTBOX.HEADERS, OUTBOX.VALUE)
           .values(key, headers, body)
-          .returning(OUTBOX.ID)
-          .getSQL(INLINED);
+          .returning(OUTBOX.ID);
     }
 
     @Override

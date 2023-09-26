@@ -3,7 +3,6 @@ package com.example.reactivetest.repository.sql.projection;
 
 import static com.example.reactivetest.generator.entity.generated.jooq.Sequences.PERSON_ID_SEQ;
 import static com.example.reactivetest.generator.entity.generated.jooq.tables.Person.PERSON;
-import static org.jooq.conf.ParamType.INLINED;
 
 import com.example.commons.sql.Projection;
 import io.vertx.sqlclient.Row;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.jooq.AttachableQueryPart;
 import org.jooq.DSLContext;
 
 @Singleton
@@ -47,12 +47,11 @@ public class PersonProjectionFactory {
     }
 
     @Override
-    public String getSql() {
+    public AttachableQueryPart getSql() {
       return dsl.insertInto(PERSON)
           .columns(PERSON.ID, PERSON.NAME)
           .values(id, name)
-          .returning(PERSON.ID, PERSON.NAME)
-          .getSQL(INLINED);
+          .returning(PERSON.ID, PERSON.NAME);
     }
 
     @Override
@@ -67,8 +66,8 @@ public class PersonProjectionFactory {
     private NextIdProjection() {}
 
     @Override
-    public String getSql() {
-      return dsl.select(PERSON_ID_SEQ.nextval()).getSQL(INLINED);
+    public AttachableQueryPart getSql() {
+      return dsl.select(PERSON_ID_SEQ.nextval());
     }
 
     @Override
@@ -86,8 +85,8 @@ public class PersonProjectionFactory {
     }
 
     @Override
-    public String getSql() {
-      return dsl.select(PERSON.ID, PERSON.NAME).from(PERSON).limit(limit).getSQL(INLINED);
+    public AttachableQueryPart getSql() {
+      return dsl.select(PERSON.ID, PERSON.NAME).from(PERSON).limit(limit);
     }
 
     @Override
