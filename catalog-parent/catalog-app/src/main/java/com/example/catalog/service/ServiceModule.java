@@ -8,5 +8,5 @@ import dagger.Module;
 public interface ServiceModule {
 
   @Binds
-  ItemService createItemService(ItemServiceImpl itemService);
+  ItemService createItemService(ItemService itemService);
 }

@@ -3,7 +3,6 @@ package com.example.catalog.ioc;
 
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
-import com.example.catalog.service.ServiceModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import io.vertx.pgclient.PgPool;
@@ -12,10 +11,7 @@ import javax.inject.Singleton;
 import org.jooq.DSLContext;
 
 @Singleton
-@Component(
-    modules = {
-      ServiceModule.class,
-    })
+@Component
 public interface TestMockRepositoryProvider extends Provider {
 
   @Component.Builder

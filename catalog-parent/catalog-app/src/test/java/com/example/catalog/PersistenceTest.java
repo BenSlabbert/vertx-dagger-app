@@ -2,6 +2,7 @@
 package com.example.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -12,13 +13,18 @@ import com.example.catalog.ioc.TestPersistenceProvider;
 import com.example.commons.HttpServerTest;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
+import com.example.commons.transaction.TransactionBoundary;
 import com.example.migration.FlywayProvider;
 import io.restassured.RestAssured;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
+import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.SqlClient;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.function.Function;
 import org.flywaydb.core.Flyway;
 import org.junit.Rule;
 import org.junit.jupiter.api.AfterEach;
@@ -37,6 +43,8 @@ public abstract class PersistenceTest extends HttpServerTest {
 
   protected static final int HTTP_PORT = getPort();
   protected static final int GRPC_PORT = getPort();
+
+  protected TestPersistenceProvider provider;
 
   @Rule public Network network = Network.newNetwork();
 
@@ -82,7 +90,7 @@ public abstract class PersistenceTest extends HttpServerTest {
             Map.of(),
             new Config.VerticleConfig(1));
 
-    TestPersistenceProvider provider =
+    provider =
         DaggerTestPersistenceProvider.builder()
             .vertx(vertx)
             .config(config)
@@ -110,5 +118,25 @@ public abstract class PersistenceTest extends HttpServerTest {
   @AfterEach
   void lastChecks(Vertx vertx) {
     assertThat(vertx.deploymentIDs()).isNotEmpty().hasSize(1);
+  }
+
+  protected <T> void persist(Function<SqlClient, Future<T>> function) {
+    PgPool pool = provider.pool();
+    CountDownLatch latch = new CountDownLatch(1);
+
+    new TransactionBoundary(pool) {
+      {
+        doInTransaction(function)
+            .onFailure(err -> fail("failure while persisting", err))
+            .onSuccess(projection -> latch.countDown());
+      }
+    };
+
+    try {
+      latch.await();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      fail("failure while waiting for persistence to complete", e);
+    }
   }
 }
