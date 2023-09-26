@@ -8,7 +8,33 @@ name: "Java + Maven + Docker"
     branches:
     - "main"
 jobs:
-  build-backend:
+  build-backend-native:
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "actions/checkout@v4"
+    - uses: "graalvm/setup-graalvm@v1"
+      with:
+        java-version: "17"
+        distribution: "graalvm-community"
+        native-image-musl: "true"
+        cache: "maven"
+    - run: "mvn package -DskipTests=true -Ddocker.skip=true -Pnative"
+    - run: "curl -L https://github.com/upx/upx/releases/download/v4.0.2/upx-4.0.2-amd64_linux.tar.xz -o upx-4.0.2-amd64_linux.tar.xz\
+        \ && tar -xf upx-4.0.2-amd64_linux.tar.xz && mv upx-4.0.2-amd64_linux /tmp/upx && /tmp/upx --version"
+    - run: "/tmp/upx -q -o iam.upx iam-parent/iam-app/target/iam"
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
+        name: "iam binary"
+        path: "iam-parent/iam-app/target/iam"
+        retention-days: 30
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
+        name: "iam binary"
+        path: "iam.upx"
+        retention-days: 30
+  build-backend-jvm:
     runs-on: "ubuntu-latest"
     steps:
     - uses: "actions/checkout@v3"
