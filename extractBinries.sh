@@ -3,7 +3,7 @@
 rm -rf bin app.tar
 mkdir bin
 
-for img in catalog iam shop
+for img in iam
 do
   id=$(docker create "$img":native-upx-latest)
   docker cp "$id":/app - > app.tar

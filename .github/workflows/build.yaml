@@ -28,8 +28,8 @@ jobs:
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
-        name: "docker-iam-native"
-        path: "iam-native_latest.tar.gz"
+        name: "upx-native-binaries"
+        path: "bin/"
         retention-days: 30
   build-frontend:
     runs-on: "ubuntu-latest"
