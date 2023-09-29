@@ -6,6 +6,7 @@ import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.RepositoryModule;
 import dagger.Component;
 import io.vertx.pgclient.PgPool;
+import io.vertx.redis.client.RedisAPI;
 import javax.inject.Singleton;
 
 @Singleton
@@ -19,6 +20,8 @@ public interface TestPersistenceProvider extends Provider {
   ItemRepository itemRepository();
 
   PgPool pool();
+
+  RedisAPI redisAPI();
 
   @Component.Builder
   interface Builder extends BaseBuilder<Builder, TestPersistenceProvider> {}

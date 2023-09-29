@@ -8,6 +8,7 @@ import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
@@ -17,6 +18,9 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.HttpException;
+import io.vertx.pgclient.PgPool;
+import io.vertx.redis.client.RedisAPI;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -32,22 +36,51 @@ public class ApiVerticle extends AbstractVerticle {
   private final AuthHandler authHandler;
   private final Config.HttpConfig httpConfig;
   private final ItemHandler itemHandler;
+  private final PgPool pool;
+  private final RedisAPI redisAPI;
 
   @Inject
   public ApiVerticle(
-      Config.HttpConfig httpConfig, ItemHandler itemHandler, AuthHandler authHandler) {
+      Config.HttpConfig httpConfig,
+      ItemHandler itemHandler,
+      AuthHandler authHandler,
+      PgPool pool,
+      RedisAPI redisAPI) {
     this.httpConfig = httpConfig;
     this.itemHandler = itemHandler;
     this.authHandler = authHandler;
+    this.pool = pool;
+    this.redisAPI = redisAPI;
   }
 
   @Override
   public void start(Promise<Void> startPromise) {
-    log.log(
-        Level.INFO,
-        "starting api verticle on port: {0}",
-        new Object[] {Integer.toString(httpConfig.port())});
+    checkConnections(startPromise)
+        .onSuccess(
+            ignore -> {
+              log.log(
+                  Level.INFO,
+                  "starting api verticle on port: {0}",
+                  new Object[] {Integer.toString(httpConfig.port())});
 
+              vertx
+                  .createHttpServer(
+                      new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
+                  .requestHandler(setupRoutes())
+                  .listen(
+                      res -> {
+                        if (res.succeeded()) {
+                          log.info("started http server");
+                          startPromise.complete();
+                        } else {
+                          log.log(Level.SEVERE, "failed to start verticle", res.cause());
+                          startPromise.fail(res.cause());
+                        }
+                      });
+            });
+  }
+
+  private Router setupRoutes() {
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 
@@ -91,20 +124,25 @@ public class ApiVerticle extends AbstractVerticle {
 
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
+    return mainRouter;
+  }
 
-    vertx
-        .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
-        .requestHandler(mainRouter)
-        .listen(
-            res -> {
-              if (res.succeeded()) {
-                log.info("started http server");
-                startPromise.complete();
-              } else {
-                log.log(Level.SEVERE, "failed to start verticle", res.cause());
-                startPromise.fail(res.cause());
-              }
-            });
+  private Future<?> checkConnections(Promise<Void> startPromise) {
+    return checkDbConnection(startPromise);
+  }
+
+  private Future<?> checkDbConnection(Promise<Void> startPromise) {
+    return pool.getConnection()
+        .onFailure(startPromise::fail)
+        .onSuccess(
+            conn ->
+                conn.close()
+                    .onFailure(startPromise::fail)
+                    .map(ignore -> checkRedisConnection(startPromise)));
+  }
+
+  private Future<?> checkRedisConnection(Promise<Void> startPromise) {
+    return redisAPI.ping(List.of()).onFailure(startPromise::fail);
   }
 
   private void processWithRequiredIdParam(RoutingContext ctx, LongConsumer consumer) {

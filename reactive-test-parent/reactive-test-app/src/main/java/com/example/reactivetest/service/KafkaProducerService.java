@@ -99,7 +99,6 @@ public class KafkaProducerService implements AutoCloseable {
     }
 
     CountDownLatch latch = new CountDownLatch(1);
-    System.err.println("closing kafka producer");
     producer
         .close()
         .onComplete(

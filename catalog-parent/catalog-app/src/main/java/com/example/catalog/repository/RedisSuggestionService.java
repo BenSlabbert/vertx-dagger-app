@@ -3,14 +3,10 @@ package com.example.catalog.repository;
 
 import static com.example.commons.redis.RedisConstants.FUZZY;
 import static com.example.commons.redis.RedisConstants.MAX;
-import static java.util.logging.Level.SEVERE;
 
-import com.example.commons.config.Config;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
-import io.vertx.core.Vertx;
 import io.vertx.ext.web.handler.HttpException;
-import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.Response;
 import io.vertx.redis.client.ResponseType;
@@ -28,14 +24,8 @@ class RedisSuggestionService implements SuggestionService, AutoCloseable {
   private final RedisAPI redisAPI;
 
   @Inject
-  RedisSuggestionService(Vertx vertx, Config.RedisConfig redisConfig) {
-    Redis client = Redis.createClient(vertx, redisConfig.uri());
-    this.redisAPI = RedisAPI.api(client);
-
-    this.redisAPI
-        .ping(List.of(""))
-        .onFailure(err -> log.log(SEVERE, "failed to ping redis", err))
-        .onSuccess(resp -> log.info("pinged redis"));
+  RedisSuggestionService(RedisAPI redisAPI) {
+    this.redisAPI = redisAPI;
   }
 
   @Override

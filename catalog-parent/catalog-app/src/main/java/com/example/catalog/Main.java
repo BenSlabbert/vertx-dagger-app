@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import lombok.extern.java.Log;
 
 @Log
@@ -44,6 +45,12 @@ public class Main {
     log.log(INFO, "parse: {0}", new Object[] {parse.toString()});
 
     config = ParseConfig.parseArgs(args);
+
+    Objects.requireNonNull(config.postgresConfig());
+    Objects.requireNonNull(config.httpConfig());
+    Objects.requireNonNull(config.redisConfig());
+    Objects.requireNonNull(config.verticleConfig());
+    Objects.requireNonNull(config.serviceRegistryConfig());
 
     List<String> reachableNameServers = ReachableNameServers.getReachableNameServers();
     log.log(INFO, "reachableNameServers: {0}", new Object[] {reachableNameServers});
@@ -70,7 +77,11 @@ public class Main {
 
     vertx
         .deployVerticle(dagger::provideNewApiVerticle, deploymentOptions)
-        .onFailure(err -> log.log(SEVERE, "error while deploying api verticle", err))
+        .onFailure(
+            err -> {
+              log.log(SEVERE, "error while deploying api verticle", err);
+              vertx.close();
+            })
         .onSuccess(id -> log.log(INFO, "api deployment id: {0}", new Object[] {id}));
   }
 

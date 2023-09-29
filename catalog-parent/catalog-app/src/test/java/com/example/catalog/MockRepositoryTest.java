@@ -19,6 +19,7 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.pgclient.PgPool;
+import io.vertx.redis.client.RedisAPI;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Transaction;
 import java.util.Map;
@@ -27,6 +28,7 @@ import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 @ExtendWith(VertxExtension.class)
 public abstract class MockRepositoryTest {
@@ -40,6 +42,7 @@ public abstract class MockRepositoryTest {
   protected ItemRepository itemRepository = mock(ItemRepository.class);
   protected DSLContext dslContext = mock(DSLContext.class);
   protected PgPool pgPool = mock(PgPool.class);
+  protected RedisAPI redisAPI = mock(RedisAPI.class);
 
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
@@ -49,6 +52,8 @@ public abstract class MockRepositoryTest {
     // needed for transaction boundary
     SqlConnection sqlConnection = mock(SqlConnection.class);
     Transaction transaction = mock(Transaction.class);
+
+    when(redisAPI.ping(Mockito.any())).thenReturn(Future.succeededFuture(null));
 
     when(pgPool.getConnection()).thenReturn(Future.succeededFuture(sqlConnection));
     when(sqlConnection.begin()).thenReturn(Future.succeededFuture(transaction));
@@ -76,6 +81,7 @@ public abstract class MockRepositoryTest {
             .suggestionService(suggestionService)
             .itemRepository(itemRepository)
             .pgPool(pgPool)
+            .redisAPI(redisAPI)
             .closeables(Set.of())
             .dslContext(dslContext)
             .build();

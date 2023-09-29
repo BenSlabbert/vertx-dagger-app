@@ -15,7 +15,7 @@ import lombok.extern.java.Log;
 
 @Log
 @Module
-public class PgPoolConfig implements AutoCloseable {
+class PgPoolConfig implements AutoCloseable {
 
   @Inject
   PgPoolConfig() {}
@@ -54,7 +54,6 @@ public class PgPoolConfig implements AutoCloseable {
     if (null == pool) return;
 
     CountDownLatch latch = new CountDownLatch(1);
-    System.err.println("closing pg pool");
     pool.close()
         .onComplete(
             r -> {

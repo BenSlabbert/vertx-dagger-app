@@ -24,20 +24,21 @@ import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.SqlClient;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import lombok.extern.java.Log;
 import org.flywaydb.core.Flyway;
-import org.junit.Rule;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-@Testcontainers
+@Log
 @ExtendWith(VertxExtension.class)
 public abstract class PersistenceTest {
 
@@ -46,10 +47,10 @@ public abstract class PersistenceTest {
 
   protected TestPersistenceProvider provider;
 
-  @Rule public Network network = Network.newNetwork();
+  private static final AtomicInteger counter = new AtomicInteger(0);
+  private static final Network network = Network.newNetwork();
 
-  @Container
-  protected GenericContainer<?> redis =
+  protected static final GenericContainer<?> redis =
       new GenericContainer<>(DockerImageName.parse("redis/redis-stack-server:latest"))
           .withExposedPorts(6379)
           .withNetwork(network)
@@ -57,8 +58,7 @@ public abstract class PersistenceTest {
           .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
           .withLogConsumer(new TestcontainerLogConsumer());
 
-  @Container
-  protected GenericContainer<?> postgres =
+  protected static final GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
           .withExposedPorts(5432)
           .withNetwork(network)
@@ -69,11 +69,33 @@ public abstract class PersistenceTest {
           .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*", 1))
           .withLogConsumer(new TestcontainerLogConsumer());
 
+  // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
+  static {
+    redis.start();
+    postgres.start();
+  }
+
+  @BeforeAll
+  static void beforeAll() {
+    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+  }
+
   @BeforeEach
-  void prepare(Vertx vertx, VertxTestContext testContext) {
+  void prepare(Vertx vertx, VertxTestContext testContext) throws Exception {
+    final String dbName = "testing" + counter.incrementAndGet();
+    log.info("creating db: " + dbName);
+
+    // create a new database for each test
+    Container.ExecResult execResult =
+        postgres.execInContainer("psql", "-U", "postgres", "-c", "CREATE DATABASE " + dbName);
+    if (execResult.getExitCode() != 0) {
+      testContext.failNow("failed to create database: " + execResult.getStderr());
+      return;
+    }
+
     Flyway flyway =
         FlywayProvider.get(
-            "localhost", postgres.getMappedPort(5432), "postgres", "postgres", "postgres");
+            "localhost", postgres.getMappedPort(5432), "postgres", "postgres", dbName);
     flyway.clean();
     flyway.migrate();
 
@@ -86,7 +108,7 @@ public abstract class PersistenceTest {
             new Config.GrpcConfig(GRPC_PORT),
             new Config.RedisConfig("localhost", redis.getMappedPort(6379), 0),
             new Config.PostgresConfig(
-                "localhost", postgres.getMappedPort(5432), "postgres", "postgres", "postgres"),
+                "localhost", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
             Map.of(),
             new Config.VerticleConfig(1));
 

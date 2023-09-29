@@ -53,7 +53,6 @@ public class PgPoolConfig implements AutoCloseable {
     if (null == pool) return;
 
     CountDownLatch latch = new CountDownLatch(1);
-    System.err.println("closing pg pool");
     pool.close()
         .onComplete(
             r -> {

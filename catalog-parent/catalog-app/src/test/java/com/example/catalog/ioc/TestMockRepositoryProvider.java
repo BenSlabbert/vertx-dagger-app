@@ -6,6 +6,7 @@ import com.example.catalog.repository.SuggestionService;
 import dagger.BindsInstance;
 import dagger.Component;
 import io.vertx.pgclient.PgPool;
+import io.vertx.redis.client.RedisAPI;
 import java.util.Set;
 import javax.inject.Singleton;
 import org.jooq.DSLContext;
@@ -25,6 +26,9 @@ public interface TestMockRepositoryProvider extends Provider {
 
     @BindsInstance
     Builder pgPool(PgPool pgPool);
+
+    @BindsInstance
+    Builder redisAPI(RedisAPI redisAPI);
 
     @BindsInstance
     Builder closeables(Set<AutoCloseable> closeables);
