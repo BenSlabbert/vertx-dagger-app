@@ -1,0 +1,27 @@
+---
+version: 2
+updates:
+- package-ecosystem: "maven"
+  directory: "/"
+  schedule:
+    interval: "daily"
+  open-pull-requests-limit: 10
+  labels:
+  - "dependencies"
+  - "maven"
+- package-ecosystem: "npm"
+  directory: "/frontend/app"
+  schedule:
+    interval: "daily"
+  open-pull-requests-limit: 10
+  labels:
+  - "dependencies"
+  - "npm"
+- package-ecosystem: "docker"
+  directory: "/"
+  schedule:
+    interval: "daily"
+  open-pull-requests-limit: 10
+  labels:
+  - "dependencies"
+  - "docker"
