@@ -1,4 +1,4 @@
-FROM alpine:3 as upx-builder
+FROM alpine:3 AS upx-builder
 
 RUN apk update && apk --no-cache add curl tar xz
 
