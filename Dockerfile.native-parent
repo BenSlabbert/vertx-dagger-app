@@ -20,7 +20,7 @@
 # RUN export PATH=$PATH:/app/"$LINUX_MUSL"-native/bin ; ./mvnw package -DskipTests=true -Ddocker.skip=true -DskipJooqGeneration=true -Pnative
 
 # FROM container-registry.oracle.com/graalvm/native-image:21-muslib
-FROM container-registry.oracle.com/graalvm/native-image:17-muslib
+FROM container-registry.oracle.com/graalvm/native-image:21-muslib
 
 COPY . .
 
