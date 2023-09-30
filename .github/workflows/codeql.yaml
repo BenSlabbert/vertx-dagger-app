@@ -10,7 +10,7 @@ name: "CodeQL"
   schedule:
   - cron: "0 0 * * *"
 jobs:
-  analyze:
+  analyze-java:
     name: "Analyze Java"
     runs-on: "ubuntu-latest"
     timeout-minutes: 360
@@ -41,6 +41,35 @@ jobs:
         \ -o maven-mvnd-1.0-m7-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 /tmp/mvnd"
     - run: "make M='/tmp/mvnd/bin/mvnd' fmtCheck"
-    - run: "make M='/tmp/mvnd/bin/mvnd -DskipTests=true'"
+    - run: "make M='/tmp/mvnd/bin/mvnd -DskipTests=true -Ddocker.skip=true'"
+    - name: "Perform CodeQL Analysis"
+      uses: "github/codeql-action/analyze@v2"
+  analyze-js:
+    name: "Analyze JavaScript"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 360
+    permissions:
+      actions: "read"
+      contents: "read"
+      security-events: "write"
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+        - "javascript"
+    steps:
+    - name: "Checkout repository"
+      uses: "actions/checkout@v4"
+    - name: "Initialize CodeQL"
+      uses: "github/codeql-action/init@v2"
+      with:
+        languages: "${{ matrix.language }}"
+    - name: "Setup node"
+      uses: "actions/setup-node@v3"
+      with:
+        node-version: 20
+        cache: "yarn"
+        cache-dependency-path: "frontend/app/yarn.lock"
+    - run: "make -C frontend/app"
     - name: "Perform CodeQL Analysis"
       uses: "github/codeql-action/analyze@v2"
