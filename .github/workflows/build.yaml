@@ -39,13 +39,13 @@ jobs:
         retention-days: 30
   build-backend-native-docker:
     runs-on: "ubuntu-latest"
+    if: "github.event_name == 'schedule' && github.event.schedule == '0 0 * * *'"
     steps:
     - name: "Check if schedule"
       if: "${{ github.event_name != 'schedule' }}"
       run: "echo 'only runs on schedule'"
     - uses: "actions/checkout@v4"
     - name: "Set up JDK 17"
-      if: "github.event_name == 'schedule' && github.event.schedule == '0 0 * * *'"
       uses: "actions/setup-java@v3"
       with:
         distribution: "zulu"
