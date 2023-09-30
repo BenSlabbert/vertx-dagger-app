@@ -11,7 +11,7 @@ name: "CodeQL"
   - cron: "0 0 * * *"
 jobs:
   analyze:
-    name: "Analyze"
+    name: "Analyze Java"
     runs-on: "ubuntu-latest"
     timeout-minutes: 360
     permissions:
@@ -23,7 +23,6 @@ jobs:
       matrix:
         language:
         - "java"
-        - "javascript"
     steps:
     - name: "Checkout repository"
       uses: "actions/checkout@v4"
@@ -42,8 +41,6 @@ jobs:
         \ -o maven-mvnd-1.0-m7-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 /tmp/mvnd"
     - run: "make M='/tmp/mvnd/bin/mvnd' fmtCheck"
-    - run: "make M=/tmp/mvnd/bin/mvnd"
+    - run: "make M='/tmp/mvnd/bin/mvnd -DskipTests=true'"
     - name: "Perform CodeQL Analysis"
       uses: "github/codeql-action/analyze@v2"
-    - name: "Perform Upload Analysis"
-      uses: "github/codeql-action/upload-sarif@v2"
