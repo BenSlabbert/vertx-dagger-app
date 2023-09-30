@@ -38,3 +38,9 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+  catalog-migrator:
+    image: "catalog-migration:jvm-latest"
+    depends_on:
+      postgres:
+        condition: "service_started"
+    command: "java -jar app.jar postgres 5432 postgres postgres catalog"

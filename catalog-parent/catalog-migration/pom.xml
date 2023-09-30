@@ -11,6 +11,10 @@
   <groupId>com.example.catalog.migration</groupId>
   <artifactId>catalog-migration</artifactId>
 
+  <properties>
+    <finalName>catalog-migration</finalName>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.example.migration</groupId>
@@ -20,6 +24,7 @@
   </dependencies>
 
   <build>
+    <finalName>${finalName}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -42,6 +47,31 @@
               <goal>shade</goal>
             </goals>
             <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>docker-build</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <skip>${docker.skip}</skip>
+              <executable>docker</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>buildx</argument>
+                <argument>build</argument>
+                <argument>.</argument>
+                <argument>-t</argument>
+                <argument>${finalName}:jvm-latest</argument>
+              </arguments>
+            </configuration>
           </execution>
         </executions>
       </plugin>

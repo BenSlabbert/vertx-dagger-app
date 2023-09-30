@@ -1,5 +1,5 @@
 CREATE
-	database CATALOG;
+	database "catalog";
 
 CREATE
 	database reactive_test;
