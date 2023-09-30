@@ -104,7 +104,7 @@ class RedisSuggestionService implements SuggestionService, AutoCloseable {
                         ignore -> log.info("deleted " + name + " from suggestion dictionary"));
               }
 
-              return null;
+              return Future.succeededFuture();
             });
   }
 

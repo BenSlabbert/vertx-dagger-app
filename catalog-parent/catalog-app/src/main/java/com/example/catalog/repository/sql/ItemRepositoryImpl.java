@@ -36,8 +36,10 @@ public class ItemRepositoryImpl implements ItemRepository {
     return execute(conn, itemProjectionFactory.createFindByIdProjection(id));
   }
 
-  public Future<Void> update(SqlClient conn, long id, String name, long priceInCents) {
-    return execute(conn, itemProjectionFactory.createUpdateProjection(id, name, priceInCents));
+  public Future<Void> update(
+      SqlClient conn, long id, String name, long priceInCents, long version) {
+    return execute(
+        conn, itemProjectionFactory.createUpdateProjection(id, name, priceInCents, version));
   }
 
   public Future<Void> delete(SqlClient conn, long id) {

@@ -16,7 +16,7 @@ public interface ItemRepository {
 
   Future<Optional<ItemProjection>> findById(SqlClient conn, long id);
 
-  Future<Void> update(SqlClient conn, long id, String name, long priceInCents);
+  Future<Void> update(SqlClient conn, long id, String name, long priceInCents, long version);
 
   Future<Void> delete(SqlClient conn, long id);
 }

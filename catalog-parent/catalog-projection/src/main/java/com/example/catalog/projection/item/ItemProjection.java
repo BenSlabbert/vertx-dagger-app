@@ -30,6 +30,9 @@ public class ItemProjection {
   @Column(name = "price_in_cents")
   private long priceInCents;
 
+  @Column(name = "version")
+  private long version;
+
   public static ItemProjection map(Row row) {
     return ItemProjectionRowMapper.INSTANCE.map(row);
   }

@@ -38,8 +38,9 @@ public class ItemProjectionFactory {
     return new FindByIdProjection(id);
   }
 
-  public UpdateProjection createUpdateProjection(long id, String name, long priceInCents) {
-    return new UpdateProjection(id, name, priceInCents);
+  public UpdateProjection createUpdateProjection(
+      long id, String name, long priceInCents, long version) {
+    return new UpdateProjection(id, name, priceInCents, version);
   }
 
   public DeleteProjection createDeleteProjection(long id) {
@@ -76,11 +77,13 @@ public class ItemProjectionFactory {
     private final long id;
     private final String name;
     private final long priceInCents;
+    private final long version;
 
-    private UpdateProjection(long id, String name, long priceInCents) {
+    private UpdateProjection(long id, String name, long priceInCents, long version) {
       this.id = id;
       this.name = name;
       this.priceInCents = priceInCents;
+      this.version = version;
     }
 
     @Override
@@ -88,7 +91,8 @@ public class ItemProjectionFactory {
       return dsl.update(ITEM)
           .set(ITEM.NAME, name)
           .set(ITEM.PRICE_IN_CENTS, priceInCents)
-          .where(ITEM.ID.eq(id))
+          .set(ITEM.VERSION, ITEM.VERSION.plus(1))
+          .where(ITEM.ID.eq(id), ITEM.VERSION.eq(version))
           .returning(ITEM.ID);
     }
 
@@ -114,7 +118,9 @@ public class ItemProjectionFactory {
 
     @Override
     public AttachableQueryPart getSql() {
-      return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS).from(ITEM).where(ITEM.ID.eq(id));
+      return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS, ITEM.VERSION)
+          .from(ITEM)
+          .where(ITEM.ID.eq(id));
     }
 
     @Override
@@ -143,7 +149,7 @@ public class ItemProjectionFactory {
 
     @Override
     public AttachableQueryPart getSql() {
-      return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS)
+      return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS, ITEM.VERSION)
           .from(ITEM)
           .where(ITEM.ID.greaterThan(lastId))
           .limit(size);
@@ -171,15 +177,15 @@ public class ItemProjectionFactory {
       return dsl.insertInto(ITEM)
           .columns(ITEM.NAME, ITEM.PRICE_IN_CENTS)
           .values(name, priceInCents)
-          .returning(ITEM.ID);
+          .returning(ITEM.ID, ITEM.VERSION);
     }
 
     @Override
     public CreatedItemProjection parse(RowSet<Row> rowSet) {
       Row row = rowSet.iterator().next();
-      return new CreatedItemProjection(row.getLong(0));
+      return new CreatedItemProjection(row.getLong(0), row.getLong(1));
     }
 
-    public record CreatedItemProjection(long id) {}
+    public record CreatedItemProjection(long id, long version) {}
   }
 }

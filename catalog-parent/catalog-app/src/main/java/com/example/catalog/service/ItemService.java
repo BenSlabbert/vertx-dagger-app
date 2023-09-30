@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.service;
 
+import com.example.catalog.mapper.FindOneResponseDtoMapper;
 import com.example.catalog.projection.item.ItemProjection;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
@@ -27,26 +28,25 @@ public class ItemService extends TransactionBoundary {
 
   private final ItemRepository itemRepository;
   private final SuggestionService suggestionService;
+  private final FindOneResponseDtoMapper findOneResponseDtoMapper;
 
   @Inject
-  ItemService(PgPool pool, ItemRepository itemRepository, SuggestionService cache) {
+  ItemService(
+      PgPool pool,
+      ItemRepository itemRepository,
+      SuggestionService cache,
+      FindOneResponseDtoMapper findOneResponseDtoMapper) {
     super(pool);
     this.itemRepository = itemRepository;
     this.suggestionService = cache;
+    this.findOneResponseDtoMapper = findOneResponseDtoMapper;
   }
 
   public Future<PaginatedResponseDto> findAll(long lastId, int size) {
     Future<List<ItemProjection>> page =
         doInTransaction(conn -> itemRepository.getPage(conn, lastId, size + 1));
 
-    return page.map(
-            projections ->
-                projections.stream()
-                    .map(
-                        item ->
-                            new FindOneResponseDto(
-                                item.getId(), item.getName(), item.getPriceInCents()))
-                    .toList())
+    return page.map(projections -> projections.stream().map(findOneResponseDtoMapper::map).toList())
         .map(
             items -> {
               if (items.isEmpty()) {
@@ -56,8 +56,7 @@ public class ItemService extends TransactionBoundary {
               var more = items.size() > size;
 
               if (more) {
-                var subList = items.subList(0, items.size() - 1);
-                return new PaginatedResponseDto(more, subList.size(), subList);
+                items = items.subList(0, items.size() - 1);
               }
 
               return new PaginatedResponseDto(more, items.size(), items);
@@ -74,18 +73,17 @@ public class ItemService extends TransactionBoundary {
 
     return createdItem
         .onSuccess(item -> suggestionService.create(dto.name()))
-        .map(item -> new CreateItemResponseDto(item.id(), dto.name(), dto.priceInCents()));
+        .map(
+            item ->
+                new CreateItemResponseDto(
+                    item.id(), dto.name(), dto.priceInCents(), item.version()));
   }
 
   public Future<Optional<FindOneResponseDto>> findById(long id) {
     Future<Optional<ItemProjection>> itemProjection =
         doInTransaction(conn -> itemRepository.findById(conn, id));
 
-    return itemProjection.map(
-        maybeItem ->
-            maybeItem.map(
-                item ->
-                    new FindOneResponseDto(item.getId(), item.getName(), item.getPriceInCents())));
+    return itemProjection.map(maybeItem -> maybeItem.map(findOneResponseDtoMapper::map));
   }
 
   public Future<Void> update(long id, UpdateItemRequestDto dto) {
@@ -101,7 +99,7 @@ public class ItemService extends TransactionBoundary {
                           }
 
                           return itemRepository
-                              .update(conn, id, dto.name(), dto.priceInCents())
+                              .update(conn, id, dto.name(), dto.priceInCents(), dto.version())
                               .map(ignore -> maybeItem.get());
                         }));
 

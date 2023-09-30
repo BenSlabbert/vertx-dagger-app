@@ -9,6 +9,7 @@ public class ShutdownHookProvider {
 
   private ShutdownHookProvider() {}
 
+  @SuppressWarnings("java:S106") // logger is not available
   public static Thread get(Vertx vertx, Iterable<AutoCloseable> closeables) {
     return new Thread(
         () -> {

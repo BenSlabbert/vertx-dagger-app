@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.ioc;
 
+import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
 import dagger.BindsInstance;
@@ -12,7 +13,7 @@ import javax.inject.Singleton;
 import org.jooq.DSLContext;
 
 @Singleton
-@Component
+@Component(modules = {MapperModule.class})
 public interface TestMockRepositoryProvider extends Provider {
 
   @Component.Builder

@@ -6,7 +6,6 @@ import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
-import com.example.catalog.web.route.dto.FindOneRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.commons.config.Config;
 import com.example.commons.web.SchemaValidator;
@@ -45,16 +44,12 @@ public class SchemaValidatorDelegator {
                 .toJson()));
 
     map.put(
-        FindOneRequestDto.class,
-        JsonSchema.of(
-            objectSchema().requiredProperty(FindOneRequestDto.ID_FIELD, stringSchema()).toJson()));
-
-    map.put(
         UpdateItemRequestDto.class,
         JsonSchema.of(
             objectSchema()
                 .requiredProperty(UpdateItemRequestDto.NAME_FIELD, stringSchema())
                 .requiredProperty(UpdateItemRequestDto.PRICE_IN_CENTS_FIELD, numberSchema())
+                .requiredProperty(UpdateItemRequestDto.VERSION_FIELD, numberSchema())
                 .toJson()));
 
     return map;

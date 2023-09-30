@@ -36,6 +36,7 @@ import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
 @Log
@@ -71,8 +72,7 @@ public abstract class PersistenceTest {
 
   // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
   static {
-    redis.start();
-    postgres.start();
+    Startables.deepStart(redis, postgres).join();
   }
 
   @BeforeAll

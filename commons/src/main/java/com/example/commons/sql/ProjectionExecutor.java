@@ -11,6 +11,8 @@ public class ProjectionExecutor {
   private ProjectionExecutor() {}
 
   public static <T> Future<T> execute(SqlClient conn, Projection<T> projection) {
-    return conn.query(projection.getSql().getSQL(INLINED)).execute().map(projection::parse);
+    // todo add config option to show logging
+    String sql = projection.getSql().getSQL(INLINED);
+    return conn.query(sql).execute().map(projection::parse);
   }
 }

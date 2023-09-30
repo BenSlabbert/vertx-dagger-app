@@ -2,7 +2,10 @@
 package com.example.catalog.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
+import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
+import static io.vertx.core.http.HttpHeaders.AUTHORIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.catalog.PersistenceTest;
@@ -11,9 +14,9 @@ import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.SuggestResponseDto;
+import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonObject;
 import org.junit.jupiter.api.Test;
 
@@ -25,8 +28,8 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
 
     String createResponseJson =
         RestAssured.given()
+            .header(AUTHORIZATION.toString(), "Bearer fake")
             .contentType(ContentType.JSON)
-            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
             .body(new CreateItemRequestDto("name2", 2L).toJson().encode())
             .post("/api/create")
             .then()
@@ -39,7 +42,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
 
     String getResponseJson =
         RestAssured.given()
-            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
+            .header(AUTHORIZATION.toString(), "Bearer fake")
             .get("/api/" + createItemResponseDto.id())
             .then()
             .assertThat()
@@ -52,7 +55,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
 
     String getAllResponseJson =
         RestAssured.given()
-            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
+            .header(AUTHORIZATION.toString(), "Bearer fake")
             .get("/api/items?lastId=0&size=1")
             .then()
             .assertThat()
@@ -66,7 +69,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
 
     getAllResponseJson =
         RestAssured.given()
-            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
+            .header(AUTHORIZATION.toString(), "Bearer fake")
             .get("/api/items?lastId=%d&size=1".formatted(paginatedResponseDto.items().get(0).id()))
             .then()
             .assertThat()
@@ -80,7 +83,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
 
     String suggestResponseJson =
         RestAssured.given()
-            .header(HttpHeaders.AUTHORIZATION.toString(), "Bearer fake")
+            .header(AUTHORIZATION.toString(), "Bearer fake")
             .get("/api/suggest?s=name")
             .then()
             .assertThat()
@@ -92,5 +95,47 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
     assertThat(suggestResponseDto.suggestions())
         .singleElement()
         .satisfies(s -> assertThat(s).isEqualTo("name2"));
+
+    RestAssured.given()
+        .header(AUTHORIZATION.toString(), "Bearer fake")
+        .contentType(ContentType.JSON)
+        .body(
+            new UpdateItemRequestDto("name2updated", 3L, createItemResponseDto.version())
+                .toJson()
+                .encode())
+        .post("/api/edit/" + createItemResponseDto.id())
+        .then()
+        .assertThat()
+        .statusCode(NO_CONTENT.code());
+
+    getResponseJson =
+        RestAssured.given()
+            .header(AUTHORIZATION.toString(), "Bearer fake")
+            .get("/api/" + createItemResponseDto.id())
+            .then()
+            .assertThat()
+            .statusCode(OK.code())
+            .extract()
+            .asString();
+
+    findOneResponseDto = new FindOneResponseDto(new JsonObject(getResponseJson));
+    assertThat(findOneResponseDto).isNotNull();
+    assertThat(findOneResponseDto.priceInCents()).isEqualTo(3L);
+    assertThat(findOneResponseDto.name()).isEqualTo("name2updated");
+    assertThat(findOneResponseDto.version()).isEqualTo(createItemResponseDto.version() + 1L);
+
+    RestAssured.given()
+        .header(AUTHORIZATION.toString(), "Bearer fake")
+        .delete("/api/" + createItemResponseDto.id())
+        .then()
+        .assertThat()
+        .statusCode(NO_CONTENT.code());
+
+    RestAssured.given()
+        .header(AUTHORIZATION.toString(), "Bearer fake")
+        .get("/api/" + createItemResponseDto.id())
+        .then()
+        .assertThat()
+        .statusCode(NOT_FOUND.code());
   }
 }

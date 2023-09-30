@@ -3,11 +3,11 @@ package com.example.reactivetest.service;
 
 import com.example.reactivetest.proto.core.Header;
 import com.example.reactivetest.proto.core.Headers;
-import com.example.reactivetest.proto.v1.Person;
 import com.example.reactivetest.repository.sql.OutboxRepository;
 import com.example.reactivetest.repository.sql.projection.OutboxProjectionFactory.DeleteFromOutbox.DeleteOutboxProjection;
 import com.example.reactivetest.repository.sql.projection.OutboxProjectionFactory.GetFromOutboxProjection;
 import com.example.reactivetest.repository.sql.projection.OutboxProjectionFactory.InsertIntoOutbox.InsertOutboxProjection;
+import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import io.vertx.sqlclient.SqlClient;
@@ -26,7 +26,8 @@ class KafkaOutboxService {
     this.outboxRepository = outboxRepository;
   }
 
-  Future<InsertOutboxProjection> insert(SqlClient conn, KafkaProducerRecord<String, Person> msg) {
+  Future<InsertOutboxProjection> insert(
+      SqlClient conn, KafkaProducerRecord<String, ? extends GeneratedMessageV3> msg) {
 
     String key = msg.key();
     byte[] value = msg.value().toByteArray();

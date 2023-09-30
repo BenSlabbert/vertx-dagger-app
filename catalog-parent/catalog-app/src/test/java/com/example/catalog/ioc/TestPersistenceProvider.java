@@ -2,6 +2,7 @@
 package com.example.catalog.ioc;
 
 import com.example.catalog.config.ConfigModule;
+import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.RepositoryModule;
 import dagger.Component;
@@ -10,11 +11,7 @@ import io.vertx.redis.client.RedisAPI;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(
-    modules = {
-      RepositoryModule.class,
-      ConfigModule.class,
-    })
+@Component(modules = {RepositoryModule.class, ConfigModule.class, MapperModule.class})
 public interface TestPersistenceProvider extends Provider {
 
   ItemRepository itemRepository();
