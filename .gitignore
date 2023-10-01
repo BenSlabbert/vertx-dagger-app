@@ -4,7 +4,6 @@ target/
 !target/lib
 !target/*.jar
 mvnw*
-.mvn/
 *-config.json
 docker-config.json
 *.tar.gz

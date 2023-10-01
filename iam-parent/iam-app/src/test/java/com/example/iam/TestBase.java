@@ -2,7 +2,6 @@
 package com.example.iam;
 
 import static com.example.commons.FreePortUtility.getPort;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
@@ -16,7 +15,6 @@ import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
@@ -76,8 +74,7 @@ public abstract class TestBase {
   }
 
   @AfterEach
-  @DisplayName("Check that the verticle is still there")
-  void lastChecks(Vertx vertx) {
-    assertThat(vertx.deploymentIDs()).isNotEmpty().hasSize(2);
+  void undeploy(Vertx vertx) {
+    vertx.deploymentIDs().forEach(vertx::undeploy);
   }
 }

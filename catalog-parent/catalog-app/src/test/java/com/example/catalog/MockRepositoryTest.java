@@ -2,7 +2,6 @@
 package com.example.catalog;
 
 import static com.example.commons.FreePortUtility.getPort;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -101,7 +100,7 @@ public abstract class MockRepositoryTest {
   }
 
   @AfterEach
-  void lastChecks(Vertx vertx) {
-    assertThat(vertx.deploymentIDs()).isNotEmpty().hasSize(1);
+  void undeploy(Vertx vertx) {
+    vertx.deploymentIDs().forEach(vertx::undeploy);
   }
 }

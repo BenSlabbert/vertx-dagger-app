@@ -54,4 +54,4 @@ dockerSave:
 .PHONY: clean
 clean:
 	${M} clean
-	rm -rf .mvn mvnw mvnw.cmd *.tar.gz
+	rm -rf mvnw mvnw.cmd *.tar.gz
