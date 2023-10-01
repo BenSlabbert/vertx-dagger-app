@@ -1,8 +1,6 @@
 ---
 name: "Java + Maven + Docker"
 "on":
-  schedule:
-  - cron: "0 0 * * *"
   push:
     branches:
     - "main"
@@ -36,33 +34,6 @@ jobs:
       with:
         name: "graalvm iam binary upx"
         path: "iam.upx"
-        retention-days: 30
-  build-backend-native-docker:
-    runs-on: "ubuntu-latest"
-    if: "github.event_name == 'schedule' && github.event.schedule == '0 0 * * *'"
-    steps:
-    - name: "Check if schedule"
-      if: "${{ github.event_name != 'schedule' }}"
-      run: "echo 'only runs on schedule'"
-    - uses: "actions/checkout@v4"
-    - name: "Set up JDK 20"
-      uses: "actions/setup-java@v3"
-      with:
-        distribution: "zulu"
-        java-version: "20"
-        java-package: "jdk"
-        cache: "maven"
-    - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m7/maven-mvnd-1.0-m7-m39-linux-amd64.zip\
-        \ -o maven-mvnd-1.0-m7-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m7-m39-linux-amd64.zip\
-        \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 /tmp/mvnd"
-    - run: "make M='/tmp/mvnd/bin/mvnd' package"
-    - run: "make M='/tmp/mvnd/bin/mvnd' native"
-    - run: "make M='/tmp/mvnd/bin/mvnd' dockerSave"
-    - uses: "actions/upload-artifact@v3"
-      if: "always()"
-      with:
-        name: "upx-native-binaries"
-        path: "bin/"
         retention-days: 30
   build-backend-jvm:
     runs-on: "ubuntu-latest"
