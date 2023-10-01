@@ -64,8 +64,8 @@ public abstract class MockRepositoryTest {
         new Config(
             new Config.HttpConfig(HTTP_PORT),
             new Config.GrpcConfig(GRPC_PORT),
-            new Config.RedisConfig("localhost", 6379, 0),
-            new Config.PostgresConfig("localhost", 5432, "postgres", "postgres", "postgres"),
+            new Config.RedisConfig("127.0.0.1", 6379, 0),
+            new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
             Map.of(),
             new Config.VerticleConfig(1));
 

@@ -16,7 +16,7 @@ jobs:
     - uses: "actions/checkout@v4"
     - uses: "graalvm/setup-graalvm@v1"
       with:
-        java-version: "17"
+        java-version: "20"
         distribution: "graalvm-community"
         native-image-musl: "true"
         cache: "maven"
@@ -45,11 +45,11 @@ jobs:
       if: "${{ github.event_name != 'schedule' }}"
       run: "echo 'only runs on schedule'"
     - uses: "actions/checkout@v4"
-    - name: "Set up JDK 17"
+    - name: "Set up JDK 20"
       uses: "actions/setup-java@v3"
       with:
         distribution: "zulu"
-        java-version: "17"
+        java-version: "20"
         java-package: "jdk"
         cache: "maven"
     - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m7/maven-mvnd-1.0-m7-m39-linux-amd64.zip\
@@ -68,11 +68,11 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
     - uses: "actions/checkout@v4"
-    - name: "Set up JDK 17"
+    - name: "Set up JDK 20"
       uses: "actions/setup-java@v3"
       with:
         distribution: "zulu"
-        java-version: "17"
+        java-version: "20"
         java-package: "jdk"
         cache: "maven"
     - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m7/maven-mvnd-1.0-m7-m39-linux-amd64.zip\

@@ -47,7 +47,7 @@ public record Config(
   public static Config defaults() {
     return Config.builder()
         .httpConfig(HttpConfig.builder().port(8080).build())
-        .redisConfig(RedisConfig.builder().host("localhost").port(6379).database(0).build())
+        .redisConfig(RedisConfig.builder().host("127.0.0.1").port(6379).database(0).build())
         .build();
   }
 

@@ -127,7 +127,7 @@ class ApiVerticleIT {
 
     GrpcClient.client(Vertx.vertx())
         .request(
-            SocketAddress.inetSocketAddress(app.getMappedPort(50051), "localhost"),
+            SocketAddress.inetSocketAddress(app.getMappedPort(50051), "127.0.0.1"),
             IamGrpc.getCheckTokenMethod())
         .compose(
             request -> {

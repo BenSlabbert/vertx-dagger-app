@@ -35,7 +35,7 @@ public class EntityGenerator {
       container.start();
 
       var flyway =
-          FlywayProvider.get("localhost", container.getMappedPort(5432), "test", "test", "test");
+          FlywayProvider.get("127.0.0.1", container.getMappedPort(5432), "test", "test", "test");
       flyway.clean();
       flyway.migrate();
 

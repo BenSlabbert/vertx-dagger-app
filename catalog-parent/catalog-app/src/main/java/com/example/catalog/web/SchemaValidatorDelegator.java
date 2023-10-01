@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web;
 
+import static io.vertx.json.schema.common.dsl.Keywords.minLength;
 import static io.vertx.json.schema.common.dsl.Schemas.numberSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
@@ -39,7 +40,8 @@ public class SchemaValidatorDelegator {
         CreateItemRequestDto.class,
         JsonSchema.of(
             objectSchema()
-                .requiredProperty(CreateItemRequestDto.NAME_FIELD, stringSchema())
+                .requiredProperty(
+                    CreateItemRequestDto.NAME_FIELD, stringSchema().with(minLength(1)))
                 .requiredProperty(CreateItemRequestDto.PRICE_IN_CENTS_FIELD, numberSchema())
                 .toJson()));
 
@@ -47,7 +49,8 @@ public class SchemaValidatorDelegator {
         UpdateItemRequestDto.class,
         JsonSchema.of(
             objectSchema()
-                .requiredProperty(UpdateItemRequestDto.NAME_FIELD, stringSchema())
+                .requiredProperty(
+                    UpdateItemRequestDto.NAME_FIELD, stringSchema().with(minLength(1)))
                 .requiredProperty(UpdateItemRequestDto.PRICE_IN_CENTS_FIELD, numberSchema())
                 .requiredProperty(UpdateItemRequestDto.VERSION_FIELD, numberSchema())
                 .toJson()));

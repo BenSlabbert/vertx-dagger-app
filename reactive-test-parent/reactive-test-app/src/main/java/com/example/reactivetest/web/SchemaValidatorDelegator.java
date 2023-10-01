@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.web;
 
+import static io.vertx.json.schema.common.dsl.Keywords.minLength;
 import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 
@@ -37,7 +38,7 @@ public class SchemaValidatorDelegator {
         CreatePersonRequest.class,
         JsonSchema.of(
             objectSchema()
-                .requiredProperty(CreatePersonRequest.NAME_FIELD, stringSchema())
+                .requiredProperty(CreatePersonRequest.NAME_FIELD, stringSchema().with(minLength(1)))
                 .toJson()));
 
     return map;

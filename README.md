@@ -19,7 +19,7 @@ This repo also builds two docker images:
     "port": 50051
   },
   "redisConfig": {
-    "host": "localhost",
+    "host": "127.0.0.1",
     "port": 6379,
     "database": 0
   },

@@ -95,7 +95,7 @@ public abstract class PersistenceTest {
 
     Flyway flyway =
         FlywayProvider.get(
-            "localhost", postgres.getMappedPort(5432), "postgres", "postgres", dbName);
+            "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName);
     flyway.clean();
     flyway.migrate();
 
@@ -106,9 +106,9 @@ public abstract class PersistenceTest {
         new Config(
             new Config.HttpConfig(HTTP_PORT),
             new Config.GrpcConfig(GRPC_PORT),
-            new Config.RedisConfig("localhost", redis.getMappedPort(6379), 0),
+            new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             new Config.PostgresConfig(
-                "localhost", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
+                "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
             Map.of(),
             new Config.VerticleConfig(1));
 

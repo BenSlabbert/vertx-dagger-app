@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.web;
 
+import static io.vertx.json.schema.common.dsl.Keywords.minLength;
 import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 
@@ -39,24 +40,27 @@ public class SchemaValidatorDelegator {
         LoginRequestDto.class,
         JsonSchema.of(
             objectSchema()
-                .requiredProperty(LoginRequestDto.USERNAME_FIELD, stringSchema())
-                .requiredProperty(LoginRequestDto.PASSWORD_FIELD, stringSchema())
+                .requiredProperty(LoginRequestDto.USERNAME_FIELD, stringSchema().with(minLength(1)))
+                .requiredProperty(LoginRequestDto.PASSWORD_FIELD, stringSchema().with(minLength(1)))
                 .toJson()));
 
     map.put(
         RefreshRequestDto.class,
         JsonSchema.of(
             objectSchema()
-                .requiredProperty(RefreshRequestDto.USERNAME_FIELD, stringSchema())
-                .requiredProperty(RefreshRequestDto.TOKEN_FIELD, stringSchema())
+                .requiredProperty(
+                    RefreshRequestDto.USERNAME_FIELD, stringSchema().with(minLength(1)))
+                .requiredProperty(RefreshRequestDto.TOKEN_FIELD, stringSchema().with(minLength(1)))
                 .toJson()));
 
     map.put(
         RegisterRequestDto.class,
         JsonSchema.of(
             objectSchema()
-                .requiredProperty(RegisterRequestDto.USERNAME_FIELD, stringSchema())
-                .requiredProperty(RegisterRequestDto.PASSWORD_FIELD, stringSchema())
+                .requiredProperty(
+                    RegisterRequestDto.USERNAME_FIELD, stringSchema().with(minLength(1)))
+                .requiredProperty(
+                    RegisterRequestDto.PASSWORD_FIELD, stringSchema().with(minLength(1)))
                 .toJson()));
 
     return map;
