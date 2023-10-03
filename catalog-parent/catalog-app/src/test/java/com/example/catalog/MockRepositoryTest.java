@@ -65,6 +65,7 @@ public abstract class MockRepositoryTest {
             new Config.GrpcConfig(GRPC_PORT),
             new Config.RedisConfig("127.0.0.1", 6379, 0),
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
+            null,
             Map.of(),
             new Config.VerticleConfig(1));
 

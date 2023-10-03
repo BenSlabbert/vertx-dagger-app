@@ -16,6 +16,7 @@ public record Config(
     GrpcConfig grpcConfig,
     RedisConfig redisConfig,
     PostgresConfig postgresConfig,
+    KafkaConfig kafkaConfig,
     Map<ServiceIdentifier, ServiceRegistryConfig> serviceRegistryConfig,
     VerticleConfig verticleConfig) {
 
@@ -59,6 +60,7 @@ public record Config(
     addRedisConfig(jsonObject, builder);
     addPostgresConfig(jsonObject, builder);
     addGrpcConfig(jsonObject, builder);
+    addKafkaConfig(jsonObject, builder);
     addServiceRegistryConfig(jsonObject, builder);
 
     return builder
@@ -70,6 +72,33 @@ public record Config(
         .build();
   }
 
+  private static void addKafkaConfig(JsonObject jsonObject, ConfigBuilder builder) {
+    JsonObject config = jsonObject.getJsonObject("kafkaConfig", new JsonObject());
+
+    if (config.isEmpty()) {
+      return;
+    }
+
+    KafkaConsumerConfig consumerConfig =
+        KafkaConsumerConfig.builder()
+            .clientId(config.getString("clientId"))
+            .consumerGroup(config.getString("consumerGroup"))
+            .maxPollRecords(config.getInteger("maxPollRecords", 1))
+            .build();
+
+    KafkaProducerConfig producerConfig =
+        KafkaProducerConfig.builder().clientId(config.getString("clientId")).build();
+
+    KafkaConfig kafkaConfig =
+        KafkaConfig.builder()
+            .bootstrapServers(config.getString("bootstrapServers"))
+            .kafkaConsumerConfig(consumerConfig)
+            .kafkaProducerConfig(producerConfig)
+            .build();
+
+    builder.kafkaConfig(kafkaConfig);
+  }
+
   private static void addGrpcConfig(JsonObject jsonObject, ConfigBuilder builder) {
     JsonObject config = jsonObject.getJsonObject("grpcConfig", new JsonObject());
 
@@ -77,7 +106,8 @@ public record Config(
       return;
     }
 
-    builder.grpcConfig(GrpcConfig.builder().port(config.getInteger("port")).build());
+    GrpcConfig grpcConfig = GrpcConfig.builder().port(config.getInteger("port")).build();
+    builder.grpcConfig(grpcConfig);
   }
 
   private static void addRedisConfig(JsonObject jsonObject, ConfigBuilder builder) {
@@ -181,6 +211,18 @@ public record Config(
       return String.format("redis://%s:%d/%d", host, port, database);
     }
   }
+
+  @Builder
+  public record KafkaConfig(
+      String bootstrapServers,
+      KafkaConsumerConfig kafkaConsumerConfig,
+      KafkaProducerConfig kafkaProducerConfig) {}
+
+  @Builder
+  public record KafkaConsumerConfig(String clientId, String consumerGroup, int maxPollRecords) {}
+
+  @Builder
+  public record KafkaProducerConfig(String clientId) {}
 
   @Builder
   public record PostgresConfig(
