@@ -1,12 +1,12 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.commons;
+package com.example.commons.protobuf;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-public class Protobuf {
+public class ProtobufParser {
 
-  private Protobuf() {}
+  private ProtobufParser() {}
 
   public static <T extends GeneratedMessageV3> T parse(byte[] in, T instance) {
     try {

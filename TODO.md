@@ -16,7 +16,7 @@ io.vertx.core.Future.fromCompletionStage(stringCompletableFuture);
 2. create payments service
    1. create a payment for user in iam
 3. create a purchase_order for the user in catalog
-4. create a simple saga:
+4. create a simple sagaExecutor:
    1. create a purchase_order (catalog service)
    2. create a payment (payments service)
    3. if payment fails, cancel the purchase_order

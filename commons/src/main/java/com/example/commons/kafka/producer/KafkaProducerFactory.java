@@ -14,31 +14,28 @@ import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_
 
 import com.example.commons.config.Config;
 import com.google.protobuf.GeneratedMessageV3;
-import io.vertx.core.Future;
+import dagger.Module;
+import dagger.Provides;
 import io.vertx.core.Vertx;
-import io.vertx.kafka.admin.KafkaAdminClient;
-import io.vertx.kafka.admin.NewTopic;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 import lombok.extern.java.Log;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.common.errors.TopicExistsException;
 
 @Log
+@Module
 public class KafkaProducerFactory {
 
   private KafkaProducerFactory() {}
 
+  @Provides
   public static KafkaProducer<String, GeneratedMessageV3> createProducer(
       Vertx vertx, Config.KafkaConfig kafkaConfig) {
 
     Map<String, String> config = new HashMap<>();
     String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
-    String valueSerializer = "com.example.commons.kafka.ProtobufSerializer";
+    String valueSerializer = ProtobufSerializer.class.getCanonicalName();
 
     config.put(BOOTSTRAP_SERVERS_CONFIG, kafkaConfig.bootstrapServers());
     config.put(KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
@@ -53,22 +50,5 @@ public class KafkaProducerFactory {
 
     return KafkaProducer.<String, GeneratedMessageV3>create(vertx, config)
         .exceptionHandler(err -> log.log(Level.SEVERE, "unhandled exception", err));
-  }
-
-  public static Future<Void> createTopic(Vertx vertx, String topic) {
-    Properties config = new Properties();
-    config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
-
-    return KafkaAdminClient.create(vertx, config)
-        .createTopics(List.of(new NewTopic(topic, 1, (short) 1)))
-        .onSuccess(v -> log.info("created topics"))
-        .onFailure(
-            err -> {
-              if (err instanceof TopicExistsException) {
-                log.info("topic already created");
-                return;
-              }
-              log.log(Level.SEVERE, "failed to create topics", err);
-            });
   }
 }
