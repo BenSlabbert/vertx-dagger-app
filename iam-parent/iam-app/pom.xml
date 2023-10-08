@@ -24,6 +24,12 @@
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.testcontainers</groupId>
+          <artifactId>testcontainers</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.google.dagger</groupId>
@@ -183,6 +189,7 @@
             </goals>
             <phase>package</phase>
             <configuration>
+              <includeScope>compile</includeScope>
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
             </configuration>
           </execution>
