@@ -16,7 +16,6 @@ public class SagaBuilder {
 
   @Inject
   SagaBuilder(KafkaProducer<String, GeneratedMessageV3> producer) {
-    // needed for dagger to add to the dependency graph
     this.producer = producer;
   }
 

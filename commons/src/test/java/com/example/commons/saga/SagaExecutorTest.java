@@ -113,7 +113,7 @@ class SagaExecutorTest extends KafkaTestBase {
               }
             })
         .subscribe(Set.of("CMD.1", "CMD.2"))
-        .onFailure(err -> fail("failed to subscribe to topics", err))
+        .onFailure(testContext::failNow)
         .onSuccess(ignore -> System.err.println("subscribed to topics successfully"));
 
     SagaExecutor sagaExecutor =
@@ -135,22 +135,22 @@ class SagaExecutorTest extends KafkaTestBase {
     // register saga consumer for east result topic
     sagaConsumer
         .handler(
-            record -> {
+            msg -> {
               Map<String, MessageHandler> handlerForTopic =
                   sagaExecutor.messageHandlers().stream()
                       .collect(
                           Collectors.toMap(MessageHandler::getResultTopic, Function.identity()));
 
-              MessageHandler handler = handlerForTopic.get(record.topic());
+              MessageHandler handler = handlerForTopic.get(msg.topic());
               if (handler == null) {
-                fail("no handler for topic: " + record.topic());
+                fail("no handler for topic: " + msg.topic());
                 return;
               }
 
-              handler.handle(record);
+              handler.handle(msg);
             })
         .subscribe(resulTopics)
-        .onFailure(err -> fail("failed to subscribe to topics", err))
+        .onFailure(testContext::failNow)
         .onSuccess(ignore -> System.err.println("subscribed to topics successfully"));
 
     sagaExecutor
@@ -234,7 +234,7 @@ class SagaExecutorTest extends KafkaTestBase {
               }
             })
         .subscribe(Set.of("CMD.1", "CMD.2"))
-        .onFailure(err -> fail("failed to subscribe to topics", err))
+        .onFailure(testContext::failNow)
         .onSuccess(ignore -> System.err.println("subscribed to topics successfully"));
 
     SagaExecutor sagaExecutor =
@@ -274,7 +274,7 @@ class SagaExecutorTest extends KafkaTestBase {
               handler.handle(record);
             })
         .subscribe(resulTopics)
-        .onFailure(err -> fail("failed to subscribe to topics", err))
+        .onFailure(testContext::failNow)
         .onSuccess(ignore -> System.err.println("subscribed to topics successfully"));
 
     sagaExecutor

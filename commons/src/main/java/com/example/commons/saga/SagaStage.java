@@ -56,11 +56,6 @@ class SagaStage implements MessageHandler {
             });
   }
 
-  public void waitForResult(Promise<Boolean> promise, String sagaId) {
-    System.err.println("%s: waiting for result".formatted(sagaId));
-    promiseForSagaId.put(sagaId, promise);
-  }
-
   public Future<Void> sendRollbackCommand(String sagaId) {
     System.err.println("%s: sending rollback command".formatted(sagaId));
 

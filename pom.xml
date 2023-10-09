@@ -19,7 +19,7 @@
   <properties>
     <revision>1.0.0-SNAPSHOT</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>21</java.version>
+    <java.version>20</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -56,6 +56,7 @@
     <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
     <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
     <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
+    <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
     <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
     <native-maven-plugin.version>0.9.27</native-maven-plugin.version>
     <spotless.version>2.40.0</spotless.version>
@@ -321,6 +322,11 @@
               </licenseHeader>
             </java>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${maven-clean-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
