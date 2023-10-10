@@ -20,7 +20,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-      ZK_SERVER_HEAP: 128
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     ports:
     - "22181:2181"
   kafka:
@@ -44,4 +44,4 @@ services:
     depends_on:
       postgres:
         condition: "service_started"
-    command: "java -jar app.jar postgres 5432 postgres postgres catalog"
+    command: "java -Xmx32M -Xms32M -jar app.jar postgres 5432 postgres postgres catalog"

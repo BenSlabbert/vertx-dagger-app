@@ -7,6 +7,7 @@ mvnw*
 *-config.json
 docker-config.json
 *.tar.gz
+*.tar
 file-uploads
 .attach_pid*
 bin/
