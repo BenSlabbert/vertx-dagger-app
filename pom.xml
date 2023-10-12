@@ -14,12 +14,14 @@
     <module>commons</module>
     <module>migration</module>
     <module>entity-generator</module>
+    <module>aspect-parent</module>
   </modules>
 
   <properties>
     <revision>1.0.0-SNAPSHOT</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>20</java.version>
+    <aspect-java.version>16</aspect-java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -47,6 +49,8 @@
     <scram.version>2.1</scram.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+    <aspectj-aspectjweaver.version>1.9.20.1</aspectj-aspectjweaver.version>
+    <aspectj-aspectjrt.version>1.9.7</aspectj-aspectjrt.version>
 
     <!--plugins-->
     <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
@@ -57,10 +61,12 @@
     <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
     <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
     <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
+    <maven-resource-plugin.version>3.3.1</maven-resource-plugin.version>
     <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
     <native-maven-plugin.version>0.9.27</native-maven-plugin.version>
     <spotless.version>2.40.0</spotless.version>
     <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
+    <aspectj-maven-plugin.version>1.14.0</aspectj-maven-plugin.version>
 
     <!--extensions-->
     <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
@@ -274,6 +280,7 @@
           <artifactId>spotless-maven-plugin</artifactId>
           <version>${spotless.version}</version>
           <configuration>
+            <ratchetFrom>origin/main</ratchetFrom>
             <yaml>
               <includes>
                 <include>**/*.yaml</include>
@@ -350,6 +357,11 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${maven-resource-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
           <version>${maven-shade-plugin.version}</version>
         </plugin>
@@ -357,6 +369,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>aspectj-maven-plugin</artifactId>
+          <version>${aspectj-maven-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
