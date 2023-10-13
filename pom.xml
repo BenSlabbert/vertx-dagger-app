@@ -50,7 +50,7 @@
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     <aspectj-aspectjweaver.version>1.9.20.1</aspectj-aspectjweaver.version>
-    <aspectj-aspectjrt.version>1.9.7</aspectj-aspectjrt.version>
+    <aspectj-aspectjrt.version>1.9.20.1</aspectj-aspectjrt.version>
 
     <!--plugins-->
     <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
