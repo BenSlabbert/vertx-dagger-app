@@ -15,6 +15,7 @@
     <module>migration</module>
     <module>entity-generator</module>
     <module>aspect-parent</module>
+    <module>code-gen-parent</module>
   </modules>
 
   <properties>
@@ -49,8 +50,9 @@
     <scram.version>2.1</scram.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-    <aspectj-aspectjweaver.version>1.9.20.1</aspectj-aspectjweaver.version>
-    <aspectj-aspectjrt.version>1.9.7</aspectj-aspectjrt.version>
+    <aspectj.version>1.9.7</aspectj.version>
+    <auto-service.version>1.1.1</auto-service.version>
+    <compile-testing.version>0.21.0</compile-testing.version>
 
     <!--plugins-->
     <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
@@ -86,6 +88,16 @@
             <artifactId>slf4j-api</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>${aspectj.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.auto.service</groupId>
+        <artifactId>auto-service</artifactId>
+        <version>${auto-service.version}</version>
       </dependency>
       <dependency>
         <groupId>com.ongres.scram</groupId>
@@ -209,6 +221,12 @@
         <scope>provided</scope>
       </dependency>
       <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>${aspectj.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
         <version>${assertj-core.version}</version>
@@ -219,6 +237,12 @@
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
         <version>${commons-codec.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.google.testing.compile</groupId>
+        <artifactId>compile-testing</artifactId>
+        <version>${compile-testing.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
