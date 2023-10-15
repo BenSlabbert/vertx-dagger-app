@@ -50,7 +50,7 @@
     <scram.version>2.1</scram.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-    <aspectj.version>1.9.7</aspectj.version>
+    <aspectj.version>1.9.20.1</aspectj.version>
     <auto-service.version>1.1.1</auto-service.version>
     <compile-testing.version>0.21.0</compile-testing.version>
 
