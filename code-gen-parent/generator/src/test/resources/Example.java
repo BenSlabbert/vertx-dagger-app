@@ -1,8 +1,8 @@
 package my.test;
 
-import com.example.codegen.generator.annotation.AdvisedBy;
+import com.example.codegen.generator.annotation.BeforeAdvice;
 
-@AdvisedBy(before = true)
+@BeforeAdvice
 public class Example {
 
   public void publicVoidMethod() {

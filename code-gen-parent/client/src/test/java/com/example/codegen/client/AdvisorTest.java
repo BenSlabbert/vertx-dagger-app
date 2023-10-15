@@ -8,7 +8,7 @@ class AdvisorTest {
   @Test
   void test() {
     Advisor advisor = new Advisor();
-    Advised advised = new Advisor_Advised(advisor);
+    Advised advised = new BeforeAdvisor_Advised(advisor);
     advised.publicVoidMethod();
     advised.publicStringMethod();
     advised.publicVoidStringMethod("in");

@@ -9,7 +9,7 @@ import com.google.testing.compile.JavaSourceSubjectFactory;
 import java.net.URL;
 import org.junit.jupiter.api.Test;
 
-class AdvisedByGeneratorTest {
+class BeforeAdviceGeneratorTest {
 
   @Test
   void test() {

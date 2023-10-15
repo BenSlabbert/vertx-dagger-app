@@ -8,11 +8,4 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
-public @interface AdvisedBy {
-
-  boolean before() default false;
-
-  boolean after() default false;
-
-  boolean around() default false;
-}
+public @interface BeforeAdvice {}

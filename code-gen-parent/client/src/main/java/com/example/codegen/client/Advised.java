@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.codegen.client;
 
-import com.example.codegen.generator.annotation.AdvisedBy;
+import com.example.codegen.generator.annotation.BeforeAdvice;
 
-@AdvisedBy(before = true)
+@BeforeAdvice
 public class Advised {
 
   public final String value;

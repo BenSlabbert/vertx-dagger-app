@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.codegen.generator.generator;
 
-import com.example.codegen.generator.annotation.AdvisedBy;
+import com.example.codegen.generator.annotation.BeforeAdvice;
 import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +18,6 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
@@ -37,7 +36,7 @@ public class AdvisedByGenerator extends AbstractProcessor {
 
   @Override
   public Set<String> getSupportedAnnotationTypes() {
-    return Set.of(AdvisedBy.class.getCanonicalName());
+    return Set.of(BeforeAdvice.class.getCanonicalName());
   }
 
   @Override
@@ -197,24 +196,7 @@ public class AdvisedByGenerator extends AbstractProcessor {
     // generate interface end
     //
 
-    TypeMirror beforeAdvisorCanonicalName = null;
-    try {
-      // https://area-51.blog/2009/02/13/getting-class-values-from-annotations-in-an-annotationprocessor/
-      AdvisedBy advisedBy = enclosingTypeElement.getAnnotation(AdvisedBy.class);
-      boolean before = advisedBy.before();
-      // since we now have primitives, i do not need this
-      System.err.println("before: " + before);
-    } catch (MirroredTypeException e) {
-      beforeAdvisorCanonicalName = e.getTypeMirror();
-    }
-
-    // if beforeAdvisorCanonicalName == com.example.codegen.generator.annotation.AdvisedBy.*
-    // then we know it is using the default interface and we do not and an advisor
-    System.out.printf(
-        "%s AdvisedBy value = %s\n",
-        enclosingTypeElement.getSimpleName(), beforeAdvisorCanonicalName);
-
-    String generatedClassName = "Advisor_" + superClass;
+    String generatedClassName = "BeforeAdvisor_" + superClass;
 
     builderFile =
         processingEnv.getFiler().createSourceFile(classPackage + "." + generatedClassName);
