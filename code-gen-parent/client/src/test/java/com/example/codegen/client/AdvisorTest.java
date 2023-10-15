@@ -12,6 +12,8 @@ class AdvisorTest {
     advised.publicVoidMethod();
     advised.publicStringMethod();
     advised.publicVoidStringMethod("in");
+    advised.publicVoidStringMethod("in1", "in2");
     advised.publicStringMethod("in");
+    advised.publicStringMethod("in1", "in2");
   }
 }

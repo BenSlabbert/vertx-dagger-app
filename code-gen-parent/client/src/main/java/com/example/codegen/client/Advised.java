@@ -4,8 +4,7 @@ package com.example.codegen.client;
 import com.example.codegen.generator.annotation.AdvisedBy;
 
 @AdvisedBy(before = true)
-public abstract class Advised {
-  // todo abstract not required
+public class Advised {
 
   public final String value;
 

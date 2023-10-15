@@ -89,6 +89,31 @@ public class AdvisedByGenerator extends AbstractProcessor {
     Name superClass = element.getSimpleName();
 
     TypeElement enclosingTypeElement = findEnclosingTypeElement(element);
+    Set<Modifier> modifiers = enclosingTypeElement.getModifiers();
+
+    boolean acceptableModifiers =
+        modifiers.stream()
+            .anyMatch(
+                m ->
+                    m == Modifier.ABSTRACT
+                        || m == Modifier.PUBLIC
+                        || m == Modifier.PROTECTED
+                        || m == Modifier.DEFAULT);
+
+    if (!acceptableModifiers) {
+      throw new GenerationException("Only abstract, public, protected, and default are supported");
+    }
+
+    boolean hasFinal = modifiers.stream().anyMatch(m -> m == Modifier.FINAL);
+
+    if (hasFinal) {
+      throw new GenerationException("cannot advise a final class");
+    }
+
+    // only supports abstract, class, protected
+
+    System.err.println("modifiers: " + modifiers);
+
     List<ExecutableElement> executableElements =
         ElementFilter.methodsIn(enclosingTypeElement.getEnclosedElements());
 
