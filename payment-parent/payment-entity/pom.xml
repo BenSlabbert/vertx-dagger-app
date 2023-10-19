@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.example.parent</groupId>
+    <artifactId>payment-parent</artifactId>
+    <version>${revision}</version>
+  </parent>
+
+  <groupId>com.example.payment.entity</groupId>
+  <artifactId>payment-entity</artifactId>
+
+  <properties>
+    <jooq.generated-sources.package>com.example.payment.generator.entity.generated.jooq</jooq.generated-sources.package>
+    <jooq.generated-sources.directory>${project.build.directory}/generated-sources/jooq</jooq.generated-sources.directory>
+    <jooq.pdo-codegen.jar.name>pdo-generator.jar</jooq.pdo-codegen.jar.name>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.example.payment.generator</groupId>
+      <artifactId>payment-generator</artifactId>
+      <version>${revision}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <skip>${skipJooqGeneration}</skip>
+          <artifactItems>
+            <artifactItem>
+              <groupId>com.example.payment.generator</groupId>
+              <artifactId>payment-generator</artifactId>
+              <version>${revision}</version>
+              <type>jar</type>
+              <classifier>jar-with-dependencies</classifier>
+              <destFileName>${jooq.pdo-codegen.jar.name}</destFileName>
+            </artifactItem>
+          </artifactItems>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.example.payment.generator</groupId>
+            <artifactId>payment-generator</artifactId>
+            <version>${revision}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>copy-jooq-generator</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <phase>generate-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <configuration>
+          <skip>${skipJooqGeneration}</skip>
+        </configuration>
+        <executions>
+          <execution>
+            <id>exec</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-jar</argument>
+                <argument>${project.build.directory}/${jooq.pdo-codegen.jar.name}</argument>
+                <argument>${jooq.generated-sources.directory}</argument>
+                <argument>${jooq.generated-sources.package}</argument>
+              </arguments>
+              <addOutputToClasspath>false</addOutputToClasspath>
+              <addResourcesToClasspath>true</addResourcesToClasspath>
+              <sourceRoot>${jooq.generated-sources.directory}</sourceRoot>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
