@@ -2,4 +2,7 @@ CREATE
 	database "catalog";
 
 CREATE
-	database reactive_test;
+	database "reactive_test";
+
+CREATE
+	database "payment";

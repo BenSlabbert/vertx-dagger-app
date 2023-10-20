@@ -79,15 +79,17 @@ public record Config(
       return;
     }
 
+    var consumer = config.getJsonObject("consumer", new JsonObject());
     KafkaConsumerConfig consumerConfig =
         KafkaConsumerConfig.builder()
-            .clientId(config.getString("clientId"))
-            .consumerGroup(config.getString("consumerGroup"))
-            .maxPollRecords(config.getInteger("maxPollRecords", 1))
+            .clientId(consumer.getString("clientId"))
+            .consumerGroup(consumer.getString("consumerGroup"))
+            .maxPollRecords(consumer.getInteger("maxPollRecords", 1))
             .build();
 
+    var producer = config.getJsonObject("producer", new JsonObject());
     KafkaProducerConfig producerConfig =
-        KafkaProducerConfig.builder().clientId(config.getString("clientId")).build();
+        KafkaProducerConfig.builder().clientId(producer.getString("clientId")).build();
 
     KafkaConfig kafkaConfig =
         KafkaConfig.builder()

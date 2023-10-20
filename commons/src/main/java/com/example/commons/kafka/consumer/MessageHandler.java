@@ -6,7 +6,7 @@ import io.vertx.kafka.client.consumer.KafkaConsumerRecord;
 
 public interface MessageHandler {
 
-  String getResultTopic();
+  String getTopic();
 
   void handle(KafkaConsumerRecord<String, Buffer> message);
 }

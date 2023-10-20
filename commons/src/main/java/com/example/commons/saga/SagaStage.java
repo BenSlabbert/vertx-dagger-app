@@ -78,7 +78,7 @@ class SagaStage implements MessageHandler {
   }
 
   @Override
-  public String getResultTopic() {
+  public String getTopic() {
     return resultTopic;
   }
 

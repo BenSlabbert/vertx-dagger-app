@@ -37,6 +37,7 @@ public class Main {
     Objects.requireNonNull(config.postgresConfig());
     Objects.requireNonNull(config.httpConfig());
     Objects.requireNonNull(config.verticleConfig());
+    Objects.requireNonNull(config.kafkaConfig());
     Objects.requireNonNull(config.serviceRegistryConfig());
 
     List<String> reachableNameServers = ReachableNameServers.getReachableNameServers();
@@ -95,6 +96,11 @@ public class Main {
   @Provides
   static Config.VerticleConfig providesVerticleConfig() {
     return config.verticleConfig();
+  }
+
+  @Provides
+  static Config.KafkaConfig providesKafkaConfig() {
+    return config.kafkaConfig();
   }
 
   @Provides

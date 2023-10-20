@@ -44,4 +44,12 @@ services:
     depends_on:
       postgres:
         condition: "service_started"
-    command: "java -Xmx32M -Xms32M -jar app.jar postgres 5432 postgres postgres catalog"
+    command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
+      \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres catalog"
+  payment-migrator:
+    image: "payment-migration:jvm-latest"
+    depends_on:
+      postgres:
+        condition: "service_started"
+    command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
+      \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres payment"

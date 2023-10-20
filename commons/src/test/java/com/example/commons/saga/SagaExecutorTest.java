@@ -129,7 +129,7 @@ class SagaExecutorTest extends KafkaTestBase {
 
     Set<String> resulTopics =
         sagaExecutor.messageHandlers().stream()
-            .map(MessageHandler::getResultTopic)
+            .map(MessageHandler::getTopic)
             .collect(Collectors.toSet());
 
     // register saga consumer for east result topic
@@ -138,8 +138,7 @@ class SagaExecutorTest extends KafkaTestBase {
             msg -> {
               Map<String, MessageHandler> handlerForTopic =
                   sagaExecutor.messageHandlers().stream()
-                      .collect(
-                          Collectors.toMap(MessageHandler::getResultTopic, Function.identity()));
+                      .collect(Collectors.toMap(MessageHandler::getTopic, Function.identity()));
 
               MessageHandler handler = handlerForTopic.get(msg.topic());
               if (handler == null) {
@@ -253,7 +252,7 @@ class SagaExecutorTest extends KafkaTestBase {
 
     Set<String> resulTopics =
         sagaExecutor.messageHandlers().stream()
-            .map(MessageHandler::getResultTopic)
+            .map(MessageHandler::getTopic)
             .collect(Collectors.toSet());
 
     // register saga consumer for east result topic
@@ -262,8 +261,7 @@ class SagaExecutorTest extends KafkaTestBase {
             record -> {
               Map<String, MessageHandler> handlerForTopic =
                   sagaExecutor.messageHandlers().stream()
-                      .collect(
-                          Collectors.toMap(MessageHandler::getResultTopic, Function.identity()));
+                      .collect(Collectors.toMap(MessageHandler::getTopic, Function.identity()));
 
               MessageHandler handler = handlerForTopic.get(record.topic());
               if (handler == null) {
