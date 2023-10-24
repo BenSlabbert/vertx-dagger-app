@@ -35,6 +35,23 @@ public class ItemHandler {
     this.schemaValidatorDelegator = schemaValidatorDelegator;
   }
 
+  public void execute(RoutingContext ctx) {
+    itemService
+        .execute()
+        .onFailure(
+            err -> {
+              log.log(SEVERE, "failed to find all items", err);
+              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+            })
+        .onSuccess(
+            sagaId ->
+                ctx.response()
+                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .setStatusCode(OK.code())
+                    .end(new JsonObject().put("sagaId", sagaId).toBuffer())
+                    .onFailure(ctx::fail));
+  }
+
   public void findAll(RoutingContext ctx, long lastId, int size) {
     itemService
         .findAll(lastId, size)

@@ -24,16 +24,17 @@ class SagaStage implements MessageHandler {
 
   private static final String SAGA_ID_HEADER = "X-Saga-Id";
   private static final String SAGA_ROLLBACK_HEADER = "X-Saga-Rollback";
+  // required to be static as this is being modified by the SagaExecutor and MessageHandler
+  // in different threads
+  private static final Map<String, Promise<Boolean>> promiseForSagaId = new ConcurrentHashMap<>();
 
   private final String commandTopic;
   private final String resultTopic;
   private final SagaStageHandler handler;
   private final KafkaProducer<String, GeneratedMessageV3> producer;
 
-  private final Map<String, Promise<Boolean>> promiseForSagaId = new ConcurrentHashMap<>();
-
-  public Future<Void> sendCommand(Promise<Boolean> promise, String sagaId) {
-    System.err.println("%s: sending command".formatted(sagaId));
+  public Future<Void> sendCommandAndAwaitResponse(Promise<Boolean> promise, String sagaId) {
+    log.info("%s: sending command".formatted(sagaId));
 
     return handler
         .getCommand(sagaId)
@@ -46,18 +47,18 @@ class SagaStage implements MessageHandler {
             })
         .map(
             metadata -> {
-              System.err.println(
+              log.info(
                   "%s: sent to command topic %s with offset: %d"
                       .formatted(sagaId, commandTopic, metadata.getOffset()));
 
-              System.err.println("waiting for promise: " + this);
+              log.info("waiting for promise: sagaId: %s".formatted(sagaId));
               promiseForSagaId.put(sagaId, promise);
               return null;
             });
   }
 
   public Future<Void> sendRollbackCommand(String sagaId) {
-    System.err.println("%s: sending rollback command".formatted(sagaId));
+    log.info("%s: sending rollback command".formatted(sagaId));
 
     return handler
         .onRollBack(sagaId)
@@ -71,8 +72,7 @@ class SagaStage implements MessageHandler {
             })
         .map(
             metadata -> {
-              System.err.println(
-                  "%s: sent rollback to command topic %s".formatted(sagaId, commandTopic));
+              log.info("%s: sent rollback to command topic %s".formatted(sagaId, commandTopic));
               return null;
             });
   }
@@ -96,9 +96,8 @@ class SagaStage implements MessageHandler {
     }
 
     String messageSagaId = buffer.toString();
-    System.err.println("handling message: " + this);
-    System.err.println("handling message for saga: " + messageSagaId);
-    System.err.println("handling message for topic: " + resultTopic);
+    log.info("handling message for saga: " + messageSagaId);
+    log.info("handling message for topic: " + resultTopic);
 
     Promise<Boolean> promise = promiseForSagaId.remove(messageSagaId);
 
@@ -107,7 +106,7 @@ class SagaStage implements MessageHandler {
       return;
     }
 
-    System.err.println("%s: handling message".formatted(messageSagaId));
+    log.info("%s: handling message".formatted(messageSagaId));
 
     handler
         .handleResult(messageSagaId, message)

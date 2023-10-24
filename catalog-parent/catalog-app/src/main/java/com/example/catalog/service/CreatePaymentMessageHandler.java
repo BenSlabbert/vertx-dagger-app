@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.payment.service;
+package com.example.catalog.service;
 
-import com.example.catalog.proto.saga.v1.CreatePaymentResponse;
-import com.example.catalog.proto.saga.v1.CreatePaymentResponseSuccessResponse;
+import com.example.catalog.proto.saga.v1.CreatePurchaseOrderResponse;
+import com.example.catalog.proto.saga.v1.CreatePurchaseOrderSuccessResponse;
 import com.example.commons.kafka.consumer.MessageHandler;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.buffer.Buffer;
@@ -13,22 +13,20 @@ import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import lombok.extern.java.Log;
 
 @Log
-@Singleton
-public class ExampleMessageHandler implements MessageHandler {
+public class CreatePaymentMessageHandler implements MessageHandler {
 
   private static final String SAGA_ID_HEADER = "X-Saga-Id";
   private static final String SAGA_ROLLBACK_HEADER = "X-Saga-Rollback";
-  private static final String CMD_TOPIC = "Saga.Catalog.CreatePayment";
-  private static final String REPLY_TOPIC = "Saga.Catalog.CreatePayment.Reply";
+  private static final String CMD_TOPIC = "Saga.Catalog.CreatePurchaseOrder";
+  private static final String REPLY_TOPIC = "Saga.Catalog.CreatePurchaseOrder.Reply";
 
   private final KafkaProducer<String, GeneratedMessageV3> producer;
 
   @Inject
-  ExampleMessageHandler(KafkaProducer<String, GeneratedMessageV3> producer) {
+  CreatePaymentMessageHandler(KafkaProducer<String, GeneratedMessageV3> producer) {
     this.producer = producer;
   }
 
@@ -52,10 +50,10 @@ public class ExampleMessageHandler implements MessageHandler {
 
     Buffer sagaId = headers.get(SAGA_ID_HEADER);
 
-    CreatePaymentResponse response =
-        CreatePaymentResponse.newBuilder()
+    CreatePurchaseOrderResponse response =
+        CreatePurchaseOrderResponse.newBuilder()
             .setSuccess(
-                CreatePaymentResponseSuccessResponse.newBuilder()
+                CreatePurchaseOrderSuccessResponse.newBuilder()
                     .setSagaId(sagaId.toString())
                     .build())
             .build();

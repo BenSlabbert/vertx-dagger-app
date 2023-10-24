@@ -34,6 +34,11 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
+      <groupId>com.example.catalog.proto</groupId>
+      <artifactId>catalog-proto</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.ongres.scram</groupId>
       <artifactId>client</artifactId>
     </dependency>

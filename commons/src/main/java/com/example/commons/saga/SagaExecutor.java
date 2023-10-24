@@ -10,6 +10,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.impl.NoStackTraceException;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.logging.Level;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
@@ -33,52 +34,52 @@ public class SagaExecutor {
   }
 
   private Future<Void> next() {
-    System.err.println("calling next");
+    log.info("calling next");
     boolean hasNext = iterator.hasNext();
 
     if (!hasNext) {
-      System.err.println("done");
+      log.info("done");
       // we are done with success
       return Future.succeededFuture();
     }
 
-    System.err.println("more");
+    log.info("more");
     SagaStage stage = iterator.next();
     Promise<Boolean> promise = Promise.promise();
 
     return stage
-        .sendCommand(promise, sagaId)
+        .sendCommandAndAwaitResponse(promise, sagaId)
         .compose(
             ignore -> {
-              //              stage.waitForResult(promise, sagaId);
-
-              // todo: need a timeout for this promise
+              // TODO: we need a timeout for this
+              //  promise.future is retuning io.vertx.core.impl.future.FutureImpl
+              //  and this is causing a class cast exception
               return promise.future();
             })
         .recover(
             throwable -> {
-              log.warning("%s failed to execute saga".formatted(sagaId));
+              log.log(Level.SEVERE, "%s failed to execute saga".formatted(sagaId), throwable);
               return previous().map(ignore -> FALSE);
             })
         .compose(
             success -> {
-              System.err.println("got result: " + success);
+              log.info("got result: " + success);
               return TRUE.equals(success) ? next() : previous();
             });
   }
 
   private Future<Void> previous() {
-    System.err.println("calling next");
+    log.info("calling next");
 
     boolean hasPrevious = iterator.hasPrevious();
 
     if (!hasPrevious) {
-      System.err.println("done");
+      log.info("done");
       // we are done with an error
       return Future.failedFuture(new NoStackTraceException("%s: saga failed".formatted(sagaId)));
     }
 
-    System.err.println("more");
+    log.info("more");
     SagaStage stage = iterator.previous();
 
     // todo: need a way to handle this future failing

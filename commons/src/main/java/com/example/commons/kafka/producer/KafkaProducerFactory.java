@@ -34,12 +34,11 @@ public class KafkaProducerFactory {
       Vertx vertx, Config.KafkaConfig kafkaConfig) {
 
     Map<String, String> config = new HashMap<>();
-    String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
-    String valueSerializer = ProtobufSerializer.class.getCanonicalName();
 
     config.put(BOOTSTRAP_SERVERS_CONFIG, kafkaConfig.bootstrapServers());
-    config.put(KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
-    config.put(VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
+    config.put(
+        KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+    config.put(VALUE_SERIALIZER_CLASS_CONFIG, ProtobufSerializer.class.getCanonicalName());
     config.put(ACKS_CONFIG, "1");
     config.put(RETRIES_CONFIG, "1");
     config.put(MAX_BLOCK_MS_CONFIG, "5000");

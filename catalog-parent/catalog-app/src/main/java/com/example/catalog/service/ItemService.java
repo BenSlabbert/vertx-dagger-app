@@ -18,6 +18,7 @@ import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.pgclient.PgPool;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -27,6 +28,7 @@ import lombok.extern.java.Log;
 public class ItemService extends TransactionBoundary {
 
   private final ItemRepository itemRepository;
+  private final SagaService sagaService;
   private final SuggestionService suggestionService;
   private final FindOneResponseDtoMapper findOneResponseDtoMapper;
 
@@ -34,12 +36,22 @@ public class ItemService extends TransactionBoundary {
   ItemService(
       PgPool pool,
       ItemRepository itemRepository,
+      SagaService sagaService,
       SuggestionService cache,
       FindOneResponseDtoMapper findOneResponseDtoMapper) {
     super(pool);
     this.itemRepository = itemRepository;
+    this.sagaService = sagaService;
     this.suggestionService = cache;
     this.findOneResponseDtoMapper = findOneResponseDtoMapper;
+  }
+
+  public Future<String> execute() {
+    return sagaService
+        .createPurchaseOrderSaga()
+        .execute()
+        .onFailure(err -> log.log(Level.SEVERE, "failed to execute saga", err))
+        .onSuccess(sagaId -> log.info("%s: saga completed".formatted(sagaId)));
   }
 
   public Future<PaginatedResponseDto> findAll(long lastId, int size) {

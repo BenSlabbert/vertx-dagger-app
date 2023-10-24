@@ -4,6 +4,8 @@ package com.example.catalog.ioc;
 import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
+import com.example.commons.kafka.KafkaModule;
+import com.example.commons.saga.SagaModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import io.vertx.pgclient.PgPool;
@@ -13,7 +15,7 @@ import javax.inject.Singleton;
 import org.jooq.DSLContext;
 
 @Singleton
-@Component(modules = {MapperModule.class})
+@Component(modules = {MapperModule.class, KafkaModule.class, SagaModule.class})
 public interface TestMockRepositoryProvider extends Provider {
 
   @Component.Builder

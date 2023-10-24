@@ -7,7 +7,11 @@ import com.example.catalog.integration.IntegrationModule;
 import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ServiceLifecycleManagement;
+import com.example.catalog.service.ServiceModule;
 import com.example.catalog.verticle.ApiVerticle;
+import com.example.commons.kafka.KafkaModule;
+import com.example.commons.saga.SagaBuilder;
+import com.example.commons.saga.SagaModule;
 import dagger.Component;
 import javax.inject.Singleton;
 
@@ -18,11 +22,16 @@ import javax.inject.Singleton;
       Main.class,
       ConfigModule.class,
       IntegrationModule.class,
-      MapperModule.class
+      MapperModule.class,
+      KafkaModule.class,
+      SagaModule.class,
+      ServiceModule.class
     })
 public interface Provider {
 
   ApiVerticle provideNewApiVerticle();
 
   ServiceLifecycleManagement providesServiceLifecycleManagement();
+
+  SagaBuilder sagaBuilder();
 }

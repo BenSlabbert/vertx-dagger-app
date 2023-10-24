@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.verticle;
 
-import com.example.payment.service.KafkaService;
+import com.example.payment.service.KafkaConsumerService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import javax.inject.Inject;
@@ -11,7 +11,7 @@ import lombok.extern.java.Log;
 public class ApiVerticle extends AbstractVerticle {
 
   @Inject
-  public ApiVerticle(KafkaService kafkaService) {}
+  public ApiVerticle(KafkaConsumerService kafkaConsumerService) {}
 
   @Override
   public void start(Promise<Void> startPromise) {

@@ -29,14 +29,13 @@ public class KafkaConsumerFactory {
 
   @Provides
   public static KafkaConsumer<String, Buffer> create(Vertx vertx, Config.KafkaConfig kafkaConfig) {
-
     Map<String, String> config = new HashMap<>();
-    String keyDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
-    String valueDeserializer = "io.vertx.kafka.client.serialization.BufferDeserializer";
 
     config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfig.bootstrapServers());
-    config.put(KEY_DESERIALIZER_CLASS_CONFIG, keyDeserializer);
-    config.put(VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializer);
+    config.put(
+        KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+    config.put(
+        VALUE_DESERIALIZER_CLASS_CONFIG, "io.vertx.kafka.client.serialization.BufferDeserializer");
     config.put(GROUP_ID_CONFIG, kafkaConfig.kafkaConsumerConfig().consumerGroup());
     config.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
     config.put(AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");

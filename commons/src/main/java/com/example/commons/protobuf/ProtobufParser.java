@@ -4,7 +4,7 @@ package com.example.commons.protobuf;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-public class ProtobufParser {
+public final class ProtobufParser {
 
   private ProtobufParser() {}
 

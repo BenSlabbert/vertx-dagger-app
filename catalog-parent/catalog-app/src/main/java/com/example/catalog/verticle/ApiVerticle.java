@@ -93,6 +93,8 @@ public class ApiVerticle extends AbstractVerticle {
     mainRouter.route("/api/*").subRouter(apiRouter);
 
     // api routes
+    apiRouter.post("/execute").handler(itemHandler::execute);
+
     apiRouter
         .get("/items")
         .handler(

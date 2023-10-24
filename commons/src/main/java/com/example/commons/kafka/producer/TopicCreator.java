@@ -18,9 +18,9 @@ import org.apache.kafka.common.errors.TopicExistsException;
 @Log
 public class TopicCreator {
 
-  private final Vertx vertx;
   private final Config.KafkaConfig kafkaConfig;
   private final String topic;
+  private final Vertx vertx;
 
   @AssistedInject
   TopicCreator(Vertx vertx, Config.KafkaConfig kafkaConfig, @Assisted String topic) {
@@ -30,18 +30,31 @@ public class TopicCreator {
   }
 
   public Future<Void> create() {
+    return create(1, (short) 1);
+  }
+
+  public Future<Void> create(int partitions, short replicationFactor) {
     Properties config = new Properties();
     config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfig.bootstrapServers());
 
-    return KafkaAdminClient.create(vertx, config)
-        .createTopics(List.of(new NewTopic(topic, 1, (short) 1)))
+    KafkaAdminClient client = KafkaAdminClient.create(vertx, config);
+
+    return client
+        .createTopics(List.of(new NewTopic(topic, partitions, replicationFactor)))
         .recover(
             err -> {
               if (err instanceof TopicExistsException) {
+                log.warning("topic %s already exists".formatted(topic));
                 return Future.succeededFuture();
               }
               log.log(Level.SEVERE, "failed to create topics", err);
               return Future.failedFuture(err);
-            });
+            })
+        .eventually(
+            ignore ->
+                client
+                    .close()
+                    .onFailure(err -> log.log(Level.SEVERE, "failed to close client", err))
+                    .onSuccess(v -> log.info("closed kafka admin client")));
   }
 }

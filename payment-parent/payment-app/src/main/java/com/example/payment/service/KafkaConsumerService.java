@@ -3,6 +3,7 @@ package com.example.payment.service;
 
 import com.example.commons.kafka.consumer.MessageHandler;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 import io.vertx.kafka.client.consumer.KafkaConsumerRecord;
 import java.util.Map;
@@ -16,13 +17,13 @@ import lombok.extern.java.Log;
 
 @Log
 @Singleton
-public class KafkaService implements AutoCloseable {
+public class KafkaConsumerService implements AutoCloseable {
 
   private final KafkaConsumer<String, Buffer> consumer;
   private final Map<String, MessageHandler> handlerMap;
 
   @Inject
-  KafkaService(KafkaConsumer<String, Buffer> consumer, Set<MessageHandler> handlers) {
+  KafkaConsumerService(KafkaConsumer<String, Buffer> consumer, Set<MessageHandler> handlers) {
     this.consumer = consumer;
     this.handlerMap =
         handlers.stream().collect(Collectors.toMap(MessageHandler::getTopic, Function.identity()));
@@ -32,14 +33,14 @@ public class KafkaService implements AutoCloseable {
 
     if (handlersForTopic != numberOfTopicHandlers) {
       log.severe("duplicate topic handlers");
-      throw new RuntimeException("duplicate topic handlers");
+      throw new NoStackTraceException("duplicate topic handlers");
     }
 
     this.consumer
         .handler(this::handle)
-        .subscribe("example")
+        .subscribe(handlerMap.keySet())
         .onFailure(err -> log.severe(err.getMessage()))
-        .onSuccess(ignore -> log.info("subscribed to topic: example"));
+        .onSuccess(ignore -> log.info("subscribed to topics: " + handlerMap.keySet()));
   }
 
   private void handle(KafkaConsumerRecord<String, Buffer> message) {
