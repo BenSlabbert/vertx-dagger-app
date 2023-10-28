@@ -18,12 +18,15 @@ import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.vertx.core.json.JsonObject;
+import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 
+@Log
 class ApiVerticlePersistenceTest extends PersistenceTest {
 
   @Test
   void apiTest() {
+    log.info("starting apiTest");
     persist(conn -> provider.itemRepository().create(conn, "name1", 1L));
 
     String createResponseJson =

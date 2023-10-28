@@ -66,7 +66,7 @@ public abstract class PersistenceTest {
           .withEnv("POSTGRES_USER", "postgres")
           .withEnv("POSTGRES_PASSWORD", "postgres")
           .withEnv("POSTGRES_DB", "postgres")
-          .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*", 1))
+          .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*", 2))
           .withLogConsumer(new TestcontainerLogConsumer("postgres"));
 
   // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
