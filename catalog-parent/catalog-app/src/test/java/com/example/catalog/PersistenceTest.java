@@ -36,7 +36,6 @@ import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
 @Log
@@ -63,7 +62,6 @@ public abstract class PersistenceTest {
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
           .withExposedPorts(5432)
           .withNetwork(network)
-          .withTmpFs(Map.of("/var/lib/postgresql/data", "rw,noexec,nosuid,size=100m"))
           .withNetworkAliases("postgres")
           .withEnv("POSTGRES_USER", "postgres")
           .withEnv("POSTGRES_PASSWORD", "postgres")
@@ -73,7 +71,12 @@ public abstract class PersistenceTest {
 
   // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
   static {
-    Startables.deepStart(redis, postgres).join();
+    log.info("starting redis");
+    redis.start();
+    log.info("starting postgres");
+    postgres.start();
+    log.info("done");
+    //    Startables.deepStart(redis, postgres).join();
   }
 
   @BeforeAll
