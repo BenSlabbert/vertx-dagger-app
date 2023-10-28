@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 .yarn/
+.yarnrc.yml
 !.yarn/plugins
 /build
 /.svelte-kit

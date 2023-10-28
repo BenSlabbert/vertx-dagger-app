@@ -49,6 +49,7 @@ showReport:
 
 .PHONY: clean
 clean:
+	rm -rf .yarn
 	rm -rf build
 	rm -rf playwright-report
 	rm -rf test-results

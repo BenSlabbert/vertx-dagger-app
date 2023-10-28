@@ -6,7 +6,8 @@ WORKDIR /app
 
 RUN corepack enable && corepack prepare yarn@stable --activate && yarn set version stable
 
-RUN echo "nodeLinker: node-modules" > .yarnrc.yml
+RUN echo "enableGlobalCache: false" >> .yarnrc.yml
+RUN echo "nodeLinker: node-modules" >> .yarnrc.yml
 
 COPY package.json .
 COPY yarn.lock .
