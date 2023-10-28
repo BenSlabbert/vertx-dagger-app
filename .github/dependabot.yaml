@@ -8,7 +8,6 @@ updates:
   open-pull-requests-limit: 10
   labels:
   - "dependencies"
-  - "maven"
 - package-ecosystem: "npm"
   directory: "/frontend/app"
   schedule:
@@ -16,7 +15,6 @@ updates:
   open-pull-requests-limit: 10
   labels:
   - "dependencies"
-  - "npm"
 - package-ecosystem: "docker"
   directory: "/"
   schedule:
@@ -24,7 +22,6 @@ updates:
   open-pull-requests-limit: 10
   labels:
   - "dependencies"
-  - "docker"
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
@@ -32,4 +29,3 @@ updates:
   open-pull-requests-limit: 10
   labels:
   - "dependencies"
-  - "github-actions"

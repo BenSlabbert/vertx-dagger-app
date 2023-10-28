@@ -103,9 +103,4 @@ public abstract class MockRepositoryTest {
   void after() {
     RestAssured.reset();
   }
-
-  @AfterEach
-  void undeploy(Vertx vertx) {
-    vertx.deploymentIDs().forEach(vertx::undeploy);
-  }
 }

@@ -12,7 +12,6 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.Map;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +36,7 @@ public abstract class TestBase {
           .withNetwork(network)
           .withNetworkAliases("redis")
           .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
-          .withLogConsumer(new TestcontainerLogConsumer());
+          .withLogConsumer(new TestcontainerLogConsumer("redis"));
 
   static {
     redis.start();
@@ -72,10 +71,5 @@ public abstract class TestBase {
 
     vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
     vertx.deployVerticle(provider.provideNewGrpcVerticle(), testContext.succeedingThenComplete());
-  }
-
-  @AfterEach
-  void undeploy(Vertx vertx) {
-    vertx.deploymentIDs().forEach(vertx::undeploy);
   }
 }

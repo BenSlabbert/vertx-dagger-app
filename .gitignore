@@ -12,3 +12,4 @@ file-uploads
 .attach_pid*
 bin/
 *.iml
+.mvn/wrapper/

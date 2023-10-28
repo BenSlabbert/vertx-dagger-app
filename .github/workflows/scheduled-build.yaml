@@ -21,7 +21,8 @@ jobs:
     - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m7/maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ -o maven-mvnd-1.0-m7-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 /tmp/mvnd"
-    - run: "make M='/tmp/mvnd/bin/mvnd -DskipTests=true' package"
+    - run: "make M='/tmp/mvnd/bin/mvnd -DskipTests=true -Djava.util.logging.config.file=$(pwd)/logging.properties'\
+        \ package"
     - run: "make M='/tmp/mvnd/bin/mvnd' native"
     - run: "make M='/tmp/mvnd/bin/mvnd' dockerSave"
     - uses: "actions/upload-artifact@v3"

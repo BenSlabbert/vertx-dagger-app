@@ -7,12 +7,19 @@ import lombok.extern.java.Log;
 import org.testcontainers.containers.output.OutputFrame;
 
 @Log
-public class TestcontainerLogConsumer implements Consumer<OutputFrame> {
+public final class TestcontainerLogConsumer implements Consumer<OutputFrame> {
+
+  private final String prefix;
+
+  public TestcontainerLogConsumer(String prefix) {
+    this.prefix = prefix;
+  }
 
   @Override
   public void accept(OutputFrame outputFrame) {
     switch (outputFrame.getType()) {
-      case STDERR, STDOUT -> log.log(Level.INFO, outputFrame.getUtf8String());
+      case STDERR, STDOUT -> log.log(
+          Level.INFO, prefix + ": " + outputFrame.getUtf8String().trim());
     }
   }
 }

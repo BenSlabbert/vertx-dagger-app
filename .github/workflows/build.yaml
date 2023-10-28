@@ -18,7 +18,8 @@ jobs:
         distribution: "graalvm-community"
         native-image-musl: "true"
         cache: "maven"
-    - run: "mvn install -DskipTests=true -Ddocker.skip=true -Pnative -DtestImageTag=native"
+    - run: "mvn install -DskipTests=true -Ddocker.skip=true -Pnative -DtestImageTag=native\
+        \ -Djava.util.logging.config.file=$(pwd)/logging.properties"
     - run: "curl -L https://github.com/upx/upx/releases/download/v4.0.2/upx-4.0.2-amd64_linux.tar.xz\
         \ -o upx-4.0.2-amd64_linux.tar.xz && tar -xf upx-4.0.2-amd64_linux.tar.xz\
         \ && mv upx-4.0.2-amd64_linux /tmp/upx && /tmp/upx/upx --version"
@@ -50,7 +51,7 @@ jobs:
         \ -o maven-mvnd-1.0-m7-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m7-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m7-m39-linux-amd64 /tmp/mvnd"
     - run: "make M='/tmp/mvnd/bin/mvnd' fmtCheck"
-    - run: "make M=/tmp/mvnd/bin/mvnd"
+    - run: "make M='/tmp/mvnd/bin/mvnd -Djava.util.logging.config.file=$(pwd)/logging.properties'"
   build-frontend:
     runs-on: "ubuntu-latest"
     steps:

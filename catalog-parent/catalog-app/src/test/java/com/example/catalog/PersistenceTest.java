@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import lombok.extern.java.Log;
 import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,18 +57,19 @@ public abstract class PersistenceTest {
           .withNetwork(network)
           .withNetworkAliases("redis")
           .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
-          .withLogConsumer(new TestcontainerLogConsumer());
+          .withLogConsumer(new TestcontainerLogConsumer("redis"));
 
   protected static final GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
           .withExposedPorts(5432)
           .withNetwork(network)
+          .withTmpFs(Map.of("/var/lib/postgresql/data", "rw,noexec,nosuid,size=100m"))
           .withNetworkAliases("postgres")
           .withEnv("POSTGRES_USER", "postgres")
           .withEnv("POSTGRES_PASSWORD", "postgres")
           .withEnv("POSTGRES_DB", "postgres")
           .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*", 1))
-          .withLogConsumer(new TestcontainerLogConsumer());
+          .withLogConsumer(new TestcontainerLogConsumer("postgres"));
 
   // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
   static {
@@ -77,6 +79,11 @@ public abstract class PersistenceTest {
   @BeforeAll
   static void beforeAll() {
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+  }
+
+  @AfterAll
+  static void afterAll() {
+    log.info("tests ended, stopping containers");
   }
 
   @BeforeEach
@@ -139,11 +146,6 @@ public abstract class PersistenceTest {
   @AfterEach
   void after() {
     RestAssured.reset();
-  }
-
-  @AfterEach
-  void undeploy(Vertx vertx) {
-    vertx.deploymentIDs().forEach(vertx::undeploy);
   }
 
   protected <T> void persist(Function<SqlClient, Future<T>> function) {

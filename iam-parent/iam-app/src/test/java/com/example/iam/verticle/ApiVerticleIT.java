@@ -50,7 +50,7 @@ class ApiVerticleIT {
           .withNetwork(network)
           .withNetworkAliases("redis")
           .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
-          .withLogConsumer(new TestcontainerLogConsumer());
+          .withLogConsumer(new TestcontainerLogConsumer("redis"));
 
   @Container
   public GenericContainer<?> app =
@@ -64,7 +64,7 @@ class ApiVerticleIT {
               Wait.forLogMessage(".*deployment id.*", 1).withStartupTimeout(Duration.ofSeconds(5L)))
           .withClasspathResourceMapping("it-config.json", "/config.json", BindMode.READ_ONLY)
           .withCommand("/config.json")
-          .withLogConsumer(new TestcontainerLogConsumer());
+          .withLogConsumer(new TestcontainerLogConsumer("app"));
 
   @BeforeEach
   void before() {
