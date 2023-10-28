@@ -1,18 +1,20 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.commons.saga;
 
+import static com.example.commons.kafka.common.Headers.SAGA_ID_HEADER;
+import static com.example.commons.kafka.common.Headers.SAGA_ROLLBACK_HEADER;
+
+import com.example.commons.kafka.consumer.ConsumerUtils;
 import com.example.commons.kafka.consumer.MessageHandler;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.kafka.client.consumer.KafkaConsumerRecord;
-import io.vertx.kafka.client.producer.KafkaHeader;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -22,8 +24,6 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor
 class SagaStage implements MessageHandler {
 
-  private static final String SAGA_ID_HEADER = "X-Saga-Id";
-  private static final String SAGA_ROLLBACK_HEADER = "X-Saga-Rollback";
   // required to be static as this is being modified by the SagaExecutor and MessageHandler
   // in different threads
   private static final Map<String, Promise<Boolean>> promiseForSagaId = new ConcurrentHashMap<>();
@@ -85,8 +85,7 @@ class SagaStage implements MessageHandler {
   @Override
   public void handle(KafkaConsumerRecord<String, Buffer> message) {
 
-    Map<String, Buffer> headers =
-        message.headers().stream().collect(Collectors.toMap(KafkaHeader::key, KafkaHeader::value));
+    Map<String, Buffer> headers = ConsumerUtils.headersAsMap(message.headers());
 
     Buffer buffer = headers.get(SAGA_ID_HEADER);
 
@@ -112,10 +111,5 @@ class SagaStage implements MessageHandler {
         .handleResult(messageSagaId, message)
         .onFailure(promise::fail)
         .onSuccess(promise::complete);
-  }
-
-  @Override
-  public String toString() {
-    return String.valueOf(super.hashCode());
   }
 }

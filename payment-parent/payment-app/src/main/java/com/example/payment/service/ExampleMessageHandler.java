@@ -1,17 +1,19 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.service;
 
+import static com.example.commons.kafka.common.Headers.SAGA_ID_HEADER;
+import static com.example.commons.kafka.common.Headers.SAGA_ROLLBACK_HEADER;
+
 import com.example.catalog.proto.saga.v1.CreatePaymentResponse;
 import com.example.catalog.proto.saga.v1.CreatePaymentResponseSuccessResponse;
+import com.example.commons.kafka.consumer.ConsumerUtils;
 import com.example.commons.kafka.consumer.MessageHandler;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.kafka.client.consumer.KafkaConsumerRecord;
-import io.vertx.kafka.client.producer.KafkaHeader;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -20,8 +22,6 @@ import lombok.extern.java.Log;
 @Singleton
 public class ExampleMessageHandler implements MessageHandler {
 
-  private static final String SAGA_ID_HEADER = "X-Saga-Id";
-  private static final String SAGA_ROLLBACK_HEADER = "X-Saga-Rollback";
   private static final String CMD_TOPIC = "Saga.Catalog.CreatePayment";
   private static final String REPLY_TOPIC = "Saga.Catalog.CreatePayment.Reply";
 
@@ -41,8 +41,7 @@ public class ExampleMessageHandler implements MessageHandler {
   public void handle(KafkaConsumerRecord<String, Buffer> message) {
     log.info("handle message: %s".formatted(CMD_TOPIC));
 
-    Map<String, Buffer> headers =
-        message.headers().stream().collect(Collectors.toMap(KafkaHeader::key, KafkaHeader::value));
+    Map<String, Buffer> headers = ConsumerUtils.headersAsMap(message.headers());
 
     if (null != headers.get(SAGA_ROLLBACK_HEADER)) {
       log.info("received rollback message: " + message.value().toString());
