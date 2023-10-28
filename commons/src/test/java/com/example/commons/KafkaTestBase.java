@@ -15,7 +15,8 @@ import org.testcontainers.utility.DockerImageName;
 public abstract class KafkaTestBase {
 
   private static final KafkaContainer kafka =
-      new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:6.2.1"));
+      new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.1"))
+          .withEnv("KAFKA_HEAP_OPTS", "-Xmx512M -Xms512M");
 
   static {
     kafka.start();

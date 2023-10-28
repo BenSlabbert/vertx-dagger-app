@@ -16,7 +16,7 @@ services:
     volumes:
     - "./create-all-databases.sql:/docker-entrypoint-initdb.d/create-all-databases.sql"
   zookeeper:
-    image: "confluentinc/cp-zookeeper:latest"
+    image: "confluentinc/cp-zookeeper:7.5.1"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -24,7 +24,7 @@ services:
     ports:
     - "22181:2181"
   kafka:
-    image: "confluentinc/cp-kafka:latest"
+    image: "confluentinc/cp-kafka:7.5.1"
     depends_on:
     - "zookeeper"
     ports:
