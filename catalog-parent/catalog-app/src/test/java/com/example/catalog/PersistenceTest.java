@@ -62,10 +62,12 @@ public abstract class PersistenceTest {
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
           .withExposedPorts(5432)
           .withNetwork(network)
+          .withTmpFs(Map.of("/var/lib/postgresql/data", "rw,noexec,nosuid,size=100m"))
           .withNetworkAliases("postgres")
           .withEnv("POSTGRES_USER", "postgres")
           .withEnv("POSTGRES_PASSWORD", "postgres")
           .withEnv("POSTGRES_DB", "postgres")
+          // must wait twice as the init process also prints this message
           .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*", 2))
           .withLogConsumer(new TestcontainerLogConsumer("postgres"));
 
