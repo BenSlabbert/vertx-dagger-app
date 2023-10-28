@@ -9,7 +9,7 @@ ARG JAVA_MINIMAL
 RUN jlink \
     --verbose \
     --add-modules java.base,java.sql,java.naming,java.security.jgss,java.security.sasl,java.instrument,jdk.unsupported \
-    --compress 2 \
+    --compress zip-6 \
     --strip-debug \
     --no-header-files \
     --no-man-pages \
