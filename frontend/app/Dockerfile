@@ -10,7 +10,7 @@ RUN echo "nodeLinker: node-modules" > .yarnrc.yml
 
 COPY package.json .
 COPY yarn.lock .
-RUN yarn plugin import workspace-tools && yarn workspaces focus --production
+RUN yarn workspaces focus --production
 
 FROM $IMAGE
 
