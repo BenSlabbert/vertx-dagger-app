@@ -192,6 +192,10 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <compilerArgs>
             <arg>-parameters</arg>
+            <arg>-Adagger.formatGeneratedSource=enabled</arg>
+            <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
+            <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
+            <arg>-Adagger.fastInit=enabled</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>

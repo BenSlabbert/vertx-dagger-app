@@ -3,12 +3,15 @@ package com.example.payment.service;
 
 import com.example.commons.transaction.blocking.TransactionBoundary;
 import com.example.payment.repository.PaymentRepository;
+import com.example.payment.repository.PaymentRepositoryImpl;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import lombok.extern.java.Log;
 import org.jooq.DSLContext;
 
 @Log
+@Singleton
 public class PaymentService extends TransactionBoundary {
 
   private final PaymentRepository paymentRepository;
@@ -25,7 +28,7 @@ public class PaymentService extends TransactionBoundary {
   }
 
   public void fetch() {
-    List<PaymentRepository.Projection> projections =
+    List<PaymentRepositoryImpl.Projection> projections =
         doInTransaction(ctx -> paymentRepository.getPayments(ctx.dsl()).toList());
     log.info("payments: " + projections);
   }

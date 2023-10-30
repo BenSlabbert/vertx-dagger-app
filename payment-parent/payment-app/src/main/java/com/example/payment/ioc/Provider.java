@@ -4,6 +4,7 @@ package com.example.payment.ioc;
 import com.example.commons.kafka.KafkaModule;
 import com.example.payment.Main;
 import com.example.payment.config.ConfigModule;
+import com.example.payment.repository.RepositoryModule;
 import com.example.payment.service.ServiceLifecycleManagement;
 import com.example.payment.service.ServiceModule;
 import com.example.payment.verticle.ApiVerticle;
@@ -15,7 +16,14 @@ import io.vertx.kafka.client.producer.KafkaProducer;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {Main.class, ServiceModule.class, ConfigModule.class, KafkaModule.class})
+@Component(
+    modules = {
+      Main.class,
+      ServiceModule.class,
+      ConfigModule.class,
+      KafkaModule.class,
+      RepositoryModule.class
+    })
 public interface Provider {
 
   ApiVerticle provideNewApiVerticle();

@@ -26,6 +26,9 @@ class JooqConfig {
     Settings settings = new Settings().withFetchSize(128);
     dslContext = DSL.using(dataSource, SQLDialect.POSTGRES, settings);
 
+    int execute = dslContext.execute("SELECT 1");
+    log.info("init dsl context: executed select 1: " + execute);
+
     return dslContext;
   }
 }

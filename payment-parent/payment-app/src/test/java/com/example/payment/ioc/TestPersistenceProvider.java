@@ -5,6 +5,7 @@ import com.example.commons.config.Config;
 import com.example.commons.kafka.KafkaModule;
 import com.example.payment.config.ConfigModule;
 import com.example.payment.repository.PaymentRepository;
+import com.example.payment.repository.RepositoryModule;
 import com.example.payment.service.PaymentService;
 import com.example.payment.service.ServiceModule;
 import dagger.BindsInstance;
@@ -15,7 +16,8 @@ import javax.inject.Singleton;
 import org.jooq.DSLContext;
 
 @Singleton
-@Component(modules = {ServiceModule.class, ConfigModule.class, KafkaModule.class})
+@Component(
+    modules = {ServiceModule.class, ConfigModule.class, KafkaModule.class, RepositoryModule.class})
 public interface TestPersistenceProvider extends Provider {
 
   DSLContext dslContext();
