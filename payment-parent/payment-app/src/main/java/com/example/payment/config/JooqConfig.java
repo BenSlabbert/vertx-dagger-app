@@ -3,11 +3,11 @@ package com.example.payment.config;
 
 import dagger.Module;
 import dagger.Provides;
+import javax.sql.DataSource;
 import lombok.extern.java.Log;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.conf.Settings;
-import org.jooq.conf.StatementType;
 import org.jooq.impl.DSL;
 
 @Log
@@ -19,12 +19,13 @@ class JooqConfig {
   private static DSLContext dslContext = null;
 
   @Provides
-  static synchronized DSLContext providesDslContext() {
+  static synchronized DSLContext providesDslContext(DataSource dataSource) {
     if (dslContext != null) return dslContext;
 
     log.info("creating dsl context");
-    Settings settings = new Settings().withStatementType(StatementType.STATIC_STATEMENT);
-    dslContext = DSL.using(SQLDialect.POSTGRES, settings);
+    Settings settings = new Settings().withFetchSize(128);
+    dslContext = DSL.using(dataSource, SQLDialect.POSTGRES, settings);
+
     return dslContext;
   }
 }

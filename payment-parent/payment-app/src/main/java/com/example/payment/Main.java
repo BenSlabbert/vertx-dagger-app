@@ -84,6 +84,11 @@ public class Main {
   }
 
   @Provides
+  static Config.PostgresConfig providesPostgresConfig() {
+    return config.postgresConfig();
+  }
+
+  @Provides
   static Config.HttpConfig providesHttpConfig() {
     return config.httpConfig();
   }

@@ -1,32 +1,25 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.catalog;
+package com.example.payment;
 
 import static com.example.commons.FreePortUtility.getPort;
-import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import com.example.catalog.integration.AuthenticationIntegration;
-import com.example.catalog.ioc.DaggerTestPersistenceProvider;
-import com.example.catalog.ioc.TestPersistenceProvider;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
-import com.example.commons.transaction.reactive.TransactionBoundary;
+import com.example.commons.transaction.blocking.TransactionBoundary;
 import com.example.migration.FlywayProvider;
+import com.example.payment.ioc.DaggerTestPersistenceProvider;
+import com.example.payment.ioc.TestPersistenceProvider;
 import io.restassured.RestAssured;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.pgclient.PgPool;
-import io.vertx.sqlclient.SqlClient;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import lombok.extern.java.Log;
 import org.flywaydb.core.Flyway;
+import org.jooq.Configuration;
+import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,8 +27,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
 @Log
@@ -50,13 +45,11 @@ public abstract class PersistenceTest {
   private static final AtomicInteger counter = new AtomicInteger(0);
   private static final Network network = Network.newNetwork();
 
-  protected static final GenericContainer<?> redis =
-      new GenericContainer<>(DockerImageName.parse("redis/redis-stack-server:latest"))
-          .withExposedPorts(6379)
+  protected static final KafkaContainer kafka =
+      new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.1"))
           .withNetwork(network)
-          .withNetworkAliases("redis")
-          .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
-          .withLogConsumer(new TestcontainerLogConsumer("redis"));
+          .withEnv("KAFKA_HEAP_OPTS", "-Xmx512M -Xms512M")
+          .withLogConsumer(new TestcontainerLogConsumer("kafka"));
 
   protected static final GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
@@ -73,12 +66,10 @@ public abstract class PersistenceTest {
 
   // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
   static {
-    log.info("starting redis");
-    redis.start();
+    log.info("starting kafka");
     log.info("starting postgres");
-    postgres.start();
+    Startables.deepStart(kafka, postgres).join();
     log.info("done");
-    //    Startables.deepStart(redis, postgres).join();
   }
 
   @BeforeAll
@@ -110,20 +101,26 @@ public abstract class PersistenceTest {
     flyway.clean();
     flyway.migrate();
 
-    AuthenticationIntegration authHandler = mock(AuthenticationIntegration.class);
-    when(authHandler.isTokenValid(anyString())).thenReturn(Future.succeededFuture(true));
-
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
             new Config.GrpcConfig(GRPC_PORT),
-            new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
+            Config.RedisConfig.builder().build(),
             new Config.PostgresConfig(
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
-            new Config.KafkaConfig(
-                "127.0.0.1:9092",
-                new Config.KafkaConsumerConfig("consumer-id", "consumer-group", 1),
-                new Config.KafkaProducerConfig("producer-id")),
+            Config.KafkaConfig.builder()
+                .bootstrapServers(kafka.getBootstrapServers())
+                .kafkaProducerConfig(
+                    Config.KafkaProducerConfig.builder()
+                        .clientId("producer-id-" + counter.get())
+                        .build())
+                .kafkaConsumerConfig(
+                    Config.KafkaConsumerConfig.builder()
+                        .clientId("consumer-id-" + counter.get())
+                        .consumerGroup("consumer-group-" + counter.get())
+                        .maxPollRecords(1)
+                        .build())
+                .build(),
             Map.of(),
             new Config.VerticleConfig(1));
 
@@ -136,7 +133,7 @@ public abstract class PersistenceTest {
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
             .kafkaConfig(config.kafkaConfig())
-            .authenticationIntegration(authHandler)
+            .postgresConfig(config.postgresConfig())
             .build();
 
     vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
@@ -153,23 +150,13 @@ public abstract class PersistenceTest {
     RestAssured.reset();
   }
 
-  protected <T> void persist(Function<SqlClient, Future<T>> function) {
-    PgPool pool = provider.pool();
-    CountDownLatch latch = new CountDownLatch(1);
+  protected <T> void persist(Function<Configuration, T> function) {
+    DSLContext dslContext = provider.dslContext();
 
-    new TransactionBoundary(pool) {
+    new TransactionBoundary(dslContext) {
       {
-        doInTransaction(function)
-            .onFailure(err -> fail("failure while persisting", err))
-            .onSuccess(projection -> latch.countDown());
+        doInTransaction(function);
       }
     };
-
-    try {
-      latch.await();
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      fail("failure while waiting for persistence to complete", e);
-    }
   }
 }

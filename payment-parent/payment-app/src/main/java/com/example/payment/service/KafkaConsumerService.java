@@ -2,6 +2,7 @@
 package com.example.payment.service;
 
 import com.example.commons.kafka.consumer.MessageHandler;
+import io.vertx.core.Future;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
@@ -53,6 +54,24 @@ public class KafkaConsumerService implements AutoCloseable {
     }
 
     messageHandler.handle(message);
+  }
+
+  public Future<Void> init() {
+    return consumer
+        .listTopics()
+        .map(
+            topics -> {
+              if (topics.isEmpty()) {
+                throw new NoStackTraceException("no topics found");
+              }
+
+              if (!topics.keySet().containsAll(handlerMap.keySet())) {
+                throw new NoStackTraceException(
+                    "not all required topics found: " + handlerMap.keySet());
+              }
+
+              return null;
+            });
   }
 
   @SuppressWarnings("java:S106") // logger is not available

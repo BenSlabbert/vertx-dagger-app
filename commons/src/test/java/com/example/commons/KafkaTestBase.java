@@ -6,6 +6,7 @@ import com.example.commons.ioc.DaggerProvider;
 import com.example.commons.ioc.Provider;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.KafkaContainer;
@@ -13,6 +14,8 @@ import org.testcontainers.utility.DockerImageName;
 
 @ExtendWith(VertxExtension.class)
 public abstract class KafkaTestBase {
+
+  private static final AtomicInteger counter = new AtomicInteger(0);
 
   private static final KafkaContainer kafka =
       new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.1"))
@@ -29,11 +32,14 @@ public abstract class KafkaTestBase {
     Config.KafkaConfig kafkaConfig =
         Config.KafkaConfig.builder()
             .bootstrapServers(kafka.getBootstrapServers())
-            .kafkaProducerConfig(Config.KafkaProducerConfig.builder().clientId("clientId").build())
+            .kafkaProducerConfig(
+                Config.KafkaProducerConfig.builder()
+                    .clientId("producer-id-" + counter.get())
+                    .build())
             .kafkaConsumerConfig(
                 Config.KafkaConsumerConfig.builder()
-                    .clientId("clientId")
-                    .consumerGroup("consumerGroup")
+                    .clientId("consumer-id-" + counter.get())
+                    .consumerGroup("consumer-group-" + counter.get())
                     .maxPollRecords(1)
                     .build())
             .build();

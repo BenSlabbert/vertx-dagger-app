@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.service;
 
-import com.example.commons.transaction.TransactionBoundary;
+import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.reactivetest.repository.sql.projection.OutboxProjectionFactory;
 import io.vertx.core.Future;
 import io.vertx.pgclient.PgPool;

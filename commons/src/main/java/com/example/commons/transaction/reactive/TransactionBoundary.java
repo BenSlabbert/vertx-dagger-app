@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.commons.transaction;
+package com.example.commons.transaction.reactive;
 
 import io.vertx.core.Future;
 import io.vertx.pgclient.PgPool;
@@ -7,6 +7,7 @@ import io.vertx.sqlclient.SqlClient;
 import java.util.function.Function;
 
 public abstract class TransactionBoundary {
+
   private final PgPool pool;
 
   protected TransactionBoundary(PgPool pool) {
