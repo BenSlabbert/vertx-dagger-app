@@ -8,6 +8,7 @@ import io.vertx.core.Vertx;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Module
 class RedisConfig implements AutoCloseable {
@@ -18,9 +19,8 @@ class RedisConfig implements AutoCloseable {
   private static RedisAPI redisAPI = null;
 
   @Provides
-  static synchronized RedisAPI providesRedisAPI(Vertx vertx, Config.RedisConfig redisConfig) {
-    if (redisAPI != null) return redisAPI;
-
+  @Singleton
+  static RedisAPI providesRedisAPI(Vertx vertx, Config.RedisConfig redisConfig) {
     Redis client = Redis.createClient(vertx, redisConfig.uri());
     redisAPI = RedisAPI.api(client);
     return redisAPI;

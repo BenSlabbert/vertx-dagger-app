@@ -15,7 +15,8 @@ import javax.inject.Singleton;
 import org.jooq.DSLContext;
 
 @Singleton
-@Component(modules = {MapperModule.class, KafkaModule.class, SagaModule.class})
+@Component(
+    modules = {MapperModule.class, KafkaModule.class, SagaModule.class, Provider.EagerModule.class})
 public interface TestMockRepositoryProvider extends Provider {
 
   @Component.Builder

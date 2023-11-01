@@ -43,6 +43,9 @@ public class Main {
     List<String> reachableNameServers = ReachableNameServers.getReachableNameServers();
     log.log(INFO, "reachableNameServers: {0}", new Object[] {reachableNameServers});
 
+    Provider dagger = DaggerProvider.create();
+    dagger.init();
+
     vertx =
         Vertx.vertx(
             new VertxOptions()
@@ -52,8 +55,6 @@ public class Main {
                 .setPreferNativeTransport(true)
                 .setAddressResolverOptions(
                     new AddressResolverOptions().setServers(reachableNameServers)));
-
-    Provider dagger = DaggerProvider.create();
 
     Runtime.getRuntime()
         .addShutdownHook(

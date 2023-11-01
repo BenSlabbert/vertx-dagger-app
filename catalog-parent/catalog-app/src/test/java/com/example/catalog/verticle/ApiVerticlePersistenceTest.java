@@ -25,6 +25,11 @@ import org.junit.jupiter.api.Test;
 class ApiVerticlePersistenceTest extends PersistenceTest {
 
   @Test
+  void test() {
+    persist(conn -> provider.itemRepository().create(conn, "name1", 1L));
+  }
+
+  @Test
   void apiTest() {
     log.info("starting apiTest");
     persist(conn -> provider.itemRepository().create(conn, "name1", 1L));

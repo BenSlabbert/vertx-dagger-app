@@ -3,6 +3,7 @@ package com.example.payment.config;
 
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 import javax.sql.DataSource;
 import lombok.extern.java.Log;
 import org.jooq.DSLContext;
@@ -16,15 +17,12 @@ class JooqConfig {
 
   private JooqConfig() {}
 
-  private static DSLContext dslContext = null;
-
   @Provides
-  static synchronized DSLContext providesDslContext(DataSource dataSource) {
-    if (dslContext != null) return dslContext;
-
+  @Singleton
+  static DSLContext dslContext(DataSource dataSource) {
     log.info("creating dsl context");
     Settings settings = new Settings().withFetchSize(128);
-    dslContext = DSL.using(dataSource, SQLDialect.POSTGRES, settings);
+    DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES, settings);
 
     int execute = dslContext.execute("SELECT 1");
     log.info("init dsl context: executed select 1: " + execute);

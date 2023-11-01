@@ -36,6 +36,7 @@ import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
 @Log
@@ -74,11 +75,9 @@ public abstract class PersistenceTest {
   // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
   static {
     log.info("starting redis");
-    redis.start();
     log.info("starting postgres");
-    postgres.start();
+    Startables.deepStart(redis, postgres).join();
     log.info("done");
-    //    Startables.deepStart(redis, postgres).join();
   }
 
   @BeforeAll
@@ -138,6 +137,7 @@ public abstract class PersistenceTest {
             .kafkaConfig(config.kafkaConfig())
             .authenticationIntegration(authHandler)
             .build();
+    provider.init();
 
     vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
   }
@@ -151,6 +151,13 @@ public abstract class PersistenceTest {
   @AfterEach
   void after() {
     RestAssured.reset();
+    for (AutoCloseable closeable : provider.closeables()) {
+      try {
+        closeable.close();
+      } catch (Exception e) {
+        log.warning("failed to close " + closeable);
+      }
+    }
   }
 
   protected <T> void persist(Function<SqlClient, Future<T>> function) {

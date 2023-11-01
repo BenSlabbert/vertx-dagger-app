@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import lombok.extern.java.Log;
-import org.jooq.DSLContext;
 
 @Log
 public class ApiVerticle extends AbstractVerticle {
@@ -19,8 +18,7 @@ public class ApiVerticle extends AbstractVerticle {
   private final KafkaConsumerService kafkaConsumerService;
 
   @Inject
-  public ApiVerticle(
-      DataSource dataSource, KafkaConsumerService kafkaConsumerService, DSLContext dslContext) {
+  public ApiVerticle(DataSource dataSource, KafkaConsumerService kafkaConsumerService) {
     this.dataSource = dataSource;
     this.kafkaConsumerService = kafkaConsumerService;
   }

@@ -10,10 +10,16 @@ import com.example.payment.service.ServiceModule;
 import com.example.payment.verticle.ApiVerticle;
 import com.google.protobuf.GeneratedMessageV3;
 import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 import io.vertx.kafka.client.producer.KafkaProducer;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.sql.DataSource;
+import org.jooq.DSLContext;
 
 @Singleton
 @Component(
@@ -22,9 +28,12 @@ import javax.inject.Singleton;
       ServiceModule.class,
       ConfigModule.class,
       KafkaModule.class,
-      RepositoryModule.class
+      RepositoryModule.class,
+      Provider.EagerModule.class
     })
 public interface Provider {
+
+  @Nullable Void init();
 
   ApiVerticle provideNewApiVerticle();
 
@@ -33,4 +42,17 @@ public interface Provider {
   KafkaConsumer<String, Buffer> consumer();
 
   KafkaProducer<String, GeneratedMessageV3> producer();
+
+  @Module
+  class EagerModule {
+
+    @Inject
+    EagerModule() {}
+
+    @Provides
+    @Nullable static Void provideEager(DataSource dataSource, DSLContext dslContext) {
+      // this eagerly builds any parameters specified and returns nothing
+      return null;
+    }
+  }
 }

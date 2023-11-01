@@ -22,14 +22,11 @@ public class PaymentService extends TransactionBoundary {
     this.paymentRepository = paymentRepository;
   }
 
-  public void save() {
-    Long newId = doInTransaction(ctx -> paymentRepository.save(ctx.dsl(), "name"));
-    log.info("saved payment with id: " + newId);
+  public Long save(String name) {
+    return doInTransaction(ctx -> paymentRepository.save(ctx.dsl(), name));
   }
 
-  public void fetch() {
-    List<PaymentRepositoryImpl.Projection> projections =
-        doInTransaction(ctx -> paymentRepository.getPayments(ctx.dsl()).toList());
-    log.info("payments: " + projections);
+  public List<PaymentRepositoryImpl.Projection> fetch() {
+    return doInTransaction(ctx -> paymentRepository.getPayments(ctx.dsl()).toList());
   }
 }

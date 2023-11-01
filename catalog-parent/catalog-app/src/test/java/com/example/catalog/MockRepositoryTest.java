@@ -89,6 +89,7 @@ public abstract class MockRepositoryTest {
             .closeables(Set.of())
             .dslContext(dslContext)
             .build();
+    provider.init();
 
     vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
   }

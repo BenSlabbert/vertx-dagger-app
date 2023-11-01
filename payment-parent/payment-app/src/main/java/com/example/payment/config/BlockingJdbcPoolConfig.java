@@ -6,9 +6,12 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dagger.Module;
 import dagger.Provides;
+import io.vertx.core.impl.NoStackTraceException;
 import java.time.Duration;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.logging.Level;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.sql.DataSource;
 import lombok.extern.java.Log;
 
@@ -22,9 +25,8 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
   BlockingJdbcPoolConfig() {}
 
   @Provides
-  static synchronized DataSource dataSource(Config.PostgresConfig config) {
-    if (dataSource != null) return dataSource;
-
+  @Singleton
+  static DataSource dataSource(Config.PostgresConfig config) {
     log.info("creating hikari datasource");
     HikariConfig cfg = new HikariConfig();
 
@@ -38,7 +40,6 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
     cfg.setMaximumPoolSize(2);
     cfg.setAutoCommit(false);
     cfg.setConnectionTimeout(Duration.ofSeconds(5L).toMillis());
-    //    cfg.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
 
     // https://github.com/brettwooldridge/HikariCP#frequently-used
     ScheduledThreadPoolExecutor executor =
@@ -48,6 +49,14 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
     cfg.setScheduledExecutor(executor);
 
     dataSource = new HikariDataSource(cfg);
+
+    try (var c = dataSource.getConnection()) {
+      // ensure we can get a connection
+    } catch (Exception e) {
+      log.log(Level.SEVERE, "failed to get connection", e);
+      throw new NoStackTraceException(e);
+    }
+
     return dataSource;
   }
 

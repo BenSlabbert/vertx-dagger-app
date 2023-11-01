@@ -11,6 +11,7 @@ import io.vertx.sqlclient.PoolOptions;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import lombok.extern.java.Log;
 
 @Log
@@ -23,9 +24,8 @@ class PgPoolConfig implements AutoCloseable {
   private static PgPool pool = null;
 
   @Provides
-  static synchronized PgPool providesPgPool(Vertx vertx, Config config) {
-    if (pool != null) return pool;
-
+  @Singleton
+  static PgPool providesPgPool(Vertx vertx, Config config) {
     log.info("creating pg pool");
     PgConnectOptions connectOptions =
         new PgConnectOptions()

@@ -13,10 +13,15 @@ import io.restassured.RestAssured;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import lombok.extern.java.Log;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.KafkaAdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.flywaydb.core.Flyway;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
@@ -124,6 +129,12 @@ public abstract class PersistenceTest {
             Map.of(),
             new Config.VerticleConfig(1));
 
+    Properties properties = new Properties();
+    properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers());
+    try (var adminClient = KafkaAdminClient.create(properties)) {
+      adminClient.createTopics(List.of(new NewTopic("Saga.Catalog.CreatePayment", 1, (short) 1)));
+    }
+
     provider =
         DaggerTestPersistenceProvider.builder()
             .vertx(vertx)
@@ -135,6 +146,7 @@ public abstract class PersistenceTest {
             .kafkaConfig(config.kafkaConfig())
             .postgresConfig(config.postgresConfig())
             .build();
+    provider.init();
 
     vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
   }
@@ -148,6 +160,13 @@ public abstract class PersistenceTest {
   @AfterEach
   void after() {
     RestAssured.reset();
+    for (AutoCloseable closeable : provider.closeables()) {
+      try {
+        closeable.close();
+      } catch (Exception e) {
+        log.warning("failed to close " + closeable);
+      }
+    }
   }
 
   protected <T> void persist(Function<Configuration, T> function) {

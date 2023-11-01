@@ -24,9 +24,9 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
   @Override
   public Stream<Projection> getPayments(DSLContext ctx) {
-    return ctx.select(PAYMENT.ID, PAYMENT.VERSION).from(PAYMENT).stream()
-        .map(r -> new Projection(r.get(PAYMENT.ID), r.get(PAYMENT.VERSION)));
+    return ctx.select(PAYMENT.ID, PAYMENT.NAME, PAYMENT.VERSION).from(PAYMENT).stream()
+        .map(r -> new Projection(r.get(PAYMENT.ID), r.get(PAYMENT.NAME), r.get(PAYMENT.VERSION)));
   }
 
-  public record Projection(long id, long version) {}
+  public record Projection(long id, String name, long version) {}
 }

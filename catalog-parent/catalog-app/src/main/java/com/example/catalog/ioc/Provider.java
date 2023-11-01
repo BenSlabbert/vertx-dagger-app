@@ -13,7 +13,14 @@ import com.example.commons.kafka.KafkaModule;
 import com.example.commons.saga.SagaBuilder;
 import com.example.commons.saga.SagaModule;
 import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
+import io.vertx.pgclient.PgPool;
+import io.vertx.redis.client.RedisAPI;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.jooq.DSLContext;
 
 @Singleton
 @Component(
@@ -25,13 +32,29 @@ import javax.inject.Singleton;
       MapperModule.class,
       KafkaModule.class,
       SagaModule.class,
-      ServiceModule.class
+      ServiceModule.class,
+      Provider.EagerModule.class
     })
 public interface Provider {
+
+  @Nullable Void init();
 
   ApiVerticle provideNewApiVerticle();
 
   ServiceLifecycleManagement providesServiceLifecycleManagement();
 
   SagaBuilder sagaBuilder();
+
+  @Module
+  class EagerModule {
+
+    @Inject
+    EagerModule() {}
+
+    @Provides
+    @Nullable static Void provideEager(RedisAPI redisAPI, PgPool pgPool, DSLContext dslContext) {
+      // this eagerly builds any parameters specified and returns nothing
+      return null;
+    }
+  }
 }

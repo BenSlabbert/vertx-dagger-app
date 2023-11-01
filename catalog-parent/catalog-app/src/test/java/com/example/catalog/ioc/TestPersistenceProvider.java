@@ -10,6 +10,7 @@ import com.example.commons.saga.SagaModule;
 import dagger.Component;
 import io.vertx.pgclient.PgPool;
 import io.vertx.redis.client.RedisAPI;
+import java.util.Set;
 import javax.inject.Singleton;
 
 @Singleton
@@ -19,7 +20,8 @@ import javax.inject.Singleton;
       ConfigModule.class,
       MapperModule.class,
       KafkaModule.class,
-      SagaModule.class
+      SagaModule.class,
+      Provider.EagerModule.class
     })
 public interface TestPersistenceProvider extends Provider {
 
@@ -28,6 +30,8 @@ public interface TestPersistenceProvider extends Provider {
   PgPool pool();
 
   RedisAPI redisAPI();
+
+  Set<AutoCloseable> closeables();
 
   @Component.Builder
   interface Builder extends BaseBuilder<Builder, TestPersistenceProvider> {}
