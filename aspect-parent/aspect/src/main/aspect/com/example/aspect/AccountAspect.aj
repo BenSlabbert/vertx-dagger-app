@@ -1,7 +1,5 @@
 package com.example.aspect;
 
-import com.example.aspect.Account;
-
 public aspect AccountAspect {
     final int MIN_BALANCE = 10;
     private String test;
