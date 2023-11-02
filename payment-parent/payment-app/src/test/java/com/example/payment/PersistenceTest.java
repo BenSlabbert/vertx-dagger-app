@@ -148,7 +148,7 @@ public abstract class PersistenceTest {
             .build();
     provider.init();
 
-    vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
+    vertx.deployVerticle(provider.provideNewWorkerVerticle(), testContext.succeedingThenComplete());
   }
 
   @BeforeEach

@@ -7,7 +7,7 @@ import com.example.payment.config.ConfigModule;
 import com.example.payment.repository.RepositoryModule;
 import com.example.payment.service.ServiceLifecycleManagement;
 import com.example.payment.service.ServiceModule;
-import com.example.payment.verticle.ApiVerticle;
+import com.example.payment.verticle.WorkerVerticle;
 import com.google.protobuf.GeneratedMessageV3;
 import dagger.Component;
 import dagger.Module;
@@ -35,7 +35,7 @@ public interface Provider {
 
   @Nullable Void init();
 
-  ApiVerticle provideNewApiVerticle();
+  WorkerVerticle provideNewWorkerVerticle();
 
   ServiceLifecycleManagement providesServiceLifecycleManagement();
 

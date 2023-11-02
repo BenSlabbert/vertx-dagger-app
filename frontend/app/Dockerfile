@@ -1,4 +1,4 @@
-ARG IMAGE="node:20-alpine"
+ARG IMAGE="node:21-alpine"
 
 FROM $IMAGE AS builder
 

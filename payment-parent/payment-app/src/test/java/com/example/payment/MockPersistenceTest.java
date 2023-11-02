@@ -17,10 +17,8 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.junit5.VertxExtension;
-import io.vertx.junit5.VertxTestContext;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 import io.vertx.kafka.client.producer.KafkaProducer;
-import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 import lombok.extern.java.Log;
@@ -58,7 +56,7 @@ public abstract class MockPersistenceTest {
   }
 
   @BeforeEach
-  void prepare(Vertx vertx, VertxTestContext testContext) throws Exception {
+  void prepare(Vertx vertx) {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
@@ -111,11 +109,6 @@ public abstract class MockPersistenceTest {
               when(configuration.dsl()).thenReturn(dslContext);
               return transactionalCallable.run(configuration);
             });
-    when(dataSource.getConnection()).thenReturn(null);
-    when(consumer.listTopics())
-        .thenReturn(Future.succeededFuture(Map.of("Saga.Catalog.CreatePayment", List.of())));
-
-    vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
   }
 
   @BeforeEach

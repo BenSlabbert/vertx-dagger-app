@@ -81,7 +81,7 @@ public class Main {
         .onFailure(
             err -> {
               log.log(SEVERE, "error while deploying api verticle", err);
-              vertx.close();
+              vertx.close().onComplete(ignore -> System.exit(1));
             })
         .onSuccess(id -> log.log(INFO, "api deployment id: {0}", new Object[] {id}));
   }

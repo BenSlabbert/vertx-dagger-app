@@ -61,15 +61,19 @@ public class Main {
             ShutdownHookProvider.get(
                 vertx, dagger.providesServiceLifecycleManagement().closeables()));
 
-    DeploymentOptions deploymentOptions =
-        new DeploymentOptions().setInstances(config.verticleConfig().numberOfInstances());
+    DeploymentOptions workerDeploymentOptions =
+        new DeploymentOptions()
+            .setInstances(config.verticleConfig().numberOfInstances())
+            .setWorker(true)
+            .setWorkerPoolSize(config.verticleConfig().numberOfInstances())
+            .setWorkerPoolName("payment-app-worker");
 
     vertx
-        .deployVerticle(dagger::provideNewApiVerticle, deploymentOptions)
+        .deployVerticle(dagger::provideNewWorkerVerticle, workerDeploymentOptions)
         .onFailure(
             err -> {
-              log.log(SEVERE, "error while deploying api verticle", err);
-              vertx.close();
+              log.log(SEVERE, "error while deploying verticle", err);
+              vertx.close().onComplete(ignore -> System.exit(1));
             })
         .onSuccess(id -> log.log(INFO, "api deployment id: {0}", new Object[] {id}));
   }
