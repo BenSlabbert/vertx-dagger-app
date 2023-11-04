@@ -5,9 +5,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.Getter;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 public class ServiceLifecycleManagement {
 

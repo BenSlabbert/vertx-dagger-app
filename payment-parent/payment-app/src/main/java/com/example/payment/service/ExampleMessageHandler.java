@@ -12,22 +12,22 @@ import com.example.commons.kafka.consumer.MessageHandler;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.kafka.client.consumer.KafkaConsumerRecord;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ExampleMessageHandler implements MessageHandler {
 
+  private static final Logger log = LoggerFactory.getLogger(ExampleMessageHandler.class);
   private static final String CMD_TOPIC = "Saga.Catalog.CreatePayment";
   private static final String REPLY_TOPIC = "Saga.Catalog.CreatePayment.Reply";
 
@@ -43,6 +43,7 @@ public class ExampleMessageHandler implements MessageHandler {
   @Override
   public void handle(KafkaConsumerRecord<String, Buffer> message) {
     log.info("handle message: %s".formatted(CMD_TOPIC));
+    log.info("handle message on thread: %s".formatted(Thread.currentThread().getName()));
 
     boolean workerContext = vertx.getOrCreateContext().isWorkerContext();
     boolean eventLoopContext = vertx.getOrCreateContext().isEventLoopContext();
@@ -62,7 +63,7 @@ public class ExampleMessageHandler implements MessageHandler {
       log.info("%s: created new payment: %d".formatted(sagaId, newId));
       sendSuccess(sagaId);
     } catch (Exception e) {
-      log.log(Level.SEVERE, "failed to handle message for saga: %s".formatted(sagaId), e);
+      log.error("failed to handle message for saga: %s".formatted(sagaId), e);
       sendFailure(sagaId);
     }
   }
@@ -93,7 +94,7 @@ public class ExampleMessageHandler implements MessageHandler {
 
     producer
         .send(producerRecord)
-        .onFailure(err -> log.severe(err.getMessage()))
+        .onFailure(err -> log.error("failed to send message to kafka", err))
         .onSuccess(metadata -> log.info("sent to topic: " + metadata.getTopic()));
   }
 }

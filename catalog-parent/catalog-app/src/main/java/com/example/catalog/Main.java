@@ -55,9 +55,6 @@ public class Main {
     List<String> reachableNameServers = ReachableNameServers.getReachableNameServers();
     log.log(INFO, "reachableNameServers: {0}", new Object[] {reachableNameServers});
 
-    Provider dagger = DaggerProvider.create();
-    dagger.init();
-
     vertx =
         Vertx.vertx(
             new VertxOptions()
@@ -68,6 +65,9 @@ public class Main {
                 .setAddressResolverOptions(
                     new AddressResolverOptions().setServers(reachableNameServers)));
 
+    Provider dagger = DaggerProvider.create();
+    dagger.init();
+
     Runtime.getRuntime()
         .addShutdownHook(
             ShutdownHookProvider.get(
@@ -76,6 +76,11 @@ public class Main {
     DeploymentOptions deploymentOptions =
         new DeploymentOptions().setInstances(config.verticleConfig().numberOfInstances());
 
+    // here we are creating the dependencies for the worker verticle on the event loop
+    // we need to move the creation of all these objects onto the worker thread in the
+    // worker's verticle start method
+    // todo: the verticle should accept the dagger provider as an argument
+    //  and use that to create all the dependencies
     vertx
         .deployVerticle(dagger::provideNewApiVerticle, deploymentOptions)
         .onFailure(

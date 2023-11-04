@@ -3,6 +3,7 @@ package com.example.commons.config;
 
 import static java.util.logging.Level.INFO;
 
+import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import java.io.IOException;
@@ -17,7 +18,11 @@ public class ParseConfig {
 
   private ParseConfig() {}
 
-  public static Config parseArgs(String[] args) throws IOException {
+  public static Config get(JsonObject jsonObject) {
+    return Config.fromJson(jsonObject);
+  }
+
+  public static Config parseArgs(String[] args) {
     if (args.length == 0) return Config.defaults();
 
     List<String> parsed =
@@ -31,7 +36,13 @@ public class ParseConfig {
     }
 
     log.log(INFO, "parsing config from: {0}", new Object[] {parsed});
-    String json = Files.readString(Paths.get(parsed.get(0)));
-    return Config.fromJson((JsonObject) Json.decodeValue(json));
+
+    try {
+      String json = Files.readString(Paths.get(parsed.get(0)));
+      return Config.fromJson((JsonObject) Json.decodeValue(json));
+    } catch (IOException e) {
+      log.log(INFO, "failed to parse config", e);
+      throw new NoStackTraceException(e);
+    }
   }
 }

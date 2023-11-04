@@ -1,10 +1,12 @@
 ---
+version: "2.4"
 services:
   redis:
     image: "redis/redis-stack:latest"
     ports:
     - "6379:6379"
     - "8001:8001"
+    mem_limit: "100m"
   postgres:
     image: "postgres:15-alpine"
     ports:
@@ -15,6 +17,7 @@ services:
       POSTGRES_DB: "postgres"
     volumes:
     - "./create-all-databases.sql:/docker-entrypoint-initdb.d/create-all-databases.sql"
+    mem_limit: "256m"
   zookeeper:
     image: "confluentinc/cp-zookeeper:7.5.1"
     environment:
@@ -23,6 +26,7 @@ services:
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     ports:
     - "22181:2181"
+    mem_limit: "256m"
   kafka:
     image: "confluentinc/cp-kafka:7.5.1"
     depends_on:
@@ -39,6 +43,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+    mem_limit: "1g"
   catalog-migrator:
     image: "catalog-migration:jvm-latest"
     depends_on:
@@ -46,6 +51,7 @@ services:
         condition: "service_started"
     command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
       \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres catalog"
+    mem_limit: "256m"
   payment-migrator:
     image: "payment-migration:jvm-latest"
     depends_on:
@@ -53,3 +59,4 @@ services:
         condition: "service_started"
     command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
       \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres payment"
+    mem_limit: "256m"

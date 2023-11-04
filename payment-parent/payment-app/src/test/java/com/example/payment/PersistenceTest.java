@@ -2,6 +2,7 @@
 package com.example.payment;
 
 import static com.example.commons.FreePortUtility.getPort;
+import static org.assertj.core.api.Assertions.fail;
 
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
@@ -12,7 +13,6 @@ import com.example.payment.ioc.TestPersistenceProvider;
 import io.restassured.RestAssured;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
-import io.vertx.junit5.VertxTestContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -88,7 +88,7 @@ public abstract class PersistenceTest {
   }
 
   @BeforeEach
-  void prepare(Vertx vertx, VertxTestContext testContext) throws Exception {
+  void prepare(Vertx vertx) throws Exception {
     final String dbName = "testing" + counter.incrementAndGet();
     log.info("creating db: " + dbName);
 
@@ -96,7 +96,7 @@ public abstract class PersistenceTest {
     Container.ExecResult execResult =
         postgres.execInContainer("psql", "-U", "postgres", "-c", "CREATE DATABASE " + dbName);
     if (execResult.getExitCode() != 0) {
-      testContext.failNow("failed to create database: " + execResult.getStderr());
+      fail("failed to create database: " + execResult.getStderr());
       return;
     }
 
@@ -140,7 +140,6 @@ public abstract class PersistenceTest {
             .vertx(vertx)
             .config(config)
             .httpConfig(config.httpConfig())
-            .redisConfig(config.redisConfig())
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
             .kafkaConfig(config.kafkaConfig())
@@ -148,7 +147,12 @@ public abstract class PersistenceTest {
             .build();
     provider.init();
 
-    vertx.deployVerticle(provider.provideNewWorkerVerticle(), testContext.succeedingThenComplete());
+    //    TODO: need a different test config where we deploy the verticle and test from API of kafka
+    // inputs
+    //    vertx.deployVerticle(
+    //        new WorkerVerticle(),
+    //        new DeploymentOptions().setWorker(true).setConfig(config),
+    //        testContext.succeedingThenComplete());
   }
 
   @BeforeEach

@@ -3,17 +3,19 @@ package com.example.payment.config;
 
 import dagger.Module;
 import dagger.Provides;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
-import lombok.extern.java.Log;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 
-@Log
 @Module
 class JooqConfig {
+
+  private static final Logger log = LoggerFactory.getLogger(JooqConfig.class);
 
   private JooqConfig() {}
 

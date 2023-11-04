@@ -4,7 +4,7 @@ target/
 !target/lib
 !target/*.jar
 mvnw*
-*-config.json
+dev-*-config.json
 docker-config.json
 *.tar.gz
 *.tar
@@ -13,3 +13,4 @@ file-uploads
 bin/
 *.iml
 .mvn/wrapper/
+dependency-reduced-pom.xml

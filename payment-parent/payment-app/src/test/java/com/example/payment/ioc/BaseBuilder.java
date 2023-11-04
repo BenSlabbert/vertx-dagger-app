@@ -19,9 +19,6 @@ public interface BaseBuilder<
   BUILDER httpConfig(Config.HttpConfig httpConfig);
 
   @BindsInstance
-  BUILDER redisConfig(Config.RedisConfig redisConfig);
-
-  @BindsInstance
   BUILDER verticleConfig(Config.VerticleConfig verticleConfig);
 
   @BindsInstance

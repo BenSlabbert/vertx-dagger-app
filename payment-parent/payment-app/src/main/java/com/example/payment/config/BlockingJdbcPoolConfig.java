@@ -7,18 +7,18 @@ import com.zaxxer.hikari.HikariDataSource;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import java.time.Duration;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
-import lombok.extern.java.Log;
 
-@Log
 @Module
 public class BlockingJdbcPoolConfig implements AutoCloseable {
 
+  private static final Logger log = LoggerFactory.getLogger(BlockingJdbcPoolConfig.class);
   private static HikariDataSource dataSource = null;
 
   @Inject
@@ -53,7 +53,7 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
     try (var c = dataSource.getConnection()) {
       // ensure we can get a connection
     } catch (Exception e) {
-      log.log(Level.SEVERE, "failed to get connection", e);
+      log.error("failed to get connection", e);
       throw new NoStackTraceException(e);
     }
 
@@ -65,6 +65,7 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
   public void close() {
     if (null == dataSource) return;
 
+    System.err.println("closing dataSource");
     dataSource.close();
   }
 }

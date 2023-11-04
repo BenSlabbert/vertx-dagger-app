@@ -7,10 +7,8 @@ import com.example.payment.repository.PaymentRepositoryImpl;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
 import org.jooq.DSLContext;
 
-@Log
 @Singleton
 public class PaymentService extends TransactionBoundary {
 

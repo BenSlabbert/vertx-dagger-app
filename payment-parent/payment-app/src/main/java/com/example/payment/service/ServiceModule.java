@@ -11,9 +11,5 @@ public interface ServiceModule {
 
   @Binds
   @IntoSet
-  AutoCloseable asAutoCloseableKafkaService(KafkaConsumerService closeablePool);
-
-  @Binds
-  @IntoSet
   MessageHandler asMessageHandlerExampleMessageHandler(ExampleMessageHandler exampleMessageHandler);
 }

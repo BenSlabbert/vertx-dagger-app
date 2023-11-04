@@ -1,0 +1,33 @@
+{
+  "httpConfig": {
+    "port": 8082
+  },
+  "kafkaConfig": {
+    "bootstrapServers": "127.0.0.1:29092",
+    "consumer" : {
+      "clientId": "payment-app-consumer",
+      "consumerGroup": "payment-app-consumer-group",
+      "maxPollRecords":  1
+    },
+    "producer" : {
+      "clientId": "payment-app-producer"
+    }
+  },
+  "verticleConfig": {
+    "numberOfInstances": 1
+  },
+  "postgresConfig": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "username": "postgres",
+    "password": "postgres",
+    "database": "payment"
+  },
+  "serviceRegistryConfig": {
+    "iam": {
+      "protocol": "GRPC",
+      "host": "127.0.0.1",
+      "port":  50051
+    }
+  }
+}

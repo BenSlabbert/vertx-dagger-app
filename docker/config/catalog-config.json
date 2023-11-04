@@ -1,0 +1,38 @@
+{
+  "httpConfig": {
+    "port": 8080
+  },
+  "kafkaConfig": {
+    "bootstrapServers": "kafka:9092",
+    "consumer" : {
+      "clientId": "catalog-app-consumer",
+      "consumerGroup": "catalog-app-consumer-group",
+      "maxPollRecords":  1
+    },
+    "producer" : {
+      "clientId": "catalog-app-producer"
+    }
+  },
+  "redisConfig": {
+    "host": "redis",
+    "port": 6379,
+    "database": 0
+  },
+  "verticleConfig": {
+    "numberOfInstances": 1
+  },
+  "postgresConfig": {
+    "host": "postgres",
+    "port": 5432,
+    "username": "postgres",
+    "password": "postgres",
+    "database": "catalog"
+  },
+  "serviceRegistryConfig": {
+    "iam": {
+      "protocol": "GRPC",
+      "host": "iam",
+      "port":  50051
+    }
+  }
+}

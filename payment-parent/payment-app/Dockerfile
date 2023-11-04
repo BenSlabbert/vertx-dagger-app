@@ -8,7 +8,7 @@ ARG JAVA_MINIMAL
 
 RUN jlink \
     --verbose \
-    --add-modules java.base,java.sql,java.naming,java.security.jgss,java.security.sasl,java.instrument,jdk.unsupported \
+    --add-modules java.base,java.sql,java.naming,java.security.jgss,java.security.sasl,java.instrument,jdk.unsupported,java.management \
     --compress zip-6 \
     --strip-debug \
     --no-header-files \
@@ -27,9 +27,6 @@ WORKDIR /app
 
 COPY target/payment.jar app.jar
 
-COPY target/lib lib
-
-CMD ["-cp", "lib", "-jar", "app.jar", "-XX:+UseZGC", "-XX:+ZGenerational", "-Xlog:gc*", "-Xmx32M", "-Xms32M", "-Djava.net.preferIPv4Stack=true"]
-ENTRYPOINT ["java"]
+ENTRYPOINT ["java", "-cp", "lib", "-jar", "app.jar", "-XX:+UseZGC", "-XX:+ZGenerational", "-Xlog:gc*", "-Xmx32M", "-Xms32M", "-Djava.net.preferIPv4Stack=true"]
 
 EXPOSE 8080

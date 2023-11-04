@@ -45,14 +45,14 @@ public record Config(
     }
   }
 
-  public static Config defaults() {
+  static Config defaults() {
     return Config.builder()
         .httpConfig(HttpConfig.builder().port(8080).build())
         .redisConfig(RedisConfig.builder().host("127.0.0.1").port(6379).database(0).build())
         .build();
   }
 
-  public static Config fromJson(JsonObject jsonObject) {
+  static Config fromJson(JsonObject jsonObject) {
     JsonObject httpConfig = jsonObject.getJsonObject("httpConfig");
     JsonObject verticleConfig = jsonObject.getJsonObject("verticleConfig", new JsonObject());
 

@@ -20,6 +20,7 @@ import io.vertx.junit5.VertxExtension;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import java.util.Map;
+import java.util.Set;
 import javax.sql.DataSource;
 import lombok.extern.java.Log;
 import org.jooq.Configuration;
@@ -82,7 +83,6 @@ public abstract class MockPersistenceTest {
             .vertx(vertx)
             .config(config)
             .httpConfig(config.httpConfig())
-            .redisConfig(config.redisConfig())
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
             .kafkaConfig(config.kafkaConfig())
@@ -92,6 +92,7 @@ public abstract class MockPersistenceTest {
             .dataSource(dataSource)
             .kafkaConsumer(consumer)
             .kafkaProducer(producer)
+            .closeables(Set.of())
             .build();
     provider.init();
 

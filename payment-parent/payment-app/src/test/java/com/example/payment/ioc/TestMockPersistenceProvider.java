@@ -11,6 +11,7 @@ import dagger.Component;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.kafka.client.consumer.KafkaConsumer;
 import io.vertx.kafka.client.producer.KafkaProducer;
+import java.util.Set;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
 import org.jooq.DSLContext;
@@ -37,6 +38,9 @@ public interface TestMockPersistenceProvider extends Provider {
 
     @BindsInstance
     Builder kafkaConsumer(KafkaConsumer<String, Buffer> consumer);
+
+    @BindsInstance
+    Builder closeables(Set<AutoCloseable> closeables);
 
     @BindsInstance
     Builder kafkaProducer(KafkaProducer<String, GeneratedMessageV3> producer);
