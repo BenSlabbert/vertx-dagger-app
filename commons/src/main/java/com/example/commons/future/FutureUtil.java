@@ -25,15 +25,12 @@ public final class FutureUtil {
     return Future.fromCompletionStage(completableFuture);
   }
 
-  public static Future<Boolean> awaitTermination() {
-    return run(
-        () -> {
-          try {
-            return EXECUTOR.awaitTermination(30L, TimeUnit.SECONDS);
-          } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new NoStackTraceException(e);
-          }
-        });
+  public static boolean awaitTermination() {
+    try {
+      return EXECUTOR.awaitTermination(30L, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new NoStackTraceException(e);
+    }
   }
 }

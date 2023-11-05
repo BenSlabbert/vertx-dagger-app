@@ -14,6 +14,7 @@ import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.NoArgsConstructor;
 
@@ -106,7 +107,7 @@ public class WorkerVerticle extends AbstractVerticle {
           });
     }
 
-    FutureUtil.awaitTermination()
+    Future.fromCompletionStage(CompletableFuture.supplyAsync(FutureUtil::awaitTermination))
         .onComplete(
             ignore -> {
               if (ignore.failed()) {
