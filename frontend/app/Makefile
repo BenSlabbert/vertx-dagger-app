@@ -5,7 +5,6 @@ IMAGE_TAG := latest
 
 .PHONY: install
 install:
-	yarn set version 4.0.1
 	yarn
 	yarn install
 
