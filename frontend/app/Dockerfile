@@ -4,7 +4,7 @@ FROM $IMAGE AS builder
 
 WORKDIR /app
 
-RUN corepack enable && corepack prepare yarn@stable --activate && yarn set version 4.0.1
+RUN corepack enable && corepack prepare yarn@stable --activate && yarn set version stable
 
 RUN yarn --version
 RUN echo "enableGlobalCache: false" >> .yarnrc.yml
