@@ -25,9 +25,9 @@ import lombok.RequiredArgsConstructor;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
-public class ExampleMessageHandler implements MessageHandler {
+public class CreatePaymentHandler implements MessageHandler {
 
-  private static final Logger log = LoggerFactory.getLogger(ExampleMessageHandler.class);
+  private static final Logger log = LoggerFactory.getLogger(CreatePaymentHandler.class);
   private static final String CMD_TOPIC = "Saga.Catalog.CreatePayment";
   private static final String REPLY_TOPIC = "Saga.Catalog.CreatePayment.Reply";
 

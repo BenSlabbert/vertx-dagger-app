@@ -7,7 +7,9 @@ import com.example.payment.repository.PaymentRepository;
 import com.example.payment.repository.RepositoryModule;
 import com.example.payment.service.PaymentService;
 import com.example.payment.service.ServiceModule;
+import com.google.protobuf.GeneratedMessageV3;
 import dagger.Component;
+import io.vertx.kafka.client.producer.KafkaProducer;
 import java.util.Set;
 import javax.inject.Singleton;
 import org.jooq.DSLContext;
@@ -30,6 +32,8 @@ public interface TestPersistenceProvider extends Provider {
   PaymentService paymentService();
 
   Set<AutoCloseable> closeables();
+
+  KafkaProducer<String, GeneratedMessageV3> producer();
 
   @Component.Builder
   interface Builder extends BaseBuilder<Builder, TestPersistenceProvider> {}

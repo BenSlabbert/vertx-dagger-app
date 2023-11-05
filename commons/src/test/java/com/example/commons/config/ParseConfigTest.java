@@ -3,7 +3,7 @@ package com.example.commons.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
+import io.vertx.core.json.JsonObject;
 import java.net.URL;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -11,11 +11,40 @@ import org.junit.jupiter.api.Test;
 class ParseConfigTest {
 
   @Test
-  void test() throws IOException {
+  void test() {
     URL resource = ParseConfigTest.class.getClassLoader().getResource("config.json");
     assertThat(resource).isNotNull();
     Config config =
         ParseConfig.parseArgs(new String[] {"-Xd=123", "-Dabc=sdf", resource.getPath()});
+
+    Config config1 =
+        new JsonObject(
+                """
+                        {
+                          "httpConfig": {
+                            "port": 8080
+                          },
+                          "grpcConfig": {
+                            "port": 50051
+                          },
+                          "redisConfig": {
+                            "host": "redis",
+                            "port": 6379,
+                            "database": 0
+                          },
+                          "verticleConfig": {
+                            "numberOfInstances": 1
+                          },
+                          "serviceRegistryConfig": {
+                            "IAM": {
+                              "protocol": "GRPC",
+                              "host": "iam",
+                              "port":  50051
+                            }
+                          }
+                        }
+                        """)
+            .mapTo(Config.class);
 
     assertThat(config)
         .isNotNull()
@@ -36,5 +65,7 @@ class ParseConfigTest {
                             .port(50051)
                             .build()))
                 .build());
+
+    assertThat(config).usingRecursiveComparison().isEqualTo(config1);
   }
 }

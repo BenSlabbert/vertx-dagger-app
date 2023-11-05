@@ -17,6 +17,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 class FutureUtilTest {
 
   @Test
+  void awaitTermination(VertxTestContext testContext) {
+    FutureUtil.awaitTermination()
+        .onComplete(
+            testContext.succeeding(
+                success ->
+                    testContext.verify(
+                        () -> {
+                          assertThat(success).isTrue();
+                          testContext.completeNow();
+                        })));
+  }
+
+  @Test
   void virtualThreadVoidReturn(VertxTestContext testContext) {
     List<Future<Void>> tasks =
         Stream.generate(() -> FutureUtil.run(this::getTaskReturningVoid)).limit(10_000L).toList();

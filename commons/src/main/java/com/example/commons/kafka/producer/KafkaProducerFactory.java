@@ -20,12 +20,15 @@ import io.vertx.core.Vertx;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import lombok.extern.java.Log;
 
 @Log
 @Module
 public class KafkaProducerFactory {
+
+  private static final AtomicInteger INCR = new AtomicInteger(0);
 
   private KafkaProducerFactory() {}
 
@@ -45,7 +48,7 @@ public class KafkaProducerFactory {
     config.put(LINGER_MS_CONFIG, "250");
     config.put(REQUEST_TIMEOUT_MS_CONFIG, "2500");
     config.put(DELIVERY_TIMEOUT_MS_CONFIG, "5000");
-    config.put(CLIENT_ID_CONFIG, kafkaConfig.kafkaProducerConfig().clientId());
+    config.put(CLIENT_ID_CONFIG, kafkaConfig.producer().clientId()+"-"+INCR.getAndIncrement());
 
     return KafkaProducer.<String, GeneratedMessageV3>create(vertx, config)
         .exceptionHandler(err -> log.log(Level.SEVERE, "unhandled exception", err));

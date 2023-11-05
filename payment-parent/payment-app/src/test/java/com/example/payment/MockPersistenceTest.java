@@ -66,9 +66,8 @@ public abstract class MockPersistenceTest {
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
             Config.KafkaConfig.builder()
                 .bootstrapServers("127.0.0.1:9092")
-                .kafkaProducerConfig(
-                    Config.KafkaProducerConfig.builder().clientId("producer-id").build())
-                .kafkaConsumerConfig(
+                .producer(Config.KafkaProducerConfig.builder().clientId("producer-id").build())
+                .consumer(
                     Config.KafkaConsumerConfig.builder()
                         .clientId("consumer-id")
                         .consumerGroup("consumer-group")

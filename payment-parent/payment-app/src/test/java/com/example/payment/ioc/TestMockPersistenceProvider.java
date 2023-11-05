@@ -2,7 +2,7 @@
 package com.example.payment.ioc;
 
 import com.example.payment.repository.PaymentRepository;
-import com.example.payment.service.ExampleMessageHandler;
+import com.example.payment.service.CreatePaymentHandler;
 import com.example.payment.service.PaymentService;
 import com.example.payment.service.ServiceModule;
 import com.google.protobuf.GeneratedMessageV3;
@@ -22,7 +22,7 @@ public interface TestMockPersistenceProvider extends Provider {
 
   PaymentService paymentService();
 
-  ExampleMessageHandler exampleMessageHandler();
+  CreatePaymentHandler exampleMessageHandler();
 
   @Component.Builder
   interface Builder extends BaseBuilder<Builder, TestMockPersistenceProvider> {

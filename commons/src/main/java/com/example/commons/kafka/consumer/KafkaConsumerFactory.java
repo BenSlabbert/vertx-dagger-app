@@ -36,13 +36,11 @@ public class KafkaConsumerFactory {
         KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
     config.put(
         VALUE_DESERIALIZER_CLASS_CONFIG, "io.vertx.kafka.client.serialization.BufferDeserializer");
-    config.put(GROUP_ID_CONFIG, kafkaConfig.kafkaConsumerConfig().consumerGroup());
+    config.put(GROUP_ID_CONFIG, kafkaConfig.consumer().consumerGroup());
     config.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
     config.put(AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
-    config.put(
-        MAX_POLL_RECORDS_CONFIG,
-        Integer.toString(kafkaConfig.kafkaConsumerConfig().maxPollRecords()));
-    config.put(CLIENT_ID_CONFIG, kafkaConfig.kafkaConsumerConfig().clientId());
+    config.put(MAX_POLL_RECORDS_CONFIG, Integer.toString(kafkaConfig.consumer().maxPollRecords()));
+    config.put(CLIENT_ID_CONFIG, kafkaConfig.consumer().clientId());
 
     return KafkaConsumer.<String, Buffer>create(vertx, config)
         .exceptionHandler(err -> log.log(Level.SEVERE, "unhandled exception", err));

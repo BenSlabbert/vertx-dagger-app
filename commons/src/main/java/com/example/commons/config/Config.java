@@ -20,10 +20,15 @@ public record Config(
     Map<ServiceIdentifier, ServiceRegistryConfig> serviceRegistryConfig,
     VerticleConfig verticleConfig) {
 
+  public JsonObject encode() {
+    String encode = new JsonObject().put("empty", this).encode();
+    return new JsonObject(encode).getJsonObject("empty");
+  }
+
   @Getter
   public enum ServiceIdentifier {
-    IAM("iam"),
-    CATALOG("catalog");
+    IAM("IAM"),
+    CATALOG("CATALOG");
 
     private final String serviceName;
 
@@ -94,8 +99,8 @@ public record Config(
     KafkaConfig kafkaConfig =
         KafkaConfig.builder()
             .bootstrapServers(config.getString("bootstrapServers"))
-            .kafkaConsumerConfig(consumerConfig)
-            .kafkaProducerConfig(producerConfig)
+            .consumer(consumerConfig)
+            .producer(producerConfig)
             .build();
 
     builder.kafkaConfig(kafkaConfig);
@@ -216,9 +221,7 @@ public record Config(
 
   @Builder
   public record KafkaConfig(
-      String bootstrapServers,
-      KafkaConsumerConfig kafkaConsumerConfig,
-      KafkaProducerConfig kafkaProducerConfig) {}
+      String bootstrapServers, KafkaConsumerConfig consumer, KafkaProducerConfig producer) {}
 
   @Builder
   public record KafkaConsumerConfig(String clientId, String consumerGroup, int maxPollRecords) {}

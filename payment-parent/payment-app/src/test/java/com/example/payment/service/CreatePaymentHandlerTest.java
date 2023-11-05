@@ -12,17 +12,17 @@ import io.vertx.kafka.client.producer.KafkaHeader;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.Test;
 
-class ExampleMessageHandlerTest extends MockPersistenceTest {
+class CreatePaymentHandlerTest extends MockPersistenceTest {
 
   @Test
   void getTopic() {
-    ExampleMessageHandler exampleMessageHandler = provider.exampleMessageHandler();
+    CreatePaymentHandler exampleMessageHandler = provider.exampleMessageHandler();
     assertThat(exampleMessageHandler.getTopic()).isEqualTo("Saga.Catalog.CreatePayment");
   }
 
   @Test
   void rollback() {
-    ExampleMessageHandler exampleMessageHandler = provider.exampleMessageHandler();
+    CreatePaymentHandler exampleMessageHandler = provider.exampleMessageHandler();
 
     ConsumerRecord<String, Buffer> stringStringConsumerRecord =
         new ConsumerRecord<>("", 0, 0, "", null);

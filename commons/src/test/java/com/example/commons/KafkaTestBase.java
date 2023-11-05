@@ -32,11 +32,11 @@ public abstract class KafkaTestBase {
     Config.KafkaConfig kafkaConfig =
         Config.KafkaConfig.builder()
             .bootstrapServers(kafka.getBootstrapServers())
-            .kafkaProducerConfig(
+            .producer(
                 Config.KafkaProducerConfig.builder()
                     .clientId("producer-id-" + counter.get())
                     .build())
-            .kafkaConsumerConfig(
+            .consumer(
                 Config.KafkaConsumerConfig.builder()
                     .clientId("consumer-id-" + counter.get())
                     .consumerGroup("consumer-group-" + counter.get())

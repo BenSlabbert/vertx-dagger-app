@@ -2,6 +2,7 @@
 package com.example.commons.future;
 
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.impl.NoStackTraceException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -25,12 +26,22 @@ public final class FutureUtil {
     return Future.fromCompletionStage(completableFuture);
   }
 
-  public static boolean awaitTermination() {
-    try {
-      return EXECUTOR.awaitTermination(30L, TimeUnit.SECONDS);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new NoStackTraceException(e);
-    }
+  public static Future<Boolean> awaitTermination() {
+    Promise<Boolean> promise = Promise.promise();
+
+    Thread.ofVirtual()
+        .start(
+            () -> {
+              try {
+                EXECUTOR.shutdown();
+                boolean ok = EXECUTOR.awaitTermination(10L, TimeUnit.SECONDS);
+                promise.complete(ok);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new NoStackTraceException(e);
+              }
+            });
+
+    return promise.future();
   }
 }

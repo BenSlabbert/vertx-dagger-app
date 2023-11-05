@@ -12,9 +12,9 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
+import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.NoArgsConstructor;
 
@@ -34,8 +34,11 @@ public class WorkerVerticle extends AbstractVerticle {
     }
 
     log.info("WorkerVerticle constructor");
-    Config config = ParseConfig.get(config());
+    JsonObject cfg = config();
+    Config config = ParseConfig.get(cfg);
 
+    Objects.requireNonNull(vertx);
+    Objects.requireNonNull(config);
     Objects.requireNonNull(config.postgresConfig());
     Objects.requireNonNull(config.httpConfig());
     Objects.requireNonNull(config.verticleConfig());
@@ -66,7 +69,7 @@ public class WorkerVerticle extends AbstractVerticle {
     boolean eventLoopContext = vertx.getOrCreateContext().isEventLoopContext();
     log.info("workerContext: %b, eventLoopContext: %b".formatted(workerContext, eventLoopContext));
 
-    checkDbConnection(startPromise);
+    Future<Void> dbCheck = FutureUtil.run(() -> checkDbConnection(startPromise));
 
     Future<Void> checkKafka =
         dagger
@@ -74,7 +77,9 @@ public class WorkerVerticle extends AbstractVerticle {
             .init()
             .onFailure(err -> log.error("failed to verify kafka connection", err));
 
-    checkKafka.onFailure(startPromise::fail).onSuccess(ignore -> startPromise.complete());
+    Future.all(dbCheck, checkKafka)
+        .onFailure(startPromise::fail)
+        .onSuccess(ignore -> startPromise.complete());
   }
 
   private void checkDbConnection(Promise<Void> startPromise) {
@@ -96,24 +101,19 @@ public class WorkerVerticle extends AbstractVerticle {
 
     AtomicInteger idx = new AtomicInteger(0);
     for (AutoCloseable service : closeables) {
-      FutureUtil.run(
-          () -> {
-            try {
-              System.err.printf("closing: [%d/%d]%n", idx.incrementAndGet(), closeables.size());
-              service.close();
-            } catch (Exception e) {
-              System.err.println("unable to close resources: " + e);
-            }
-          });
+      try {
+        System.err.printf("closing: [%d/%d]%n", idx.incrementAndGet(), closeables.size());
+        service.close();
+      } catch (Exception e) {
+        System.err.println("unable to close resources: " + e);
+      }
     }
 
-    Future.fromCompletionStage(CompletableFuture.supplyAsync(FutureUtil::awaitTermination))
+    System.err.println("awaitTermination...start");
+    FutureUtil.awaitTermination()
         .onComplete(
-            ignore -> {
-              if (ignore.failed()) {
-                System.err.println("failed to shutdown safely: " + ignore.cause());
-              }
-              System.err.println("shutdown complete");
+            ar -> {
+              System.err.printf("awaitTermination...end: %b%n", ar.result());
               stopPromise.complete();
             });
   }

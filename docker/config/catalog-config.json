@@ -29,7 +29,7 @@
     "database": "catalog"
   },
   "serviceRegistryConfig": {
-    "iam": {
+    "IAM": {
       "protocol": "GRPC",
       "host": "iam",
       "port":  50051

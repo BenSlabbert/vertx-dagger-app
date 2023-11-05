@@ -11,5 +11,5 @@ public interface ServiceModule {
 
   @Binds
   @IntoSet
-  MessageHandler asMessageHandlerExampleMessageHandler(ExampleMessageHandler exampleMessageHandler);
+  MessageHandler asMessageHandlerExampleMessageHandler(CreatePaymentHandler exampleMessageHandler);
 }

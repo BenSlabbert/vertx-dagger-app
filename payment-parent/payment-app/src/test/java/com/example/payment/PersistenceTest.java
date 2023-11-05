@@ -10,7 +10,6 @@ import com.example.commons.transaction.blocking.TransactionBoundary;
 import com.example.migration.FlywayProvider;
 import com.example.payment.ioc.DaggerTestPersistenceProvider;
 import com.example.payment.ioc.TestPersistenceProvider;
-import io.restassured.RestAssured;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import java.util.List;
@@ -25,9 +24,7 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.flywaydb.core.Flyway;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.Container;
@@ -46,6 +43,7 @@ public abstract class PersistenceTest {
   protected static final int GRPC_PORT = getPort();
 
   protected TestPersistenceProvider provider;
+  protected Config config;
 
   private static final AtomicInteger counter = new AtomicInteger(0);
   private static final Network network = Network.newNetwork();
@@ -74,17 +72,7 @@ public abstract class PersistenceTest {
     log.info("starting kafka");
     log.info("starting postgres");
     Startables.deepStart(kafka, postgres).join();
-    log.info("done");
-  }
-
-  @BeforeAll
-  static void beforeAll() {
-    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-  }
-
-  @AfterAll
-  static void afterAll() {
-    log.info("tests ended, stopping containers");
+    log.info("container startup done");
   }
 
   @BeforeEach
@@ -106,7 +94,7 @@ public abstract class PersistenceTest {
     flyway.clean();
     flyway.migrate();
 
-    Config config =
+    config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
             new Config.GrpcConfig(GRPC_PORT),
@@ -115,11 +103,11 @@ public abstract class PersistenceTest {
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
             Config.KafkaConfig.builder()
                 .bootstrapServers(kafka.getBootstrapServers())
-                .kafkaProducerConfig(
+                .producer(
                     Config.KafkaProducerConfig.builder()
                         .clientId("producer-id-" + counter.get())
                         .build())
-                .kafkaConsumerConfig(
+                .consumer(
                     Config.KafkaConsumerConfig.builder()
                         .clientId("consumer-id-" + counter.get())
                         .consumerGroup("consumer-group-" + counter.get())
@@ -146,24 +134,10 @@ public abstract class PersistenceTest {
             .postgresConfig(config.postgresConfig())
             .build();
     provider.init();
-
-    //    TODO: need a different test config where we deploy the verticle and test from API of kafka
-    // inputs
-    //    vertx.deployVerticle(
-    //        new WorkerVerticle(),
-    //        new DeploymentOptions().setWorker(true).setConfig(config),
-    //        testContext.succeedingThenComplete());
-  }
-
-  @BeforeEach
-  void before() {
-    RestAssured.baseURI = "http://localhost";
-    RestAssured.port = HTTP_PORT;
   }
 
   @AfterEach
   void after() {
-    RestAssured.reset();
     for (AutoCloseable closeable : provider.closeables()) {
       try {
         closeable.close();
