@@ -48,7 +48,7 @@ public class KafkaProducerFactory {
     config.put(LINGER_MS_CONFIG, "250");
     config.put(REQUEST_TIMEOUT_MS_CONFIG, "2500");
     config.put(DELIVERY_TIMEOUT_MS_CONFIG, "5000");
-    config.put(CLIENT_ID_CONFIG, kafkaConfig.producer().clientId()+"-"+INCR.getAndIncrement());
+    config.put(CLIENT_ID_CONFIG, kafkaConfig.producer().clientId() + "-" + INCR.getAndIncrement());
 
     return KafkaProducer.<String, GeneratedMessageV3>create(vertx, config)
         .exceptionHandler(err -> log.log(Level.SEVERE, "unhandled exception", err));
