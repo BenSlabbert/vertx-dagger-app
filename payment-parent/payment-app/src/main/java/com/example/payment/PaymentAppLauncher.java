@@ -17,7 +17,11 @@ public class PaymentAppLauncher extends Launcher {
   private static final Logger log = LoggerFactory.getLogger(PaymentAppLauncher.class);
 
   public static void main(String[] args) {
-    (new PaymentAppLauncher()).dispatch(args);
+    new PaymentAppLauncher().dispatch(args);
+  }
+
+  public static void executeCommand(String cmd, String... args) {
+    new PaymentAppLauncher().execute(cmd, args);
   }
 
   @Override
