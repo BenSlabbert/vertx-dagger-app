@@ -63,7 +63,7 @@ jobs:
         node-version: 20
         cache: "yarn"
         cache-dependency-path: "frontend/app/yarn.lock"
-    - run: "yarn set version 4.0.1"
+    - run: "cd frontend/app/ && yarn set version 4.0.1 && yarn --version && echo \"enableGlobalCache: false\" >> .yarnrc.yml && echo \"nodeLinker: node-modules\" >> .yarnrc.yml"
     - run: "make -C frontend/app"
     - run: "make lint -C frontend/app"
     - run: "make test -C frontend/app"
