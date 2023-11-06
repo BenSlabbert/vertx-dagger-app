@@ -1164,7 +1164,7 @@ __metadata:
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
     eslint: "npm:^8.53.0"
     eslint-config-prettier: "npm:^8.10.0"
-    eslint-plugin-svelte: "npm:^2.34.1"
+    eslint-plugin-svelte: "npm:^2.35.0"
     prettier: "npm:^2.8.8"
     prettier-plugin-svelte: "npm:^2.10.1"
     svelte: "npm:^4.2.2"
@@ -1859,6 +1859,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-compat-utils@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "eslint-compat-utils@npm:0.1.2"
+  peerDependencies:
+    eslint: ">=6.0.0"
+  checksum: 8c273889485ab863f2b6089c36f042dd2d9bf65d219fa256c1991f9466ea8261f3ab753a017a6d8e93bec84abd568fe3e10216f3fda5b41d05e3dce3b2a5e514
+  languageName: node
+  linkType: hard
+
 "eslint-config-prettier@npm:^8.10.0":
   version: 8.10.0
   resolution: "eslint-config-prettier@npm:8.10.0"
@@ -1870,13 +1879,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.34.1":
-  version: 2.34.1
-  resolution: "eslint-plugin-svelte@npm:2.34.1"
+"eslint-plugin-svelte@npm:^2.35.0":
+  version: 2.35.0
+  resolution: "eslint-plugin-svelte@npm:2.35.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.2.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.14"
     debug: "npm:^4.3.1"
+    eslint-compat-utils: "npm:^0.1.2"
     esutils: "npm:^2.0.3"
     known-css-properties: "npm:^0.29.0"
     postcss: "npm:^8.4.5"
@@ -1891,7 +1901,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: f204b06c8919fbf0eea75fed317336b33e40d4f644617b39d76839b032efbf64cc972405c51f6c9a00351432b8754b19b9d9aecccf20c3b30a7a23b6b9bf2bdc
+  checksum: bb6b9d75b3266548c840cbd76ee09b63edefe96e398c3648ebd1c28f989f5c8ae6a1bb14d6af82ceeec58e5ac31ebc182ed29b4554340bfdef84f502b42efdfc
   languageName: node
   linkType: hard
 
