@@ -50,7 +50,8 @@ public class EntityGenerator {
 
       var target = new Target().withPackageName(packageName).withDirectory(folderPath);
       var generatorStrategy = new Strategy();
-      var generate = new Generate().withJavaTimeTypes(true);
+      var generate =
+          new Generate().withComments(true).withJavaTimeTypes(true).withFluentSetters(true);
 
       var generator =
           new Generator()

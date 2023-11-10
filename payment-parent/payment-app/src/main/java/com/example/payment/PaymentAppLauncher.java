@@ -16,6 +16,11 @@ public class PaymentAppLauncher extends Launcher {
 
   private static final Logger log = LoggerFactory.getLogger(PaymentAppLauncher.class);
 
+  static {
+    System.setProperty("org.jooq.no-tips", "true");
+    System.setProperty("org.jooq.no-logo", "true");
+  }
+
   public static void main(String[] args) {
     new PaymentAppLauncher().dispatch(args);
   }

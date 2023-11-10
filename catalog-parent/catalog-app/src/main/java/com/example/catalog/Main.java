@@ -33,6 +33,11 @@ public class Main {
   private static Config config;
   private static Vertx vertx;
 
+  static {
+    System.setProperty("org.jooq.no-tips", "true");
+    System.setProperty("org.jooq.no-logo", "true");
+  }
+
   public static void main(String[] args) throws IOException {
     log.log(INFO, "starting app: {0}", new Object[] {Arrays.toString(args)});
 
