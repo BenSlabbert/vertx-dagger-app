@@ -1,20 +1,15 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.commons.saga;
 
-import static com.example.commons.kafka.common.Headers.SAGA_ID_HEADER;
-import static com.example.commons.kafka.common.Headers.SAGA_ROLLBACK_HEADER;
+import static com.example.commons.mesage.Headers.SAGA_ID_HEADER;
+import static com.example.commons.mesage.Headers.SAGA_ROLLBACK_HEADER;
 
-import com.example.commons.kafka.consumer.ConsumerUtils;
-import com.example.commons.kafka.consumer.MessageHandler;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
-import io.vertx.core.Promise;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.kafka.client.consumer.KafkaConsumerRecord;
-import io.vertx.kafka.client.producer.KafkaProducer;
-import io.vertx.kafka.client.producer.KafkaProducerRecord;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
+import java.time.Duration;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -22,39 +17,25 @@ import lombok.extern.java.Log;
 @Log
 @Builder
 @RequiredArgsConstructor
-class SagaStage implements MessageHandler {
+class SagaStage {
 
-  // required to be static as this is being modified by the SagaExecutor and MessageHandler
-  // in different threads
-  private static final Map<String, Promise<Boolean>> promiseForSagaId = new ConcurrentHashMap<>();
-
-  private final String commandTopic;
-  private final String resultTopic;
   private final SagaStageHandler handler;
-  private final KafkaProducer<String, GeneratedMessageV3> producer;
+  private final String commandAddress;
+  private final EventBus eventBus;
 
-  public Future<Void> sendCommandAndAwaitResponse(Promise<Boolean> promise, String sagaId) {
+  public Future<Message<GeneratedMessageV3>> sendCommand(String sagaId) {
     log.info("%s: sending command".formatted(sagaId));
 
     return handler
         .getCommand(sagaId)
         .compose(
-            message -> {
-              KafkaProducerRecord<String, GeneratedMessageV3> producerRecord =
-                  KafkaProducerRecord.create(commandTopic, "", message, 0);
-              producerRecord.addHeader(SAGA_ID_HEADER, sagaId);
-              return producer.send(producerRecord);
-            })
-        .map(
-            metadata -> {
-              log.info(
-                  "%s: sent to command topic %s with offset: %d"
-                      .formatted(sagaId, commandTopic, metadata.getOffset()));
-
-              log.info("waiting for promise: sagaId: %s".formatted(sagaId));
-              promiseForSagaId.put(sagaId, promise);
-              return null;
-            });
+            message ->
+                eventBus.request(
+                    commandAddress,
+                    message,
+                    new DeliveryOptions()
+                        .setSendTimeout(Duration.ofSeconds(5L).toMillis())
+                        .addHeader(SAGA_ID_HEADER, sagaId)));
   }
 
   public Future<Void> sendRollbackCommand(String sagaId) {
@@ -64,52 +45,18 @@ class SagaStage implements MessageHandler {
         .onRollBack(sagaId)
         .compose(
             ignore -> {
-              KafkaProducerRecord<String, GeneratedMessageV3> producerRecord =
-                  KafkaProducerRecord.create(commandTopic, "", null, 0);
-              producerRecord.addHeader(SAGA_ID_HEADER, sagaId);
-              producerRecord.addHeader(SAGA_ROLLBACK_HEADER, Boolean.TRUE.toString());
-              return producer.send(producerRecord);
-            })
-        .map(
-            metadata -> {
-              log.info("%s: sent rollback to command topic %s".formatted(sagaId, commandTopic));
+              eventBus.send(
+                  commandAddress,
+                  null,
+                  new DeliveryOptions()
+                      .addHeader(SAGA_ID_HEADER, sagaId)
+                      .addHeader(SAGA_ROLLBACK_HEADER, Boolean.TRUE.toString()));
               return null;
             });
   }
 
-  @Override
-  public String getTopic() {
-    return resultTopic;
-  }
-
-  @Override
-  public void handle(KafkaConsumerRecord<String, Buffer> message) {
-
-    Map<String, Buffer> headers = ConsumerUtils.headersAsMap(message.headers());
-
-    Buffer buffer = headers.get(SAGA_ID_HEADER);
-
-    if (null == buffer) {
-      log.warning("no saga header present");
-      return;
-    }
-
-    String messageSagaId = buffer.toString();
-    log.info("handling message for saga: " + messageSagaId);
-    log.info("handling message for topic: " + resultTopic);
-
-    Promise<Boolean> promise = promiseForSagaId.remove(messageSagaId);
-
-    if (null == promise) {
-      log.warning("no pending promise for sagaId: %s".formatted(messageSagaId));
-      return;
-    }
-
-    log.info("%s: handling message".formatted(messageSagaId));
-
-    handler
-        .handleResult(messageSagaId, message)
-        .onFailure(promise::fail)
-        .onSuccess(promise::complete);
+  public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+    log.info("%s: handle result".formatted(sagaId));
+    return handler.handleResult(sagaId, result);
   }
 }

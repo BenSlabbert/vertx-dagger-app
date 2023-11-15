@@ -134,7 +134,6 @@ public abstract class PersistenceTest {
             .redisConfig(config.redisConfig())
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
-            .kafkaConfig(config.kafkaConfig())
             .authenticationIntegration(authHandler)
             .build();
     provider.init();

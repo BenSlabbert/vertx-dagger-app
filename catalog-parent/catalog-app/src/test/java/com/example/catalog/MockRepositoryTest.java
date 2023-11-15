@@ -80,7 +80,6 @@ public abstract class MockRepositoryTest {
             .redisConfig(config.redisConfig())
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
-            .kafkaConfig(config.kafkaConfig())
             .authenticationIntegration(authHandler)
             .suggestionService(suggestionService)
             .itemRepository(itemRepository)

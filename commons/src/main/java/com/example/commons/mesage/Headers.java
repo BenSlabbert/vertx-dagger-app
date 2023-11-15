@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.commons.kafka.common;
+package com.example.commons.mesage;
 
 public final class Headers {
 

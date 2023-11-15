@@ -50,6 +50,11 @@
       <artifactId>mapstruct</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport-native-epoll</artifactId>
+      <classifier>linux-x86_64</classifier>
+    </dependency>
+    <dependency>
       <groupId>com.example.payment.entity</groupId>
       <artifactId>payment-entity</artifactId>
       <version>${revision}</version>
@@ -78,8 +83,7 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-kafka-client</artifactId>
-      <version>${vertx.version}</version>
+      <artifactId>vertx-opentelemetry</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -141,11 +145,6 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>kafka</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

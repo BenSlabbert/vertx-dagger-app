@@ -3,7 +3,6 @@ package com.example.payment;
 
 import static com.example.commons.FreePortUtility.getPort;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,14 +10,9 @@ import com.example.commons.config.Config;
 import com.example.payment.ioc.DaggerTestMockPersistenceProvider;
 import com.example.payment.ioc.TestMockPersistenceProvider;
 import com.example.payment.repository.PaymentRepository;
-import com.google.protobuf.GeneratedMessageV3;
 import io.restassured.RestAssured;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.junit5.VertxExtension;
-import io.vertx.kafka.client.consumer.KafkaConsumer;
-import io.vertx.kafka.client.producer.KafkaProducer;
 import java.util.Map;
 import java.util.Set;
 import javax.sql.DataSource;
@@ -43,8 +37,6 @@ public abstract class MockPersistenceTest {
   protected DSLContext dslContext = mock(DSLContext.class);
   protected PaymentRepository paymentRepository = mock(PaymentRepository.class);
   protected DataSource dataSource = mock(DataSource.class);
-  protected KafkaConsumer<String, Buffer> consumer = mock(KafkaConsumer.class);
-  protected KafkaProducer<String, GeneratedMessageV3> producer = mock(KafkaProducer.class);
 
   @BeforeAll
   static void beforeAll() {
@@ -64,16 +56,7 @@ public abstract class MockPersistenceTest {
             new Config.GrpcConfig(GRPC_PORT),
             Config.RedisConfig.builder().build(),
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
-            Config.KafkaConfig.builder()
-                .bootstrapServers("127.0.0.1:9092")
-                .producer(Config.KafkaProducerConfig.builder().clientId("producer-id").build())
-                .consumer(
-                    Config.KafkaConsumerConfig.builder()
-                        .clientId("consumer-id")
-                        .consumerGroup("consumer-group")
-                        .maxPollRecords(1)
-                        .build())
-                .build(),
+            null,
             Map.of(),
             new Config.VerticleConfig(1));
 
@@ -84,19 +67,13 @@ public abstract class MockPersistenceTest {
             .httpConfig(config.httpConfig())
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
-            .kafkaConfig(config.kafkaConfig())
             .postgresConfig(config.postgresConfig())
             .paymentRepository(paymentRepository)
             .dslContext(dslContext)
             .dataSource(dataSource)
-            .kafkaConsumer(consumer)
-            .kafkaProducer(producer)
             .closeables(Set.of())
             .build();
     provider.init();
-
-    when(consumer.handler(any())).thenReturn(consumer);
-    when(consumer.subscribe(anySet())).thenReturn(Future.succeededFuture());
 
     when(dslContext.transactionResult(any(TransactionalCallable.class)))
         .thenAnswer(

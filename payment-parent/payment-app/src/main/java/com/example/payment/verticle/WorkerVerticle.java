@@ -4,6 +4,7 @@ package com.example.payment.verticle;
 import com.example.commons.config.Config;
 import com.example.commons.config.ParseConfig;
 import com.example.commons.future.FutureUtil;
+import com.example.commons.mesage.Consumer;
 import com.example.payment.ioc.DaggerProvider;
 import com.example.payment.ioc.Provider;
 import io.vertx.core.AbstractVerticle;
@@ -24,6 +25,7 @@ public class WorkerVerticle extends AbstractVerticle {
   private static final Logger log = LoggerFactory.getLogger(WorkerVerticle.class);
 
   private Provider dagger;
+  private Set<Consumer> consumers = Set.of();
 
   private void init() {
     Context orCreateContext = vertx.getOrCreateContext();
@@ -42,7 +44,6 @@ public class WorkerVerticle extends AbstractVerticle {
     Objects.requireNonNull(config.postgresConfig());
     Objects.requireNonNull(config.httpConfig());
     Objects.requireNonNull(config.verticleConfig());
-    Objects.requireNonNull(config.kafkaConfig());
     Objects.requireNonNull(config.serviceRegistryConfig());
 
     this.dagger =
@@ -51,7 +52,6 @@ public class WorkerVerticle extends AbstractVerticle {
             .config(config)
             .httpConfig(config.httpConfig())
             .verticleConfig(config.verticleConfig())
-            .kafkaConfig(config.kafkaConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
             .postgresConfig(config.postgresConfig())
             .build();
@@ -69,17 +69,10 @@ public class WorkerVerticle extends AbstractVerticle {
     boolean eventLoopContext = vertx.getOrCreateContext().isEventLoopContext();
     log.info("workerContext: %b, eventLoopContext: %b".formatted(workerContext, eventLoopContext));
 
-    Future<Void> dbCheck = FutureUtil.run(() -> checkDbConnection(startPromise));
-
-    Future<Void> checkKafka =
-        dagger
-            .kafkaConsumerService()
-            .init()
-            .onFailure(err -> log.error("failed to verify kafka connection", err));
-
-    Future.all(dbCheck, checkKafka)
-        .onFailure(startPromise::fail)
-        .onSuccess(ignore -> startPromise.complete());
+    checkDbConnection(startPromise);
+    consumers = dagger.consumers();
+    consumers.forEach(Consumer::register);
+    startPromise.complete();
   }
 
   private void checkDbConnection(Promise<Void> startPromise) {
@@ -94,10 +87,18 @@ public class WorkerVerticle extends AbstractVerticle {
   @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void stop(Promise<Void> stopPromise) {
+    MultiCompletePromise multiCompletePromise = new MultiCompletePromise(stopPromise, 2);
     System.err.println("stopping");
 
     Set<AutoCloseable> closeables = dagger.providesServiceLifecycleManagement().closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
+
+    Future.all(consumers.stream().map(Consumer::unregister).toList())
+        .onComplete(
+            ar -> {
+              System.err.println("all eventbus consumers unregistered");
+              multiCompletePromise.complete();
+            });
 
     AtomicInteger idx = new AtomicInteger(0);
     for (AutoCloseable service : closeables) {
@@ -114,7 +115,24 @@ public class WorkerVerticle extends AbstractVerticle {
         .onComplete(
             ar -> {
               System.err.printf("awaitTermination...end: %b%n", ar.result());
-              stopPromise.complete();
+              multiCompletePromise.complete();
             });
+  }
+
+  static class MultiCompletePromise {
+
+    private final Promise<Void> promise;
+    private final AtomicInteger counter;
+
+    MultiCompletePromise(Promise<Void> promise, int times) {
+      this.promise = promise;
+      this.counter = new AtomicInteger(times);
+    }
+
+    void complete() {
+      if (counter.decrementAndGet() == 0) {
+        promise.complete();
+      }
+    }
   }
 }

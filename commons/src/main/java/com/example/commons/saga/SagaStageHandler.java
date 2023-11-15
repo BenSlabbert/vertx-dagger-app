@@ -3,8 +3,7 @@ package com.example.commons.saga;
 
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.kafka.client.consumer.KafkaConsumerRecord;
+import io.vertx.core.eventbus.Message;
 
 public interface SagaStageHandler {
 
@@ -16,7 +15,7 @@ public interface SagaStageHandler {
    *
    * <p>if false, a rollback command is sent to the command topic
    */
-  Future<Boolean> handleResult(String sagaId, KafkaConsumerRecord<String, Buffer> result);
+  Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result);
 
   /** in the event of a rollback this handler is called */
   Future<Void> onRollBack(String sagaId);

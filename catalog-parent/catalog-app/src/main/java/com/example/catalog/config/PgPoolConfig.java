@@ -2,13 +2,13 @@
 package com.example.catalog.config;
 
 import com.example.commons.config.Config;
+import com.example.commons.future.FutureUtil;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -50,19 +50,9 @@ class PgPoolConfig implements AutoCloseable {
 
   @SuppressWarnings("java:S106") // logger is not available
   @Override
-  public void close() throws InterruptedException {
+  public void close() {
     if (null == pool) return;
 
-    CountDownLatch latch = new CountDownLatch(1);
-    pool.close()
-        .onComplete(
-            r -> {
-              if (r.failed()) {
-                System.err.println("closing pg pool failed: " + r.cause());
-              }
-              latch.countDown();
-            });
-
-    latch.await();
+    FutureUtil.blockingExecution(pool.close());
   }
 }

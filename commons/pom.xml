@@ -146,6 +146,7 @@
           <systemPropertyVariables>
             <net.bytebuddy.experimental>true</net.bytebuddy.experimental>
           </systemPropertyVariables>
+          <forkCount>1C</forkCount>
         </configuration>
       </plugin>
       <plugin>

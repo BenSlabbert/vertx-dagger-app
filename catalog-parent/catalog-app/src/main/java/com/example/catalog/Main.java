@@ -122,11 +122,6 @@ public class Main {
   }
 
   @Provides
-  static Config.KafkaConfig providesKafkaConfig() {
-    return config.kafkaConfig();
-  }
-
-  @Provides
   static Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig>
       providesServiceRegistryConfig() {
     return config.serviceRegistryConfig();

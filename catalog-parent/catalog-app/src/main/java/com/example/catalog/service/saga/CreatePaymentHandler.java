@@ -9,8 +9,7 @@ import com.example.commons.protobuf.ProtobufParser;
 import com.example.commons.saga.SagaStageHandler;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.kafka.client.consumer.KafkaConsumerRecord;
+import io.vertx.core.eventbus.Message;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -31,10 +30,10 @@ public class CreatePaymentHandler implements SagaStageHandler {
   }
 
   @Override
-  public Future<Boolean> handleResult(String sagaId, KafkaConsumerRecord<String, Buffer> result) {
+  public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
     log.info("%s: handle result".formatted(sagaId));
 
-    byte[] bytes = result.value().getBytes();
+    byte[] bytes = result.body().toByteArray();
 
     CreatePurchaseOrderResponse response =
         ProtobufParser.parse(bytes, CreatePurchaseOrderResponse.getDefaultInstance());

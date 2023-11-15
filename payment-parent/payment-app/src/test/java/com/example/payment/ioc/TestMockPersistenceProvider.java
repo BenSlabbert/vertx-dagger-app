@@ -5,12 +5,8 @@ import com.example.payment.repository.PaymentRepository;
 import com.example.payment.service.CreatePaymentHandler;
 import com.example.payment.service.PaymentService;
 import com.example.payment.service.ServiceModule;
-import com.google.protobuf.GeneratedMessageV3;
 import dagger.BindsInstance;
 import dagger.Component;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.kafka.client.consumer.KafkaConsumer;
-import io.vertx.kafka.client.producer.KafkaProducer;
 import java.util.Set;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
@@ -37,12 +33,6 @@ public interface TestMockPersistenceProvider extends Provider {
     Builder dataSource(DataSource dataSource);
 
     @BindsInstance
-    Builder kafkaConsumer(KafkaConsumer<String, Buffer> consumer);
-
-    @BindsInstance
     Builder closeables(Set<AutoCloseable> closeables);
-
-    @BindsInstance
-    Builder kafkaProducer(KafkaProducer<String, GeneratedMessageV3> producer);
   }
 }

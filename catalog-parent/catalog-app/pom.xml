@@ -250,6 +250,9 @@
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
+            <configuration>
+              <forkCount>1C</forkCount>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -274,6 +277,7 @@
           <systemPropertyVariables>
             <net.bytebuddy.experimental>true</net.bytebuddy.experimental>
           </systemPropertyVariables>
+          <forkCount>1C</forkCount>
         </configuration>
       </plugin>
       <plugin>

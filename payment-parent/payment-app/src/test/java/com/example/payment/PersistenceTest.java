@@ -12,15 +12,10 @@ import com.example.payment.ioc.DaggerTestPersistenceProvider;
 import com.example.payment.ioc.TestPersistenceProvider;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import lombok.extern.java.Log;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.KafkaAdminClient;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.flywaydb.core.Flyway;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
@@ -29,7 +24,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.lifecycle.Startables;
@@ -48,12 +42,6 @@ public abstract class PersistenceTest {
   private static final AtomicInteger counter = new AtomicInteger(0);
   private static final Network network = Network.newNetwork();
 
-  protected static final KafkaContainer kafka =
-      new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.1"))
-          .withNetwork(network)
-          .withEnv("KAFKA_HEAP_OPTS", "-Xmx512M -Xms512M")
-          .withLogConsumer(new TestcontainerLogConsumer("kafka"));
-
   protected static final GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
           .withExposedPorts(5432)
@@ -69,9 +57,8 @@ public abstract class PersistenceTest {
 
   // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
   static {
-    log.info("starting kafka");
     log.info("starting postgres");
-    Startables.deepStart(kafka, postgres).join();
+    Startables.deepStart(postgres).join();
     log.info("container startup done");
   }
 
@@ -102,26 +89,17 @@ public abstract class PersistenceTest {
             new Config.PostgresConfig(
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
             Config.KafkaConfig.builder()
-                .bootstrapServers(kafka.getBootstrapServers())
-                .producer(
-                    Config.KafkaProducerConfig.builder()
-                        .clientId("producer-id-" + counter.get())
-                        .build())
+                .bootstrapServers("")
+                .producer(Config.KafkaProducerConfig.builder().clientId("producer-id").build())
                 .consumer(
                     Config.KafkaConsumerConfig.builder()
-                        .clientId("consumer-id-" + counter.get())
-                        .consumerGroup("consumer-group-" + counter.get())
+                        .clientId("consumer-id")
+                        .consumerGroup("consumer-group")
                         .maxPollRecords(1)
                         .build())
                 .build(),
             Map.of(),
             new Config.VerticleConfig(1));
-
-    Properties properties = new Properties();
-    properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers());
-    try (var adminClient = KafkaAdminClient.create(properties)) {
-      adminClient.createTopics(List.of(new NewTopic("Saga.Catalog.CreatePayment", 1, (short) 1)));
-    }
 
     provider =
         DaggerTestPersistenceProvider.builder()
@@ -130,7 +108,6 @@ public abstract class PersistenceTest {
             .httpConfig(config.httpConfig())
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
-            .kafkaConfig(config.kafkaConfig())
             .postgresConfig(config.postgresConfig())
             .build();
     provider.init();

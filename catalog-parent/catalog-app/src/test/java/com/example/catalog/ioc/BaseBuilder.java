@@ -29,9 +29,6 @@ public interface BaseBuilder<
   BUILDER serviceRegistryConfig(Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig> map);
 
   @BindsInstance
-  BUILDER kafkaConfig(Config.KafkaConfig kafkaConfig);
-
-  @BindsInstance
   BUILDER authenticationIntegration(AuthenticationIntegration authenticationIntegration);
 
   PROVIDER build();

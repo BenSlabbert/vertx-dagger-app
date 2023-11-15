@@ -2,10 +2,9 @@
 package com.example.payment.ioc;
 
 import com.example.commons.config.Config;
-import com.example.commons.kafka.KafkaModule;
+import com.example.commons.mesage.Consumer;
 import com.example.payment.config.ConfigModule;
 import com.example.payment.repository.RepositoryModule;
-import com.example.payment.service.KafkaConsumerService;
 import com.example.payment.service.ServiceLifecycleManagement;
 import com.example.payment.service.ServiceModule;
 import dagger.BindsInstance;
@@ -14,6 +13,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -25,7 +25,6 @@ import org.jooq.DSLContext;
     modules = {
       ServiceModule.class,
       ConfigModule.class,
-      KafkaModule.class,
       RepositoryModule.class,
       Provider.EagerModule.class
     })
@@ -35,7 +34,7 @@ public interface Provider {
 
   DataSource dataSource();
 
-  KafkaConsumerService kafkaConsumerService();
+  Set<Consumer> consumers();
 
   ServiceLifecycleManagement providesServiceLifecycleManagement();
 
@@ -59,9 +58,6 @@ public interface Provider {
 
     @BindsInstance
     Builder serviceRegistryConfig(Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig> map);
-
-    @BindsInstance
-    Builder kafkaConfig(Config.KafkaConfig kafkaConfig);
 
     Provider build();
   }

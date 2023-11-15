@@ -3,6 +3,7 @@ package com.example.commons.protobuf;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
+import io.vertx.core.impl.NoStackTraceException;
 
 public final class ProtobufParser {
 
@@ -12,7 +13,7 @@ public final class ProtobufParser {
     try {
       return (T) instance.getParserForType().parseFrom(in);
     } catch (InvalidProtocolBufferException e) {
-      throw new RuntimeException(e);
+      throw new NoStackTraceException(e);
     }
   }
 }

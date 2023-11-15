@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.commons.spi;
 
+import com.example.commons.thread.VirtualThreadFactory;
 import io.vertx.core.impl.VertxBuilder;
 import io.vertx.core.impl.VertxThread;
 import io.vertx.core.spi.VertxThreadFactory;
@@ -41,7 +42,7 @@ public class CustomVertxServiceProvider implements VertxThreadFactory {
     private MyVertxThread(
         Runnable target, String name, boolean worker, long maxExecTime, TimeUnit maxExecTimeUnit) {
       super(target, name, worker, maxExecTime, maxExecTimeUnit);
-      this.thread = Thread.ofVirtual().unstarted(target);
+      this.thread = VirtualThreadFactory.THREAD_FACTORY.newThread(target);
     }
 
     // delegate thread methods to virtual thread

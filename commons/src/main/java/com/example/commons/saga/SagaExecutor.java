@@ -4,14 +4,11 @@ package com.example.commons.saga;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-import com.example.commons.kafka.consumer.MessageHandler;
 import io.vertx.core.Future;
-import io.vertx.core.Promise;
 import io.vertx.core.impl.NoStackTraceException;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Level;
-import lombok.Getter;
 import lombok.extern.java.Log;
 
 @Log
@@ -20,11 +17,8 @@ public class SagaExecutor {
   private final String sagaId;
   private final ListIterator<SagaStage> iterator;
 
-  @Getter private final List<MessageHandler> messageHandlers;
-
   SagaExecutor(String sagaId, List<SagaStage> stages) {
     this.sagaId = sagaId;
-    this.messageHandlers = stages.stream().map(ss -> (MessageHandler) ss).toList();
     this.iterator = stages.listIterator();
   }
 
@@ -43,19 +37,12 @@ public class SagaExecutor {
       return Future.succeededFuture();
     }
 
-    log.info("more");
+    log.info("next");
     SagaStage stage = iterator.next();
-    Promise<Boolean> promise = Promise.promise();
 
     return stage
-        .sendCommandAndAwaitResponse(promise, sagaId)
-        .compose(
-            ignore -> {
-              // TODO: we need a timeout for this
-              //  promise.future is retuning io.vertx.core.impl.future.FutureImpl
-              //  and this is causing a class cast exception
-              return promise.future();
-            })
+        .sendCommand(sagaId)
+        .compose(msg -> stage.handleResult(sagaId, msg))
         .recover(
             throwable -> {
               log.log(Level.SEVERE, "%s failed to execute saga".formatted(sagaId), throwable);

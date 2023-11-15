@@ -152,6 +152,13 @@
         <artifactId>mapstruct</artifactId>
         <version>${org.mapstruct.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-transport-native-epoll</artifactId>
+        <!--Should align with netty version that Vert.x uses-->
+        <version>4.1.100.Final</version>
+        <classifier>linux-x86_64</classifier>
+      </dependency>
       <!--no good-->
       <dependency>
         <groupId>org.testcontainers</groupId>

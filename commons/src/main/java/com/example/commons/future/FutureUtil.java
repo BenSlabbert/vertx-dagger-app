@@ -1,10 +1,12 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.commons.future;
 
+import com.example.commons.thread.VirtualThreadFactory;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.impl.NoStackTraceException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +16,8 @@ public final class FutureUtil {
 
   private FutureUtil() {}
 
-  public static final ExecutorService EXECUTOR = Executors.newVirtualThreadPerTaskExecutor();
+  public static final ExecutorService EXECUTOR =
+      Executors.newThreadPerTaskExecutor(VirtualThreadFactory.THREAD_FACTORY);
 
   public static <T> Future<T> run(Supplier<T> task) {
     CompletableFuture<T> completableFuture = CompletableFuture.supplyAsync(task, EXECUTOR);
@@ -43,5 +46,29 @@ public final class FutureUtil {
             });
 
     return promise.future();
+  }
+
+  /** will block the current thread until the future is completed */
+  @SuppressWarnings("java:S106") // logger generally not available during shutdown
+  public static <T> void blockingExecution(Future<T> future) {
+    CountDownLatch latch = new CountDownLatch(1);
+
+    future.onComplete(
+        ar -> {
+          if (ar.failed()) {
+            System.err.println("closing pg pool failed: " + ar.cause());
+          }
+          latch.countDown();
+        });
+
+    try {
+      boolean await = latch.await(30L, TimeUnit.SECONDS);
+      if (!await) {
+        System.err.println("closing timed out");
+      }
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      System.err.println("closing failed: " + e);
+    }
   }
 }

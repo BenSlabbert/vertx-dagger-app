@@ -13,6 +13,7 @@ import static org.apache.kafka.clients.producer.ProducerConfig.REQUEST_TIMEOUT_M
 import static org.apache.kafka.clients.producer.ProducerConfig.RETRIES_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
 
+import com.example.commons.future.FutureUtil;
 import com.example.reactivetest.proto.v1.Person;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -26,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -93,22 +93,11 @@ public class KafkaProducerService implements AutoCloseable {
 
   @SuppressWarnings("java:S106") // logger is not available
   @Override
-  public void close() throws Exception {
+  public void close() {
     if (null == producer) {
       return;
     }
 
-    CountDownLatch latch = new CountDownLatch(1);
-    producer
-        .close()
-        .onComplete(
-            r -> {
-              if (r.failed()) {
-                System.err.println("failed to close pool: " + r.cause());
-              }
-              latch.countDown();
-            });
-
-    latch.await();
+    FutureUtil.blockingExecution(producer.close());
   }
 }

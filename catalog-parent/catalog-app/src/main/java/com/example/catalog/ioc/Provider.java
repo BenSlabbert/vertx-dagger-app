@@ -9,14 +9,14 @@ import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ServiceLifecycleManagement;
 import com.example.catalog.service.ServiceModule;
 import com.example.catalog.verticle.ApiVerticle;
-import com.example.commons.kafka.KafkaModule;
-import com.example.commons.saga.SagaBuilder;
+import com.example.commons.mesage.Consumer;
 import com.example.commons.saga.SagaModule;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.pgclient.PgPool;
 import io.vertx.redis.client.RedisAPI;
+import java.util.Set;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,7 +30,6 @@ import org.jooq.DSLContext;
       ConfigModule.class,
       IntegrationModule.class,
       MapperModule.class,
-      KafkaModule.class,
       SagaModule.class,
       ServiceModule.class,
       Provider.EagerModule.class
@@ -43,7 +42,7 @@ public interface Provider {
 
   ServiceLifecycleManagement providesServiceLifecycleManagement();
 
-  SagaBuilder sagaBuilder();
+  Set<Consumer> consumers();
 
   @Module
   class EagerModule {
