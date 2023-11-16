@@ -15,7 +15,6 @@
     <jooq.generated-sources.package>com.example.catalog.generator.entity.generated.jooq</jooq.generated-sources.package>
     <jooq.generated-sources.directory>${project.build.directory}/generated-sources/jooq</jooq.generated-sources.directory>
     <jooq.pdo-codegen.jar.name>pdo-generator.jar</jooq.pdo-codegen.jar.name>
-    <java.exec>java</java.exec>
   </properties>
 
   <dependencies>
