@@ -63,6 +63,10 @@ jobs:
         node-version: 20
         cache: "yarn"
         cache-dependency-path: "frontend/app/yarn.lock"
+    - run: "corepack enable"
+    - run: "corepack prepare yarn@stable --activate"
+    - run: "yarn set version stable"
+    - run: "yarn --version"
     - run: "make -C frontend/app"
     - run: "make lint -C frontend/app"
     - run: "make test -C frontend/app"
