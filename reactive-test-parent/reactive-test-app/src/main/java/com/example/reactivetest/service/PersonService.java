@@ -4,10 +4,12 @@ package com.example.reactivetest.service;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.commons.transaction.reactive.TransactionBoundary;
-import com.example.commons.util.Tuple;
+import com.example.reactivetest.config.Events;
 import com.example.reactivetest.repository.sql.PersonRepository;
 import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;
 import io.vertx.core.Future;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.pgclient.PgPool;
 import java.util.List;
 import javax.inject.Inject;
@@ -18,40 +20,26 @@ import lombok.extern.java.Log;
 @Singleton
 public class PersonService extends TransactionBoundary {
 
-  private final EventService eventService;
+  private final Vertx vertx;
   private final PersonRepository personRepository;
-  private final KafkaOutboxService kafkaOutboxService;
 
   @Inject
-  PersonService(
-      PgPool pool,
-      EventService eventService,
-      PersonRepository personRepository,
-      KafkaOutboxService kafkaOutboxService) {
+  PersonService(PgPool pool, Vertx vertx, PersonRepository personRepository) {
     super(pool);
-    this.eventService = eventService;
+    this.vertx = vertx;
     this.personRepository = personRepository;
-    this.kafkaOutboxService = kafkaOutboxService;
   }
 
   public Future<PersonProjection> create(String name) {
-    return doInTransaction(
-            conn ->
-                personRepository
-                    .create(conn, name)
-                    .compose(
-                        projection ->
-                            kafkaOutboxService
-                                .insert(conn, KafkaMessageFactory.create(projection))
-                                .map(outbox -> new Tuple<>(projection, outbox))))
+    return doInTransaction(conn -> personRepository.create(conn, name))
         .onSuccess(
-            tuple -> {
-              eventService.publishKafkaOutboxEvent(tuple.r().id());
-              eventService.publishPersonCreatedEvent(tuple.l());
-              log.info("created person: " + tuple.l());
+            person -> {
+              log.info("created person: " + person);
+              vertx
+                  .eventBus()
+                  .publish(Events.PERSON_CREATED, person, new DeliveryOptions().setLocalOnly(true));
             })
-        .onFailure(err -> log.log(SEVERE, "person create Transaction failed", err))
-        .map(Tuple::l);
+        .onFailure(err -> log.log(SEVERE, "person create Transaction failed", err));
   }
 
   public Future<List<PersonProjection>> findAll() {

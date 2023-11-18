@@ -4,12 +4,14 @@ package com.example.commons.spi;
 import com.example.commons.thread.VirtualThreadFactory;
 import io.vertx.core.impl.VertxBuilder;
 import io.vertx.core.impl.VertxThread;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.spi.VertxThreadFactory;
 import java.util.concurrent.TimeUnit;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class CustomVertxServiceProvider implements VertxThreadFactory {
+
+  private static final Logger log = LoggerFactory.getLogger(CustomVertxServiceProvider.class);
 
   @Override
   public void init(VertxBuilder builder) {

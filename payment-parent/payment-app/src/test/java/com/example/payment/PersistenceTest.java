@@ -88,16 +88,6 @@ public abstract class PersistenceTest {
             Config.RedisConfig.builder().build(),
             new Config.PostgresConfig(
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
-            Config.KafkaConfig.builder()
-                .bootstrapServers("")
-                .producer(Config.KafkaProducerConfig.builder().clientId("producer-id").build())
-                .consumer(
-                    Config.KafkaConsumerConfig.builder()
-                        .clientId("consumer-id")
-                        .consumerGroup("consumer-group")
-                        .maxPollRecords(1)
-                        .build())
-                .build(),
             Map.of(),
             new Config.VerticleConfig(1));
 

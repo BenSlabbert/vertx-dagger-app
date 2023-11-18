@@ -4,9 +4,6 @@ package com.example.reactivetest.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.config.Config;
-import com.example.reactivetest.service.KafkaOutboxEventListener;
-import com.example.reactivetest.service.StartupService;
-import com.example.reactivetest.service.UserService;
 import com.example.reactivetest.web.handler.PersonHandler;
 import com.example.reactivetest.web.handler.SecurityHandler;
 import io.vertx.core.AbstractVerticle;
@@ -29,21 +26,11 @@ public class ApplicationVerticle extends AbstractVerticle {
 
   private final PersonHandler personHandler;
   private final Config.HttpConfig httpConfig;
-  private final StartupService startupService;
-  private final UserService userService;
 
   @Inject
-  ApplicationVerticle(
-      Config config,
-      PersonHandler personHandler,
-      // eventListener here for eager init
-      KafkaOutboxEventListener kafkaOutboxEventListener,
-      StartupService startupService,
-      UserService userService) {
+  ApplicationVerticle(Config config, PersonHandler personHandler) {
     this.personHandler = personHandler;
     this.httpConfig = config.httpConfig();
-    this.startupService = startupService;
-    this.userService = userService;
   }
 
   @Override
@@ -53,22 +40,7 @@ public class ApplicationVerticle extends AbstractVerticle {
         "starting api verticle on port: {0}",
         new Object[] {Integer.toString(httpConfig.port())});
 
-    userService
-        .findAll()
-        .onSuccess(
-            values -> {
-              log.info("values: " + values);
-            });
-
-    log.info("running startup event");
-    startupService
-        .run()
-        .onSuccess(
-            ignore -> {
-              log.info("start up event completed");
-              createRoutes(startPromise);
-            })
-        .onFailure(err -> log.log(Level.SEVERE, "failed to process messages", err));
+    createRoutes(startPromise);
   }
 
   void createRoutes(Promise<Void> startPromise) {

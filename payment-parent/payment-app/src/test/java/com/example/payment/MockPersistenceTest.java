@@ -56,7 +56,6 @@ public abstract class MockPersistenceTest {
             new Config.GrpcConfig(GRPC_PORT),
             Config.RedisConfig.builder().build(),
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
-            null,
             Map.of(),
             new Config.VerticleConfig(1));
 

@@ -2,17 +2,6 @@
   "httpConfig": {
     "port": 8080
   },
-  "kafkaConfig": {
-    "bootstrapServers": "kafka:9092",
-    "consumer" : {
-      "clientId": "payment-app-consumer",
-      "consumerGroup": "payment-app-consumer-group",
-      "maxPollRecords":  1
-    },
-    "producer" : {
-      "clientId": "payment-app-producer"
-    }
-  },
   "verticleConfig": {
     "numberOfInstances": 1
   },

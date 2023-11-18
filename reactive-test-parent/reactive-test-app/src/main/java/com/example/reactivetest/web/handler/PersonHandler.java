@@ -10,15 +10,17 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.util.logging.Level.SEVERE;
 
+import com.example.reactivetest.config.Events;
 import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;
-import com.example.reactivetest.service.EventService;
 import com.example.reactivetest.service.PersonService;
 import com.example.reactivetest.web.SchemaValidatorDelegator;
 import com.example.reactivetest.web.dto.CreatePersonRequest;
 import com.example.reactivetest.web.dto.GetPersonResponse;
 import com.example.reactivetest.web.dto.GetPersonsResponse;
 import com.example.reactivetest.web.dto.SseResponse;
+import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
@@ -34,21 +36,19 @@ import lombok.extern.java.Log;
 @Singleton
 public class PersonHandler implements AutoCloseable {
 
+  private final Vertx vertx;
   private final PersonService personService;
   private final SchemaValidatorDelegator schemaValidatorDelegator;
-  private final EventService eventService;
 
   private final Map<HttpServerResponse, MessageConsumer<PersonProjection>> responseConsumerMap =
       new ConcurrentHashMap<>();
 
   @Inject
   PersonHandler(
-      PersonService personService,
-      SchemaValidatorDelegator schemaValidatorDelegator,
-      EventService eventService) {
+      Vertx vertx, PersonService personService, SchemaValidatorDelegator schemaValidatorDelegator) {
+    this.vertx = vertx;
     this.personService = personService;
     this.schemaValidatorDelegator = schemaValidatorDelegator;
-    this.eventService = eventService;
   }
 
   public void create(RoutingContext ctx) {
@@ -121,22 +121,28 @@ public class PersonHandler implements AutoCloseable {
   }
 
   private MessageConsumer<PersonProjection> getMessageConsumer(HttpServerResponse response) {
-    return eventService.consumePersonCreatedEvent(
-        projection -> {
-          log.info("received event: " + projection);
+    return vertx
+        .eventBus()
+        .consumer(
+            Events.PERSON_CREATED,
+            (Message<PersonProjection> msg) -> {
+              var projection = msg.body();
+              log.info("received event: " + projection);
 
-          if (response.closed()) {
-            log.info("response closed, not sending event");
-            Optional.ofNullable(responseConsumerMap.remove(response))
-                .ifPresent(
-                    c -> c.unregister().onSuccess(ignore -> log.info("unregistered consumer")));
-            return;
-          }
+              if (response.closed()) {
+                log.info("response closed, not sending event");
+                Optional.ofNullable(responseConsumerMap.remove(response))
+                    .ifPresent(
+                        c -> c.unregister().onSuccess(ignore -> log.info("unregistered consumer")));
+                return;
+              }
 
-          Buffer buffer = new SseResponse(projection.id(), projection.name()).toJson().toBuffer();
-          response.write(buffer);
-          response.write("\n");
-        });
+              Buffer buffer =
+                  new SseResponse(projection.id(), projection.name()).toJson().toBuffer();
+              response.write(buffer);
+              response.write("\n");
+            })
+        .exceptionHandler(err -> log.log(SEVERE, "event consumer failed", err));
   }
 
   @Override

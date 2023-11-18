@@ -119,10 +119,6 @@ public abstract class PersistenceTest {
             new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             new Config.PostgresConfig(
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
-            new Config.KafkaConfig(
-                "127.0.0.1:9092",
-                new Config.KafkaConsumerConfig("consumer-id", "consumer-group", 1),
-                new Config.KafkaProducerConfig("producer-id")),
             Map.of(),
             new Config.VerticleConfig(1));
 

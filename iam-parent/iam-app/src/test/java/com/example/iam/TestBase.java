@@ -55,7 +55,6 @@ public abstract class TestBase {
             new Config.GrpcConfig(GRPC_PORT),
             new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             null,
-            null,
             Map.of(),
             new Config.VerticleConfig(1));
 

@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "com.example.commons.kafka.proto.v1";
+option java_package = "com.example.commons.proto.v1";
 option java_outer_classname = "TestProto";
 option objc_class_prefix = "RTG";
 

@@ -16,7 +16,6 @@ public record Config(
     GrpcConfig grpcConfig,
     RedisConfig redisConfig,
     PostgresConfig postgresConfig,
-    KafkaConfig kafkaConfig,
     Map<ServiceIdentifier, ServiceRegistryConfig> serviceRegistryConfig,
     VerticleConfig verticleConfig) {
 
@@ -65,7 +64,6 @@ public record Config(
     addRedisConfig(jsonObject, builder);
     addPostgresConfig(jsonObject, builder);
     addGrpcConfig(jsonObject, builder);
-    addKafkaConfig(jsonObject, builder);
     addServiceRegistryConfig(jsonObject, builder);
 
     return builder
@@ -75,35 +73,6 @@ public record Config(
                 .numberOfInstances(verticleConfig.getInteger("numberOfInstances", 1))
                 .build())
         .build();
-  }
-
-  private static void addKafkaConfig(JsonObject jsonObject, ConfigBuilder builder) {
-    JsonObject config = jsonObject.getJsonObject("kafkaConfig", new JsonObject());
-
-    if (config.isEmpty()) {
-      return;
-    }
-
-    var consumer = config.getJsonObject("consumer", new JsonObject());
-    KafkaConsumerConfig consumerConfig =
-        KafkaConsumerConfig.builder()
-            .clientId(consumer.getString("clientId"))
-            .consumerGroup(consumer.getString("consumerGroup"))
-            .maxPollRecords(consumer.getInteger("maxPollRecords", 1))
-            .build();
-
-    var producer = config.getJsonObject("producer", new JsonObject());
-    KafkaProducerConfig producerConfig =
-        KafkaProducerConfig.builder().clientId(producer.getString("clientId")).build();
-
-    KafkaConfig kafkaConfig =
-        KafkaConfig.builder()
-            .bootstrapServers(config.getString("bootstrapServers"))
-            .consumer(consumerConfig)
-            .producer(producerConfig)
-            .build();
-
-    builder.kafkaConfig(kafkaConfig);
   }
 
   private static void addGrpcConfig(JsonObject jsonObject, ConfigBuilder builder) {
@@ -218,16 +187,6 @@ public record Config(
       return String.format("redis://%s:%d/%d", host, port, database);
     }
   }
-
-  @Builder
-  public record KafkaConfig(
-      String bootstrapServers, KafkaConsumerConfig consumer, KafkaProducerConfig producer) {}
-
-  @Builder
-  public record KafkaConsumerConfig(String clientId, String consumerGroup, int maxPollRecords) {}
-
-  @Builder
-  public record KafkaProducerConfig(String clientId) {}
 
   @Builder
   public record PostgresConfig(

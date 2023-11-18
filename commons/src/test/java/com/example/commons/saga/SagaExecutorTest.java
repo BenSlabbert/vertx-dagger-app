@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.example.commons.TestBase;
-import com.example.commons.kafka.proto.v1.Proto;
+import com.example.commons.proto.v1.Proto;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.NoStackTraceException;
