@@ -2,7 +2,8 @@
 package com.example.payment.ioc;
 
 import com.example.payment.repository.PaymentRepository;
-import com.example.payment.service.CreatePaymentHandler;
+import com.example.payment.scope.TransactionComponent;
+import com.example.payment.scope.TransactionModule;
 import com.example.payment.service.PaymentService;
 import com.example.payment.service.ServiceModule;
 import dagger.BindsInstance;
@@ -13,12 +14,12 @@ import javax.sql.DataSource;
 import org.jooq.DSLContext;
 
 @Singleton
-@Component(modules = {ServiceModule.class, Provider.EagerModule.class})
+@Component(modules = {ServiceModule.class, Provider.EagerModule.class, TransactionModule.class})
 public interface TestMockPersistenceProvider extends Provider {
 
   PaymentService paymentService();
 
-  CreatePaymentHandler exampleMessageHandler();
+  TransactionComponent.Builder transactionComponentBuilder();
 
   @Component.Builder
   interface Builder extends BaseBuilder<Builder, TestMockPersistenceProvider> {

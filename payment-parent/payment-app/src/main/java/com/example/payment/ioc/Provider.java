@@ -5,8 +5,10 @@ import com.example.commons.config.Config;
 import com.example.commons.mesage.Consumer;
 import com.example.payment.config.ConfigModule;
 import com.example.payment.repository.RepositoryModule;
+import com.example.payment.scope.TransactionModule;
 import com.example.payment.service.ServiceLifecycleManagement;
 import com.example.payment.service.ServiceModule;
+import com.example.payment.service.TestingScopeService;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -26,7 +28,8 @@ import org.jooq.DSLContext;
       ServiceModule.class,
       ConfigModule.class,
       RepositoryModule.class,
-      Provider.EagerModule.class
+      Provider.EagerModule.class,
+      TransactionModule.class
     })
 public interface Provider {
 
@@ -37,6 +40,8 @@ public interface Provider {
   Set<Consumer> consumers();
 
   ServiceLifecycleManagement providesServiceLifecycleManagement();
+
+  TestingScopeService providesTestingScopeService();
 
   @Component.Builder
   interface Builder {

@@ -4,9 +4,11 @@ package com.example.payment.verticle;
 import com.example.commons.config.Config;
 import com.example.commons.config.ParseConfig;
 import com.example.commons.future.FutureUtil;
+import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.mesage.Consumer;
 import com.example.payment.ioc.DaggerProvider;
 import com.example.payment.ioc.Provider;
+import com.example.payment.service.TestingScopeService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
@@ -55,7 +57,10 @@ public class WorkerVerticle extends AbstractVerticle {
             .serviceRegistryConfig(config.serviceRegistryConfig())
             .postgresConfig(config.postgresConfig())
             .build();
+
     this.dagger.init();
+    TestingScopeService testingScopeService = this.dagger.providesTestingScopeService();
+    testingScopeService.handle();
   }
 
   @Override
@@ -87,8 +92,8 @@ public class WorkerVerticle extends AbstractVerticle {
   @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void stop(Promise<Void> stopPromise) {
-    MultiCompletePromise multiCompletePromise = new MultiCompletePromise(stopPromise, 2);
     System.err.println("stopping");
+    MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
     Set<AutoCloseable> closeables = dagger.providesServiceLifecycleManagement().closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
@@ -117,22 +122,5 @@ public class WorkerVerticle extends AbstractVerticle {
               System.err.printf("awaitTermination...end: %b%n", ar.result());
               multiCompletePromise.complete();
             });
-  }
-
-  static class MultiCompletePromise {
-
-    private final Promise<Void> promise;
-    private final AtomicInteger counter;
-
-    MultiCompletePromise(Promise<Void> promise, int times) {
-      this.promise = promise;
-      this.counter = new AtomicInteger(times);
-    }
-
-    void complete() {
-      if (counter.decrementAndGet() == 0) {
-        promise.complete();
-      }
-    }
   }
 }
