@@ -19,7 +19,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.SqlClient;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -156,7 +156,7 @@ public abstract class PersistenceTest {
   }
 
   protected <T> void persist(Function<SqlClient, Future<T>> function) {
-    PgPool pool = provider.pool();
+    Pool pool = provider.pool();
     CountDownLatch latch = new CountDownLatch(1);
 
     new TransactionBoundary(pool) {

@@ -18,8 +18,8 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.HttpException;
-import io.vertx.pgclient.PgPool;
 import io.vertx.redis.client.RedisAPI;
+import io.vertx.sqlclient.Pool;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -36,7 +36,7 @@ public class ApiVerticle extends AbstractVerticle {
   private final AuthHandler authHandler;
   private final Config.HttpConfig httpConfig;
   private final ItemHandler itemHandler;
-  private final PgPool pool;
+  private final Pool pool;
   private final RedisAPI redisAPI;
 
   @Inject
@@ -44,7 +44,7 @@ public class ApiVerticle extends AbstractVerticle {
       Config.HttpConfig httpConfig,
       ItemHandler itemHandler,
       AuthHandler authHandler,
-      PgPool pool,
+      Pool pool,
       RedisAPI redisAPI) {
     this.httpConfig = httpConfig;
     this.itemHandler = itemHandler;

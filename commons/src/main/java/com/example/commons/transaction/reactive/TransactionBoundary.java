@@ -2,15 +2,15 @@
 package com.example.commons.transaction.reactive;
 
 import io.vertx.core.Future;
-import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.SqlClient;
 import java.util.function.Function;
 
 public abstract class TransactionBoundary {
 
-  private final PgPool pool;
+  private final Pool pool;
 
-  protected TransactionBoundary(PgPool pool) {
+  protected TransactionBoundary(Pool pool) {
     this.pool = pool;
   }
 
@@ -21,6 +21,6 @@ public abstract class TransactionBoundary {
                 conn.begin()
                     .compose(tx -> function.apply(conn).compose(res -> tx.commit().map(res)))
                     .map(res -> res)
-                    .eventually(v -> conn.close()));
+                    .eventually(() -> conn.close()));
   }
 }

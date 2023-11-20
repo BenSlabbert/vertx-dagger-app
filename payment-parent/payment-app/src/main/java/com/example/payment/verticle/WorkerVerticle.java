@@ -13,6 +13,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.ThreadingModel;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
@@ -33,8 +34,10 @@ public class WorkerVerticle extends AbstractVerticle {
     Context orCreateContext = vertx.getOrCreateContext();
     log.info("orCreateContext:" + orCreateContext);
     log.info("context:" + context);
-    if (!orCreateContext.isWorkerContext()) {
-      throw new IllegalStateException("not running in a worker context");
+    boolean workerContext = orCreateContext.isWorkerContext();
+    ThreadingModel threadingModel = orCreateContext.threadingModel();
+    if (!workerContext && threadingModel != ThreadingModel.VIRTUAL_THREAD) {
+      throw new IllegalStateException("not running in a worker/virtual thread context");
     }
 
     log.info("WorkerVerticle constructor");
@@ -70,9 +73,12 @@ public class WorkerVerticle extends AbstractVerticle {
     log.info("starting WorkerVerticle");
     log.info("starting WorkerVerticle on thread: %s".formatted(Thread.currentThread().getName()));
 
+    ThreadingModel threadingModel = vertx.getOrCreateContext().threadingModel();
     boolean workerContext = vertx.getOrCreateContext().isWorkerContext();
     boolean eventLoopContext = vertx.getOrCreateContext().isEventLoopContext();
-    log.info("workerContext: %b, eventLoopContext: %b".formatted(workerContext, eventLoopContext));
+    log.info(
+        "threadingModel: %s, workerContext: %b, eventLoopContext: %b"
+            .formatted(threadingModel, workerContext, eventLoopContext));
 
     checkDbConnection(startPromise);
     consumers = dagger.consumers();

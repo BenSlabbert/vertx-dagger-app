@@ -11,6 +11,7 @@ import com.example.commons.mesage.Consumer;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
+import io.vertx.core.ThreadingModel;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
@@ -38,9 +39,12 @@ public class CreatePaymentHandler implements Consumer {
     log.info("handle message: %s".formatted(CMD_ADDRESS));
     log.info("handle message on thread: %s".formatted(Thread.currentThread().getName()));
 
+    ThreadingModel threadingModel = vertx.getOrCreateContext().threadingModel();
     boolean workerContext = vertx.getOrCreateContext().isWorkerContext();
     boolean eventLoopContext = vertx.getOrCreateContext().isEventLoopContext();
-    log.info("workerContext: %b, eventLoopContext: %b".formatted(workerContext, eventLoopContext));
+    log.info(
+        "threadingModel: %s, workerContext: %b, eventLoopContext: %b"
+            .formatted(threadingModel, workerContext, eventLoopContext));
 
     MultiMap headers = message.headers();
     String sagaId = Objects.requireNonNull(headers.get(SAGA_ID_HEADER));

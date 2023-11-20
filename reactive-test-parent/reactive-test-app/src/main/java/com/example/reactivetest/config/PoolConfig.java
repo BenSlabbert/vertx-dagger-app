@@ -7,7 +7,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
 import io.vertx.pgclient.PgConnectOptions;
-import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.PoolOptions;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
@@ -15,15 +15,15 @@ import lombok.extern.java.Log;
 
 @Log
 @Module
-public class PgPoolConfig implements AutoCloseable {
+public class PoolConfig implements AutoCloseable {
 
   @Inject
-  PgPoolConfig() {}
+  PoolConfig() {}
 
-  private static PgPool pool = null;
+  private static Pool pool = null;
 
   @Provides
-  static synchronized PgPool providesPgPool(Vertx vertx, Config config) {
+  static synchronized Pool providesPool(Vertx vertx, Config config) {
     if (pool != null) return pool;
 
     log.info("creating pg pool");
@@ -43,7 +43,7 @@ public class PgPoolConfig implements AutoCloseable {
             .setConnectionTimeoutUnit(TimeUnit.SECONDS)
             .setMaxSize(1);
 
-    pool = PgPool.pool(vertx, connectOptions, poolOptions);
+    pool = Pool.pool(vertx, connectOptions, poolOptions);
     return pool;
   }
 

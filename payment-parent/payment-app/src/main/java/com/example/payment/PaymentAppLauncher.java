@@ -8,6 +8,7 @@ import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Launcher;
+import io.vertx.core.ThreadingModel;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.impl.NoStackTraceException;
@@ -31,10 +32,6 @@ public class PaymentAppLauncher extends Launcher {
     new PaymentAppLauncher().dispatch(args);
   }
 
-  public static void executeCommand(String cmd, String... args) {
-    new PaymentAppLauncher().execute(cmd, args);
-  }
-
   @Override
   public void afterStartingVertx(Vertx vertx) {
     log.info("afterStartingVertx");
@@ -45,9 +42,9 @@ public class PaymentAppLauncher extends Launcher {
   @Override
   public void beforeDeployingVerticle(DeploymentOptions deploymentOptions) {
     log.info("afterStartingVertx");
-    if (!deploymentOptions.isWorker()) {
+    if (deploymentOptions.getThreadingModel() == ThreadingModel.VIRTUAL_THREAD) {
       log.warn("deployment not configured as worker, overriding this setting");
-      deploymentOptions.setWorker(true);
+      deploymentOptions.setThreadingModel(ThreadingModel.VIRTUAL_THREAD);
     }
   }
 

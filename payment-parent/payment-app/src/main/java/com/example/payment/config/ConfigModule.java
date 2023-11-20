@@ -10,5 +10,5 @@ public interface ConfigModule {
 
   @Binds
   @IntoSet
-  AutoCloseable asAutoCloseablePgPoolConfig(BlockingJdbcPoolConfig closeablePool);
+  AutoCloseable asAutoCloseablePoolConfig(BlockingJdbcPoolConfig closeablePool);
 }

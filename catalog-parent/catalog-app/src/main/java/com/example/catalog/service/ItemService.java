@@ -15,7 +15,7 @@ import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;
-import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -34,7 +34,7 @@ public class ItemService extends TransactionBoundary {
 
   @Inject
   ItemService(
-      PgPool pool,
+      Pool pool,
       ItemRepository itemRepository,
       SagaService sagaService,
       SuggestionService cache,

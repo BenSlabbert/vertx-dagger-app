@@ -5,7 +5,7 @@ import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.reactivetest.projections.UserDataObject;
 import com.example.reactivetest.repository.sql.UserRepository;
 import io.vertx.core.Future;
-import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,7 +16,7 @@ public class UserService extends TransactionBoundary {
   private final UserRepository userRepository;
 
   @Inject
-  UserService(PgPool pool, UserRepository userRepository) {
+  UserService(Pool pool, UserRepository userRepository) {
     super(pool);
     this.userRepository = userRepository;
   }

@@ -5,12 +5,12 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoSet;
 
-@Module(includes = {JooqConfig.class, PgPoolConfig.class, RedisConfig.class})
+@Module(includes = {JooqConfig.class, PoolConfig.class, RedisConfig.class})
 public interface ConfigModule {
 
   @Binds
   @IntoSet
-  AutoCloseable asAutoCloseablePgPoolConfig(PgPoolConfig closeablePool);
+  AutoCloseable asAutoCloseablePoolConfig(PoolConfig closeablePool);
 
   @Binds
   @IntoSet

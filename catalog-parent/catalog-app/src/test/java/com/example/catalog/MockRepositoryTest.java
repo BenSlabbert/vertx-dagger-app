@@ -17,8 +17,8 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.pgclient.PgPool;
 import io.vertx.redis.client.RedisAPI;
+import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Transaction;
 import java.util.Map;
@@ -40,7 +40,7 @@ public abstract class MockRepositoryTest {
   protected SuggestionService suggestionService = mock(SuggestionService.class);
   protected ItemRepository itemRepository = mock(ItemRepository.class);
   protected DSLContext dslContext = mock(DSLContext.class);
-  protected PgPool pgPool = mock(PgPool.class);
+  protected Pool pool = mock(Pool.class);
   protected RedisAPI redisAPI = mock(RedisAPI.class);
 
   @BeforeEach
@@ -54,7 +54,7 @@ public abstract class MockRepositoryTest {
 
     when(redisAPI.ping(Mockito.any())).thenReturn(Future.succeededFuture(null));
 
-    when(pgPool.getConnection()).thenReturn(Future.succeededFuture(sqlConnection));
+    when(pool.getConnection()).thenReturn(Future.succeededFuture(sqlConnection));
     when(sqlConnection.begin()).thenReturn(Future.succeededFuture(transaction));
     when(sqlConnection.close()).thenReturn(Future.succeededFuture());
     when(transaction.commit()).thenReturn(Future.succeededFuture());
@@ -79,7 +79,7 @@ public abstract class MockRepositoryTest {
             .authenticationIntegration(authHandler)
             .suggestionService(suggestionService)
             .itemRepository(itemRepository)
-            .pgPool(pgPool)
+            .pool(pool)
             .redisAPI(redisAPI)
             .closeables(Set.of())
             .dslContext(dslContext)

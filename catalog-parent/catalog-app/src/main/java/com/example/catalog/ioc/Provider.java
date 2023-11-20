@@ -14,8 +14,8 @@ import com.example.commons.saga.SagaModule;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
-import io.vertx.pgclient.PgPool;
 import io.vertx.redis.client.RedisAPI;
+import io.vertx.sqlclient.Pool;
 import java.util.Set;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -51,7 +51,7 @@ public interface Provider {
     EagerModule() {}
 
     @Provides
-    @Nullable static Void provideEager(RedisAPI redisAPI, PgPool pgPool, DSLContext dslContext) {
+    @Nullable static Void provideEager(RedisAPI redisAPI, Pool pool, DSLContext dslContext) {
       // this eagerly builds any parameters specified and returns nothing
       return null;
     }

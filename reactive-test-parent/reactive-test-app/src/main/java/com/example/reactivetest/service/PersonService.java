@@ -10,7 +10,7 @@ import com.example.reactivetest.repository.sql.projection.PersonProjectionFactor
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,7 +24,7 @@ public class PersonService extends TransactionBoundary {
   private final PersonRepository personRepository;
 
   @Inject
-  PersonService(PgPool pool, Vertx vertx, PersonRepository personRepository) {
+  PersonService(Pool pool, Vertx vertx, PersonRepository personRepository) {
     super(pool);
     this.vertx = vertx;
     this.personRepository = personRepository;

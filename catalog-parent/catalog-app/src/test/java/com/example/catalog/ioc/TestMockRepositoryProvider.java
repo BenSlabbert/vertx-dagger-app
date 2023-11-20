@@ -8,8 +8,8 @@ import com.example.catalog.service.ServiceModule;
 import com.example.commons.saga.SagaModule;
 import dagger.BindsInstance;
 import dagger.Component;
-import io.vertx.pgclient.PgPool;
 import io.vertx.redis.client.RedisAPI;
+import io.vertx.sqlclient.Pool;
 import java.util.Set;
 import javax.inject.Singleton;
 import org.jooq.DSLContext;
@@ -34,7 +34,7 @@ public interface TestMockRepositoryProvider extends Provider {
     Builder itemRepository(ItemRepository itemRepository);
 
     @BindsInstance
-    Builder pgPool(PgPool pgPool);
+    Builder pool(Pool pool);
 
     @BindsInstance
     Builder redisAPI(RedisAPI redisAPI);

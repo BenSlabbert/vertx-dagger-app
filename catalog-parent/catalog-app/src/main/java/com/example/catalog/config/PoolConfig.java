@@ -6,8 +6,9 @@ import com.example.commons.future.FutureUtil;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
+import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;
-import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.PoolOptions;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
@@ -16,16 +17,16 @@ import lombok.extern.java.Log;
 
 @Log
 @Module
-class PgPoolConfig implements AutoCloseable {
+class PoolConfig implements AutoCloseable {
 
   @Inject
-  PgPoolConfig() {}
+  PoolConfig() {}
 
-  private static PgPool pool = null;
+  private static Pool pool = null;
 
   @Provides
   @Singleton
-  static PgPool providesPgPool(Vertx vertx, Config config) {
+  static Pool providesPool(Vertx vertx, Config config) {
     log.info("creating pg pool");
     PgConnectOptions connectOptions =
         new PgConnectOptions()
@@ -44,7 +45,18 @@ class PgPoolConfig implements AutoCloseable {
             .setConnectionTimeoutUnit(TimeUnit.SECONDS)
             .setMaxSize(1);
 
-    pool = PgPool.pool(vertx, connectOptions, poolOptions);
+    pool =
+        PgBuilder.pool()
+            .with(poolOptions)
+            .withConnectHandler(
+                conn -> {
+                  log.info("got connection in the ConnectHandler!");
+                  conn.close();
+                })
+            .connectingTo(connectOptions)
+            .using(vertx)
+            .build();
+
     return pool;
   }
 
