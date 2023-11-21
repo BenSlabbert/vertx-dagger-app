@@ -1,6 +1,6 @@
 #!make
 
-IMAGE_NAME := iam-sveltekit
+IMAGE_NAME := app-sveltekit
 IMAGE_TAG := latest
 
 .PHONY: install

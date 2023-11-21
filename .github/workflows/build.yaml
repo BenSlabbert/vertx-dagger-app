@@ -24,6 +24,7 @@ jobs:
         \ -o upx-4.0.2-amd64_linux.tar.xz && tar -xf upx-4.0.2-amd64_linux.tar.xz\
         \ && mv upx-4.0.2-amd64_linux /tmp/upx && /tmp/upx/upx --version"
     - run: "/tmp/upx/upx -q -o iam.upx iam-parent/iam-app/target/iam"
+    - run: "/tmp/upx/upx -q -o catalog.upx catalog-parent/catalog-app/target/catalog"
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
@@ -33,8 +34,20 @@ jobs:
     - uses: "actions/upload-artifact@v3"
       if: "always()"
       with:
+        name: "graalvm catalog binary"
+        path: "catalog-parent/catalog-app/target/catalog"
+        retention-days: 30
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
         name: "graalvm iam binary upx"
         path: "iam.upx"
+        retention-days: 30
+    - uses: "actions/upload-artifact@v3"
+      if: "always()"
+      with:
+        name: "graalvm catalog binary upx"
+        path: "catalog.upx"
         retention-days: 30
   build-backend-jvm:
     runs-on: "ubuntu-latest"
@@ -89,5 +102,5 @@ jobs:
       if: "always()"
       with:
         name: "ui-docker"
-        path: "frontend/app/iam-sveltekit_latest.tar.gz"
+        path: "frontend/app/app-sveltekit_latest.tar.gz"
         retention-days: 30
