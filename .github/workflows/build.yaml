@@ -76,6 +76,8 @@ jobs:
         node-version: 20
         cache: "yarn"
         cache-dependency-path: "frontend/app/yarn.lock"
+    - run: "echo \"enableGlobalCache: false\" >> frontend/app/.yarnrc.yml"
+    - run: "echo \"nodeLinker: node-modules\" >> frontend/app/.yarnrc.yml"
     - run: "corepack enable"
     - run: "corepack prepare yarn@stable --activate"
     - run: "yarn set version stable"
