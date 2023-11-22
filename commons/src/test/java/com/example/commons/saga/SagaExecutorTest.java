@@ -2,6 +2,7 @@
 package com.example.commons.saga;
 
 import static com.example.commons.mesage.Headers.SAGA_ID_HEADER;
+import static com.example.commons.mesage.Headers.SAGA_ROLLBACK_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.commons.TestBase;
@@ -22,6 +23,7 @@ class SagaExecutorTest extends TestBase {
 
   @Test
   void testSuccess(Vertx vertx, VertxTestContext testContext) {
+    Checkpoint complete = testContext.checkpoint();
     Checkpoint commandMessageReceived = testContext.checkpoint(2);
 
     SagaStageHandler stageHandler1 =
@@ -67,7 +69,13 @@ class SagaExecutorTest extends TestBase {
         .consumer(
             "CMD.1",
             msg -> {
+              System.err.println("handle CMD.1");
               commandMessageReceived.flag();
+
+              String sagaId = msg.headers().get(SAGA_ID_HEADER);
+              String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
+              System.err.printf("CMD.1: sagaId %s rollback ? %b%n", sagaId, rollback);
+
               msg.reply(Proto.getDefaultInstance());
             });
     vertx
@@ -75,7 +83,13 @@ class SagaExecutorTest extends TestBase {
         .consumer(
             "CMD.2",
             msg -> {
+              System.err.println("handle CMD.2");
               commandMessageReceived.flag();
+
+              String sagaId = msg.headers().get(SAGA_ID_HEADER);
+              String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
+              System.err.printf("CMD.2: sagaId %s rollback ? %b%n", sagaId, rollback);
+
               msg.reply(Proto.getDefaultInstance());
             });
 
@@ -98,13 +112,14 @@ class SagaExecutorTest extends TestBase {
                     testContext.verify(
                         () -> {
                           assertThat(sagaId).isNotNull();
-                          testContext.completeNow();
+                          complete.flag();
                         })));
   }
 
   @Test
   void testRollback_handlerError(Vertx vertx, VertxTestContext testContext) {
-    Checkpoint commandMessageReceived = testContext.checkpoint(2);
+    Checkpoint complete = testContext.checkpoint();
+    Checkpoint commandMessageReceived = testContext.checkpoint(4);
 
     SagaStageHandler stageHandler1 =
         new SagaStageHandler() {
@@ -170,7 +185,13 @@ class SagaExecutorTest extends TestBase {
         .consumer(
             "CMD.1",
             msg -> {
+              System.err.println("handle CMD.1");
               commandMessageReceived.flag();
+
+              String sagaId = msg.headers().get(SAGA_ID_HEADER);
+              String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
+              System.err.printf("CMD.1: sagaId %s rollback ? %b%n", sagaId, rollback);
+
               msg.reply(Proto.getDefaultInstance());
             });
     vertx
@@ -178,7 +199,13 @@ class SagaExecutorTest extends TestBase {
         .consumer(
             "CMD.2",
             msg -> {
+              System.err.println("handle CMD.2");
               commandMessageReceived.flag();
+
+              String sagaId = msg.headers().get(SAGA_ID_HEADER);
+              String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
+              System.err.printf("CMD.2: sagaId %s rollback ? %b%n", sagaId, rollback);
+
               msg.reply(Proto.getDefaultInstance());
             });
 
@@ -206,13 +233,14 @@ class SagaExecutorTest extends TestBase {
                     testContext.verify(
                         () -> {
                           assertThat(sagaId).isNotNull();
-                          testContext.completeNow();
+                          complete.flag();
                         })));
   }
 
   @Test
   void testRollback_consumerError(Vertx vertx, VertxTestContext testContext) {
-    Checkpoint commandMessageReceived = testContext.checkpoint(3);
+    Checkpoint complete = testContext.checkpoint();
+    Checkpoint commandMessageReceived = testContext.checkpoint(4);
 
     SagaStageHandler stageHandler1 =
         new SagaStageHandler() {
@@ -278,6 +306,11 @@ class SagaExecutorTest extends TestBase {
             msg -> {
               System.err.println("handle CMD.1");
               commandMessageReceived.flag();
+
+              String sagaId = msg.headers().get(SAGA_ID_HEADER);
+              String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
+              System.err.printf("CMD.1: sagaId %s rollback ? %b%n", sagaId, rollback);
+
               msg.reply(Proto.getDefaultInstance());
             });
 
@@ -289,7 +322,10 @@ class SagaExecutorTest extends TestBase {
             msg -> {
               System.err.println("handle CMD.2");
               commandMessageReceived.flag();
+
               String sagaId = msg.headers().get(SAGA_ID_HEADER);
+              String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
+              System.err.printf("CMD.2: sagaId %s rollback ? %b%n", sagaId, rollback);
 
               if (atomicBoolean.compareAndSet(false, true)) {
                 msg.fail(1, sagaId);
@@ -322,7 +358,7 @@ class SagaExecutorTest extends TestBase {
                     testContext.verify(
                         () -> {
                           assertThat(sagaId).isNotNull();
-                          testContext.completeNow();
+                          complete.flag();
                         })));
   }
 }
