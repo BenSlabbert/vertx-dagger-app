@@ -24,7 +24,7 @@ class SagaStage {
   private final EventBus eventBus;
 
   public Future<Message<GeneratedMessageV3>> sendCommand(String sagaId) {
-    log.info("%s: sending command".formatted(sagaId));
+    log.info("%s: sending command to: %s".formatted(sagaId, commandAddress));
 
     return handler
         .getCommand(sagaId)
@@ -38,21 +38,19 @@ class SagaStage {
                         .addHeader(SAGA_ID_HEADER, sagaId)));
   }
 
-  public Future<Void> sendRollbackCommand(String sagaId) {
-    log.info("%s: sending rollback command".formatted(sagaId));
+  public Future<Message<Void>> sendRollbackCommand(String sagaId) {
+    log.info("%s: sending rollback command to: %s".formatted(sagaId, commandAddress));
 
     return handler
         .onRollBack(sagaId)
         .compose(
-            ignore -> {
-              eventBus.send(
-                  commandAddress,
-                  null,
-                  new DeliveryOptions()
-                      .addHeader(SAGA_ID_HEADER, sagaId)
-                      .addHeader(SAGA_ROLLBACK_HEADER, Boolean.TRUE.toString()));
-              return null;
-            });
+            ignore ->
+                eventBus.request(
+                    commandAddress,
+                    null,
+                    new DeliveryOptions()
+                        .addHeader(SAGA_ID_HEADER, sagaId)
+                        .addHeader(SAGA_ROLLBACK_HEADER, Boolean.TRUE.toString())));
   }
 
   public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {

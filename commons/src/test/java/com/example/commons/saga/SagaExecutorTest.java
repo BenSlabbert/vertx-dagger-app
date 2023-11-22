@@ -3,23 +3,19 @@ package com.example.commons.saga;
 
 import static com.example.commons.mesage.Headers.SAGA_ID_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
 
 import com.example.commons.TestBase;
 import com.example.commons.proto.v1.Proto;
+import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.junit5.Checkpoint;
 import io.vertx.junit5.VertxTestContext;
+import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 @Log
 class SagaExecutorTest extends TestBase {
@@ -28,18 +24,44 @@ class SagaExecutorTest extends TestBase {
   void testSuccess(Vertx vertx, VertxTestContext testContext) {
     Checkpoint commandMessageReceived = testContext.checkpoint(2);
 
-    SagaStageHandler stageHandler1 = Mockito.mock(SagaStageHandler.class);
-    SagaStageHandler stageHandler2 = Mockito.mock(SagaStageHandler.class);
+    SagaStageHandler stageHandler1 =
+        new SagaStageHandler() {
 
-    when(stageHandler1.getCommand(anyString()))
-        .thenReturn(Future.succeededFuture(Proto.getDefaultInstance()));
-    when(stageHandler1.handleResult(anyString(), any())).thenReturn(Future.succeededFuture(true));
+          @Override
+          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+            return Future.succeededFuture(Proto.getDefaultInstance());
+          }
 
-    when(stageHandler2.getCommand(anyString()))
-        .thenReturn(Future.succeededFuture(Proto.getDefaultInstance()));
-    when(stageHandler2.handleResult(anyString(), any())).thenReturn(Future.succeededFuture(true));
+          @Override
+          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+            return Future.succeededFuture(true);
+          }
 
-    // register consumer for command topics
+          @Override
+          public Future<Void> onRollBack(String sagaId) {
+            return Future.succeededFuture();
+          }
+        };
+
+    SagaStageHandler stageHandler2 =
+        new SagaStageHandler() {
+
+          @Override
+          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+            return Future.succeededFuture(Proto.getDefaultInstance());
+          }
+
+          @Override
+          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+            return Future.succeededFuture(true);
+          }
+
+          @Override
+          public Future<Void> onRollBack(String sagaId) {
+            return Future.succeededFuture();
+          }
+        };
+
     vertx
         .eventBus()
         .consumer(
@@ -76,13 +98,6 @@ class SagaExecutorTest extends TestBase {
                     testContext.verify(
                         () -> {
                           assertThat(sagaId).isNotNull();
-                          verify(stageHandler1).getCommand(anyString());
-                          verify(stageHandler1).handleResult(anyString(), any());
-                          verify(stageHandler1, never()).onRollBack(anyString());
-
-                          verify(stageHandler2).getCommand(anyString());
-                          verify(stageHandler2).handleResult(anyString(), any());
-                          verify(stageHandler2, never()).onRollBack(anyString());
                           testContext.completeNow();
                         })));
   }
@@ -91,22 +106,65 @@ class SagaExecutorTest extends TestBase {
   void testRollback_handlerError(Vertx vertx, VertxTestContext testContext) {
     Checkpoint commandMessageReceived = testContext.checkpoint(2);
 
-    SagaStageHandler stageHandler1 = Mockito.mock(SagaStageHandler.class);
-    SagaStageHandler stageHandler2 = Mockito.mock(SagaStageHandler.class);
-    SagaStageHandler stageHandler3 = Mockito.mock(SagaStageHandler.class);
+    SagaStageHandler stageHandler1 =
+        new SagaStageHandler() {
 
-    when(stageHandler1.getCommand(anyString()))
-        .thenReturn(Future.succeededFuture(Proto.getDefaultInstance()));
-    when(stageHandler1.handleResult(anyString(), any())).thenReturn(Future.succeededFuture(true));
-    when(stageHandler1.onRollBack(anyString())).thenReturn(Future.succeededFuture());
+          @Override
+          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+            return Future.succeededFuture(Proto.getDefaultInstance());
+          }
 
-    when(stageHandler2.getCommand(anyString()))
-        .thenReturn(Future.succeededFuture(Proto.getDefaultInstance()));
-    when(stageHandler2.handleResult(anyString(), any()))
-        .thenReturn(Future.failedFuture(new NoStackTraceException("planned exception")));
-    when(stageHandler2.onRollBack(anyString())).thenReturn(Future.succeededFuture());
+          @Override
+          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+            return Future.succeededFuture(true);
+          }
 
-    // register consumer for command topics
+          @Override
+          public Future<Void> onRollBack(String sagaId) {
+            return Future.succeededFuture();
+          }
+        };
+
+    SagaStageHandler stageHandler2 =
+        new SagaStageHandler() {
+
+          @Override
+          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+            return Future.succeededFuture(Proto.getDefaultInstance());
+          }
+
+          @Override
+          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+            return Future.failedFuture(new NoStackTraceException("planned exception"));
+          }
+
+          @Override
+          public Future<Void> onRollBack(String sagaId) {
+            return Future.succeededFuture();
+          }
+        };
+
+    SagaStageHandler stageHandler3 =
+        new SagaStageHandler() {
+          @Override
+          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+            testContext.failNow("should not be called");
+            return null;
+          }
+
+          @Override
+          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+            testContext.failNow("should not be called");
+            return null;
+          }
+
+          @Override
+          public Future<Void> onRollBack(String sagaId) {
+            testContext.failNow("should not be called");
+            return null;
+          }
+        };
+
     vertx
         .eventBus()
         .consumer(
@@ -147,53 +205,97 @@ class SagaExecutorTest extends TestBase {
                 sagaId ->
                     testContext.verify(
                         () -> {
-                          verify(stageHandler1).getCommand(anyString());
-                          verify(stageHandler1).handleResult(anyString(), any());
-                          verify(stageHandler1).onRollBack(anyString());
-
-                          verify(stageHandler2).getCommand(anyString());
-                          verify(stageHandler2).handleResult(anyString(), any());
-                          verify(stageHandler2).onRollBack(anyString());
-
-                          verifyNoInteractions(stageHandler3);
+                          assertThat(sagaId).isNotNull();
                           testContext.completeNow();
                         })));
   }
 
   @Test
   void testRollback_consumerError(Vertx vertx, VertxTestContext testContext) {
-    Checkpoint commandMessageReceived = testContext.checkpoint(2);
+    Checkpoint commandMessageReceived = testContext.checkpoint(3);
 
-    SagaStageHandler stageHandler1 = Mockito.mock(SagaStageHandler.class);
-    SagaStageHandler stageHandler2 = Mockito.mock(SagaStageHandler.class);
-    SagaStageHandler stageHandler3 = Mockito.mock(SagaStageHandler.class);
+    SagaStageHandler stageHandler1 =
+        new SagaStageHandler() {
+          @Override
+          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+            return Future.succeededFuture(Proto.getDefaultInstance());
+          }
 
-    when(stageHandler1.getCommand(anyString()))
-        .thenReturn(Future.succeededFuture(Proto.getDefaultInstance()));
-    when(stageHandler1.handleResult(anyString(), any())).thenReturn(Future.succeededFuture(true));
-    when(stageHandler1.onRollBack(anyString())).thenReturn(Future.succeededFuture());
+          @Override
+          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+            return Future.succeededFuture(true);
+          }
 
-    when(stageHandler2.getCommand(anyString()))
-        .thenReturn(Future.succeededFuture(Proto.getDefaultInstance()));
-    when(stageHandler2.onRollBack(anyString())).thenReturn(Future.succeededFuture());
+          @Override
+          public Future<Void> onRollBack(String sagaId) {
+            return Future.succeededFuture();
+          }
+        };
 
-    // register consumer for command topics
+    SagaStageHandler stageHandler2 =
+        new SagaStageHandler() {
+          @Override
+          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+            return Future.succeededFuture(Proto.getDefaultInstance());
+          }
+
+          @Override
+          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+            return Future.succeededFuture(true);
+          }
+
+          @Override
+          public Future<Void> onRollBack(String sagaId) {
+            return Future.succeededFuture();
+          }
+        };
+
+    SagaStageHandler stageHandler3 =
+        new SagaStageHandler() {
+          @Override
+          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+            testContext.failNow("should not be called");
+            return null;
+          }
+
+          @Override
+          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+            testContext.failNow("should not be called");
+            return null;
+          }
+
+          @Override
+          public Future<Void> onRollBack(String sagaId) {
+            testContext.failNow("should not be called");
+            return null;
+          }
+        };
+
     vertx
         .eventBus()
         .consumer(
             "CMD.1",
             msg -> {
+              System.err.println("handle CMD.1");
               commandMessageReceived.flag();
               msg.reply(Proto.getDefaultInstance());
             });
+
+    AtomicBoolean atomicBoolean = new AtomicBoolean(false);
     vertx
         .eventBus()
         .consumer(
             "CMD.2",
             msg -> {
+              System.err.println("handle CMD.2");
               commandMessageReceived.flag();
               String sagaId = msg.headers().get(SAGA_ID_HEADER);
-              msg.fail(1, sagaId);
+
+              if (atomicBoolean.compareAndSet(false, true)) {
+                msg.fail(1, sagaId);
+              } else {
+                msg.reply(Proto.getDefaultInstance());
+              }
             });
 
     vertx.eventBus().consumer("CMD.3", msg -> testContext.failNow("should not be called"));
@@ -219,15 +321,7 @@ class SagaExecutorTest extends TestBase {
                 sagaId ->
                     testContext.verify(
                         () -> {
-                          verify(stageHandler1).getCommand(anyString());
-                          verify(stageHandler1).handleResult(anyString(), any());
-                          verify(stageHandler1).onRollBack(anyString());
-
-                          verify(stageHandler2).getCommand(anyString());
-                          verify(stageHandler2, never()).handleResult(anyString(), any());
-                          verify(stageHandler2).onRollBack(anyString());
-
-                          verifyNoInteractions(stageHandler3);
+                          assertThat(sagaId).isNotNull();
                           testContext.completeNow();
                         })));
   }

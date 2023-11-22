@@ -3,12 +3,12 @@ package com.example.commons.saga;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
+import static java.util.logging.Level.SEVERE;
 
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.logging.Level;
 import lombok.extern.java.Log;
 
 @Log
@@ -32,7 +32,7 @@ public class SagaExecutor {
     boolean hasNext = iterator.hasNext();
 
     if (!hasNext) {
-      log.info("done");
+      log.info("done with success");
       // we are done with success
       return Future.succeededFuture();
     }
@@ -45,7 +45,7 @@ public class SagaExecutor {
         .compose(msg -> stage.handleResult(sagaId, msg))
         .recover(
             throwable -> {
-              log.log(Level.SEVERE, "%s failed to execute saga".formatted(sagaId), throwable);
+              log.log(SEVERE, "%s failed to execute saga".formatted(sagaId), throwable);
               return previous().map(ignore -> FALSE);
             })
         .compose(
@@ -56,21 +56,40 @@ public class SagaExecutor {
   }
 
   private Future<Void> previous() {
-    log.info("calling next");
+    log.info("calling previous");
 
     boolean hasPrevious = iterator.hasPrevious();
 
     if (!hasPrevious) {
-      log.info("done");
+      log.info("done with failure");
       // we are done with an error
-      return Future.failedFuture(new NoStackTraceException("%s: saga failed".formatted(sagaId)));
+      return Future.failedFuture(new FailedSagaException("%s: saga failed".formatted(sagaId)));
     }
 
-    log.info("more");
+    log.info("more previous");
     SagaStage stage = iterator.previous();
 
-    // todo: need a way to handle this future failing
-    //  maybe a recover, or onFailure
-    return stage.sendRollbackCommand(sagaId).compose(v -> previous());
+    return stage
+        .sendRollbackCommand(sagaId)
+        .compose(v -> previous())
+        .recover(
+            throwable -> {
+              if (throwable instanceof FailedSagaException) {
+                // do nothing, the saga has failed
+                return Future.failedFuture(throwable);
+              }
+
+              // sendRollbackCommand failed, log the error and keep unwinding
+              log.log(SEVERE, "%s failed to execute saga rollback".formatted(sagaId), throwable);
+              return previous();
+            });
+  }
+
+  @SuppressWarnings("java:S110")
+  public static class FailedSagaException extends NoStackTraceException {
+
+    public FailedSagaException(String message) {
+      super(message);
+    }
   }
 }

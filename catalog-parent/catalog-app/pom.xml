@@ -326,7 +326,7 @@
               <mainClass>${exec.mainClass}</mainClass>
               <buildArgs>
                 <buildArg>--trace-class-initialization=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger</buildArg>
-                <buildArg>--initialize-at-build-time=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger</buildArg>
+                <buildArg>--initialize-at-build-time=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger,org.jooq.SQLDialect</buildArg>
                 <buildArg>--initialize-at-run-time=io.netty.handler.codec.compression.ZstdOptions,io.netty.handler.ssl.BouncyCastleAlpnSslUtils</buildArg>
                 <buildArg>--install-exit-handlers</buildArg>
                 <buildArg>-H:+TraceSecurityServices</buildArg>
