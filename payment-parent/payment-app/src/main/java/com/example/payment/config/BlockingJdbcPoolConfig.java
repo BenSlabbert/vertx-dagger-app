@@ -1,6 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.config;
 
+import static com.example.commons.thread.VirtualThreadFactory.THREAD_FACTORY;
+
 import com.example.commons.config.Config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -34,7 +36,7 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
     cfg.setPassword(config.password());
     cfg.setJdbcUrl(
         "jdbc:postgresql://%s:%d/%s".formatted(config.host(), config.port(), config.database()));
-    cfg.setThreadFactory(Thread.ofVirtual().factory());
+    cfg.setThreadFactory(THREAD_FACTORY);
     cfg.setConnectionTestQuery("select 1");
     cfg.setPoolName("payment-pool");
     cfg.setMaximumPoolSize(2);
@@ -42,16 +44,15 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
     cfg.setConnectionTimeout(Duration.ofSeconds(5L).toMillis());
 
     // https://github.com/brettwooldridge/HikariCP#frequently-used
-    ScheduledThreadPoolExecutor executor =
-        new ScheduledThreadPoolExecutor(1, Thread.ofVirtual().factory());
+    var executor = new ScheduledThreadPoolExecutor(1, THREAD_FACTORY);
     executor.setRemoveOnCancelPolicy(true);
-
     cfg.setScheduledExecutor(executor);
 
     dataSource = new HikariDataSource(cfg);
 
     try (var c = dataSource.getConnection()) {
-      // ensure we can get a connection
+      String s = c.nativeSQL("select 1");
+      log.info("test connection: %s".formatted(s));
     } catch (Exception e) {
       log.error("failed to get connection", e);
       throw new NoStackTraceException(e);
