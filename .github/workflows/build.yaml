@@ -10,6 +10,9 @@ name: "Java + Maven + Docker"
 jobs:
   build-backend-native-graalvm:
     runs-on: "ubuntu-latest"
+    env:
+      UPX_VERSION: "4.2.1"
+      UPX_DOWNLOAD_URL: "https://github.com/upx/upx/releases/download/v$UPX_VERSION/upx-$UPX_VERSION-amd64_linux.tar.xz"
     steps:
     - uses: "actions/checkout@v4"
     - uses: "graalvm/setup-graalvm@v1"
@@ -18,8 +21,6 @@ jobs:
         distribution: "graalvm-community"
         native-image-musl: "true"
         cache: "maven"
-    - run: "export UPX_VERSION=4.2.1"
-    - run: "export UPX_DOWNLOAD_URL=https://github.com/upx/upx/releases/download/v$UPX_VERSION/upx-$UPX_VERSION-amd64_linux.tar.xz"
     - run: "curl -L $UPX_DOWNLOAD_URL -o upx-$UPX_VERSION-amd64_linux.tar.xz"
     - run: "tar -xf upx-$UPX_VERSION-amd64_linux.tar.xz"
     - run: "mv upx-$UPX_VERSION-amd64_linux /tmp/upx"
