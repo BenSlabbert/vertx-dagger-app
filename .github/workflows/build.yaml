@@ -21,6 +21,8 @@ jobs:
         distribution: "graalvm-community"
         native-image-musl: "true"
         cache: "maven"
+    - run: "echo $UPX_VERSION"
+    - run: "echo $UPX_DOWNLOAD_URL"
     - run: "curl -L $UPX_DOWNLOAD_URL -o upx-$UPX_VERSION-amd64_linux.tar.xz"
     - run: "tar -xf upx-$UPX_VERSION-amd64_linux.tar.xz"
     - run: "mv upx-$UPX_VERSION-amd64_linux /tmp/upx"
