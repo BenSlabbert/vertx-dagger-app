@@ -12,7 +12,6 @@ jobs:
     runs-on: "ubuntu-latest"
     env:
       UPX_VERSION: "4.2.1"
-      UPX_DOWNLOAD_URL: "https://github.com/upx/upx/releases/download/v$UPX_VERSION/upx-$UPX_VERSION-amd64_linux.tar.xz"
     steps:
     - uses: "actions/checkout@v4"
     - uses: "graalvm/setup-graalvm@v1"
@@ -21,6 +20,8 @@ jobs:
         distribution: "graalvm-community"
         native-image-musl: "true"
         cache: "maven"
+    - run: "mvn install -DskipTests=true -Ddocker.skip=true -Pnative -DtestImageTag=native\
+        \ -Djava.util.logging.config.file=$(pwd)/logging.properties --fail-at-end"
     - run: "echo $UPX_VERSION"
     - run: "curl -L https://github.com/upx/upx/releases/download/v$UPX_VERSION/upx-$UPX_VERSION-amd64_linux.tar.xz\
         \ -o upx-$UPX_VERSION-amd64_linux.tar.xz"
