@@ -21,6 +21,8 @@ jobs:
         distribution: "graalvm-community"
         native-image-musl: "true"
         cache: "maven"
+    - name: "Set UPX_DOWNLOAD_URL"
+      run: "echo ::set-env name=UPX_DOWNLOAD_URL::https://github.com/upx/upx/releases/download/v${{env.UPX_VERSION}}/upx-${{env.UPX_VERSION}}-amd64_linux.tar.xz"
     - run: "echo $UPX_VERSION"
     - run: "echo $UPX_DOWNLOAD_URL"
     - run: "curl -L $UPX_DOWNLOAD_URL -o upx-$UPX_VERSION-amd64_linux.tar.xz"
