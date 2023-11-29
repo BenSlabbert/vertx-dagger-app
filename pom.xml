@@ -46,7 +46,7 @@
     <protoc.version>3.25.1</protoc.version>
     <dagger.version>2.48.1</dagger.version>
     <commons-lang3.version>3.13.0</commons-lang3.version>
-    <flyway.version>9.22.3</flyway.version>
+    <flyway.version>10.1.0</flyway.version>
     <postgresql.version>42.7.0</postgresql.version>
     <jooq.version>3.18.7</jooq.version>
     <scram.version>2.1</scram.version>
