@@ -325,6 +325,11 @@
               <imageName>${finalName}</imageName>
               <mainClass>${exec.mainClass}</mainClass>
               <buildArgs>
+                <buildArg>--strict-image-heap</buildArg>
+                <buildArg>-march=native</buildArg>
+                <buildArg>-H:Optimize=${nativeImageOptimizationLevel}</buildArg>
+                <buildArg>--gc=G1</buildArg>
+                <buildArg>--pgo-instrument</buildArg>
                 <buildArg>--trace-class-initialization=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger</buildArg>
                 <buildArg>--initialize-at-build-time=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger,org.jooq.SQLDialect</buildArg>
                 <buildArg>--initialize-at-run-time=io.netty.handler.codec.compression.ZstdOptions,io.netty.handler.ssl.BouncyCastleAlpnSslUtils</buildArg>
@@ -346,7 +351,6 @@
                 <buildArg>-R:MinHeapSize=32m</buildArg>
                 <buildArg>-R:MaxHeapSize=32m</buildArg>
                 <buildArg>-R:MaxNewSize=16m</buildArg>
-                <buildArg>-H:Optimize=0</buildArg>
               </buildArgs>
             </configuration>
             <executions>

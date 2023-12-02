@@ -31,6 +31,7 @@
     <!--config-->
     <docker.skip>false</docker.skip>
     <skipJooqGeneration>false</skipJooqGeneration>
+    <nativeImageOptimizationLevel>0</nativeImageOptimizationLevel>
 
     <!--deps-->
     <vertx.version>4.5.0</vertx.version>

@@ -3,7 +3,7 @@
 rm -rf bin app.tar
 mkdir bin
 
-for img in iam iam-grpc catalog
+for img in iam iam-grpc catalog payment
 do
   id=$(docker create "$img":native-upx-latest)
   docker cp "$id":/app - > app.tar
