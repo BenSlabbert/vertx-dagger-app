@@ -6,6 +6,8 @@ import static io.netty.handler.codec.http.HttpResponseStatus.UNAUTHORIZED;
 import com.example.catalog.integration.AuthenticationIntegration;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpHeaders;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.User;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.HttpException;
 import javax.inject.Inject;
@@ -54,9 +56,12 @@ public class AuthHandler implements Handler<RoutingContext> {
               ctx.fail(new HttpException(UNAUTHORIZED.code()));
             })
         .onSuccess(
-            isValid -> {
-              log.info("token valid? " + isValid);
-              if (Boolean.TRUE.equals(isValid)) {
+            resp -> {
+              log.info("token valid? " + resp.getValid());
+              if (resp.getValid()) {
+                JsonObject principal = new JsonObject(resp.getUserPrincipal());
+                JsonObject attributes = new JsonObject(resp.getUserAttributes());
+                ctx.setUser(User.create(principal, attributes));
                 ctx.next();
                 return;
               }

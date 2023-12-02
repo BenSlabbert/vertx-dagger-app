@@ -40,15 +40,14 @@ class IamIntegration implements AuthenticationIntegration, AutoCloseable {
         SocketAddress.inetSocketAddress(serviceRegistryConfig.port(), serviceRegistryConfig.host());
   }
 
-  public Future<Boolean> isTokenValid(String token) {
+  public Future<CheckTokenResponse> isTokenValid(String token) {
     return client
         .request(server, IamGrpc.getCheckTokenMethod())
         .compose(
             request -> {
               request.end(CheckTokenRequest.newBuilder().setToken(token).build());
               return request.response().compose(GrpcReadStream::last);
-            })
-        .map(CheckTokenResponse::getValid);
+            });
   }
 
   @Override

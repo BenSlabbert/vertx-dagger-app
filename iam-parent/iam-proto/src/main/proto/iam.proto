@@ -17,4 +17,6 @@ message CheckTokenRequest {
 
 message CheckTokenResponse {
   bool valid = 1;
+  string user_principal = 2;
+  string user_attributes = 3;
 }

@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.grpc.service;
 
+import com.example.iam.grpc.iam.CheckTokenRequest;
 import com.example.iam.grpc.iam.CheckTokenResponse;
 import com.example.iam.grpc.iam.IamGrpc;
 import io.vertx.core.Vertx;
@@ -23,29 +24,31 @@ public class GrpcService {
   private final Vertx vertx;
 
   public GrpcServer getGrpcServer() {
-    return GrpcServer.server(vertx)
-        .callHandler(
-            IamGrpc.getCheckTokenMethod(),
-            request -> {
-              request.handler(
-                  check ->
-                      tokenService
-                          .isValidToken(check.getToken())
-                          .onSuccess(
-                              valid ->
-                                  request
-                                      .response()
-                                      .end(CheckTokenResponse.newBuilder().setValid(true).build()))
-                          .onFailure(
-                              err ->
-                                  request
-                                      .response()
-                                      .end(
-                                          CheckTokenResponse.newBuilder()
-                                              .setValid(false)
-                                              .build())));
-              request.exceptionHandler(throwable -> setInternalStatusError(request, throwable));
-            });
+    return GrpcServer.server(vertx).callHandler(IamGrpc.getCheckTokenMethod(), this::checkToken);
+  }
+
+  private void checkToken(GrpcServerRequest<CheckTokenRequest, CheckTokenResponse> request) {
+    request
+        .exceptionHandler(throwable -> setInternalStatusError(request, throwable))
+        .handler(
+            checkRequest ->
+                tokenService
+                    .isValidToken(checkRequest.getToken())
+                    .onSuccess(
+                        user ->
+                            request
+                                .response()
+                                .end(
+                                    CheckTokenResponse.newBuilder()
+                                        .setUserPrincipal(user.principal().encode())
+                                        .setUserAttributes(user.attributes().encode())
+                                        .setValid(true)
+                                        .build()))
+                    .onFailure(
+                        err ->
+                            request
+                                .response()
+                                .end(CheckTokenResponse.newBuilder().setValid(false).build())));
   }
 
   private void setInternalStatusError(GrpcServerRequest<?, ?> request, Throwable throwable) {

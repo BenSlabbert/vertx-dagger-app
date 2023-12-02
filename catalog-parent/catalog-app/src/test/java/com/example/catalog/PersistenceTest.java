@@ -13,10 +13,12 @@ import com.example.catalog.ioc.TestPersistenceProvider;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.transaction.reactive.TransactionBoundary;
+import com.example.iam.grpc.iam.CheckTokenResponse;
 import com.example.migration.FlywayProvider;
 import io.restassured.RestAssured;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.sqlclient.Pool;
@@ -110,7 +112,14 @@ public abstract class PersistenceTest {
     flyway.migrate();
 
     AuthenticationIntegration authHandler = mock(AuthenticationIntegration.class);
-    when(authHandler.isTokenValid(anyString())).thenReturn(Future.succeededFuture(true));
+    when(authHandler.isTokenValid(anyString()))
+        .thenReturn(
+            Future.succeededFuture(
+                CheckTokenResponse.newBuilder()
+                    .setValid(true)
+                    .setUserPrincipal(JsonObject.of().encode())
+                    .setUserAttributes(JsonObject.of().encode())
+                    .build()));
 
     Config config =
         new Config(
