@@ -10,4 +10,4 @@ COPY --from=native-parent-builder:latest /app/${MODULE}/target/${BINARY} app
 EXPOSE 8080
 EXPOSE 50051
 
-ENTRYPOINT ["./app"]
+ENTRYPOINT ["./app", "-XX:+PrintGC", "-XX:+VerboseGC"]

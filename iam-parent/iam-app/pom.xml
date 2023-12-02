@@ -291,7 +291,7 @@
                 <buildArg>--strict-image-heap</buildArg>
                 <buildArg>-march=native</buildArg>
                 <buildArg>-H:Optimize=${nativeImageOptimizationLevel}</buildArg>
-                <buildArg>--gc=G1</buildArg>
+                <buildArg>--gc=serial</buildArg>
                 <buildArg>--pgo-instrument</buildArg>
                 <buildArg>--trace-class-initialization=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger</buildArg>
                 <buildArg>--initialize-at-build-time=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger</buildArg>
