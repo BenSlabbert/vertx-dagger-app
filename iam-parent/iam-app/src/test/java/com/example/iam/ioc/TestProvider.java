@@ -29,9 +29,6 @@ public interface TestProvider extends Provider {
     Builder providesHttpConfig(Config.HttpConfig httpConfig);
 
     @BindsInstance
-    Builder providesGrpcConfig(Config.GrpcConfig httpConfig);
-
-    @BindsInstance
     Builder providesVerticleConfig(Config.VerticleConfig httpConfig);
 
     @BindsInstance

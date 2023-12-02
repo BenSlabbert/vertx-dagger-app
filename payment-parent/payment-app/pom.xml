@@ -248,7 +248,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.5.1</version>
         <executions>
           <execution>
             <goals>
@@ -343,6 +342,7 @@
                 <buildArg>-R:MinHeapSize=32m</buildArg>
                 <buildArg>-R:MaxHeapSize=32m</buildArg>
                 <buildArg>-R:MaxNewSize=16m</buildArg>
+                <buildArg>-H:Optimize=0</buildArg>
               </buildArgs>
             </configuration>
             <executions>

@@ -1,18 +1,17 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.iam;
+package com.example.iam.grpc;
 
 import static com.example.commons.FreePortUtility.getPort;
 
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
-import com.example.iam.ioc.DaggerTestProvider;
-import com.example.iam.ioc.TestProvider;
-import io.restassured.RestAssured;
+import com.example.iam.grpc.verticle.GrpcVerticle;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.GenericContainer;
@@ -23,10 +22,7 @@ import org.testcontainers.utility.DockerImageName;
 @ExtendWith(VertxExtension.class)
 public abstract class TestBase {
 
-  protected static final int HTTP_PORT = getPort();
   protected static final int GRPC_PORT = getPort();
-
-  protected TestProvider provider;
 
   private static final Network network = Network.newNetwork();
 
@@ -42,31 +38,21 @@ public abstract class TestBase {
     redis.start();
   }
 
-  @BeforeAll
-  static void beforeAll() {
-    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-  }
-
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     Config config =
         new Config(
-            new Config.HttpConfig(HTTP_PORT),
+            new Config.HttpConfig(0),
             new Config.GrpcConfig(GRPC_PORT),
             new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             null,
             Map.of(),
             new Config.VerticleConfig(1));
 
-    provider =
-        DaggerTestProvider.builder()
-            .providesVertx(vertx)
-            .providesConfig(config)
-            .providesHttpConfig(config.httpConfig())
-            .providesVerticleConfig(config.verticleConfig())
-            .providesRedisConfig(config.redisConfig())
-            .build();
-
-    vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
+    JsonObject cfg = config.encode();
+    vertx.deployVerticle(
+        new GrpcVerticle(),
+        new DeploymentOptions().setConfig(cfg),
+        testContext.succeedingThenComplete());
   }
 }

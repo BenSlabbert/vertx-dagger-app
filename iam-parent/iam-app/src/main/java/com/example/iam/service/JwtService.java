@@ -51,11 +51,6 @@ public class JwtService implements TokenService {
   }
 
   @Override
-  public Future<User> isValidToken(String token) {
-    return jwtAuth.authenticate(new TokenCredentials(token));
-  }
-
-  @Override
   public Future<User> isValidRefresh(String token) {
     return jwtRefresh.authenticate(new TokenCredentials(token));
   }

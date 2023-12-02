@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.iam.verticle;
+package com.example.iam.grpc.verticle;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.iam.TestBase;
+import com.example.iam.grpc.TestBase;
 import com.example.iam.grpc.iam.CheckTokenRequest;
 import com.example.iam.grpc.iam.IamGrpc;
 import io.vertx.core.Vertx;

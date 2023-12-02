@@ -4,51 +4,24 @@
 
   <parent>
     <groupId>com.example.parent</groupId>
-    <artifactId>catalog-parent</artifactId>
+    <artifactId>iam-parent</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <groupId>com.example.catalog</groupId>
-  <artifactId>catalog-app</artifactId>
+  <groupId>com.example.iam.grpc</groupId>
+  <artifactId>iam-grpc</artifactId>
 
   <properties>
-    <finalName>catalog</finalName>
-    <exec.mainClass>com.example.catalog.Main</exec.mainClass>
+    <finalName>iam-grpc</finalName>
+    <launcher.class>com.example.iam.grpc.IamGrpcLauncher</launcher.class>
+    <main.verticle>com.example.iam.grpc.verticle.GrpcVerticle</main.verticle>
+    <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->
     <testImageTag>jvm</testImageTag>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>com.example.catalog.entity</groupId>
-      <artifactId>catalog-entity</artifactId>
-      <version>${revision}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.example.catalog.generator</groupId>
-          <artifactId>catalog-generator</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.example.catalog.projection</groupId>
-      <artifactId>catalog-projection</artifactId>
-      <version>${revision}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.example.catalog.proto</groupId>
-      <artifactId>catalog-proto</artifactId>
-      <version>${revision}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.ongres.scram</groupId>
-      <artifactId>client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.ongres.scram</groupId>
-      <artifactId>common</artifactId>
-    </dependency>
     <dependency>
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
@@ -61,10 +34,6 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger</artifactId>
     </dependency>
@@ -74,12 +43,8 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
-      <groupId>org.jooq</groupId>
-      <artifactId>jooq</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-auth-jwt</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -87,11 +52,19 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-grpc-client</artifactId>
+      <artifactId>vertx-grpc-server</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-health-check</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-json-schema</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-opentelemetry</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -100,6 +73,10 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-validation</artifactId>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -117,12 +94,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.example.catalog.migration</groupId>
-      <artifactId>catalog-migration</artifactId>
-      <version>${revision}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
@@ -134,6 +105,11 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -179,6 +155,11 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
+      <artifactId>vertx-grpc-client</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
       <artifactId>vertx-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -187,6 +168,7 @@
   <build>
     <finalName>${finalName}</finalName>
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -209,16 +191,6 @@
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
               <version>${lombok.version}</version>
-            </path>
-            <path>
-              <groupId>org.mapstruct</groupId>
-              <artifactId>mapstruct-processor</artifactId>
-              <version>${org.mapstruct.version}</version>
-            </path>
-            <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok-mapstruct-binding</artifactId>
-              <version>${lombok-mapstruct-binding.version}</version>
             </path>
             <path>
               <groupId>com.google.dagger</groupId>
@@ -253,9 +225,6 @@
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
-            <configuration>
-              <forkCount>1C</forkCount>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -274,13 +243,42 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <manifestEntries>
+                    <Main-Class>${launcher.class}</Main-Class>
+                    <Main-Verticle>${main.verticle}</Main-Verticle>
+                    <X-Compile-Source-JDK>21</X-Compile-Source-JDK>
+                    <X-Compile-Target-JDK>21</X-Compile-Target-JDK>
+                  </manifestEntries>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <forkCount>1C</forkCount>
           <reuseForks>true</reuseForks>
           <!--Workaround when running tests with Java 21, can be removed once the mockito/bytebuddy issue is fixed, see https://github.com/mockito/mockito/issues/3121-->
           <systemPropertyVariables>
-            <net.bytebuddy.experimental>true</net.bytebuddy.experimental>
+            <systemPropertyVariables>
+              <net.bytebuddy.experimental>true</net.bytebuddy.experimental>
+            </systemPropertyVariables>
+            <property>
+              <name>imageTag</name>
+              <value>${testImageTag}</value>
+            </property>
           </systemPropertyVariables>
         </configuration>
       </plugin>
@@ -326,7 +324,7 @@
               <mainClass>${exec.mainClass}</mainClass>
               <buildArgs>
                 <buildArg>--trace-class-initialization=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger</buildArg>
-                <buildArg>--initialize-at-build-time=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger,org.jooq.SQLDialect</buildArg>
+                <buildArg>--initialize-at-build-time=org.slf4j.LoggerFactory,org.slf4j.simple.SimpleLogger</buildArg>
                 <buildArg>--initialize-at-run-time=io.netty.handler.codec.compression.ZstdOptions,io.netty.handler.ssl.BouncyCastleAlpnSslUtils</buildArg>
                 <buildArg>--install-exit-handlers</buildArg>
                 <buildArg>-H:+TraceSecurityServices</buildArg>

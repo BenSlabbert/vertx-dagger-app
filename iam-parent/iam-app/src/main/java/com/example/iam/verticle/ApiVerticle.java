@@ -15,19 +15,15 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import java.util.logging.Level;
 import javax.inject.Inject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 @Log
+@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ApiVerticle extends AbstractVerticle {
 
   private final UserHandler userHandler;
   private final Config.HttpConfig httpConfig;
-
-  @Inject
-  public ApiVerticle(UserHandler userHandler, Config.HttpConfig httpConfig) {
-    this.userHandler = userHandler;
-    this.httpConfig = httpConfig;
-  }
 
   @Override
   public void start(Promise<Void> startPromise) {

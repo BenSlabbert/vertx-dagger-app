@@ -14,6 +14,7 @@
   <modules>
     <module>iam-proto</module>
     <module>iam-app</module>
+    <module>iam-grpc</module>
   </modules>
 
 </project>

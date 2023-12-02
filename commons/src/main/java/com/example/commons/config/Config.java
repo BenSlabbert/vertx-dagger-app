@@ -19,6 +19,11 @@ public record Config(
     Map<ServiceIdentifier, ServiceRegistryConfig> serviceRegistryConfig,
     VerticleConfig verticleConfig) {
 
+  /**
+   * <strong>NOTE:</strong> only use this for test!
+   *
+   * <p>this depends on jackson and reflection which we do not want in the running application
+   */
   public JsonObject encode() {
     String encode = new JsonObject().put("empty", this).encode();
     return new JsonObject(encode).getJsonObject("empty");
@@ -78,7 +83,7 @@ public record Config(
   private static void addGrpcConfig(JsonObject jsonObject, ConfigBuilder builder) {
     JsonObject config = jsonObject.getJsonObject("grpcConfig", new JsonObject());
 
-    if (config.isEmpty()) {
+    if (isNullOrEmpty(config)) {
       return;
     }
 
@@ -89,7 +94,7 @@ public record Config(
   private static void addRedisConfig(JsonObject jsonObject, ConfigBuilder builder) {
     JsonObject config = jsonObject.getJsonObject("redisConfig", new JsonObject());
 
-    if (config.isEmpty()) {
+    if (isNullOrEmpty(config)) {
       return;
     }
 
@@ -104,7 +109,7 @@ public record Config(
   private static void addPostgresConfig(JsonObject jsonObject, ConfigBuilder builder) {
     JsonObject config = jsonObject.getJsonObject("postgresConfig", new JsonObject());
 
-    if (config.isEmpty()) {
+    if (isNullOrEmpty(config)) {
       return;
     }
 
@@ -121,11 +126,10 @@ public record Config(
   private static void addServiceRegistryConfig(JsonObject jsonObject, ConfigBuilder builder) {
     JsonObject config = jsonObject.getJsonObject("serviceRegistryConfig", new JsonObject());
 
-    if (config.isEmpty()) {
+    if (isNullOrEmpty(config)) {
       builder.serviceRegistryConfig(Map.of());
       return;
     }
-
     Map<ServiceIdentifier, ServiceRegistryConfig> map =
         Arrays.stream(ServiceIdentifier.values())
             .filter(
@@ -147,6 +151,10 @@ public record Config(
                     }));
 
     builder.serviceRegistryConfig(map);
+  }
+
+  private static boolean isNullOrEmpty(JsonObject config) {
+    return null == config || config.isEmpty();
   }
 
   @Builder
