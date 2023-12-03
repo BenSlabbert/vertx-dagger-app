@@ -20,7 +20,7 @@
   "serviceRegistryConfig": {
     "IAM": {
       "protocol": "GRPC",
-      "host": "iam",
+      "host": "iam-grpc",
       "port":  50051
     }
   }

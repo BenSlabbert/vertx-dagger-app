@@ -1,33 +1,40 @@
 ---
 services:
-  iam-jvm:
-    hostname: "iam"
+  iam:
     image: "iam:jvm-latest"
     ports:
     - "8080:8080"
-    - "50051:50051"
     volumes:
     - "./config/iam-config.json:/config.json"
     command:
     - "/config.json"
+    - "-XX:+UseZGC"
+    - "-XX:+ZGenerational"
+    - "-Xlog:gc*"
+    - "-Xmx32M"
+    - "-Xms32M"
+    - "-Djava.net.preferIPv4Stack=true"
     depends_on:
     - "redis"
     mem_limit: "256m"
-  iam-native:
-    hostname: "iam"
-    image: "iam:native-latest"
+  iam-grpc:
+    image: "iam-grpc:jvm-latest"
     ports:
-    - "8080:8080"
     - "50051:50051"
     volumes:
-    - "./config/iam-config.json:/config.json"
+    - "./config/iam-grpc-config.json:/config.json"
     command:
+    - "run"
+    - "-conf"
     - "/config.json"
-    depends_on:
-    - "redis"
+    - "-XX:+UseZGC"
+    - "-XX:+ZGenerational"
+    - "-Xlog:gc*"
+    - "-Xmx32M"
+    - "-Xms32M"
+    - "-Djava.net.preferIPv4Stack=true"
     mem_limit: "256m"
-  catalog-jvm:
-    hostname: "catalog"
+  catalog:
     image: "catalog:jvm-latest"
     ports:
     - "8081:8080"
@@ -35,19 +42,50 @@ services:
     - "./config/catalog-config.json:/config.json"
     command:
     - "/config.json"
+    - "-XX:+UseZGC"
+    - "-XX:+ZGenerational"
+    - "-Xlog:gc*"
+    - "-Xmx32M"
+    - "-Xms32M"
+    - "-Djava.net.preferIPv4Stack=true"
     depends_on:
     - "redis"
     - "postgres"
+    - "catalog-migrator"
     mem_limit: "256m"
-  payment-jvm:
-    hostname: "payment"
+  payment:
     image: "payment:jvm-latest"
     ports:
     - "8082:8080"
     volumes:
     - "./config/payment-config.json:/config.json"
     command:
+    - "run"
+    - "-conf"
     - "/config.json"
+    - "-XX:+UseZGC"
+    - "-XX:+ZGenerational"
+    - "-Xlog:gc*"
+    - "-Xmx32M"
+    - "-Xms32M"
+    - "-Djava.net.preferIPv4Stack=true"
     depends_on:
     - "postgres"
+    - "payment-migrator"
+    mem_limit: "256m"
+  catalog-migrator:
+    image: "catalog-migration:jvm-latest"
+    depends_on:
+      postgres:
+        condition: "service_started"
+    command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
+      \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres catalog"
+    mem_limit: "256m"
+  payment-migrator:
+    image: "payment-migration:jvm-latest"
+    depends_on:
+      postgres:
+        condition: "service_started"
+    command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
+      \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres payment"
     mem_limit: "256m"

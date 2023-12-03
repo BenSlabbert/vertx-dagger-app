@@ -6,7 +6,7 @@ services:
     ports:
     - "6379:6379"
     - "8001:8001"
-    mem_limit: "100m"
+    mem_limit: "512m"
   postgres:
     image: "postgres:15-alpine"
     ports:
@@ -17,20 +17,4 @@ services:
       POSTGRES_DB: "postgres"
     volumes:
     - "./create-all-databases.sql:/docker-entrypoint-initdb.d/create-all-databases.sql"
-    mem_limit: "256m"
-  catalog-migrator:
-    image: "catalog-migration:jvm-latest"
-    depends_on:
-      postgres:
-        condition: "service_started"
-    command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
-      \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres catalog"
-    mem_limit: "256m"
-  payment-migrator:
-    image: "payment-migration:jvm-latest"
-    depends_on:
-      postgres:
-        condition: "service_started"
-    command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
-      \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres payment"
-    mem_limit: "256m"
+    mem_limit: "512m"

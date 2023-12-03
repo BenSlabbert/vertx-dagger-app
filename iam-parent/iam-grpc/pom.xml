@@ -260,8 +260,8 @@
                   <manifestEntries>
                     <Main-Class>${launcher.class}</Main-Class>
                     <Main-Verticle>${main.verticle}</Main-Verticle>
-                    <X-Compile-Source-JDK>21</X-Compile-Source-JDK>
-                    <X-Compile-Target-JDK>21</X-Compile-Target-JDK>
+                    <X-Compile-Source-JDK>${java.version}</X-Compile-Source-JDK>
+                    <X-Compile-Target-JDK>${java.version}</X-Compile-Target-JDK>
                   </manifestEntries>
                 </transformer>
               </transformers>

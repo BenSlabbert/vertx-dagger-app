@@ -42,7 +42,7 @@ public class PaymentAppLauncher extends Launcher {
   @Override
   public void beforeDeployingVerticle(DeploymentOptions deploymentOptions) {
     log.info("afterStartingVertx");
-    if (deploymentOptions.getThreadingModel() == ThreadingModel.VIRTUAL_THREAD) {
+    if (deploymentOptions.getThreadingModel() != ThreadingModel.VIRTUAL_THREAD) {
       log.warn("deployment not configured as worker, overriding this setting");
       deploymentOptions.setThreadingModel(ThreadingModel.VIRTUAL_THREAD);
     }

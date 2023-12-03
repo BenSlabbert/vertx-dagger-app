@@ -1,0 +1,8 @@
+{
+  "grpcConfig": {
+    "port": 50051
+  },
+  "verticleConfig": {
+    "numberOfInstances": 1
+  }
+}
