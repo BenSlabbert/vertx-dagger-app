@@ -33,23 +33,23 @@ public class GrpcService {
         .handler(
             checkRequest -> {
               log.info("check token is valid");
-                tokenService
-                    .isValidToken(checkRequest.getToken())
-                    .onSuccess(
-                        user ->
-                            request
-                                .response()
-                                .end(
-                                    CheckTokenResponse.newBuilder()
-                                        .setUserPrincipal(user.principal().encode())
-                                        .setUserAttributes(user.attributes().encode())
-                                        .setValid(true)
-                                        .build()))
-                    .onFailure(
-                        err ->
-                            request
-                                .response()
-                                .end(CheckTokenResponse.newBuilder().setValid(false).build()));
+              tokenService
+                  .isValidToken(checkRequest.getToken())
+                  .onSuccess(
+                      user ->
+                          request
+                              .response()
+                              .end(
+                                  CheckTokenResponse.newBuilder()
+                                      .setUserPrincipal(user.principal().encode())
+                                      .setUserAttributes(user.attributes().encode())
+                                      .setValid(true)
+                                      .build()))
+                  .onFailure(
+                      err ->
+                          request
+                              .response()
+                              .end(CheckTokenResponse.newBuilder().setValid(false).build()));
             });
   }
 

@@ -90,7 +90,6 @@ public record Config(
     builder.httpConfig(httpConfig);
   }
 
-
   private static void addGrpcConfig(JsonObject jsonObject, ConfigBuilder builder) {
     JsonObject config = jsonObject.getJsonObject("grpcConfig", new JsonObject());
 
