@@ -62,23 +62,34 @@ public record Config(
   }
 
   static Config fromJson(JsonObject jsonObject) {
-    JsonObject httpConfig = jsonObject.getJsonObject("httpConfig");
     JsonObject verticleConfig = jsonObject.getJsonObject("verticleConfig", new JsonObject());
 
     ConfigBuilder builder = Config.builder();
+    addHttpConfig(jsonObject, builder);
     addRedisConfig(jsonObject, builder);
     addPostgresConfig(jsonObject, builder);
     addGrpcConfig(jsonObject, builder);
     addServiceRegistryConfig(jsonObject, builder);
 
     return builder
-        .httpConfig(HttpConfig.builder().port(httpConfig.getInteger("port")).build())
         .verticleConfig(
             VerticleConfig.builder()
                 .numberOfInstances(verticleConfig.getInteger("numberOfInstances", 1))
                 .build())
         .build();
   }
+
+  private static void addHttpConfig(JsonObject jsonObject, ConfigBuilder builder) {
+    JsonObject config = jsonObject.getJsonObject("httpConfig", new JsonObject());
+
+    if (isNullOrEmpty(config)) {
+      return;
+    }
+
+    HttpConfig httpConfig = HttpConfig.builder().port(config.getInteger("port")).build();
+    builder.httpConfig(httpConfig);
+  }
+
 
   private static void addGrpcConfig(JsonObject jsonObject, ConfigBuilder builder) {
     JsonObject config = jsonObject.getJsonObject("grpcConfig", new JsonObject());

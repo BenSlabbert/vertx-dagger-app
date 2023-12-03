@@ -31,7 +31,8 @@ public class GrpcService {
     request
         .exceptionHandler(throwable -> setInternalStatusError(request, throwable))
         .handler(
-            checkRequest ->
+            checkRequest -> {
+              log.info("check token is valid");
                 tokenService
                     .isValidToken(checkRequest.getToken())
                     .onSuccess(
@@ -48,7 +49,8 @@ public class GrpcService {
                         err ->
                             request
                                 .response()
-                                .end(CheckTokenResponse.newBuilder().setValid(false).build())));
+                                .end(CheckTokenResponse.newBuilder().setValid(false).build()));
+            });
   }
 
   private void setInternalStatusError(GrpcServerRequest<?, ?> request, Throwable throwable) {

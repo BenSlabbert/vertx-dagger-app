@@ -17,6 +17,7 @@ import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.HttpException;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.sqlclient.Pool;
@@ -81,16 +82,23 @@ public class ApiVerticle extends AbstractVerticle {
   }
 
   private Router setupRoutes() {
+
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 
-    mainRouter.route().handler(authHandler);
-
-    // 100kB max body size
-    mainRouter.route().handler(BodyHandler.create().setBodyLimit(1024L * 100L));
+    mainRouter
+        .route()
+        // CORS config
+        .handler(CorsHandler.create())
+        // auth handler
+        .handler(authHandler);
 
     // main routes
-    mainRouter.route("/api/*").subRouter(apiRouter);
+    mainRouter
+        .route("/api/*")
+        // 100kB max body size
+        .handler(BodyHandler.create().setBodyLimit(1024L * 100L))
+        .subRouter(apiRouter);
 
     // api routes
     apiRouter.post("/execute").handler(itemHandler::execute);

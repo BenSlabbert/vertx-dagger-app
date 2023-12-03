@@ -57,7 +57,7 @@ public class JwtService implements TokenService {
 
   @Override
   public String authToken(String username) {
-    return generateToken(jwtAuth, username, Duration.ofSeconds(5L));
+    return generateToken(jwtAuth, username, Duration.ofSeconds(30L));
   }
 
   @Override

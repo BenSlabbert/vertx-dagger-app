@@ -32,15 +32,13 @@ public class ApiVerticle extends AbstractVerticle {
         "starting api verticle on port: {0}",
         new Object[] {Integer.toString(httpConfig.port())});
 
-    CorsHandler corsHandler = CorsHandler.create();
-
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 
     mainRouter
         .route()
         // CORS config
-        .handler(corsHandler)
+        .handler(CorsHandler.create())
         // 100kB max body size
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
