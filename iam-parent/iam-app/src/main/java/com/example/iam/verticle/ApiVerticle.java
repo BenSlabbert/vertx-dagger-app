@@ -7,12 +7,12 @@ import com.example.commons.config.Config;
 import com.example.iam.web.route.handler.UserHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import java.util.logging.Level;
 import javax.inject.Inject;
 import lombok.RequiredArgsConstructor;
@@ -32,12 +32,16 @@ public class ApiVerticle extends AbstractVerticle {
         "starting api verticle on port: {0}",
         new Object[] {Integer.toString(httpConfig.port())});
 
+    CorsHandler corsHandler = CorsHandler.create();
+
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 
-    // 100kB max body size
     mainRouter
-        .route(HttpMethod.POST, "/*")
+        .route()
+        // CORS config
+        .handler(corsHandler)
+        // 100kB max body size
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
     // main routes
