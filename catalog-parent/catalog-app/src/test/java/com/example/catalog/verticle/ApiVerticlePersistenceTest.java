@@ -17,12 +17,14 @@ import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 
-@Log
 class ApiVerticlePersistenceTest extends PersistenceTest {
+
+  private static final Logger log = LoggerFactory.getLogger(ApiVerticlePersistenceTest.class);
 
   @Test
   void test() {

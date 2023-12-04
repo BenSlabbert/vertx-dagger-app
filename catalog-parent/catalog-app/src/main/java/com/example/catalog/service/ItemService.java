@@ -15,17 +15,18 @@ import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.sqlclient.Pool;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 public class ItemService extends TransactionBoundary {
+
+  private static final Logger log = LoggerFactory.getLogger(ItemService.class);
 
   private final ItemRepository itemRepository;
   private final SagaService sagaService;
@@ -50,7 +51,7 @@ public class ItemService extends TransactionBoundary {
     return sagaService
         .createPurchaseOrderSaga()
         .execute()
-        .onFailure(err -> log.log(Level.SEVERE, "failed to execute saga", err))
+        .onFailure(err -> log.error("failed to execute saga", err))
         .onSuccess(sagaId -> log.info("%s: saga completed".formatted(sagaId)));
   }
 

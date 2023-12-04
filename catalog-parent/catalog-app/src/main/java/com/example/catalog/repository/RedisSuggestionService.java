@@ -6,6 +6,8 @@ import static com.example.commons.redis.RedisConstants.MAX;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.web.handler.HttpException;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.Response;
@@ -14,13 +16,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 class RedisSuggestionService implements SuggestionService, AutoCloseable {
 
+  private static final Logger log = LoggerFactory.getLogger(RedisSuggestionService.class);
   private static final String ITEM_SUGGESTION_DICTIONARY = "item-suggestions";
 
   private final RedisAPI redisAPI;

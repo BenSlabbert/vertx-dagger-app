@@ -7,17 +7,19 @@ import com.example.iam.grpc.iam.CheckTokenResponse;
 import com.example.iam.grpc.iam.IamGrpc;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.grpc.client.GrpcClient;
 import io.vertx.grpc.common.GrpcReadStream;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 class IamIntegration implements AuthenticationIntegration, AutoCloseable {
+
+  private static final Logger log = LoggerFactory.getLogger(IamIntegration.class);
 
   private final GrpcClient client;
   private final SocketAddress server;

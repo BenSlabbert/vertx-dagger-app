@@ -12,6 +12,8 @@ import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
@@ -26,13 +28,14 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
-import java.util.logging.Level;
 import javax.inject.Inject;
-import lombok.extern.java.Log;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
 
-@Log
+@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ApiVerticle extends AbstractVerticle {
+
+  private static final Logger log = LoggerFactory.getLogger(ApiVerticle.class);
 
   private final AuthHandler authHandler;
   private final Config.HttpConfig httpConfig;
@@ -40,29 +43,12 @@ public class ApiVerticle extends AbstractVerticle {
   private final Pool pool;
   private final RedisAPI redisAPI;
 
-  @Inject
-  public ApiVerticle(
-      Config.HttpConfig httpConfig,
-      ItemHandler itemHandler,
-      AuthHandler authHandler,
-      Pool pool,
-      RedisAPI redisAPI) {
-    this.httpConfig = httpConfig;
-    this.itemHandler = itemHandler;
-    this.authHandler = authHandler;
-    this.pool = pool;
-    this.redisAPI = redisAPI;
-  }
-
   @Override
   public void start(Promise<Void> startPromise) {
     checkConnections(startPromise)
         .onSuccess(
             ignore -> {
-              log.log(
-                  Level.INFO,
-                  "starting api verticle on port: {0}",
-                  new Object[] {Integer.toString(httpConfig.port())});
+              log.info("starting api verticle on port: " + httpConfig.port());
 
               vertx
                   .createHttpServer(
@@ -74,7 +60,7 @@ public class ApiVerticle extends AbstractVerticle {
                           log.info("started http server");
                           startPromise.complete();
                         } else {
-                          log.log(Level.SEVERE, "failed to start verticle", res.cause());
+                          log.error("failed to start verticle", res.cause());
                           startPromise.fail(res.cause());
                         }
                       });
@@ -82,7 +68,6 @@ public class ApiVerticle extends AbstractVerticle {
   }
 
   private Router setupRoutes() {
-
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
 
@@ -213,7 +198,7 @@ public class ApiVerticle extends AbstractVerticle {
 
   @Override
   public void stop(Promise<Void> stopPromise) {
-    log.warning("stopping");
+    log.warn("stopping");
     stopPromise.complete();
   }
 }

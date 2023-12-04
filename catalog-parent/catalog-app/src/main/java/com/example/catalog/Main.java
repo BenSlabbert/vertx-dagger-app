@@ -1,9 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.SEVERE;
-
 import com.example.catalog.ioc.DaggerProvider;
 import com.example.catalog.ioc.Provider;
 import com.example.commons.config.Config;
@@ -16,7 +13,8 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.dns.AddressResolverOptions;
-import java.io.IOException;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -24,11 +22,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import lombok.extern.java.Log;
 
-@Log
 @Module
 public class Main {
+
+  private static final Logger log = LoggerFactory.getLogger(Main.class);
 
   private static Config config;
   private static Vertx vertx;
@@ -38,8 +36,8 @@ public class Main {
     System.setProperty("org.jooq.no-logo", "true");
   }
 
-  public static void main(String[] args) throws IOException {
-    log.log(INFO, "starting app: {0}", new Object[] {Arrays.toString(args)});
+  public static void main(String[] args) {
+    log.info("starting app: " + Arrays.toString(args));
 
     // breaks on native image
     // https://github.com/oracle/graal/issues/5510
@@ -47,7 +45,7 @@ public class Main {
         LocalDateTime.parse(
             "4714-11-24 00:00:00 BC",
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
-    log.log(INFO, "parse: {0}", new Object[] {parse.toString()});
+    log.info("parse: " + parse);
 
     config = ParseConfig.parseArgs(args);
 
@@ -58,7 +56,7 @@ public class Main {
     Objects.requireNonNull(config.serviceRegistryConfig());
 
     List<String> reachableNameServers = ReachableNameServers.getReachableNameServers();
-    log.log(INFO, "reachableNameServers: {0}", new Object[] {reachableNameServers});
+    log.info("reachableNameServers: " + reachableNameServers);
 
     vertx =
         Vertx.vertx(
@@ -90,10 +88,10 @@ public class Main {
         .deployVerticle(dagger::provideNewApiVerticle, deploymentOptions)
         .onFailure(
             err -> {
-              log.log(SEVERE, "error while deploying api verticle", err);
+              log.error("error while deploying api verticle", err);
               vertx.close().onComplete(ignore -> System.exit(1));
             })
-        .onSuccess(id -> log.log(INFO, "api deployment id: {0}", new Object[] {id}));
+        .onSuccess(id -> log.info("api deployment id: " + id));
   }
 
   @Provides

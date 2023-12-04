@@ -18,6 +18,8 @@ import com.example.migration.FlywayProvider;
 import io.restassured.RestAssured;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
@@ -27,7 +29,6 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import lombok.extern.java.Log;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -41,9 +42,10 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
-@Log
 @ExtendWith(VertxExtension.class)
 public abstract class PersistenceTest {
+
+  private static final Logger log = LoggerFactory.getLogger(PersistenceTest.class);
 
   protected static final int HTTP_PORT = getPort();
   protected static final int GRPC_PORT = getPort();
@@ -159,7 +161,7 @@ public abstract class PersistenceTest {
       try {
         closeable.close();
       } catch (Exception e) {
-        log.warning("failed to close " + closeable);
+        log.warn("failed to close " + closeable);
       }
     }
   }

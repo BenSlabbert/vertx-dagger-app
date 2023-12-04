@@ -6,18 +6,19 @@ import static io.netty.handler.codec.http.HttpResponseStatus.UNAUTHORIZED;
 import com.example.catalog.integration.AuthenticationIntegration;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpHeaders;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.HttpException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 public class AuthHandler implements Handler<RoutingContext> {
 
+  private static final Logger log = LoggerFactory.getLogger(AuthHandler.class);
   private static final String BEARER = "Bearer ";
 
   private final AuthenticationIntegration authenticationIntegration;
@@ -36,13 +37,13 @@ public class AuthHandler implements Handler<RoutingContext> {
     ctx.request().pause();
 
     if (null == authHeader) {
-      log.warning("invalid header: auth header is null");
+      log.warn("invalid header: auth header is null");
       ctx.fail(new HttpException(UNAUTHORIZED.code()));
       return;
     }
 
     if (!authHeader.startsWith(BEARER)) {
-      log.warning("invalid header: auth header incorrect prefix");
+      log.warn("invalid header: auth header incorrect prefix");
       ctx.fail(new HttpException(UNAUTHORIZED.code()));
       return;
     }
@@ -52,7 +53,7 @@ public class AuthHandler implements Handler<RoutingContext> {
         .isTokenValid(token)
         .onFailure(
             err -> {
-              log.severe("iam call failed");
+              log.error("iam call failed", err);
               ctx.fail(new HttpException(UNAUTHORIZED.code()));
             })
         .onSuccess(

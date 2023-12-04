@@ -10,15 +10,17 @@ import com.example.commons.saga.SagaStageHandler;
 import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class CreatePurchaseOrderHandler implements SagaStageHandler {
+
+  private static final Logger log = LoggerFactory.getLogger(CreatePurchaseOrderHandler.class);
 
   @Override
   public Future<GeneratedMessageV3> getCommand(String sagaId) {
@@ -36,16 +38,15 @@ public class CreatePurchaseOrderHandler implements SagaStageHandler {
     CreatePaymentResponse response =
         ProtobufParser.parse(bytes, CreatePaymentResponse.getDefaultInstance());
 
-    return switch (response.getResponseCase()) {
-      case SUCCESS:
-        log.info("success");
-        CreatePaymentResponseSuccessResponse success = response.getSuccess();
-        yield Future.succeededFuture(true);
-      case FAILED, RESPONSE_NOT_SET:
-        log.info("failure");
-        CreatePaymentResponseFailedResponse failed = response.getFailed();
-        yield Future.succeededFuture(false);
-    };
+    if (response.getResponseCase() == CreatePaymentResponse.ResponseCase.SUCCESS) {
+      CreatePaymentResponseSuccessResponse success = response.getSuccess();
+      log.info("success: " + success);
+      return Future.succeededFuture(true);
+    }
+
+    CreatePaymentResponseFailedResponse failed = response.getFailed();
+    log.info("failure: " + failed);
+    return Future.succeededFuture(false);
   }
 
   @Override

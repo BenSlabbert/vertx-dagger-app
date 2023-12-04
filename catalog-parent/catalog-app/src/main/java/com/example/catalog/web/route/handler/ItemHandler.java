@@ -9,22 +9,23 @@ import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERR
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
-import static java.util.logging.Level.SEVERE;
 
 import com.example.catalog.service.ItemService;
 import com.example.catalog.web.SchemaValidatorDelegator;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.HttpException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 public class ItemHandler {
+
+  private static final Logger log = LoggerFactory.getLogger(ItemHandler.class);
 
   private final ItemService itemService;
   private final SchemaValidatorDelegator schemaValidatorDelegator;
@@ -40,7 +41,7 @@ public class ItemHandler {
         .execute()
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to find all items", err);
+              log.error("failed to find all items", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
@@ -57,7 +58,7 @@ public class ItemHandler {
         .findAll(lastId, size)
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to find all items", err);
+              log.error("failed to find all items", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
@@ -74,7 +75,7 @@ public class ItemHandler {
         .suggest(name)
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to find suggestion: " + name, err);
+              log.error("failed to find suggestion: " + name, err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
@@ -91,7 +92,7 @@ public class ItemHandler {
         .findById(id)
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to find item: " + id, err);
+              log.error("failed to find item: " + id, err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
@@ -114,7 +115,7 @@ public class ItemHandler {
         .delete(id)
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to delete item: " + id, err);
+              log.error("failed to delete item: " + id, err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
@@ -131,7 +132,7 @@ public class ItemHandler {
     Boolean valid = schemaValidatorDelegator.validate(CreateItemRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
-      log.log(SEVERE, "invalid create item request params");
+      log.error("invalid create item request params");
       ctx.response().setStatusCode(BAD_REQUEST.code()).end();
       return;
     }
@@ -140,7 +141,7 @@ public class ItemHandler {
         .create(new CreateItemRequestDto(body))
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to create item", err);
+              log.error("failed to create item", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(
@@ -157,7 +158,7 @@ public class ItemHandler {
     Boolean valid = schemaValidatorDelegator.validate(UpdateItemRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
-      log.log(SEVERE, "invalid create item request params");
+      log.error("invalid create item request params");
       ctx.response().setStatusCode(BAD_REQUEST.code()).end();
       return;
     }
@@ -166,7 +167,7 @@ public class ItemHandler {
         .update(id, new UpdateItemRequestDto(body))
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to create item", err);
+              log.error("failed to create item", err);
               ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
             })
         .onSuccess(

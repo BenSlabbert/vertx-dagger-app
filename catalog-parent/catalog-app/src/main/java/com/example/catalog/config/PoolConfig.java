@@ -6,6 +6,8 @@ import com.example.commons.future.FutureUtil;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.sqlclient.Pool;
@@ -13,11 +15,11 @@ import io.vertx.sqlclient.PoolOptions;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
 
-@Log
 @Module
 class PoolConfig implements AutoCloseable {
+
+  private static final Logger log = LoggerFactory.getLogger(PoolConfig.class);
 
   @Inject
   PoolConfig() {}
