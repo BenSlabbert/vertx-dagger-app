@@ -13,7 +13,7 @@ import lombok.extern.java.Log;
 @Log
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
-public class SagaService {
+class SagaService {
 
   private static final String CREATE_PURCHASE_ORDER_TOPIC = "Saga.Catalog.CreatePurchaseOrder";
   private static final String CREATE_PAYMENT_TOPIC = "Saga.Catalog.CreatePayment";

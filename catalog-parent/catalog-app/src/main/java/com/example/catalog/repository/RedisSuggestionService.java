@@ -13,20 +13,17 @@ import io.vertx.redis.client.ResponseType;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 @Log
 @Singleton
+@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 class RedisSuggestionService implements SuggestionService, AutoCloseable {
 
   private static final String ITEM_SUGGESTION_DICTIONARY = "item-suggestions";
 
   private final RedisAPI redisAPI;
-
-  @Inject
-  RedisSuggestionService(RedisAPI redisAPI) {
-    this.redisAPI = redisAPI;
-  }
 
   @Override
   public Future<Void> create(String name) {

@@ -13,16 +13,13 @@ import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 
 @Singleton
+@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ItemRepositoryImpl implements ItemRepository {
 
   private final ItemProjectionFactory itemProjectionFactory;
-
-  @Inject
-  public ItemRepositoryImpl(ItemProjectionFactory itemProjectionFactory) {
-    this.itemProjectionFactory = itemProjectionFactory;
-  }
 
   public Future<CreatedItemProjection> create(SqlClient conn, String name, long priceInCents) {
     return execute(conn, itemProjectionFactory.createInsertItemProjection(name, priceInCents));

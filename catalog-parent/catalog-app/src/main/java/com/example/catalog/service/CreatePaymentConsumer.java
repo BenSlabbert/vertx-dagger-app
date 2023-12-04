@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
-public class CreatePaymentConsumer implements Consumer {
+class CreatePaymentConsumer implements Consumer {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentConsumer.class);
   private static final String CMD_ADDRESS = "Saga.Catalog.CreatePurchaseOrder";
@@ -30,7 +30,7 @@ public class CreatePaymentConsumer implements Consumer {
 
   private MessageConsumer<GeneratedMessageV3> consumer;
 
-  public void handle(Message<GeneratedMessageV3> message) {
+  private void handle(Message<GeneratedMessageV3> message) {
     log.info("handle message: %s".formatted(CMD_ADDRESS));
 
     MultiMap headers = message.headers();

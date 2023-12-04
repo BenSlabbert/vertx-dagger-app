@@ -12,14 +12,13 @@ import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 @Log
 @Singleton
+@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class CreatePaymentHandler implements SagaStageHandler {
-
-  @Inject
-  CreatePaymentHandler() {}
 
   @Override
   public Future<GeneratedMessageV3> getCommand(String sagaId) {
