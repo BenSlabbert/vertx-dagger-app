@@ -41,6 +41,10 @@
       <artifactId>vertx-pg-client</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-redis-client</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>

@@ -115,6 +115,11 @@ public class Main {
   }
 
   @Provides
+  static Config.PostgresConfig providesPostgresConfig() {
+    return config.postgresConfig();
+  }
+
+  @Provides
   static Config.VerticleConfig providesVerticleConfig() {
     return config.verticleConfig();
   }

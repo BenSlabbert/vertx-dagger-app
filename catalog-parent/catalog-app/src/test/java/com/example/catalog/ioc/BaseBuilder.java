@@ -23,6 +23,9 @@ public interface BaseBuilder<
   BUILDER redisConfig(Config.RedisConfig redisConfig);
 
   @BindsInstance
+  BUILDER postgresConfig(Config.PostgresConfig postgresConfig);
+
+  @BindsInstance
   BUILDER verticleConfig(Config.VerticleConfig verticleConfig);
 
   @BindsInstance

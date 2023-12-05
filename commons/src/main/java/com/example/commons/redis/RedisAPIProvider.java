@@ -1,33 +1,40 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.catalog.config;
+package com.example.commons.redis;
 
 import com.example.commons.config.Config;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 
 @Module
-class RedisConfig implements AutoCloseable {
+@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
+class RedisAPIProvider implements AutoCloseable {
 
-  @Inject
-  RedisConfig() {}
+  private static final Logger log = LoggerFactory.getLogger(RedisAPIProvider.class);
 
   private static RedisAPI redisAPI = null;
 
   @Provides
   @Singleton
   static RedisAPI providesRedisAPI(Vertx vertx, Config.RedisConfig redisConfig) {
+    log.info("creating redis api client");
     Redis client = Redis.createClient(vertx, redisConfig.uri());
     redisAPI = RedisAPI.api(client);
     return redisAPI;
   }
 
+  @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void close() {
+    System.err.println("closing redis client");
+
     if (null == redisAPI) return;
 
     redisAPI.close();

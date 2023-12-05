@@ -139,6 +139,7 @@ public abstract class PersistenceTest {
             .config(config)
             .httpConfig(config.httpConfig())
             .redisConfig(config.redisConfig())
+            .postgresConfig(config.postgresConfig())
             .verticleConfig(config.verticleConfig())
             .serviceRegistryConfig(config.serviceRegistryConfig())
             .authenticationIntegration(authHandler)
