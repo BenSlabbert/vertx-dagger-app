@@ -74,7 +74,7 @@
     <native-maven-plugin.version>0.9.28</native-maven-plugin.version>
     <spotless.version>2.41.1</spotless.version>
     <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
-    <aspectj-maven-plugin.version>1.14.0</aspectj-maven-plugin.version>
+    <aspectj-maven-plugin.version>1.15.0</aspectj-maven-plugin.version>
 
     <!--extensions-->
     <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
