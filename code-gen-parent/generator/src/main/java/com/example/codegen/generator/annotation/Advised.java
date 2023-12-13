@@ -8,4 +8,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
-public @interface BeforeAdvice {}
+public @interface Advised {
+
+  Class<? extends Advice>[] advisors() default {};
+}

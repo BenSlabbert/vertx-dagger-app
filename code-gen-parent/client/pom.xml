@@ -39,10 +39,10 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>
           <annotationProcessors>
-            <annotationProcessor>com.example.codegen.generator.generator.AdvisedByGenerator</annotationProcessor>
+            <annotationProcessor>com.example.codegen.generator.generator.AdviceGenerator</annotationProcessor>
           </annotationProcessors>
           <compilerArgs>
-            <arg>-Adummy=value for dummy!</arg>
+            <arg>-Aoption=value for option!</arg>
           </compilerArgs>
         </configuration>
       </plugin>

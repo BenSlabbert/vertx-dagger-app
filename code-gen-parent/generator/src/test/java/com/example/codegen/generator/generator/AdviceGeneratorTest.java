@@ -9,16 +9,16 @@ import com.google.testing.compile.JavaSourceSubjectFactory;
 import java.net.URL;
 import org.junit.jupiter.api.Test;
 
-class BeforeAdviceGeneratorTest {
+class AdviceGeneratorTest {
 
   @Test
   void test() {
-    URL resource = this.getClass().getClassLoader().getResource("Example.java");
+    URL resource = this.getClass().getClassLoader().getResource("AdviceTest.java");
     assertThat(resource).isNotNull();
 
     assertAbout(JavaSourceSubjectFactory.javaSource())
         .that(JavaFileObjects.forResource(resource))
-        .processedWith(new AdvisedByGenerator())
+        .processedWith(new AdviceGenerator())
         .compilesWithoutError();
   }
 }
