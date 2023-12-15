@@ -66,6 +66,6 @@ export const actions: Actions = {
 		}
 
 		// redirect the user
-		throw redirect(303, routes.catalog);
+		redirect(303, routes.catalog);
 	}
 };

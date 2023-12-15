@@ -25,7 +25,7 @@ export const actions: Actions = {
 		// redirect user if logged in
 		if (locals.user) {
 			logger.info('user logged in already, redirect');
-			throw redirect(302, routes.home);
+			redirect(302, routes.home);
 		}
 
 		// get the form data
@@ -80,6 +80,6 @@ export const actions: Actions = {
 		await cookieUtils.set(cookies, appUser);
 
 		// redirect the user
-		throw redirect(303, routes.home);
+		redirect(303, routes.home);
 	}
 };

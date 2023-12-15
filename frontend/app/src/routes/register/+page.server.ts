@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	if (locals.user) {
 		logger.info(`user is already logged in, redirect to ${routes.home}`);
-		throw redirect(303, routes.home);
+		redirect(303, routes.home);
 	}
 
 	// if not logged in, just render the page
@@ -24,7 +24,7 @@ export const actions: Actions = {
 		// redirect user if logged in
 		if (locals.user) {
 			logger.info('user logged in already, redirect');
-			throw redirect(302, routes.home);
+			redirect(302, routes.home);
 		}
 
 		// get the form data
@@ -68,6 +68,6 @@ export const actions: Actions = {
 		}
 
 		// redirect to login
-		throw redirect(303, routes.login);
+		redirect(303, routes.login);
 	}
 };
