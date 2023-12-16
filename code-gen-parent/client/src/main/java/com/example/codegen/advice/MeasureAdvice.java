@@ -2,9 +2,13 @@
 package com.example.codegen.advice;
 
 import com.example.codegen.generator.annotation.Advice;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class MeasureAdvice implements Advice {
 
+  @Inject
   public MeasureAdvice() {}
 
   @Override

@@ -6,7 +6,10 @@ import com.example.codegen.advice.MeasureAdvice;
 import com.example.codegen.generator.annotation.Advised;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 @Advised(advisors = {LogAdvice.class, MeasureAdvice.class})
 public class Example {
 
@@ -14,6 +17,7 @@ public class Example {
   private final DependencyA dependencyA;
   private final int i;
 
+  @Inject
   public Example(DependencyA depA, String value, int i) {
     this.dependencyA = depA;
     this.value = value;

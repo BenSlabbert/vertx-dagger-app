@@ -2,9 +2,13 @@
 package com.example.codegen.client;
 
 import com.example.codegen.generator.annotation.Advice;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-class LogAdvice implements Advice {
+@Singleton
+public class LogAdvice implements Advice {
 
+  @Inject
   LogAdvice() {}
 
   @Override

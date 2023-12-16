@@ -119,7 +119,8 @@ public class AdviceGenerator extends AbstractProcessor {
         out.println();
       }
 
-      out.printf("class %s extends %s {%n", generatedClassName, superClass);
+      out.println("@javax.inject.Singleton");
+      out.printf("public class %s extends %s {%n", generatedClassName, superClass);
       out.println();
       printConstructor(out, generatedClassName, superConstructor, advisors);
       out.println();
@@ -258,6 +259,7 @@ public class AdviceGenerator extends AbstractProcessor {
     advisorParams.forEach(s -> out.printf("\tprivate final %s %s;%n", s, asVariableName(s)));
     out.println();
 
+    out.println("\t@javax.inject.Inject");
     out.printf("\t%s(", generatedClassName);
 
     AtomicInteger index = new AtomicInteger();

@@ -12,6 +12,15 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.google.dagger</groupId>
+      <artifactId>dagger</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.dagger</groupId>
+      <artifactId>dagger-compiler</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.example.code-gen</groupId>
       <artifactId>generator</artifactId>
       <version>${revision}</version>
@@ -34,16 +43,33 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
+          <useIncrementalCompilation>false</useIncrementalCompilation>
           <source>${java.version}</source>
           <target>${java.version}</target>
+          <release>${java.version}</release>
+          <parameters>true</parameters>
           <encoding>${project.build.sourceEncoding}</encoding>
           <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>
-          <annotationProcessors>
-            <annotationProcessor>com.example.codegen.generator.generator.AdviceGenerator</annotationProcessor>
-          </annotationProcessors>
           <compilerArgs>
+            <arg>-parameters</arg>
+            <arg>-Adagger.formatGeneratedSource=enabled</arg>
+            <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
+            <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
+            <arg>-Adagger.fastInit=enabled</arg>
             <arg>-Aoption=value for option!</arg>
           </compilerArgs>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.example.code-gen</groupId>
+              <artifactId>generator</artifactId>
+              <version>${revision}</version>
+            </path>
+            <path>
+              <groupId>com.google.dagger</groupId>
+              <artifactId>dagger-compiler</artifactId>
+              <version>${dagger.version}</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
     </plugins>
