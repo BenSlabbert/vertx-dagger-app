@@ -59,6 +59,8 @@ public class ApplicationVerticle extends AbstractVerticle {
               User user = ctx.user();
               JsonObject principal = user.principal();
               JsonObject attributes = user.attributes();
+              log.info("principal: " + principal);
+              log.info("attributes: " + attributes);
               // add user roles
               user.authorizations()
                   .add("role-provider-id", RoleBasedAuthorization.create("my-role"));
