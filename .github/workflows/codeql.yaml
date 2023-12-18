@@ -27,7 +27,7 @@ jobs:
     - name: "Checkout repository"
       uses: "actions/checkout@v4"
     - name: "Initialize CodeQL"
-      uses: "github/codeql-action/init@v2"
+      uses: "github/codeql-action/init@v3"
       with:
         languages: "${{ matrix.language }}"
     - name: "Set up JDK 21"
@@ -43,7 +43,7 @@ jobs:
     - run: "make M='/tmp/mvnd/bin/mvnd' fmtCheck"
     - run: "make M='/tmp/mvnd/bin/mvnd -DskipTests=true -Ddocker.skip=true'"
     - name: "Perform CodeQL Analysis"
-      uses: "github/codeql-action/analyze@v2"
+      uses: "github/codeql-action/analyze@v3"
   analyze-js:
     name: "Analyze JavaScript"
     runs-on: "ubuntu-latest"
@@ -61,7 +61,7 @@ jobs:
     - name: "Checkout repository"
       uses: "actions/checkout@v4"
     - name: "Initialize CodeQL"
-      uses: "github/codeql-action/init@v2"
+      uses: "github/codeql-action/init@v3"
       with:
         languages: "${{ matrix.language }}"
     - name: "Setup node"
@@ -73,4 +73,4 @@ jobs:
     - run: "yarn --version"
     - run: "make -C frontend/app"
     - name: "Perform CodeQL Analysis"
-      uses: "github/codeql-action/analyze@v2"
+      uses: "github/codeql-action/analyze@v3"
