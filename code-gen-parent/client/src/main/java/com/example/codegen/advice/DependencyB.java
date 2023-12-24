@@ -8,5 +8,5 @@ import javax.inject.Singleton;
 public class DependencyB {
 
   @Inject
-  public DependencyB() {}
+  DependencyB() {}
 }

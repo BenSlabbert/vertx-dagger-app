@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 public class MeasureAdvice implements Advice {
 
   @Inject
-  public MeasureAdvice() {}
+  MeasureAdvice() {}
 
   @Override
   public void before(Class<?> clazz, String methodName, Object... args) {

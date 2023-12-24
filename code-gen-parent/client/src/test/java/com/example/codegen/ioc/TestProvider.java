@@ -2,23 +2,14 @@
 package com.example.codegen.ioc;
 
 import com.example.codegen.advice.AdviceModule;
-import com.example.codegen.advice.DependencyB;
-import com.example.codegen.advice.MeasureAdvice;
 import com.example.codegen.client.ClientModule;
-import com.example.codegen.client.Example;
 import dagger.BindsInstance;
 import dagger.Component;
 import javax.inject.Singleton;
 
 @Singleton
 @Component(modules = {AdviceModule.class, ClientModule.class})
-public interface Provider {
-
-  Example example();
-
-  DependencyB dependencyB();
-
-  MeasureAdvice measureAdvice();
+public interface TestProvider extends Provider {
 
   @Component.Builder
   interface Builder {
@@ -29,6 +20,6 @@ public interface Provider {
     @BindsInstance
     Builder integer(int i);
 
-    Provider build();
+    TestProvider build();
   }
 }
