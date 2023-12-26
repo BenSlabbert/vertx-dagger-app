@@ -171,6 +171,8 @@ class TableTest {
                             "com.example.payment.generator.entity.generated.jooq.tables"))
             .map(ClassPath.ClassInfo::load)
             .filter(Table.class::isAssignableFrom)
+            // remove inner classes
+            .filter(f -> !f.isMemberClass())
             .map(
                 c -> {
                   try {
