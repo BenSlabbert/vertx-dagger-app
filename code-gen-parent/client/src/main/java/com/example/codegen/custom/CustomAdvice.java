@@ -2,6 +2,7 @@
 package com.example.codegen.custom;
 
 import com.example.codegen.generator.annotation.Advice;
+import java.util.Arrays;
 import javax.inject.Inject;
 
 // do not make singleton
@@ -28,8 +29,18 @@ public class CustomAdvice implements Advice {
   }
 
   @Override
-  public void before(Class<?> clazz, String methodName, Object... args) {}
+  public void before(Class<?> clazz, String methodName, Object... args) {
+    System.err.println("before: " + clazz + " " + methodName + " args: " + Arrays.toString(args));
+    System.err.println("param1: " + param1);
+    System.err.println("foo: " + foo);
+    System.err.println("bar: " + bar);
+  }
 
   @Override
-  public void after(Class<?> clazz, String methodName, Object result) {}
+  public void after(Class<?> clazz, String methodName, Object result) {
+    System.err.println("after: " + clazz + " " + methodName + " result: " + result);
+    System.err.println("param1: " + param1);
+    System.err.println("foo: " + foo);
+    System.err.println("bar: " + bar);
+  }
 }

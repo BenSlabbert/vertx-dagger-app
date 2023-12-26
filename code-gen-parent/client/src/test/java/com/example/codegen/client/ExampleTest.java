@@ -24,5 +24,8 @@ class ExampleTest {
     assertThat(example).isInstanceOf(Example_Advised.class);
 
     example.publicVoidMethod();
+    example.publicStringMethod(new DependencyA(), 1, "string");
+    example.returnList("in");
+    example.returnMap();
   }
 }

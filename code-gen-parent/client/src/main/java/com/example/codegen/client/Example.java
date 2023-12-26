@@ -36,11 +36,13 @@ public class Example {
     return depA;
   }
 
+  @Custom(param1 = "p1")
   public List<String> returnList(String in) {
     System.out.println("publicVoidMethod");
     return List.of(in);
   }
 
+  @Custom(bar = true)
   public Map<String, String> returnMap() {
     System.out.println("publicVoidMethod");
     return Map.of();

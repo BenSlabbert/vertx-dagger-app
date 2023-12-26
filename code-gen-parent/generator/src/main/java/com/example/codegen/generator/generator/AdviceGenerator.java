@@ -6,7 +6,6 @@ import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -107,17 +106,14 @@ public class AdviceGenerator extends AbstractProcessor {
       throw new GenerationException("cannot advise final class");
     }
 
+    // todo: also check for the scope (Singleton, RequestScoped, etc)
     boolean isPublic = elementToBeAdvised.getModifiers().contains(Modifier.PUBLIC);
 
     String generatedClassName = superClass + "_Advised";
 
-    Set<CustomAdvisorAnnotation> additionalAnnotations = new HashSet<>();
-    for (ExecutableElement method : methods) {
-      additionalAnnotations.addAll(getAdditionalAnnotations(method));
-    }
-
     Set<String> customAnnotationCanonicalNames =
-        additionalAnnotations.stream()
+        methods.stream()
+            .flatMap(method -> getAdditionalAnnotations(method).stream())
             .map(CustomAdvisorAnnotation::advisorCanonicalClassName)
             .collect(Collectors.toSet());
 
@@ -144,6 +140,7 @@ public class AdviceGenerator extends AbstractProcessor {
 
       out.println("import javax.inject.Singleton;");
       out.println("import javax.inject.Inject;");
+      out.println("import javax.inject.Provider;");
       out.println();
 
       canonicalImports.forEach(canonicalImport -> out.printf("import %s;%n", canonicalImport));
@@ -213,11 +210,15 @@ public class AdviceGenerator extends AbstractProcessor {
                 .map(Pair::r)
                 .collect(Collectors.joining(", "));
 
-        String variableName = asVariableName(advisor);
-        additionalAdvisors.add(variableName);
+        String adviceGetter = asVariableName(advisor);
+        String variableName = "_" + adviceGetter;
+
+        out.println("\t\tvar " + variableName + " = " + adviceGetter + ".get();");
 
         // customize the advisor
         out.println("\t\t" + variableName + ".customize(" + collected + ");");
+
+        additionalAdvisors.add(variableName);
       }
 
       advisors.stream()
@@ -227,7 +228,16 @@ public class AdviceGenerator extends AbstractProcessor {
           .map(AdviceGenerator::asVariableName)
           .forEach(additionalAdvisors::add);
 
-      for (String advisorVariable : additionalAdvisors) {
+      for (int i = 0; i < additionalAdvisors.size(); i++) {
+        String advisorVariable = additionalAdvisors.get(i);
+
+        if (!advisorVariable.startsWith("_")) {
+          String newVar = "_" + advisorVariable;
+          out.println("\t\tvar " + newVar + " = " + advisorVariable + ".get();");
+          advisorVariable = newVar;
+          additionalAdvisors.set(i, advisorVariable);
+        }
+
         if (varList.isEmpty()) {
           out.println(
               "\t\t"
@@ -386,26 +396,44 @@ public class AdviceGenerator extends AbstractProcessor {
             .map(f -> f.substring(f.lastIndexOf(".") + 1))
             .toList();
 
-    advisorParams.forEach(s -> out.printf("\tprivate final %s %s;%n", s, asVariableName(s)));
+    advisorParams.forEach(
+        s -> out.printf("\tprivate final Provider<%s> %s;%n", s, asVariableName(s)));
     additionalAnnotationsParams.forEach(
-        s -> out.printf("\tprivate final %s %s;%n", s, asVariableName(s)));
+        s -> out.printf("\tprivate final Provider<%s> %s;%n", s, asVariableName(s)));
     out.println();
 
     out.println("\t@Inject");
     out.printf("\t%s(", generatedClassName);
 
     AtomicInteger index = new AtomicInteger();
-    String params =
+    String superParamsJoined =
         String.join(
             ", ",
-            Stream.of(superParams, advisorParams, additionalAnnotationsParams)
+            Stream.of(superParams)
                 .flatMap(List::stream)
                 .map(f -> "%s %s".formatted(f, asVariableName(f) + "_" + index.getAndIncrement()))
                 .toList());
 
+    String advisorParamsJoined =
+        Stream.of(advisorParams, additionalAnnotationsParams)
+            .flatMap(List::stream)
+            .map(
+                f ->
+                    "Provider<%s> %s"
+                        .formatted(f, asVariableName(f) + "_" + index.getAndIncrement()))
+            .collect(Collectors.joining(", "));
+
+    String join;
+
+    if (superParamsJoined.isEmpty()) {
+      join = advisorParamsJoined;
+    } else {
+      join = String.join(", ", superParamsJoined, advisorParamsJoined);
+    }
+
     index.set(0);
 
-    out.print(params);
+    out.print(join);
 
     out.printf(") {%n");
 
