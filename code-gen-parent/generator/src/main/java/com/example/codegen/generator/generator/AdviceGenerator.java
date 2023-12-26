@@ -5,6 +5,8 @@ import com.example.codegen.generator.annotation.Advised;
 import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,12 +16,16 @@ import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
@@ -30,6 +36,7 @@ import javax.tools.JavaFileObject;
 public class AdviceGenerator extends AbstractProcessor {
 
   private static final String OPTION = "option";
+  private static final String PROCESS_CUSTOM = "processCustom";
 
   @Override
   public SourceVersion getSupportedSourceVersion() {
@@ -43,7 +50,7 @@ public class AdviceGenerator extends AbstractProcessor {
 
   @Override
   public Set<String> getSupportedOptions() {
-    return Set.of(OPTION);
+    return Set.of(OPTION, PROCESS_CUSTOM);
   }
 
   @Override
@@ -54,6 +61,8 @@ public class AdviceGenerator extends AbstractProcessor {
 
     String option = processingEnv.getOptions().get(OPTION);
     System.err.println("option: " + option);
+    String processCustom = processingEnv.getOptions().get(PROCESS_CUSTOM);
+    System.err.println("processCustom: " + processCustom);
 
     for (TypeElement annotation : annotations) {
       Set<? extends Element> annotated = roundEnv.getElementsAnnotatedWith(annotation);
@@ -93,7 +102,24 @@ public class AdviceGenerator extends AbstractProcessor {
     String canonicalName = elementToBeAdvised.asType().toString();
     String classPackage = canonicalName.substring(0, canonicalName.lastIndexOf('.'));
     Name superClass = elementToBeAdvised.getSimpleName();
+
+    if (elementToBeAdvised.getModifiers().contains(Modifier.FINAL)) {
+      throw new GenerationException("cannot advise final class");
+    }
+
+    boolean isPublic = elementToBeAdvised.getModifiers().contains(Modifier.PUBLIC);
+
     String generatedClassName = superClass + "_Advised";
+
+    Set<CustomAdvisorAnnotation> additionalAnnotations = new HashSet<>();
+    for (ExecutableElement method : methods) {
+      additionalAnnotations.addAll(getAdditionalAnnotations(method));
+    }
+
+    Set<String> customAnnotationCanonicalNames =
+        additionalAnnotations.stream()
+            .map(CustomAdvisorAnnotation::advisorCanonicalClassName)
+            .collect(Collectors.toSet());
 
     Set<String> canonicalImports =
         getCanonicalImports(superConstructor, methods, advisors).stream()
@@ -110,19 +136,33 @@ public class AdviceGenerator extends AbstractProcessor {
     JavaFileObject builderFile =
         processingEnv.getFiler().createSourceFile(classPackage + "." + generatedClassName);
 
+    // todo: rewrite so that we print last and first gather all the method and constructor
+    // dependencies
     try (PrintWriter out = new PrintWriter(builderFile.openWriter())) {
       out.printf("package %s;%n", classPackage);
       out.println();
 
+      out.println("import javax.inject.Singleton;");
+      out.println("import javax.inject.Inject;");
+      out.println();
+
       canonicalImports.forEach(canonicalImport -> out.printf("import %s;%n", canonicalImport));
+      customAnnotationCanonicalNames.forEach(
+          canonicalImport -> out.printf("import %s;%n", canonicalImport));
       if (!canonicalImports.isEmpty()) {
         out.println();
       }
 
-      out.println("@javax.inject.Singleton");
-      out.printf("public class %s extends %s {%n", generatedClassName, superClass);
+      out.println("@Singleton");
+
+      if (isPublic) {
+        out.printf("public ");
+      }
+
+      out.printf("class %s extends %s {%n", generatedClassName, superClass);
       out.println();
-      printConstructor(out, generatedClassName, superConstructor, advisors);
+      printConstructor(
+          out, generatedClassName, superConstructor, advisors, customAnnotationCanonicalNames);
       out.println();
       printMethods(out, methods, advisors, superClass);
       out.println("}");
@@ -133,6 +173,9 @@ public class AdviceGenerator extends AbstractProcessor {
       PrintWriter out, List<ExecutableElement> methods, List<Element> advisors, Name superClass) {
 
     for (ExecutableElement method : methods) {
+      // todo: if we have these we need to import the dependencies in the constructor above
+      List<CustomAdvisorAnnotation> additionalAnnotations = getAdditionalAnnotations(method);
+
       String modifier =
           method.getModifiers().isEmpty()
               ? ""
@@ -158,20 +201,33 @@ public class AdviceGenerator extends AbstractProcessor {
 
       out.println("\t@Override");
       out.println("\t" + modifier + returnType + " " + methodName + "(" + collect + ") {");
-      out.println();
 
       String varList = pairs.stream().map(Pair::r).collect(Collectors.joining(", "));
 
+      List<String> additionalAdvisors = new ArrayList<>();
       // call advisors
-      List<String> advisorVariables =
-          advisors.stream()
-              .map(Element::asType)
-              .map(TypeMirror::toString)
-              .map(f -> f.substring(f.lastIndexOf(".") + 1))
-              .map(AdviceGenerator::asVariableName)
-              .toList();
+      for (CustomAdvisorAnnotation additionalAnnotation : additionalAnnotations) {
+        String advisor = additionalAnnotation.advisorCanonicalClassName();
+        String collected =
+            additionalAnnotation.customizers.stream()
+                .map(Pair::r)
+                .collect(Collectors.joining(", "));
 
-      for (String advisorVariable : advisorVariables) {
+        String variableName = asVariableName(advisor);
+        additionalAdvisors.add(variableName);
+
+        // customize the advisor
+        out.println("\t\t" + variableName + ".customize(" + collected + ");");
+      }
+
+      advisors.stream()
+          .map(Element::asType)
+          .map(TypeMirror::toString)
+          .map(f -> f.substring(f.lastIndexOf(".") + 1))
+          .map(AdviceGenerator::asVariableName)
+          .forEach(additionalAdvisors::add);
+
+      for (String advisorVariable : additionalAdvisors) {
         if (varList.isEmpty()) {
           out.println(
               "\t\t"
@@ -203,7 +259,7 @@ public class AdviceGenerator extends AbstractProcessor {
         out.println("\t\tvar _res = super." + methodName + "(" + varList + ");");
         out.println();
 
-        for (String advisorVariable : advisorVariables) {
+        for (String advisorVariable : additionalAdvisors) {
           out.println(
               "\t\t"
                   + advisorVariable
@@ -221,7 +277,7 @@ public class AdviceGenerator extends AbstractProcessor {
         out.println("\t\tsuper." + methodName + "(" + varList + ");");
         out.println();
 
-        for (String advisorVariable : advisorVariables) {
+        for (String advisorVariable : additionalAdvisors) {
           out.println(
               "\t\t"
                   + advisorVariable
@@ -238,11 +294,85 @@ public class AdviceGenerator extends AbstractProcessor {
     }
   }
 
+  private List<CustomAdvisorAnnotation> getAdditionalAnnotations(ExecutableElement method) {
+    List<CustomAdvisorAnnotation> list = new ArrayList<>();
+
+    for (AnnotationMirror annotationMirror : method.getAnnotationMirrors()) {
+      DeclaredType declaredType = annotationMirror.getAnnotationType();
+      TypeElement declaredTypeElement = (TypeElement) declaredType.asElement();
+      System.err.println("element: " + declaredTypeElement);
+      TypeMirror additionalAdviceType = declaredTypeElement.asType();
+      System.err.println("additionalAdviceType: " + additionalAdviceType);
+      ElementKind kind = declaredTypeElement.getKind();
+      System.err.println("kind: " + kind);
+
+      if (kind != ElementKind.ANNOTATION_TYPE) {
+        throw new GenerationException("can only process annotations");
+      }
+
+      if (!declaredTypeElement.toString().equals(processingEnv.getOptions().get(PROCESS_CUSTOM))) {
+        throw new GenerationException("can only process: " + declaredTypeElement);
+      }
+
+      // customizer fields
+      List<ExecutableElement> annotationMethods =
+          declaredTypeElement.getEnclosedElements().stream()
+              .filter(e -> e.getKind() == ElementKind.METHOD)
+              .map(e -> (ExecutableElement) e)
+              .toList();
+
+      List<VariableElement> annotationFields =
+          declaredTypeElement.getEnclosedElements().stream()
+              .filter(e -> e.getKind() == ElementKind.FIELD)
+              .map(e -> (VariableElement) e)
+              .toList();
+
+      if (annotationFields.size() != 1) {
+        throw new GenerationException("should only have one variable");
+      }
+      VariableElement advisorField = annotationFields.getFirst();
+
+      if (!"advisor".equals(advisorField.getSimpleName().toString())) {
+        throw new GenerationException("first field must be called advisor");
+      }
+
+      // default customizers
+      List<Pair> customizers = new ArrayList<>();
+      for (ExecutableElement field : annotationMethods) {
+        customizers.add(
+            new Pair(field.getSimpleName().toString(), field.getDefaultValue().toString()));
+      }
+
+      // tells me how the annotation is used
+      // update the defaults with actual values
+      var elementValues = annotationMirror.getElementValues();
+      for (var entry : elementValues.entrySet()) {
+        ExecutableElement k = entry.getKey();
+        AnnotationValue v = entry.getValue();
+        for (int i = 0; i < customizers.size(); i++) {
+          Pair pair = customizers.get(i);
+          if (pair.l.equals(k.getSimpleName().toString())) {
+            customizers.set(i, new Pair(pair.l, v.toString()));
+          }
+        }
+      }
+
+      list.add(
+          new CustomAdvisorAnnotation(advisorField.getConstantValue().toString(), customizers));
+    }
+
+    return list;
+  }
+
   private void printConstructor(
       PrintWriter out,
       String generatedClassName,
       ExecutableElement constructor,
-      List<Element> advisors) {
+      List<Element> advisors,
+      Set<String> customAnnotationCanonicalNames) {
+
+    List<String> additionalAnnotationsParams =
+        customAnnotationCanonicalNames.stream().map(AdviceGenerator::getSimpleName).toList();
 
     List<String> superParams =
         getParamsCanonicalClassNames(constructor).stream()
@@ -257,16 +387,18 @@ public class AdviceGenerator extends AbstractProcessor {
             .toList();
 
     advisorParams.forEach(s -> out.printf("\tprivate final %s %s;%n", s, asVariableName(s)));
+    additionalAnnotationsParams.forEach(
+        s -> out.printf("\tprivate final %s %s;%n", s, asVariableName(s)));
     out.println();
 
-    out.println("\t@javax.inject.Inject");
+    out.println("\t@Inject");
     out.printf("\t%s(", generatedClassName);
 
     AtomicInteger index = new AtomicInteger();
     String params =
         String.join(
             ", ",
-            Stream.of(superParams, advisorParams)
+            Stream.of(superParams, advisorParams, additionalAnnotationsParams)
                 .flatMap(List::stream)
                 .map(f -> "%s %s".formatted(f, asVariableName(f) + "_" + index.getAndIncrement()))
                 .toList());
@@ -285,17 +417,29 @@ public class AdviceGenerator extends AbstractProcessor {
                 .map(s -> asVariableName(s) + "_" + index.getAndIncrement())
                 .toList()));
 
-    advisorParams.forEach(
-        s ->
-            out.printf(
-                "\t\tthis.%s = %s;%n",
-                asVariableName(s), asVariableName(s) + "_" + index.getAndIncrement()));
+    Stream.of(advisorParams, additionalAnnotationsParams)
+        .flatMap(List::stream)
+        .forEach(
+            s ->
+                out.printf(
+                    "\t\tthis.%s = %s;%n",
+                    asVariableName(s), asVariableName(s) + "_" + index.getAndIncrement()));
 
     out.printf("\t}%n");
   }
 
   private static String asVariableName(String name) {
+    if (name.contains(".")) {
+      name = name.substring(name.lastIndexOf(".") + 1);
+    }
     return name.substring(0, 1).toLowerCase() + name.substring(1);
+  }
+
+  private static String getSimpleName(String canonicalName) {
+    if (canonicalName.contains(".")) {
+      canonicalName = canonicalName.substring(canonicalName.lastIndexOf(".") + 1);
+    }
+    return canonicalName;
   }
 
   private static Set<String> getCanonicalImports(
@@ -350,7 +494,7 @@ public class AdviceGenerator extends AbstractProcessor {
 
     try {
       Advised annotation = element.getAnnotation(Advised.class);
-      annotation.advisors();
+      var ignore = annotation.advisors(); // NOSONAR this method invocation thrown
     } catch (MirroredTypesException mte) {
       List<? extends TypeMirror> typeMirrors = mte.getTypeMirrors();
 
@@ -359,6 +503,8 @@ public class AdviceGenerator extends AbstractProcessor {
 
     throw new GenerationException("expecting MirroredTypesException to be thrown");
   }
+
+  record CustomAdvisorAnnotation(String advisorCanonicalClassName, List<Pair> customizers) {}
 
   record Pair(String l, String r) {}
 }

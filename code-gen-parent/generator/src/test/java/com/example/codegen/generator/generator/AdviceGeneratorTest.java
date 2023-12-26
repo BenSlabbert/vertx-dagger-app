@@ -18,6 +18,7 @@ class AdviceGeneratorTest {
 
     assertAbout(JavaSourceSubjectFactory.javaSource())
         .that(JavaFileObjects.forResource(resource))
+        .withCompilerOptions("-AprocessCustom=com.example.codegen.custom.Custom")
         .processedWith(new AdviceGenerator())
         .compilesWithoutError();
   }

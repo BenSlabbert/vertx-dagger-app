@@ -57,6 +57,7 @@
             <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
             <arg>-Adagger.fastInit=enabled</arg>
             <arg>-Aoption=value for option!</arg>
+            <arg>-AprocessCustom=com.example.codegen.custom.Custom</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>

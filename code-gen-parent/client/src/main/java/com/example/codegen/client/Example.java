@@ -3,6 +3,7 @@ package com.example.codegen.client;
 
 import com.example.codegen.advice.DependencyB;
 import com.example.codegen.advice.MeasureAdvice;
+import com.example.codegen.custom.Custom;
 import com.example.codegen.generator.annotation.Advised;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,12 @@ public class Example {
     this.i = i;
   }
 
+  @Custom
   public void publicVoidMethod() {
     System.out.println("publicVoidMethod");
   }
 
+  @Custom(foo = 100)
   public DependencyA publicStringMethod(DependencyA depA, int i, Object obj) {
     System.out.println("publicVoidMethod");
     return depA;
