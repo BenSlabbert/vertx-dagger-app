@@ -8,9 +8,7 @@ import com.example.codegen.generator.annotation.Advised;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 @Advised(advisors = {LogAdvice.class, MeasureAdvice.class})
 public class Example {
 

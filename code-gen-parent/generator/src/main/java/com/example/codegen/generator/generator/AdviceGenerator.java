@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.inject.Singleton;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -146,11 +147,13 @@ public class AdviceGenerator extends AbstractProcessor {
       canonicalImports.forEach(canonicalImport -> out.printf("import %s;%n", canonicalImport));
       customAnnotationCanonicalNames.forEach(
           canonicalImport -> out.printf("import %s;%n", canonicalImport));
-      if (!canonicalImports.isEmpty()) {
-        out.println();
-      }
+      out.println();
 
-      out.println("@Singleton");
+      Singleton annotation = elementToBeAdvised.getAnnotation(Singleton.class);
+
+      if (null != annotation) {
+        out.println("@Singleton");
+      }
 
       if (isPublic) {
         out.printf("public ");
