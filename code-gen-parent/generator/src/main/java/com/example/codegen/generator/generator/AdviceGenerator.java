@@ -158,6 +158,8 @@ public class AdviceGenerator extends AbstractProcessor {
 
       out.printf("class %s extends %s {%n", generatedClassName, superClass);
       out.println();
+      out.println("\tprivate static final Class<?> clazz = " + superClass + ".class;");
+      out.println();
       printConstructor(
           out, generatedClassName, superConstructor, advisors, customAnnotationCanonicalNames);
       out.println();
@@ -239,21 +241,13 @@ public class AdviceGenerator extends AbstractProcessor {
         }
 
         if (varList.isEmpty()) {
-          out.println(
-              "\t\t"
-                  + advisorVariable
-                  + ".before("
-                  + superClass
-                  + ".class, \""
-                  + methodName
-                  + "\");");
+          out.println("\t\t" + advisorVariable + ".before(" + "clazz, \"" + methodName + "\");");
         } else {
           out.println(
               "\t\t"
                   + advisorVariable
                   + ".before("
-                  + superClass
-                  + ".class, \""
+                  + "clazz, \""
                   + methodName
                   + "\", "
                   + varList
@@ -271,13 +265,7 @@ public class AdviceGenerator extends AbstractProcessor {
 
         for (String advisorVariable : additionalAdvisors) {
           out.println(
-              "\t\t"
-                  + advisorVariable
-                  + ".after("
-                  + superClass
-                  + ".class, \""
-                  + methodName
-                  + "\", _res);");
+              "\t\t" + advisorVariable + ".after(" + "clazz, \"" + methodName + "\", _res);");
         }
 
         out.println();
@@ -289,13 +277,7 @@ public class AdviceGenerator extends AbstractProcessor {
 
         for (String advisorVariable : additionalAdvisors) {
           out.println(
-              "\t\t"
-                  + advisorVariable
-                  + ".after("
-                  + superClass
-                  + ".class, \""
-                  + methodName
-                  + "\", null);");
+              "\t\t" + advisorVariable + ".after(" + "clazz, \"" + methodName + "\", null);");
         }
       }
 
