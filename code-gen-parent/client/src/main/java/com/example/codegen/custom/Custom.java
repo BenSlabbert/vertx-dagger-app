@@ -13,7 +13,7 @@ public @interface Custom {
   // must be string as we need a compile time constant
   // required by the code generator
   // <? extends Advice> this is the contract for the advisor
-  String advisor = "com.example.codegen.custom.CustomAdvice";
+  String ADVISOR = "com.example.codegen.custom.CustomAdvice";
 
   // following params are optional,
   // but when present, they are used by the code generator

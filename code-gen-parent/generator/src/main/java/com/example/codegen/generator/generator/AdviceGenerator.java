@@ -6,6 +6,7 @@ import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -107,7 +108,6 @@ public class AdviceGenerator extends AbstractProcessor {
       throw new GenerationException("cannot advise final class");
     }
 
-    // todo: also check for the scope (Singleton, RequestScoped, etc)
     boolean isPublic = elementToBeAdvised.getModifiers().contains(Modifier.PUBLIC);
 
     String generatedClassName = superClass + "_Advised";
@@ -295,68 +295,69 @@ public class AdviceGenerator extends AbstractProcessor {
     for (AnnotationMirror annotationMirror : method.getAnnotationMirrors()) {
       DeclaredType declaredType = annotationMirror.getAnnotationType();
       TypeElement declaredTypeElement = (TypeElement) declaredType.asElement();
-      System.err.println("element: " + declaredTypeElement);
-      TypeMirror additionalAdviceType = declaredTypeElement.asType();
-      System.err.println("additionalAdviceType: " + additionalAdviceType);
       ElementKind kind = declaredTypeElement.getKind();
-      System.err.println("kind: " + kind);
 
-      if (kind != ElementKind.ANNOTATION_TYPE) {
-        throw new GenerationException("can only process annotations");
+      String args = processingEnv.getOptions().get(PROCESS_CUSTOM);
+      Set<String> customAdvisors = Arrays.stream(args.split(",")).collect(Collectors.toSet());
+
+      if (kind != ElementKind.ANNOTATION_TYPE
+          || !customAdvisors.contains(declaredTypeElement.toString())) {
+        continue;
       }
 
-      if (!declaredTypeElement.toString().equals(processingEnv.getOptions().get(PROCESS_CUSTOM))) {
-        throw new GenerationException("can only process: " + declaredTypeElement);
-      }
-
-      // customizer fields
-      List<ExecutableElement> annotationMethods =
-          declaredTypeElement.getEnclosedElements().stream()
-              .filter(e -> e.getKind() == ElementKind.METHOD)
-              .map(e -> (ExecutableElement) e)
-              .toList();
-
-      List<VariableElement> annotationFields =
-          declaredTypeElement.getEnclosedElements().stream()
-              .filter(e -> e.getKind() == ElementKind.FIELD)
-              .map(e -> (VariableElement) e)
-              .toList();
-
-      if (annotationFields.size() != 1) {
-        throw new GenerationException("should only have one variable");
-      }
-      VariableElement advisorField = annotationFields.getFirst();
-
-      if (!"advisor".equals(advisorField.getSimpleName().toString())) {
-        throw new GenerationException("first field must be called advisor");
-      }
-
-      // default customizers
-      List<Pair> customizers = new ArrayList<>();
-      for (ExecutableElement field : annotationMethods) {
-        customizers.add(
-            new Pair(field.getSimpleName().toString(), field.getDefaultValue().toString()));
-      }
-
-      // tells me how the annotation is used
-      // update the defaults with actual values
-      var elementValues = annotationMirror.getElementValues();
-      for (var entry : elementValues.entrySet()) {
-        ExecutableElement k = entry.getKey();
-        AnnotationValue v = entry.getValue();
-        for (int i = 0; i < customizers.size(); i++) {
-          Pair pair = customizers.get(i);
-          if (pair.l.equals(k.getSimpleName().toString())) {
-            customizers.set(i, new Pair(pair.l, v.toString()));
-          }
-        }
-      }
-
-      list.add(
-          new CustomAdvisorAnnotation(advisorField.getConstantValue().toString(), customizers));
+      list.add(getCustomAdvisor(annotationMirror, declaredTypeElement));
     }
 
     return list;
+  }
+
+  private CustomAdvisorAnnotation getCustomAdvisor(
+      AnnotationMirror annotationMirror, TypeElement typeElement) {
+    // customizer fields
+    List<ExecutableElement> annotationMethods =
+        typeElement.getEnclosedElements().stream()
+            .filter(e -> e.getKind() == ElementKind.METHOD)
+            .map(e -> (ExecutableElement) e)
+            .toList();
+
+    List<VariableElement> annotationFields =
+        typeElement.getEnclosedElements().stream()
+            .filter(e -> e.getKind() == ElementKind.FIELD)
+            .map(e -> (VariableElement) e)
+            .toList();
+
+    if (annotationFields.size() != 1) {
+      throw new GenerationException("should only have one variable");
+    }
+
+    VariableElement advisorField = annotationFields.getFirst();
+
+    if (!"ADVISOR".equals(advisorField.getSimpleName().toString())) {
+      throw new GenerationException("first field must be called advisor");
+    }
+
+    // default customizers
+    List<Pair> customizers = new ArrayList<>();
+    for (ExecutableElement field : annotationMethods) {
+      customizers.add(
+          new Pair(field.getSimpleName().toString(), field.getDefaultValue().toString()));
+    }
+
+    // tells me how the annotation is used
+    // update the defaults with actual values
+    var elementValues = annotationMirror.getElementValues();
+    for (var entry : elementValues.entrySet()) {
+      ExecutableElement k = entry.getKey();
+      AnnotationValue v = entry.getValue();
+      for (int i = 0; i < customizers.size(); i++) {
+        Pair pair = customizers.get(i);
+        if (pair.l.equals(k.getSimpleName().toString())) {
+          customizers.set(i, new Pair(pair.l, v.toString()));
+        }
+      }
+    }
+
+    return new CustomAdvisorAnnotation(advisorField.getConstantValue().toString(), customizers);
   }
 
   private void printConstructor(
