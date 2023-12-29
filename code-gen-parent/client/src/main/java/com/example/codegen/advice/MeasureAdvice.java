@@ -13,11 +13,11 @@ public class MeasureAdvice implements Advice {
 
   @Override
   public void before(Class<?> clazz, String methodName, Object... args) {
-    System.out.println("before " + clazz.getName() + "." + methodName);
+    System.err.println("before " + clazz.getName() + "." + methodName);
   }
 
   @Override
   public void after(Class<?> clazz, String methodName, Object result) {
-    System.out.println("after " + clazz.getName() + "." + methodName);
+    System.err.println("after " + clazz.getName() + "." + methodName);
   }
 }

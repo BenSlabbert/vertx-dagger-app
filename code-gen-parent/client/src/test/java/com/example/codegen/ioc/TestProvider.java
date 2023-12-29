@@ -3,12 +3,13 @@ package com.example.codegen.ioc;
 
 import com.example.codegen.advice.AdviceModule;
 import com.example.codegen.client.ClientModule;
+import com.example.codegen.custom.CustomModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {AdviceModule.class, ClientModule.class})
+@Component(modules = {AdviceModule.class, ClientModule.class, CustomModule.class})
 public interface TestProvider extends Provider {
 
   @Component.Builder

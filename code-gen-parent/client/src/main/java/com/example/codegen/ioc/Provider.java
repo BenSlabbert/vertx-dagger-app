@@ -6,12 +6,14 @@ import com.example.codegen.advice.DependencyB;
 import com.example.codegen.advice.MeasureAdvice;
 import com.example.codegen.client.ClientModule;
 import com.example.codegen.client.Example;
+import com.example.codegen.custom.Client;
+import com.example.codegen.custom.CustomModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {AdviceModule.class, ClientModule.class})
+@Component(modules = {AdviceModule.class, ClientModule.class, CustomModule.class})
 public interface Provider {
 
   Example example();
@@ -19,6 +21,8 @@ public interface Provider {
   DependencyB dependencyB();
 
   MeasureAdvice measureAdvice();
+
+  Client client();
 
   @Component.Builder
   interface Builder {
