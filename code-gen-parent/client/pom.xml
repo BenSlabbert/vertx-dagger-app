@@ -113,7 +113,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <configuration>
-          <skip>${skipJooqGeneration}</skip>
           <shadedArtifactAttached>true</shadedArtifactAttached>
           <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
           <createDependencyReducedPom>false</createDependencyReducedPom>
