@@ -24,6 +24,10 @@ public interface Provider {
 
   Client client();
 
+  String string();
+
+  int integer();
+
   @Component.Builder
   interface Builder {
 
