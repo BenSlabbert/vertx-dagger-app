@@ -27,6 +27,7 @@ class ExampleTest {
     example.publicStringMethod(new DependencyA(), 1, "string");
     example.returnList("in");
     example.returnMap();
+    example.varargs(1, 2, 3);
 
     Example example2 = provider.example();
     assertThat(example).isNotSameAs(example2);

@@ -1,8 +1,9 @@
 package my.test;
 
-import java.util.List;
 import com.example.codegen.generator.annotation.Advice;
 import com.example.codegen.generator.annotation.Advised;
+import java.util.List;
+import java.util.Map;
 
 @Advised(advisors = {LogAdvice.class, MeasureAdvice.class})
 public class AdviceTest {
@@ -17,6 +18,36 @@ public class AdviceTest {
     System.out.println("publicVoidMethod");
   }
 
+  public int publicIntMethod() {
+    System.out.println("publicIntMethod");
+    return 1;
+  }
+
+  public int[] publicIntArrayMethod() {
+    System.out.println("publicIntArrayMethod");
+    return new int[] {1, 2, 3};
+  }
+
+  public String[] publicStringArrayMethod() {
+    System.out.println("publicIntArrayMethod");
+    return new String[] {};
+  }
+
+  public B[] publicBArrayMethod() {
+    System.out.println("publicBArrayMethod");
+    return new B[] {};
+  }
+
+  public A publicAMethod() {
+    System.out.println("publicAMethod");
+    return new B();
+  }
+
+  public B publicBMethod() {
+    System.out.println("publicBMethod");
+    return new B();
+  }
+
   public String publicStringMethod(String in, int i, Object obj) {
     System.out.println("publicVoidMethod");
     return in;
@@ -24,6 +55,41 @@ public class AdviceTest {
 
   public List<String> returnList(String in) {
     System.out.println("publicVoidMethod");
+    return List.of(in);
+  }
+
+  public Map<String, ? extends CharSequence> returnMapExtends() {
+    System.out.println("returnMap");
+    return Map.of();
+  }
+
+  public Map<String, ? super CharSequence> returnMapSuper() {
+    System.out.println("returnMap");
+    return Map.of();
+  }
+
+  public Map<? extends String, ? super CharSequence> returnMapSuperExtends() {
+    System.out.println("returnMap");
+    return Map.of();
+  }
+
+  public List<? extends String> returnListGenericExtends(String in) {
+    System.out.println("returnListGenericExtends");
+    return List.of(in);
+  }
+
+  public List<? super String> returnListGenericSuper(String in) {
+    System.out.println("returnListGenericSuper");
+    return List.of(in);
+  }
+
+  public List<?> returnListGenericWildcard(String in) {
+    System.out.println("returnListGenericWildcard");
+    return List.of(in);
+  }
+
+  public List returnListGenericRaw(String in) {
+    System.out.println("returnListGenericRaw");
     return List.of(in);
   }
 
@@ -41,6 +107,10 @@ public class AdviceTest {
     System.out.println("publicVoidMethod");
     return in;
   }
+
+  interface A {}
+
+  class B implements A {}
 }
 
 class LogAdvice implements Advice {

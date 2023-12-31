@@ -5,6 +5,7 @@ import com.example.codegen.advice.DependencyB;
 import com.example.codegen.advice.MeasureAdvice;
 import com.example.codegen.custom.Custom;
 import com.example.codegen.generator.annotation.Advised;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -46,6 +47,11 @@ public class Example {
     return Map.of();
   }
 
+  protected String[] protectedStringArrMethod(String in) {
+    System.out.println("publicVoidMethod");
+    return new String[] {in};
+  }
+
   protected String protectedStringMethod(String in) {
     System.out.println("publicVoidMethod");
     return in;
@@ -54,6 +60,15 @@ public class Example {
   DependencyB packagePrivateStringMethod(DependencyB in) {
     System.out.println("publicVoidMethod");
     return in;
+  }
+
+  public int primitiveMethod(int in) {
+    System.out.println("primitiveMethod");
+    return in;
+  }
+
+  public void varargs(int... in) {
+    System.out.println("varargs: " + Arrays.toString(in));
   }
 
   private String privateStringMethod(String in) {
