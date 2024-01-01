@@ -23,7 +23,7 @@ public class SchemaValidatorDelegator {
   private final SchemaValidator schemaValidator;
 
   @Inject
-  public SchemaValidatorDelegator(Config.HttpConfig httpConfig) {
+  SchemaValidatorDelegator(Config.HttpConfig httpConfig) {
     this.schemaValidator = new SchemaValidator(httpConfig, getRegistry());
   }
 

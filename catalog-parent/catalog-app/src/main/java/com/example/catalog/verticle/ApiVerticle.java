@@ -7,9 +7,12 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
+import com.example.commons.web.IntegerParser;
+import com.example.commons.web.LongParser;
+import com.example.commons.web.RequestParser;
+import com.example.commons.web.StringParser;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.impl.logging.Logger;
@@ -17,20 +20,14 @@ import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.HttpException;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.sqlclient.Pool;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.LongConsumer;
 import javax.inject.Inject;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.math.NumberUtils;
 
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ApiVerticle extends AbstractVerticle {
@@ -91,26 +88,73 @@ public class ApiVerticle extends AbstractVerticle {
     apiRouter
         .get("/items")
         .handler(
-            ctx ->
-                processWithPaginationParams(ctx, (from, to) -> itemHandler.findAll(ctx, from, to)));
+            ctx -> {
+              RequestParser rp = RequestParser.create(ctx);
+              Long lastId = rp.getQueryParam("lastId", 0L, LongParser.create());
+              Integer size = rp.getQueryParam("size", 10, IntegerParser.create());
+              itemHandler.findAll(ctx, new ItemHandler.FindAllRequestDto(lastId, size));
+            });
 
     apiRouter.post("/create").handler(itemHandler::create);
 
     apiRouter
         .get("/suggest")
-        .handler(ctx -> processWithRequiredSuggestParam(ctx, s -> itemHandler.suggest(ctx, s)));
+        .handler(
+            ctx -> {
+              RequestParser rp = RequestParser.create(ctx);
+              String s = rp.getQueryParam("s", "", StringParser.create());
+              if (null == s || s.isEmpty()) {
+                ctx.fail(new HttpException(BAD_REQUEST.code()));
+                return;
+              }
+
+              itemHandler.suggest(ctx, s);
+            });
 
     apiRouter
         .get("/:id")
-        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.findOne(ctx, id)));
+        .handler(
+            ctx -> {
+              RequestParser rp = RequestParser.create(ctx);
+              Long id = rp.getPathParam("id", LongParser.create());
+
+              if (null == id) {
+                ctx.fail(new HttpException(BAD_REQUEST.code()));
+                return;
+              }
+
+              itemHandler.findOne(ctx, id);
+            });
 
     apiRouter
         .delete("/:id")
-        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.deleteOne(ctx, id)));
+        .handler(
+            ctx -> {
+              RequestParser rp = RequestParser.create(ctx);
+              Long id = rp.getPathParam("id", LongParser.create());
+
+              if (null == id) {
+                ctx.fail(new HttpException(BAD_REQUEST.code()));
+                return;
+              }
+
+              itemHandler.deleteOne(ctx, id);
+            });
 
     apiRouter
         .post("/edit/:id")
-        .handler(ctx -> processWithRequiredIdParam(ctx, id -> itemHandler.update(ctx, id)));
+        .handler(
+            ctx -> {
+              RequestParser rp = RequestParser.create(ctx);
+              Long id = rp.getPathParam("id", LongParser.create());
+
+              if (null == id) {
+                ctx.fail(new HttpException(BAD_REQUEST.code()));
+                return;
+              }
+
+              itemHandler.update(ctx, id);
+            });
 
     // https://vertx.io/docs/vertx-health-check/java/
     mainRouter
@@ -138,62 +182,6 @@ public class ApiVerticle extends AbstractVerticle {
 
   private Future<?> checkRedisConnection(Promise<Void> startPromise) {
     return redisAPI.ping(List.of()).onFailure(startPromise::fail);
-  }
-
-  private void processWithRequiredIdParam(RoutingContext ctx, LongConsumer consumer) {
-    Optional<Long> id = parseLong(ctx.pathParam("id"));
-
-    if (id.isEmpty()) {
-      ctx.fail(new HttpException(BAD_REQUEST.code()));
-      return;
-    }
-
-    consumer.accept(id.get());
-  }
-
-  private void processWithRequiredSuggestParam(RoutingContext ctx, Consumer<String> consumer) {
-    MultiMap entries = ctx.queryParams();
-    String search = entries.get("s");
-
-    if (null == search || search.isEmpty()) {
-      ctx.fail(new HttpException(BAD_REQUEST.code()));
-      return;
-    }
-
-    consumer.accept(search);
-  }
-
-  private void processWithPaginationParams(RoutingContext ctx, BiConsumer<Long, Integer> consumer) {
-    MultiMap entries = ctx.queryParams();
-
-    Optional<Long> lastId = parseLong(entries.get("lastId"));
-    Optional<Integer> size = parseInteger(entries.get("size"));
-
-    consumer.accept(lastId.orElse(0L), size.orElse(10));
-  }
-
-  private Optional<Integer> parseInteger(String maybeInt) {
-    if (null == maybeInt || maybeInt.isEmpty()) {
-      return Optional.empty();
-    }
-
-    if (NumberUtils.isCreatable(maybeInt)) {
-      return Optional.of(NumberUtils.createInteger(maybeInt));
-    }
-
-    return Optional.empty();
-  }
-
-  private Optional<Long> parseLong(String maybeInt) {
-    if (null == maybeInt || maybeInt.isEmpty()) {
-      return Optional.empty();
-    }
-
-    if (NumberUtils.isCreatable(maybeInt)) {
-      return Optional.of(NumberUtils.createLong(maybeInt));
-    }
-
-    return Optional.empty();
   }
 
   @Override

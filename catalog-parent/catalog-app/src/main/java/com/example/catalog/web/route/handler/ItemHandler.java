@@ -31,7 +31,7 @@ public class ItemHandler {
   private final SchemaValidatorDelegator schemaValidatorDelegator;
 
   @Inject
-  public ItemHandler(ItemService itemService, SchemaValidatorDelegator schemaValidatorDelegator) {
+  ItemHandler(ItemService itemService, SchemaValidatorDelegator schemaValidatorDelegator) {
     this.itemService = itemService;
     this.schemaValidatorDelegator = schemaValidatorDelegator;
   }
@@ -53,9 +53,11 @@ public class ItemHandler {
                     .onFailure(ctx::fail));
   }
 
-  public void findAll(RoutingContext ctx, long lastId, int size) {
+  public record FindAllRequestDto(long lastId, int size) {}
+
+  public void findAll(RoutingContext ctx, FindAllRequestDto req) {
     itemService
-        .findAll(lastId, size)
+        .findAll(req.lastId(), req.size())
         .onFailure(
             err -> {
               log.error("failed to find all items", err);

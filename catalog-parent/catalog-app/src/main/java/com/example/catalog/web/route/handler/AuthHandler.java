@@ -24,7 +24,7 @@ public class AuthHandler implements Handler<RoutingContext> {
   private final AuthenticationIntegration authenticationIntegration;
 
   @Inject
-  public AuthHandler(AuthenticationIntegration authenticationIntegration) {
+  AuthHandler(AuthenticationIntegration authenticationIntegration) {
     this.authenticationIntegration = authenticationIntegration;
   }
 
