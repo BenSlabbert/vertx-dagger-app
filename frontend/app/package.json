@@ -35,7 +35,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@picocss/pico": "^1.5.10",
+		"@picocss/pico": "^1.5.11",
 		"@yarnpkg/plugin-interactive-tools": "^4.0.0",
 		"winston": "^3.11.0",
 		"zod": "^3.22.4",
