@@ -68,7 +68,7 @@
     <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
     <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
     <maven-resource-plugin.version>3.3.1</maven-resource-plugin.version>
-    <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
+    <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
     <native-maven-plugin.version>0.9.28</native-maven-plugin.version>
     <spotless.version>2.41.1</spotless.version>
     <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
