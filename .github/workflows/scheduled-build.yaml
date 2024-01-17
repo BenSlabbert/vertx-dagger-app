@@ -24,10 +24,3 @@ jobs:
     - run: "make M='/tmp/mvnd/bin/mvnd -DskipTests=true -Djava.util.logging.config.file=$(pwd)/logging.properties\
         \ --fail-at-end' package"
     - run: "make M='/tmp/mvnd/bin/mvnd' native"
-    - run: "make M='/tmp/mvnd/bin/mvnd' dockerSave"
-    - uses: "actions/upload-artifact@v4"
-      if: "always()"
-      with:
-        name: "upx-native-binaries"
-        path: "bin/"
-        retention-days: 30
