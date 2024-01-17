@@ -12,8 +12,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>client</module>
-    <module>generator</module>
+    <module>code-gen-client</module>
+    <module>code-gen-generator</module>
   </modules>
 
 </project>

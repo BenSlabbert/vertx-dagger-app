@@ -8,7 +8,7 @@
   </parent>
 
   <groupId>org.example.code-gen</groupId>
-  <artifactId>generator</artifactId>
+  <artifactId>code-gen-generator</artifactId>
 
   <dependencies>
     <dependency>

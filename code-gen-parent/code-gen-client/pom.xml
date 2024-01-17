@@ -8,13 +8,18 @@
   </parent>
 
   <groupId>org.example.code-gen</groupId>
-  <artifactId>client</artifactId>
+  <artifactId>code-gen-client</artifactId>
 
   <properties>
     <exec.mainClass>com.example.codegen.Main</exec.mainClass>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.example.code-gen</groupId>
+      <artifactId>code-gen-generator</artifactId>
+      <version>${revision}</version>
+    </dependency>
     <dependency>
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger</artifactId>
@@ -23,11 +28,6 @@
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger-compiler</artifactId>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.example.code-gen</groupId>
-      <artifactId>generator</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
