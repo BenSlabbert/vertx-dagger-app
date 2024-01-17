@@ -2,7 +2,7 @@
 package com.example.catalog;
 
 import static com.example.commons.FreePortUtility.getPort;
-import static com.example.commons.config.Config.ServiceRegistryConfig.Protocol.GRPC;
+import static com.example.commons.config.Config.ServiceRegistryConfig.Protocol.RPC;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -16,11 +16,14 @@ import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.iam.rpc.api.CheckTokenResponse;
+import com.example.iam.rpc.api.IamRpcService;
+import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;
 import com.example.migration.FlywayProvider;
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
@@ -57,6 +60,8 @@ public abstract class PersistenceTest {
 
   private static final AtomicInteger counter = new AtomicInteger(0);
   private static final Network network = Network.newNetwork();
+
+  private MessageConsumer<JsonObject> register;
 
   protected static final GenericContainer<?> redis =
       new GenericContainer<>(DockerImageName.parse("redis/redis-stack-server:latest"))
@@ -135,7 +140,7 @@ public abstract class PersistenceTest {
             Map.of(
                 Config.ServiceIdentifier.IAM,
                 Config.ServiceRegistryConfig.builder()
-                    .protocol(GRPC)
+                    .protocol(RPC)
                     .port(GRPC_PORT)
                     .host("127.0.0.1")
                     .build()),
@@ -154,6 +159,18 @@ public abstract class PersistenceTest {
             .build();
     provider.init();
 
+    register =
+        new IamRpcServiceVertxProxyHandler(
+                vertx,
+                request ->
+                    Future.succeededFuture(
+                        CheckTokenResponse.builder()
+                            .valid(true)
+                            .userAttributes(new JsonObject().encode())
+                            .userPrincipal(new JsonObject().encode())
+                            .build()))
+            .register(vertx.eventBus(), IamRpcService.ADDRESS);
+
     JsonObject cfg = config.encode();
     vertx.deployVerticle(
         new ApiVerticle(),
@@ -169,6 +186,7 @@ public abstract class PersistenceTest {
 
   @AfterEach
   void after() {
+    register.unregister();
     RestAssured.reset();
     for (AutoCloseable closeable : provider.closeables()) {
       try {

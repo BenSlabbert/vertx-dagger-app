@@ -37,7 +37,7 @@ class ParseConfigTest {
                           },
                           "serviceRegistryConfig": {
                             "IAM": {
-                              "protocol": "GRPC",
+                              "protocol": "RPC",
                               "host": "iam",
                               "port":  50051
                             }
@@ -60,7 +60,7 @@ class ParseConfigTest {
                     Map.of(
                         Config.ServiceIdentifier.IAM,
                         Config.ServiceRegistryConfig.builder()
-                            .protocol(Config.ServiceRegistryConfig.Protocol.GRPC)
+                            .protocol(Config.ServiceRegistryConfig.Protocol.RPC)
                             .host("iam")
                             .port(50051)
                             .build()))

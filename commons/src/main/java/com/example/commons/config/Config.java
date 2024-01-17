@@ -180,7 +180,7 @@ public record Config(
   public record ServiceRegistryConfig(Protocol protocol, String host, int port) {
 
     public enum Protocol {
-      GRPC("GRPC"),
+      RPC("RPC"),
       REST("REST");
 
       private final String name;
