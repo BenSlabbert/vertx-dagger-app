@@ -2,6 +2,7 @@
 package com.example.catalog;
 
 import static com.example.commons.FreePortUtility.getPort;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -12,13 +13,11 @@ import com.example.catalog.ioc.TestMockRepositoryProvider;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
 import com.example.commons.config.Config;
-import com.example.iam.grpc.iam.CheckTokenResponse;
-import io.restassured.RestAssured;
+import com.example.iam.rpc.api.CheckTokenResponse;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
-import io.vertx.junit5.VertxTestContext;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.SqlConnection;
@@ -26,10 +25,8 @@ import io.vertx.sqlclient.Transaction;
 import java.util.Map;
 import java.util.Set;
 import org.jooq.DSLContext;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 
 @ExtendWith(VertxExtension.class)
 public abstract class MockRepositoryTest {
@@ -42,26 +39,26 @@ public abstract class MockRepositoryTest {
   protected SuggestionService suggestionService = mock(SuggestionService.class);
   protected ItemRepository itemRepository = mock(ItemRepository.class);
   protected DSLContext dslContext = mock(DSLContext.class);
-  protected Pool pool = mock(Pool.class);
   protected RedisAPI redisAPI = mock(RedisAPI.class);
+  protected Pool pool = mock(Pool.class);
 
   @BeforeEach
-  void prepare(Vertx vertx, VertxTestContext testContext) {
+  void prepare(Vertx vertx) {
     AuthenticationIntegration authHandler = mock(AuthenticationIntegration.class);
     when(authHandler.isTokenValid(anyString()))
         .thenReturn(
             Future.succeededFuture(
-                CheckTokenResponse.newBuilder()
-                    .setValid(true)
-                    .setUserPrincipal(JsonObject.of().encode())
-                    .setUserAttributes(JsonObject.of().encode())
+                CheckTokenResponse.builder()
+                    .valid(true)
+                    .userPrincipal(JsonObject.of().encode())
+                    .userAttributes(JsonObject.of().encode())
                     .build()));
 
     // needed for transaction boundary
     SqlConnection sqlConnection = mock(SqlConnection.class);
     Transaction transaction = mock(Transaction.class);
 
-    when(redisAPI.ping(Mockito.any())).thenReturn(Future.succeededFuture(null));
+    when(redisAPI.ping(any())).thenReturn(Future.succeededFuture(null));
 
     when(pool.getConnection()).thenReturn(Future.succeededFuture(sqlConnection));
     when(sqlConnection.begin()).thenReturn(Future.succeededFuture(transaction));
@@ -95,18 +92,5 @@ public abstract class MockRepositoryTest {
             .dslContext(dslContext)
             .build();
     provider.init();
-
-    vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
-  }
-
-  @BeforeEach
-  void before() {
-    RestAssured.baseURI = "http://localhost";
-    RestAssured.port = HTTP_PORT;
-  }
-
-  @AfterEach
-  void after() {
-    RestAssured.reset();
   }
 }

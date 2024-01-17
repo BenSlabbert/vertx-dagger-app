@@ -58,8 +58,8 @@ public class AuthHandler implements Handler<RoutingContext> {
             })
         .onSuccess(
             resp -> {
-              log.info("token valid? " + resp.getValid());
-              if (resp.getValid()) {
+              log.info("token valid? " + resp.isValid());
+              if (resp.isValid()) {
                 JsonObject principal = new JsonObject(resp.getUserPrincipal());
                 JsonObject attributes = new JsonObject(resp.getUserAttributes());
                 ctx.setUser(User.create(principal, attributes));

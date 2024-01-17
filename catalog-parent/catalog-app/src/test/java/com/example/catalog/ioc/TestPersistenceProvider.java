@@ -8,8 +8,6 @@ import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ServiceModule;
 import com.example.commons.saga.SagaModule;
 import dagger.Component;
-import io.vertx.redis.client.RedisAPI;
-import io.vertx.sqlclient.Pool;
 import java.util.Set;
 import javax.inject.Singleton;
 
@@ -21,15 +19,12 @@ import javax.inject.Singleton;
       MapperModule.class,
       ServiceModule.class,
       SagaModule.class,
+      IamRpcServiceProvider.class,
       Provider.EagerModule.class
     })
 public interface TestPersistenceProvider extends Provider {
 
   ItemRepository itemRepository();
-
-  Pool pool();
-
-  RedisAPI redisAPI();
 
   Set<AutoCloseable> closeables();
 

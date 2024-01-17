@@ -6,12 +6,11 @@ import static com.example.commons.mesage.Headers.SAGA_ROLLBACK_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.commons.TestBase;
-import com.example.commons.proto.v1.Proto;
-import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.Checkpoint;
 import io.vertx.junit5.VertxTestContext;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,12 +29,12 @@ class SagaExecutorTest extends TestBase {
         new SagaStageHandler() {
 
           @Override
-          public Future<GeneratedMessageV3> getCommand(String sagaId) {
-            return Future.succeededFuture(Proto.getDefaultInstance());
+          public Future<JsonObject> getCommand(String sagaId) {
+            return Future.succeededFuture(new JsonObject());
           }
 
           @Override
-          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+          public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
             return Future.succeededFuture(true);
           }
 
@@ -49,12 +48,12 @@ class SagaExecutorTest extends TestBase {
         new SagaStageHandler() {
 
           @Override
-          public Future<GeneratedMessageV3> getCommand(String sagaId) {
-            return Future.succeededFuture(Proto.getDefaultInstance());
+          public Future<JsonObject> getCommand(String sagaId) {
+            return Future.succeededFuture(new JsonObject());
           }
 
           @Override
-          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+          public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
             return Future.succeededFuture(true);
           }
 
@@ -76,7 +75,7 @@ class SagaExecutorTest extends TestBase {
               String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
               System.err.printf("CMD.1: sagaId %s rollback ? %b%n", sagaId, rollback);
 
-              msg.reply(Proto.getDefaultInstance());
+              msg.reply(new JsonObject());
             });
     vertx
         .eventBus()
@@ -90,7 +89,7 @@ class SagaExecutorTest extends TestBase {
               String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
               System.err.printf("CMD.2: sagaId %s rollback ? %b%n", sagaId, rollback);
 
-              msg.reply(Proto.getDefaultInstance());
+              msg.reply(new JsonObject());
             });
 
     SagaExecutor sagaExecutor =
@@ -125,12 +124,12 @@ class SagaExecutorTest extends TestBase {
         new SagaStageHandler() {
 
           @Override
-          public Future<GeneratedMessageV3> getCommand(String sagaId) {
-            return Future.succeededFuture(Proto.getDefaultInstance());
+          public Future<JsonObject> getCommand(String sagaId) {
+            return Future.succeededFuture(new JsonObject());
           }
 
           @Override
-          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+          public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
             return Future.succeededFuture(true);
           }
 
@@ -144,12 +143,12 @@ class SagaExecutorTest extends TestBase {
         new SagaStageHandler() {
 
           @Override
-          public Future<GeneratedMessageV3> getCommand(String sagaId) {
-            return Future.succeededFuture(Proto.getDefaultInstance());
+          public Future<JsonObject> getCommand(String sagaId) {
+            return Future.succeededFuture(new JsonObject());
           }
 
           @Override
-          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+          public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
             return Future.failedFuture(new NoStackTraceException("planned exception"));
           }
 
@@ -162,13 +161,13 @@ class SagaExecutorTest extends TestBase {
     SagaStageHandler stageHandler3 =
         new SagaStageHandler() {
           @Override
-          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+          public Future<JsonObject> getCommand(String sagaId) {
             testContext.failNow("should not be called");
             return null;
           }
 
           @Override
-          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+          public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
             testContext.failNow("should not be called");
             return null;
           }
@@ -192,7 +191,7 @@ class SagaExecutorTest extends TestBase {
               String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
               System.err.printf("CMD.1: sagaId %s rollback ? %b%n", sagaId, rollback);
 
-              msg.reply(Proto.getDefaultInstance());
+              msg.reply(new JsonObject());
             });
     vertx
         .eventBus()
@@ -206,7 +205,7 @@ class SagaExecutorTest extends TestBase {
               String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
               System.err.printf("CMD.2: sagaId %s rollback ? %b%n", sagaId, rollback);
 
-              msg.reply(Proto.getDefaultInstance());
+              msg.reply(new JsonObject());
             });
 
     vertx.eventBus().consumer("CMD.3", msg -> testContext.failNow("should not be called"));
@@ -245,12 +244,12 @@ class SagaExecutorTest extends TestBase {
     SagaStageHandler stageHandler1 =
         new SagaStageHandler() {
           @Override
-          public Future<GeneratedMessageV3> getCommand(String sagaId) {
-            return Future.succeededFuture(Proto.getDefaultInstance());
+          public Future<JsonObject> getCommand(String sagaId) {
+            return Future.succeededFuture(new JsonObject());
           }
 
           @Override
-          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+          public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
             return Future.succeededFuture(true);
           }
 
@@ -263,12 +262,12 @@ class SagaExecutorTest extends TestBase {
     SagaStageHandler stageHandler2 =
         new SagaStageHandler() {
           @Override
-          public Future<GeneratedMessageV3> getCommand(String sagaId) {
-            return Future.succeededFuture(Proto.getDefaultInstance());
+          public Future<JsonObject> getCommand(String sagaId) {
+            return Future.succeededFuture(new JsonObject());
           }
 
           @Override
-          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+          public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
             return Future.succeededFuture(true);
           }
 
@@ -281,13 +280,13 @@ class SagaExecutorTest extends TestBase {
     SagaStageHandler stageHandler3 =
         new SagaStageHandler() {
           @Override
-          public Future<GeneratedMessageV3> getCommand(String sagaId) {
+          public Future<JsonObject> getCommand(String sagaId) {
             testContext.failNow("should not be called");
             return null;
           }
 
           @Override
-          public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+          public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
             testContext.failNow("should not be called");
             return null;
           }
@@ -311,7 +310,7 @@ class SagaExecutorTest extends TestBase {
               String rollback = msg.headers().get(SAGA_ROLLBACK_HEADER);
               System.err.printf("CMD.1: sagaId %s rollback ? %b%n", sagaId, rollback);
 
-              msg.reply(Proto.getDefaultInstance());
+              msg.reply(new JsonObject());
             });
 
     AtomicBoolean atomicBoolean = new AtomicBoolean(false);
@@ -330,7 +329,7 @@ class SagaExecutorTest extends TestBase {
               if (atomicBoolean.compareAndSet(false, true)) {
                 msg.fail(1, sagaId);
               } else {
-                msg.reply(Proto.getDefaultInstance());
+                msg.reply(new JsonObject());
               }
             });
 

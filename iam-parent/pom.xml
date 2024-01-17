@@ -12,9 +12,9 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>iam-proto</module>
     <module>iam-app</module>
-    <module>iam-grpc</module>
+    <module>iam-rpc</module>
+    <module>iam-rpc-api</module>
   </modules>
 
 </project>

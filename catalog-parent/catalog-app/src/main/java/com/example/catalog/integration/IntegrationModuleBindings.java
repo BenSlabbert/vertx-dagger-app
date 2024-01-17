@@ -3,15 +3,10 @@ package com.example.catalog.integration;
 
 import dagger.Binds;
 import dagger.Module;
-import dagger.multibindings.IntoSet;
 
 @Module
 interface IntegrationModuleBindings {
 
   @Binds
   AuthenticationIntegration toAuthenticationIntegration(IamIntegration iamIntegration);
-
-  @Binds
-  @IntoSet
-  AutoCloseable asAutoCloseable(IamIntegration iamIntegration);
 }

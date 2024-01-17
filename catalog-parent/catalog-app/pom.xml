@@ -13,13 +13,20 @@
 
   <properties>
     <finalName>catalog</finalName>
-    <exec.mainClass>com.example.catalog.Main</exec.mainClass>
+    <launcher.class>com.example.payment.PaymentAppLauncher</launcher.class>
+    <main.verticle>com.example.payment.verticle.WorkerVerticle</main.verticle>
+    <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->
     <testImageTag>jvm</testImageTag>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.example.catalog.api</groupId>
+      <artifactId>catalog-api</artifactId>
+      <version>${revision}</version>
+    </dependency>
     <dependency>
       <groupId>com.example.catalog.entity</groupId>
       <artifactId>catalog-entity</artifactId>
@@ -34,11 +41,6 @@
     <dependency>
       <groupId>com.example.catalog.projection</groupId>
       <artifactId>catalog-projection</artifactId>
-      <version>${revision}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.example.catalog.proto</groupId>
-      <artifactId>catalog-proto</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>
@@ -74,8 +76,8 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.example.iam</groupId>
-      <artifactId>iam-proto</artifactId>
+      <groupId>com.example.iam.rpc.api</groupId>
+      <artifactId>iam-rpc-api</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>
@@ -92,11 +94,11 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-grpc-client</artifactId>
+      <artifactId>vertx-health-check</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-health-check</artifactId>
+      <artifactId>vertx-opentelemetry</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>

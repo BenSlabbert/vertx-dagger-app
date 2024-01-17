@@ -4,6 +4,7 @@ package com.example.catalog.ioc;
 import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
+import com.example.catalog.service.ItemService;
 import com.example.catalog.service.ServiceModule;
 import com.example.commons.saga.SagaModule;
 import dagger.BindsInstance;
@@ -20,9 +21,12 @@ import org.jooq.DSLContext;
       MapperModule.class,
       SagaModule.class,
       ServiceModule.class,
+      IamRpcServiceProvider.class,
       Provider.EagerModule.class
     })
 public interface TestMockRepositoryProvider extends Provider {
+
+  ItemService itemService();
 
   @Component.Builder
   interface Builder extends BaseBuilder<Builder, TestMockRepositoryProvider> {

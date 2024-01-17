@@ -2,34 +2,24 @@
 package com.example.catalog.integration;
 
 import com.example.commons.config.Config;
-import com.example.iam.grpc.iam.CheckTokenRequest;
-import com.example.iam.grpc.iam.CheckTokenResponse;
-import com.example.iam.grpc.iam.IamGrpc;
+import com.example.iam.rpc.api.CheckTokenRequest;
+import com.example.iam.rpc.api.CheckTokenResponse;
+import com.example.iam.rpc.api.IamRpcService;
 import io.vertx.core.Future;
-import io.vertx.core.Vertx;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
-import io.vertx.core.net.SocketAddress;
-import io.vertx.grpc.client.GrpcClient;
-import io.vertx.grpc.common.GrpcReadStream;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-class IamIntegration implements AuthenticationIntegration, AutoCloseable {
+class IamIntegration implements AuthenticationIntegration {
 
-  private static final Logger log = LoggerFactory.getLogger(IamIntegration.class);
-
-  private final GrpcClient client;
-  private final SocketAddress server;
+  private final IamRpcService iamRpcService;
 
   @Inject
   IamIntegration(
-      Vertx vertx,
+      IamRpcService iamRpcService,
       Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig>
           serviceIdentifierServiceRegistryConfigMap) {
-    this.client = GrpcClient.client(vertx);
 
     Config.ServiceRegistryConfig serviceRegistryConfig =
         serviceIdentifierServiceRegistryConfigMap.get(Config.ServiceIdentifier.IAM);
@@ -38,23 +28,10 @@ class IamIntegration implements AuthenticationIntegration, AutoCloseable {
       throw new IllegalArgumentException("config cannot be null");
     }
 
-    this.server =
-        SocketAddress.inetSocketAddress(serviceRegistryConfig.port(), serviceRegistryConfig.host());
+    this.iamRpcService = iamRpcService;
   }
 
   public Future<CheckTokenResponse> isTokenValid(String token) {
-    return client
-        .request(server, IamGrpc.getCheckTokenMethod())
-        .compose(
-            request -> {
-              request.end(CheckTokenRequest.newBuilder().setToken(token).build());
-              return request.response().compose(GrpcReadStream::last);
-            });
-  }
-
-  @Override
-  public void close() {
-    log.info("closing iam grpc client");
-    this.client.close();
+    return iamRpcService.check(CheckTokenRequest.builder().token(token).build());
   }
 }

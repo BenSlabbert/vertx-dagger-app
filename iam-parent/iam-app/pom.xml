@@ -41,21 +41,12 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.example.iam</groupId>
-      <artifactId>iam-proto</artifactId>
-      <version>${revision}</version>
-    </dependency>
-    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-auth-jwt</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-grpc-server</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -145,11 +136,6 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-grpc-client</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

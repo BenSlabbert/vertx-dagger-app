@@ -4,10 +4,10 @@ package com.example.catalog.service;
 import static com.example.commons.mesage.Headers.SAGA_ID_HEADER;
 import static com.example.commons.mesage.Headers.SAGA_ROLLBACK_HEADER;
 
-import com.example.catalog.proto.saga.v1.CreatePurchaseOrderResponse;
-import com.example.catalog.proto.saga.v1.CreatePurchaseOrderSuccessResponse;
+import com.example.catalog.api.saga.CreatePurchaseOrderRequest;
+import com.example.catalog.api.saga.CreatePurchaseOrderResponse;
+import com.example.catalog.api.saga.CreatePurchaseOrderSuccessResponse;
 import com.example.commons.mesage.Consumer;
-import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
@@ -16,6 +16,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
+import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import javax.inject.Inject;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,13 @@ import lombok.RequiredArgsConstructor;
 class CreatePaymentConsumer implements Consumer {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentConsumer.class);
-  private static final String CMD_ADDRESS = "Saga.Catalog.CreatePurchaseOrder";
+  private static final String CMD_ADDRESS = CreatePurchaseOrderRequest.CREATE_PURCHASE_ORDER_TOPIC;
 
   private final Vertx vertx;
 
-  private MessageConsumer<GeneratedMessageV3> consumer;
+  private MessageConsumer<JsonObject> consumer;
 
-  private void handle(Message<GeneratedMessageV3> message) {
+  private void handle(Message<JsonObject> message) {
     log.info("handle message: %s".formatted(CMD_ADDRESS));
 
     MultiMap headers = message.headers();
@@ -43,8 +44,8 @@ class CreatePaymentConsumer implements Consumer {
     }
 
     CreatePurchaseOrderResponse response =
-        CreatePurchaseOrderResponse.newBuilder()
-            .setSuccess(CreatePurchaseOrderSuccessResponse.newBuilder().setSagaId(sagaId).build())
+        CreatePurchaseOrderResponse.builder()
+            .successResponse(CreatePurchaseOrderSuccessResponse.builder().sagaId(sagaId).build())
             .build();
 
     log.info("sending reply");

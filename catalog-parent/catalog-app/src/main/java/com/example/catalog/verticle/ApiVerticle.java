@@ -4,9 +4,14 @@ package com.example.catalog.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
-import com.example.catalog.web.route.handler.AuthHandler;
+import com.example.catalog.ioc.DaggerProvider;
+import com.example.catalog.ioc.Provider;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
+import com.example.commons.config.ParseConfig;
+import com.example.commons.future.FutureUtil;
+import com.example.commons.future.MultiCompletePromise;
+import com.example.commons.mesage.Consumer;
 import com.example.commons.web.IntegerParser;
 import com.example.commons.web.LongParser;
 import com.example.commons.web.RequestParser;
@@ -17,34 +22,63 @@ import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.HttpException;
-import io.vertx.redis.client.RedisAPI;
-import io.vertx.sqlclient.Pool;
 import java.util.List;
-import javax.inject.Inject;
-import lombok.RequiredArgsConstructor;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import lombok.NoArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ApiVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(ApiVerticle.class);
 
-  private final AuthHandler authHandler;
-  private final Config.HttpConfig httpConfig;
-  private final ItemHandler itemHandler;
-  private final Pool pool;
-  private final RedisAPI redisAPI;
+  private Provider dagger;
+  private Set<Consumer> consumers = Set.of();
+
+  private void init() {
+    log.info("ApiVerticle constructor");
+    JsonObject cfg = config();
+    Config config = ParseConfig.get(cfg);
+
+    Objects.requireNonNull(vertx);
+    Objects.requireNonNull(config);
+    Objects.requireNonNull(config.postgresConfig());
+    Objects.requireNonNull(config.httpConfig());
+    Objects.requireNonNull(config.redisConfig());
+    Objects.requireNonNull(config.verticleConfig());
+    Objects.requireNonNull(config.serviceRegistryConfig());
+
+    this.dagger =
+        DaggerProvider.builder()
+            .vertx(vertx)
+            .config(config)
+            .httpConfig(config.httpConfig())
+            .redisConfig(config.redisConfig())
+            .verticleConfig(config.verticleConfig())
+            .serviceRegistryConfig(config.serviceRegistryConfig())
+            .postgresConfig(config.postgresConfig())
+            .build();
+
+    this.dagger.init();
+  }
 
   @Override
   public void start(Promise<Void> startPromise) {
+    init();
+    log.info("starting ApiVerticle");
+
     checkConnections(startPromise)
         .onSuccess(
             ignore -> {
+              Config.HttpConfig httpConfig = dagger.config().httpConfig();
               log.info("starting api verticle on port: " + httpConfig.port());
 
               vertx
@@ -55,6 +89,9 @@ public class ApiVerticle extends AbstractVerticle {
                       res -> {
                         if (res.succeeded()) {
                           log.info("started http server");
+                          log.info("register consumers");
+                          consumers = dagger.consumers();
+                          consumers.forEach(Consumer::register);
                           startPromise.complete();
                         } else {
                           log.error("failed to start verticle", res.cause());
@@ -73,7 +110,7 @@ public class ApiVerticle extends AbstractVerticle {
         // CORS config
         .handler(CorsHandler.create())
         // auth handler
-        .handler(authHandler);
+        .handler(dagger.authHandler());
 
     // main routes
     mainRouter
@@ -81,6 +118,8 @@ public class ApiVerticle extends AbstractVerticle {
         // 100kB max body size
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L))
         .subRouter(apiRouter);
+
+    ItemHandler itemHandler = dagger.itemHandler();
 
     // api routes
     apiRouter.post("/execute").handler(itemHandler::execute);
@@ -171,7 +210,9 @@ public class ApiVerticle extends AbstractVerticle {
   }
 
   private Future<?> checkDbConnection(Promise<Void> startPromise) {
-    return pool.getConnection()
+    return dagger
+        .pool()
+        .getConnection()
         .onFailure(startPromise::fail)
         .onSuccess(
             conn ->
@@ -181,12 +222,41 @@ public class ApiVerticle extends AbstractVerticle {
   }
 
   private Future<?> checkRedisConnection(Promise<Void> startPromise) {
-    return redisAPI.ping(List.of()).onFailure(startPromise::fail);
+    return dagger.redisAPI().ping(List.of()).onFailure(startPromise::fail);
   }
 
+  @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void stop(Promise<Void> stopPromise) {
-    log.warn("stopping");
-    stopPromise.complete();
+    System.err.println("stopping");
+    MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
+
+    Set<AutoCloseable> closeables = dagger.providesServiceLifecycleManagement().closeables();
+    System.err.printf("closing created resources [%d]...%n", closeables.size());
+
+    Future.all(consumers.stream().map(Consumer::unregister).toList())
+        .onComplete(
+            ar -> {
+              System.err.println("all eventbus consumers unregistered");
+              multiCompletePromise.complete();
+            });
+
+    AtomicInteger idx = new AtomicInteger(0);
+    for (AutoCloseable service : closeables) {
+      try {
+        System.err.printf("closing: [%d/%d]%n", idx.incrementAndGet(), closeables.size());
+        service.close();
+      } catch (Exception e) {
+        System.err.println("unable to close resources: " + e);
+      }
+    }
+
+    System.err.println("awaitTermination...start");
+    FutureUtil.awaitTermination()
+        .onComplete(
+            ar -> {
+              System.err.printf("awaitTermination...end: %b%n", ar.result());
+              multiCompletePromise.complete();
+            });
   }
 }

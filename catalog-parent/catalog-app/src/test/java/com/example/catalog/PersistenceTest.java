@@ -2,6 +2,7 @@
 package com.example.catalog;
 
 import static com.example.commons.FreePortUtility.getPort;
+import static com.example.commons.config.Config.ServiceRegistryConfig.Protocol.GRPC;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -10,12 +11,14 @@ import static org.mockito.Mockito.when;
 import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
+import com.example.catalog.verticle.ApiVerticle;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.transaction.reactive.TransactionBoundary;
-import com.example.iam.grpc.iam.CheckTokenResponse;
+import com.example.iam.rpc.api.CheckTokenResponse;
 import com.example.migration.FlywayProvider;
 import io.restassured.RestAssured;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.logging.Logger;
@@ -67,7 +70,6 @@ public abstract class PersistenceTest {
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
           .withExposedPorts(5432)
           .withNetwork(network)
-          .withTmpFs(Map.of("/var/lib/postgresql/data", "rw,noexec,nosuid,size=100m"))
           .withNetworkAliases("postgres")
           .withEnv("POSTGRES_USER", "postgres")
           .withEnv("POSTGRES_PASSWORD", "postgres")
@@ -117,10 +119,10 @@ public abstract class PersistenceTest {
     when(authHandler.isTokenValid(anyString()))
         .thenReturn(
             Future.succeededFuture(
-                CheckTokenResponse.newBuilder()
-                    .setValid(true)
-                    .setUserPrincipal(JsonObject.of().encode())
-                    .setUserAttributes(JsonObject.of().encode())
+                CheckTokenResponse.builder()
+                    .valid(true)
+                    .userPrincipal(JsonObject.of().encode())
+                    .userAttributes(JsonObject.of().encode())
                     .build()));
 
     Config config =
@@ -130,7 +132,13 @@ public abstract class PersistenceTest {
             new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             new Config.PostgresConfig(
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
-            Map.of(),
+            Map.of(
+                Config.ServiceIdentifier.IAM,
+                Config.ServiceRegistryConfig.builder()
+                    .protocol(GRPC)
+                    .port(GRPC_PORT)
+                    .host("127.0.0.1")
+                    .build()),
             new Config.VerticleConfig(1));
 
     provider =
@@ -146,7 +154,11 @@ public abstract class PersistenceTest {
             .build();
     provider.init();
 
-    vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
+    JsonObject cfg = config.encode();
+    vertx.deployVerticle(
+        new ApiVerticle(),
+        new DeploymentOptions().setConfig(cfg),
+        testContext.succeedingThenComplete());
   }
 
   @BeforeEach

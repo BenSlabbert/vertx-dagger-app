@@ -22,8 +22,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.example.catalog.proto</groupId>
-      <artifactId>catalog-proto</artifactId>
+      <groupId>com.example.catalog.api</groupId>
+      <artifactId>catalog-api</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>

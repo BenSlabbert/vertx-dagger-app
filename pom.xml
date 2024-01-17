@@ -42,7 +42,6 @@
     <commons-codec.version>1.16.0</commons-codec.version>
     <testcontainers.version>1.19.3</testcontainers.version>
     <grpc.version>1.58.0</grpc.version>
-    <protoc.version>3.25.1</protoc.version>
     <dagger.version>2.50</dagger.version>
     <errorprone.version>2.24.0</errorprone.version>
     <commons-lang3.version>3.14.0</commons-lang3.version>
@@ -71,10 +70,6 @@
     <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
     <native-maven-plugin.version>0.9.28</native-maven-plugin.version>
     <spotless.version>2.41.1</spotless.version>
-    <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
-
-    <!--extensions-->
-    <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -175,11 +170,6 @@
         <artifactId>postgresql</artifactId>
         <version>${postgresql.version}</version>
       </dependency>
-      <dependency>
-        <groupId>com.google.protobuf</groupId>
-        <artifactId>protobuf-java</artifactId>
-        <version>${protoc.version}</version>
-      </dependency>
       <!--also no good-->
       <dependency>
         <groupId>org.testcontainers</groupId>
@@ -206,6 +196,11 @@
       <dependency>
         <groupId>io.vertx</groupId>
         <artifactId>vertx-pg-client</artifactId>
+        <version>${vertx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-service-proxy</artifactId>
         <version>${vertx.version}</version>
       </dependency>
       <dependency>
@@ -411,11 +406,6 @@
           <groupId>org.graalvm.buildtools</groupId>
           <artifactId>native-maven-plugin</artifactId>
           <version>${native-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.xolstice.maven.plugins</groupId>
-          <artifactId>protobuf-maven-plugin</artifactId>
-          <version>${protobuf-maven-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

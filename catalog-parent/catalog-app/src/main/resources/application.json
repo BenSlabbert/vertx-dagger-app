@@ -1,0 +1,27 @@
+{
+  "httpConfig": {
+    "port": 8081
+  },
+  "redisConfig": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "database": 0
+  },
+  "verticleConfig": {
+    "numberOfInstances": 1
+  },
+  "postgresConfig": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "username": "postgres",
+    "password": "postgres",
+    "database": "catalog"
+  },
+  "serviceRegistryConfig": {
+    "IAM": {
+      "protocol": "GRPC",
+      "host": "127.0.0.1",
+      "port":  50051
+    }
+  }
+}

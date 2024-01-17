@@ -4,11 +4,11 @@ package com.example.commons.saga;
 import static com.example.commons.mesage.Headers.SAGA_ID_HEADER;
 import static com.example.commons.mesage.Headers.SAGA_ROLLBACK_HEADER;
 
-import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 import java.time.Duration;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ class SagaStage {
   private final String commandAddress;
   private final EventBus eventBus;
 
-  public Future<Message<GeneratedMessageV3>> sendCommand(String sagaId) {
+  public Future<Message<JsonObject>> sendCommand(String sagaId) {
     log.info("%s: sending command to: %s".formatted(sagaId, commandAddress));
 
     return handler
@@ -53,7 +53,7 @@ class SagaStage {
                         .addHeader(SAGA_ROLLBACK_HEADER, Boolean.TRUE.toString())));
   }
 
-  public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+  public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
     log.info("%s: handle result".formatted(sagaId));
     return handler.handleResult(sagaId, result);
   }

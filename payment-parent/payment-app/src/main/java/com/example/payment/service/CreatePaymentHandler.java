@@ -4,11 +4,11 @@ package com.example.payment.service;
 import static com.example.commons.mesage.Headers.SAGA_ID_HEADER;
 import static com.example.commons.mesage.Headers.SAGA_ROLLBACK_HEADER;
 
-import com.example.catalog.proto.saga.v1.CreatePaymentResponse;
-import com.example.catalog.proto.saga.v1.CreatePaymentResponseFailedResponse;
-import com.example.catalog.proto.saga.v1.CreatePaymentResponseSuccessResponse;
+import com.example.catalog.api.saga.CreatePaymentFailedResponse;
+import com.example.catalog.api.saga.CreatePaymentRequest;
+import com.example.catalog.api.saga.CreatePaymentResponse;
+import com.example.catalog.api.saga.CreatePaymentSuccessResponse;
 import com.example.commons.mesage.Consumer;
-import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.ThreadingModel;
@@ -18,6 +18,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
+import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,14 +29,14 @@ import lombok.RequiredArgsConstructor;
 public class CreatePaymentHandler implements Consumer {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentHandler.class);
-  private static final String CMD_ADDRESS = "Saga.Catalog.CreatePayment";
+  private static final String CMD_ADDRESS = CreatePaymentRequest.CREATE_PAYMENT_TOPIC;
 
   private final PaymentService paymentService;
   private final Vertx vertx;
 
-  private MessageConsumer<GeneratedMessageV3> consumer;
+  private MessageConsumer<JsonObject> consumer;
 
-  public void handle(Message<GeneratedMessageV3> message) {
+  public void handle(Message<JsonObject> message) {
     log.info("handle message: %s".formatted(CMD_ADDRESS));
     log.info("handle message on thread: %s".formatted(Thread.currentThread().getName()));
 
@@ -65,28 +66,29 @@ public class CreatePaymentHandler implements Consumer {
     }
   }
 
-  private void sendFailure(String sagaId, Message<GeneratedMessageV3> message) {
-    CreatePaymentResponse response =
-        CreatePaymentResponse.newBuilder()
-            .setFailed(CreatePaymentResponseFailedResponse.newBuilder().setSagaId(sagaId).build())
-            .build();
+  private void sendFailure(String sagaId, Message<JsonObject> message) {
+    JsonObject response =
+        CreatePaymentResponse.builder()
+            .failedResponse(CreatePaymentFailedResponse.builder().sagaId(sagaId).build())
+            .build()
+            .toJson();
 
     log.info("sending failure reply");
     send(sagaId, response, message);
   }
 
-  private void sendSuccess(String sagaId, Message<GeneratedMessageV3> message) {
-    CreatePaymentResponse response =
-        CreatePaymentResponse.newBuilder()
-            .setSuccess(CreatePaymentResponseSuccessResponse.newBuilder().setSagaId(sagaId).build())
-            .build();
+  private void sendSuccess(String sagaId, Message<JsonObject> message) {
+    JsonObject response =
+        CreatePaymentResponse.builder()
+            .successResponse(CreatePaymentSuccessResponse.builder().sagaId(sagaId).build())
+            .build()
+            .toJson();
 
     log.info("sending success reply");
     send(sagaId, response, message);
   }
 
-  private void send(
-      String sagaId, GeneratedMessageV3 response, Message<GeneratedMessageV3> message) {
+  private void send(String sagaId, JsonObject response, Message<JsonObject> message) {
     message.reply(response, new DeliveryOptions().addHeader(SAGA_ID_HEADER, sagaId));
   }
 

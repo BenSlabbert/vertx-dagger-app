@@ -9,7 +9,7 @@ public final class FreePortUtility {
   private FreePortUtility() {}
 
   public static int getPort() {
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 1_000; i++) {
       try (var serverSocket = new ServerSocket(0)) {
         return serverSocket.getLocalPort();
       } catch (IOException e) {

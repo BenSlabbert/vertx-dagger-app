@@ -1,17 +1,16 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.service.saga;
 
-import com.example.catalog.proto.saga.v1.CreatePurchaseOrderFailedResponse;
-import com.example.catalog.proto.saga.v1.CreatePurchaseOrderRequest;
-import com.example.catalog.proto.saga.v1.CreatePurchaseOrderResponse;
-import com.example.catalog.proto.saga.v1.CreatePurchaseOrderSuccessResponse;
-import com.example.commons.protobuf.ProtobufParser;
+import com.example.catalog.api.saga.CreatePurchaseOrderFailedResponse;
+import com.example.catalog.api.saga.CreatePurchaseOrderRequest;
+import com.example.catalog.api.saga.CreatePurchaseOrderResponse;
+import com.example.catalog.api.saga.CreatePurchaseOrderSuccessResponse;
 import com.example.commons.saga.SagaStageHandler;
-import com.google.protobuf.GeneratedMessageV3;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
+import io.vertx.core.json.JsonObject;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -23,29 +22,25 @@ public class CreatePaymentHandler implements SagaStageHandler {
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentHandler.class);
 
   @Override
-  public Future<GeneratedMessageV3> getCommand(String sagaId) {
+  public Future<JsonObject> getCommand(String sagaId) {
     log.info("%s: getting command".formatted(sagaId));
-    CreatePurchaseOrderRequest cmd =
-        CreatePurchaseOrderRequest.newBuilder().setSagaId(sagaId).build();
-    return Future.succeededFuture(cmd);
+    CreatePurchaseOrderRequest cmd = CreatePurchaseOrderRequest.builder().sagaId(sagaId).build();
+    return Future.succeededFuture(cmd.toJson());
   }
 
   @Override
-  public Future<Boolean> handleResult(String sagaId, Message<GeneratedMessageV3> result) {
+  public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
     log.info("%s: handle result".formatted(sagaId));
 
-    byte[] bytes = result.body().toByteArray();
-
-    CreatePurchaseOrderResponse response =
-        ProtobufParser.parse(bytes, CreatePurchaseOrderResponse.getDefaultInstance());
+    CreatePurchaseOrderResponse response = new CreatePurchaseOrderResponse(result.body());
 
     if (response.getResponseCase() == CreatePurchaseOrderResponse.ResponseCase.SUCCESS) {
-      CreatePurchaseOrderSuccessResponse success = response.getSuccess();
+      CreatePurchaseOrderSuccessResponse success = response.getSuccessResponse();
       log.info("success: " + success);
       return Future.succeededFuture(true);
     }
 
-    CreatePurchaseOrderFailedResponse failed = response.getFailed();
+    CreatePurchaseOrderFailedResponse failed = response.getFailedResponse();
     log.info("failure: " + failed);
     return Future.succeededFuture(false);
   }

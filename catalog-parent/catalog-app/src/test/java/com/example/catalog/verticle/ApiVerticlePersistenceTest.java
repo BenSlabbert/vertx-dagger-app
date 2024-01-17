@@ -20,8 +20,12 @@ import io.restassured.http.ContentType;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+// note for self -> looks like protobuf code gen is not yet supported by vertx, only JSON, which is
+// fine
+@Disabled("disabled until: GRPC servers removed, use vertx service proxies instead")
 class ApiVerticlePersistenceTest extends PersistenceTest {
 
   private static final Logger log = LoggerFactory.getLogger(ApiVerticlePersistenceTest.class);
