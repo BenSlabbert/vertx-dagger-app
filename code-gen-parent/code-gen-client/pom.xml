@@ -70,7 +70,7 @@
           <annotationProcessorPaths>
             <path>
               <groupId>org.example.code-gen</groupId>
-              <artifactId>generator</artifactId>
+              <artifactId>code-gen-generator</artifactId>
               <version>${revision}</version>
             </path>
             <path>
