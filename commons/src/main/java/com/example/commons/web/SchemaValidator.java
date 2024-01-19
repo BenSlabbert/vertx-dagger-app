@@ -24,7 +24,7 @@ public class SchemaValidator {
     this.repository =
         SchemaRepository.create(
             new JsonSchemaOptions()
-                .setBaseUri("http://localhost:" + httpConfig.port())
+                .setBaseUri("http://127.0.0.1:" + httpConfig.port())
                 .setDraft(Draft.DRAFT7));
 
     for (JsonSchema schema : registry.values()) {

@@ -49,7 +49,7 @@ class IamApiImpl implements IamApi {
 
 	async login(request: LoginRequest): Promise<LoginResponse | Error> {
 		try {
-			const resp = await this.fetch('http://localhost:8080/api/login', {
+			const resp = await this.fetch('http://127.0.0.1:8080/api/login', {
 				method: 'POST',
 				body: JSON.stringify({
 					username: request.username,
@@ -70,7 +70,7 @@ class IamApiImpl implements IamApi {
 
 	async refresh(request: RefreshRequest): Promise<RefreshResponse | Error> {
 		try {
-			const resp = await this.fetch('http://localhost:8080/api/refresh', {
+			const resp = await this.fetch('http://127.0.0.1:8080/api/refresh', {
 				method: 'POST',
 				body: JSON.stringify({
 					username: request.username,
@@ -92,7 +92,7 @@ class IamApiImpl implements IamApi {
 
 	async register(request: RegisterRequest): Promise<RegisterResponse | Error> {
 		try {
-			const resp = await this.fetch('http://localhost:8080/api/register', {
+			const resp = await this.fetch('http://127.0.0.1:8080/api/register', {
 				method: 'POST',
 				body: JSON.stringify({
 					username: request.username,

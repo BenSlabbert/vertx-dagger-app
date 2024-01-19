@@ -3,6 +3,6 @@ services:
   ui:
     image: "app-sveltekit:latest"
     environment:
-      ORIGIN: "http://localhost:3000"
+      ORIGIN: "http://127.0.0.1:3000"
     ports:
     - "3000:3000"

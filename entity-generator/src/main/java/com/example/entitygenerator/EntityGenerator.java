@@ -63,7 +63,7 @@ public class EntityGenerator {
       var jdbc =
           new Jdbc()
               .withDriver("org.postgresql.Driver")
-              .withUrl("jdbc:postgresql://localhost:" + container.getMappedPort(5432) + "/test")
+              .withUrl("jdbc:postgresql://127.0.0.1:" + container.getMappedPort(5432) + "/test")
               .withUser("test")
               .withPassword("test");
 

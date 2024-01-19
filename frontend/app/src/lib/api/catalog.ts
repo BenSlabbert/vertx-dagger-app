@@ -119,7 +119,7 @@ class CatalogApiImpl implements CatalogApi {
 	async getItems(request: ItemsRequest): Promise<ItemsResponse | Error> {
 		try {
 			const resp = await this.fetch(
-				`http://localhost:8081/api/items?lastId=${request.lastId}&size=${request.size}&direction=${request.direction}`,
+				`http://127.0.0.1:8081/api/items?lastId=${request.lastId}&size=${request.size}&direction=${request.direction}`,
 				{
 					method: 'GET',
 					headers: {
@@ -153,7 +153,7 @@ class CatalogApiImpl implements CatalogApi {
 
 	async getOneItem(request: GetOneItemRequest): Promise<GetOneItemResponse | Error> {
 		try {
-			const resp = await this.fetch(`http://localhost:8081/api/${request.id}`, {
+			const resp = await this.fetch(`http://127.0.0.1:8081/api/${request.id}`, {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + request.token
@@ -177,7 +177,7 @@ class CatalogApiImpl implements CatalogApi {
 
 	async create(request: CreateRequest): Promise<Error | CreateResponse> {
 		try {
-			const resp = await this.fetch('http://localhost:8081/api/create', {
+			const resp = await this.fetch('http://127.0.0.1:8081/api/create', {
 				method: 'POST',
 				body: JSON.stringify({
 					name: request.name,
@@ -202,7 +202,7 @@ class CatalogApiImpl implements CatalogApi {
 
 	async edit(request: EditRequest): Promise<EditResponse | Error> {
 		try {
-			await this.fetch(`http://localhost:8081/api/edit/${request.id}`, {
+			await this.fetch(`http://127.0.0.1:8081/api/edit/${request.id}`, {
 				method: 'POST',
 				body: JSON.stringify({
 					name: request.name,
@@ -221,7 +221,7 @@ class CatalogApiImpl implements CatalogApi {
 
 	async delete(request: DeleteRequest): Promise<DeleteResponse | Error> {
 		try {
-			await this.fetch(`http://localhost:8081/api/${request.id}`, {
+			await this.fetch(`http://127.0.0.1:8081/api/${request.id}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + request.token
@@ -246,7 +246,7 @@ class CatalogApiImpl implements CatalogApi {
 				query += `&priceFrom=${request.priceFrom}&priceTo=${request.priceTo}`;
 			}
 
-			const resp = await this.fetch(`http://localhost:8081/api/search?${query}`, {
+			const resp = await this.fetch(`http://127.0.0.1:8081/api/search?${query}`, {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + request.token
@@ -278,7 +278,7 @@ class CatalogApiImpl implements CatalogApi {
 
 	async suggest(request: SuggestRequest): Promise<SuggestResponse | Error> {
 		try {
-			const resp = await this.fetch(`http://localhost:8081/api/suggest?s=${request.searchTerm}`, {
+			const resp = await this.fetch(`http://127.0.0.1:8081/api/suggest?s=${request.searchTerm}`, {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + request.token

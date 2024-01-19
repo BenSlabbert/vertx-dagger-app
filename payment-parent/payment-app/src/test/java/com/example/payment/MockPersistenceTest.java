@@ -89,7 +89,7 @@ public abstract class MockPersistenceTest {
 
   @BeforeEach
   void before() {
-    RestAssured.baseURI = "http://localhost";
+    RestAssured.baseURI = "http://127.0.0.1";
     RestAssured.port = HTTP_PORT;
   }
 
