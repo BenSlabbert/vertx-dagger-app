@@ -4,12 +4,17 @@ package com.example.reactivetest.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.config.Config;
+import com.example.commons.config.ParseConfig;
+import com.example.reactivetest.ioc.DaggerProvider;
+import com.example.reactivetest.ioc.Provider;
 import com.example.reactivetest.web.handler.PersonHandler;
 import com.example.reactivetest.web.handler.SecurityHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
@@ -17,30 +22,33 @@ import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import java.util.logging.Level;
-import javax.inject.Inject;
-import lombok.extern.java.Log;
+import java.util.Objects;
 
-@Log
 public class ApplicationVerticle extends AbstractVerticle {
 
-  private final PersonHandler personHandler;
-  private final Config.HttpConfig httpConfig;
+  private static final Logger log = LoggerFactory.getLogger(ApplicationVerticle.class);
 
-  @Inject
-  ApplicationVerticle(Config config, PersonHandler personHandler) {
-    this.personHandler = personHandler;
-    this.httpConfig = config.httpConfig();
-  }
+  private Provider dagger;
 
   @Override
   public void start(Promise<Void> startPromise) {
-    log.log(
-        Level.INFO,
-        "starting api verticle on port: {0}",
-        new Object[] {Integer.toString(httpConfig.port())});
-
+    log.info("starting");
+    init();
     createRoutes(startPromise);
+  }
+
+  private void init() {
+    JsonObject cfg = config();
+    Config config = ParseConfig.get(cfg);
+
+    Objects.requireNonNull(vertx);
+    Objects.requireNonNull(config);
+
+    log.info("create dagger");
+    this.dagger = DaggerProvider.builder().vertx(vertx).config(config).build();
+    log.info("init dagger deps");
+    this.dagger.init();
+    log.info("dagger init complete");
   }
 
   void createRoutes(Promise<Void> startPromise) {
@@ -82,6 +90,7 @@ public class ApplicationVerticle extends AbstractVerticle {
         .handler(ctx -> SecurityHandler.hasRole(ctx, RoleBasedAuthorization.create("my-role")));
 
     // api routes
+    PersonHandler personHandler = dagger.personHandler();
     apiRouter.get("/persons/all").handler(personHandler::getAll);
     apiRouter.post("/persons/create").handler(personHandler::create);
     apiRouter.get("/persons/sse").handler(personHandler::sse);
@@ -94,8 +103,9 @@ public class ApplicationVerticle extends AbstractVerticle {
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
-    vertx.exceptionHandler(err -> log.log(Level.SEVERE, "unhandled exception", err));
+    vertx.exceptionHandler(err -> log.error("unhandled exception", err));
 
+    Config.HttpConfig httpConfig = dagger.config().httpConfig();
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
         .requestHandler(mainRouter)
@@ -105,7 +115,7 @@ public class ApplicationVerticle extends AbstractVerticle {
                 log.info("started http server");
                 startPromise.complete();
               } else {
-                log.log(Level.SEVERE, "failed to start verticle", res.cause());
+                log.error("failed to start verticle", res.cause());
                 startPromise.fail(res.cause());
               }
             });
@@ -113,7 +123,7 @@ public class ApplicationVerticle extends AbstractVerticle {
 
   @Override
   public void stop(Promise<Void> stopPromise) {
-    log.warning("stopping");
+    log.warn("stopping");
     stopPromise.complete();
   }
 }

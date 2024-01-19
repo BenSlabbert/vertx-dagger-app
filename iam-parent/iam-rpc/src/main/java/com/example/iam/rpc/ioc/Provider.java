@@ -14,11 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(
-    modules = {
-      ServiceModule.class,
-      Provider.EagerModule.class,
-    })
+@Component(modules = {ServiceModule.class, Provider.EagerModule.class})
 public interface Provider {
 
   @Nullable Void init();

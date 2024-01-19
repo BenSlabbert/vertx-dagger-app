@@ -22,7 +22,7 @@ public class EntityGenerator {
 
     var outputFolder = args[0];
     var packageName = args[1];
-    System.out.println("generating JOOQ into dir " + outputFolder + " with package " + packageName);
+    System.out.println("generating jOOQ into dir " + outputFolder + " with package " + packageName);
     generate(outputFolder, packageName);
   }
 

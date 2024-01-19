@@ -13,8 +13,9 @@ public class MigrationExecutor {
             .filter(a -> !a.endsWith(".jar"))
             .toArray(String[]::new);
 
-    if (args.length != 5)
+    if (args.length != 5) {
       throw new IllegalArgumentException("expecting 5 arguments but got: " + Arrays.toString(args));
+    }
 
     var flyway = FlywayProvider.get(args[0], Integer.parseInt(args[1]), args[2], args[3], args[4]);
     flyway.migrate();
