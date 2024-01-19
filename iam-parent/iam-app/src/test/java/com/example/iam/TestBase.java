@@ -15,6 +15,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.Map;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,5 +76,16 @@ public abstract class TestBase {
         new ApiVerticle(),
         new DeploymentOptions().setConfig(cfg),
         testContext.succeedingThenComplete());
+  }
+
+  @BeforeEach
+  void before() {
+    RestAssured.baseURI = "http://localhost";
+    RestAssured.port = HTTP_PORT;
+  }
+
+  @AfterEach
+  void after() {
+    RestAssured.reset();
   }
 }

@@ -7,11 +7,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.iam.TestBase;
 import com.example.iam.web.route.dto.LoginRequestDto;
+import com.example.iam.web.route.dto.LoginResponseDto;
 import com.example.iam.web.route.dto.RefreshRequestDto;
+import com.example.iam.web.route.dto.RefreshResponseDto;
 import com.example.iam.web.route.dto.RegisterRequestDto;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -88,5 +95,52 @@ class ApiVerticleTest extends TestBase {
                           assertThat(clientResponse.statusCode()).isEqualTo(BAD_REQUEST.code());
                           testContext.completeNow();
                         })));
+  }
+
+  @Test
+  void fullHappyPath() {
+    String register = new RegisterRequestDto("name", "pswd").toJson().encode();
+    String login = new LoginRequestDto("name", "pswd").toJson().encode();
+
+    RestAssured.given()
+        .contentType(ContentType.JSON)
+        .body(register)
+        .post("/api/register")
+        .then()
+        .assertThat()
+        .statusCode(HttpResponseStatus.NO_CONTENT.code());
+
+    String stringJsonResponse =
+        RestAssured.given()
+            .contentType(ContentType.JSON)
+            .body(login)
+            .post("/api/login")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.CREATED.code())
+            .extract()
+            .asString();
+
+    var loginResponseDto = new LoginResponseDto(new JsonObject(stringJsonResponse));
+    assertThat(loginResponseDto.token()).isNotNull();
+    assertThat(loginResponseDto.refreshToken()).isNotNull();
+
+    String refresh =
+        new RefreshRequestDto("name", loginResponseDto.refreshToken()).toJson().encode();
+
+    stringJsonResponse =
+        RestAssured.given()
+            .contentType(ContentType.JSON)
+            .body(refresh)
+            .post("/api/refresh")
+            .then()
+            .assertThat()
+            .statusCode(HttpResponseStatus.CREATED.code())
+            .extract()
+            .asString();
+
+    var refreshResponseDto = new RefreshResponseDto(new JsonObject(stringJsonResponse));
+    assertThat(refreshResponseDto.token()).isNotNull();
+    assertThat(refreshResponseDto.refreshToken()).isNotNull();
   }
 }
