@@ -155,7 +155,7 @@
         <groupId>io.netty</groupId>
         <artifactId>netty-transport-native-epoll</artifactId>
         <!--Should align with netty version that Vert.x uses-->
-        <version>4.1.105.Final</version>
+        <version>4.1.106.Final</version>
         <classifier>linux-x86_64</classifier>
       </dependency>
       <!--no good-->
