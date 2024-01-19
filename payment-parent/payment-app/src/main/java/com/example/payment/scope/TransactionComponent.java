@@ -6,7 +6,7 @@ import com.example.payment.scope.repo.RepoModule;
 import dagger.Subcomponent;
 
 @TransactionScope
-@Subcomponent(modules = {ScopeModule.class, RepoModule.class})
+@Subcomponent(modules = {ScopeModuleBindings.class, RepoModule.class})
 public interface TransactionComponent {
 
   TransactionManager transactionManager();

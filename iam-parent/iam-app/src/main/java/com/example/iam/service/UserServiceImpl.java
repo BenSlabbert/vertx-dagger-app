@@ -13,13 +13,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final TokenService tokenService;
 
   @Inject
-  public UserServiceImpl(UserRepository userRepository, TokenService tokenService) {
+  UserServiceImpl(UserRepository userRepository, TokenService tokenService) {
     this.userRepository = userRepository;
     this.tokenService = tokenService;
   }

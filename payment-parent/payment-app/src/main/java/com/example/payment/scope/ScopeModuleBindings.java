@@ -5,9 +5,7 @@ import dagger.Binds;
 import dagger.Module;
 
 @Module
-interface ScopeModule {
-
-  // here we can add out own bindings for this specific scope
+interface ScopeModuleBindings {
 
   @Binds
   DslProvider dslProvider(TransactionManager transactionManager);

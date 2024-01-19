@@ -22,12 +22,12 @@ import lombok.extern.java.Log;
 
 @Log
 @Singleton
-public class RedisDB implements UserRepository, AutoCloseable {
+class RedisDB implements UserRepository, AutoCloseable {
 
   private final RedisAPI redisAPI;
 
   @Inject
-  public RedisDB(Vertx vertx, Config.RedisConfig redisConfig) {
+  RedisDB(Vertx vertx, Config.RedisConfig redisConfig) {
     log.info("redisConfig.uri: " + redisConfig.uri());
     Redis client = Redis.createClient(vertx, redisConfig.uri());
     this.redisAPI = RedisAPI.api(client);

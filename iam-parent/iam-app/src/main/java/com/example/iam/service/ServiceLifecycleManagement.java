@@ -5,16 +5,15 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.Getter;
-import lombok.extern.java.Log;
 
-@Log
+@Getter
 @Singleton
 public class ServiceLifecycleManagement {
 
-  @Getter private final Set<AutoCloseable> closeables;
+  private final Set<AutoCloseable> closeables;
 
   @Inject
-  public ServiceLifecycleManagement(Set<AutoCloseable> closeables) {
+  ServiceLifecycleManagement(Set<AutoCloseable> closeables) {
     this.closeables = closeables;
   }
 }

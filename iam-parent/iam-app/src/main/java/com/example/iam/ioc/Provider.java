@@ -2,8 +2,8 @@
 package com.example.iam.ioc;
 
 import com.example.commons.config.Config;
-import com.example.iam.repository.RedisDB;
 import com.example.iam.repository.RepositoryModule;
+import com.example.iam.repository.UserRepository;
 import com.example.iam.service.ServiceLifecycleManagement;
 import com.example.iam.service.ServiceModule;
 import com.example.iam.web.route.handler.UserHandler;
@@ -56,7 +56,7 @@ public interface Provider {
     EagerModule() {}
 
     @Provides
-    @Nullable static Void provideEager(RedisDB redisDB) {
+    @Nullable static Void provideEager(UserRepository redisDB) {
       // this eagerly builds any parameters specified and returns nothing
       return null;
     }

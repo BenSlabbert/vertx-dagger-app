@@ -17,13 +17,13 @@ import lombok.extern.java.Log;
 
 @Log
 @Singleton
-public class JwtService implements TokenService {
+class JwtService implements TokenService {
 
   private final JWTAuth jwtAuth;
   private final JWTAuth jwtRefresh;
 
   @Inject
-  public JwtService(Vertx vertx) {
+  JwtService(Vertx vertx) {
     this.jwtAuth =
         JWTAuth.create(
             vertx,

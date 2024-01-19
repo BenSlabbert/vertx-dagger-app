@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import org.jooq.DSLContext;
 
 @TransactionScope
-public class RepoImpl implements Repo {
+class RepoImpl implements Repo {
 
   private final DSLContext dsl;
 
