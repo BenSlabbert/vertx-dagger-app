@@ -28,6 +28,7 @@ public class RedisDB implements UserRepository, AutoCloseable {
 
   @Inject
   public RedisDB(Vertx vertx, Config.RedisConfig redisConfig) {
+    log.info("redisConfig.uri: " + redisConfig.uri());
     Redis client = Redis.createClient(vertx, redisConfig.uri());
     this.redisAPI = RedisAPI.api(client);
 

@@ -1,5 +1,5 @@
 {
-  "grpcConfig": {
+  "rpcConfig": {
     "port": 50051
   },
   "verticleConfig": {

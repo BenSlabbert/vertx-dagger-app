@@ -7,8 +7,11 @@ import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.iam.ioc.DaggerTestProvider;
 import com.example.iam.ioc.TestProvider;
+import com.example.iam.verticle.ApiVerticle;
 import io.restassured.RestAssured;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.Map;
@@ -24,7 +27,7 @@ import org.testcontainers.utility.DockerImageName;
 public abstract class TestBase {
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int GRPC_PORT = getPort();
+  protected static final int RPC_PORT = getPort();
 
   protected TestProvider provider;
 
@@ -52,7 +55,7 @@ public abstract class TestBase {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.GrpcConfig(GRPC_PORT),
+            new Config.RpcConfig(RPC_PORT),
             new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             null,
             Map.of(),
@@ -67,6 +70,10 @@ public abstract class TestBase {
             .providesRedisConfig(config.redisConfig())
             .build();
 
-    vertx.deployVerticle(provider.provideNewApiVerticle(), testContext.succeedingThenComplete());
+    JsonObject cfg = config.encode();
+    vertx.deployVerticle(
+        new ApiVerticle(),
+        new DeploymentOptions().setConfig(cfg),
+        testContext.succeedingThenComplete());
   }
 }

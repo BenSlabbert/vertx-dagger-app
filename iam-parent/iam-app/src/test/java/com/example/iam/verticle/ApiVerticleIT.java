@@ -1,6 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.verticle;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.WRITE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.commons.TestcontainerLogConsumer;
@@ -13,57 +15,82 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.vertx.core.json.JsonObject;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import lombok.extern.java.Log;
-import org.junit.Rule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 @Log
-@Testcontainers
+@Disabled("need to fix docker networking issue")
 class ApiVerticleIT {
 
-  @Rule public Network network = Network.newNetwork();
+  @TempDir Path tempDir;
 
-  @Container
   public GenericContainer<?> redis =
       new GenericContainer<>(DockerImageName.parse("redis/redis-stack-server:latest"))
           .withExposedPorts(6379)
-          .withNetwork(network)
           .withNetworkAliases("redis")
-          .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
+          .waitingFor(
+              Wait.forLogMessage(".*Ready to accept connections.*", 1)
+                  .withStartupTimeout(Duration.ofSeconds(10L)))
           .withLogConsumer(new TestcontainerLogConsumer("redis"));
 
-  @Container
   public GenericContainer<?> app =
       new GenericContainer<>(
               DockerImageName.parse("iam:" + System.getProperty("testImageTag", "jvm") + "-latest"))
           .withExposedPorts(8080)
-          .withNetwork(network)
+          .withNetworkMode("host")
           .withNetworkAliases("app")
           .dependsOn(redis)
-          .waitingFor(
-              Wait.forLogMessage(".*deployment id.*", 1).withStartupTimeout(Duration.ofSeconds(5L)))
-          .withClasspathResourceMapping("it-config.json", "/config.json", BindMode.READ_ONLY)
-          .withCommand("/config.json")
+          //          .waitingFor(
+          //              Wait.forLogMessage(".*Succeeded in deploying verticle.*", 1)
+          //                  .withStartupTimeout(Duration.ofSeconds(10L)))
+          //          .withClasspathResourceMapping("it-config.json", "/config.json",
+          // BindMode.READ_ONLY)
+          .withCommand("-conf", "/config.json")
           .withLogConsumer(new TestcontainerLogConsumer("app"));
 
   @BeforeEach
-  void before() {
+  void before() throws IOException {
+    redis.start();
+
+    Path tempFile = Files.createTempFile(tempDir, "prefix-", "-cfg");
+
+    JsonObject cfg = new JsonObject();
+    cfg.put("httpConfig", new JsonObject().put("port", 8080));
+    cfg.put(
+        "redisConfig",
+        new JsonObject()
+            .put("host", "127.0.0.1")
+            .put("port", redis.getMappedPort(6379))
+            .put("database", 0));
+    cfg.put("verticleConfig", new JsonObject().put("numberOfInstances", 1));
+
+    String encoded = cfg.encodePrettily();
+    Files.writeString(tempFile, encoded, UTF_8, WRITE);
+
+    String string = tempFile.toString();
+    app.withFileSystemBind(string, "/config.json", BindMode.READ_ONLY);
+
+    app.start();
     RestAssured.baseURI = "http://" + app.getHost();
     RestAssured.port = app.getMappedPort(8080);
   }
 
   @AfterEach
   void after() {
+    app.stop();
+    redis.stop();
     RestAssured.reset();
   }
 

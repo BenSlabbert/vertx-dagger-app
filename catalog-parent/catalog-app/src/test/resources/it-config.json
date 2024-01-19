@@ -2,7 +2,7 @@
   "httpConfig": {
     "port": 8080
   },
-  "grpcConfig": {
+  "rpcConfig": {
     "port": 50051
   },
   "redisConfig": {

@@ -24,7 +24,7 @@ class ParseConfigTest {
                           "httpConfig": {
                             "port": 8080
                           },
-                          "grpcConfig": {
+                          "rpcConfig": {
                             "port": 50051
                           },
                           "redisConfig": {
@@ -55,7 +55,7 @@ class ParseConfigTest {
                 .redisConfig(
                     Config.RedisConfig.builder().host("redis").port(6379).database(0).build())
                 .verticleConfig(Config.VerticleConfig.builder().numberOfInstances(1).build())
-                .grpcConfig(Config.GrpcConfig.builder().port(50051).build())
+                .rpcConfig(Config.RpcConfig.builder().port(50051).build())
                 .serviceRegistryConfig(
                     Map.of(
                         Config.ServiceIdentifier.IAM,

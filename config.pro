@@ -1,8 +1,8 @@
 # execute with ~/Downloads/proguard-7.4.1/bin/proguard.sh @config.pro
 
--injars       /home/ben/IdeaProjects/vertx-dagger-app/iam-parent/iam-grpc/target/iam-grpc.jar
+-injars       /home/ben/IdeaProjects/vertx-dagger-app/iam-parent/iam-rpc/target/iam-rpc.jar
 -outjars      output.jar
--libraryjars  /home/ben/.jdks/21/jmods/java.base.jmod(!**.jar;!module-info.class):/home/ben/IdeaProjects/vertx-dagger-app/iam-parent/iam-grpc/target/lib/
+-libraryjars  /home/ben/.jdks/21/jmods/java.base.jmod(!**.jar;!module-info.class):/home/ben/IdeaProjects/vertx-dagger-app/iam-parent/iam-rpc/target/lib/
 -dontwarn
 
 -repackageclasses 'com.example.repackage'

@@ -11,7 +11,7 @@ import io.vertx.core.Vertx;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {RepositoryModule.class, ServiceModule.class})
+@Component(modules = {RepositoryModule.class, Provider.EagerModule.class, ServiceModule.class})
 public interface TestProvider extends Provider {
 
   TokenService tokenService();

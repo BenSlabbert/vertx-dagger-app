@@ -13,7 +13,7 @@ import lombok.Getter;
 @Builder
 public record Config(
     HttpConfig httpConfig,
-    GrpcConfig grpcConfig,
+    RpcConfig rpcConfig,
     RedisConfig redisConfig,
     PostgresConfig postgresConfig,
     Map<ServiceIdentifier, ServiceRegistryConfig> serviceRegistryConfig,
@@ -68,7 +68,7 @@ public record Config(
     addHttpConfig(jsonObject, builder);
     addRedisConfig(jsonObject, builder);
     addPostgresConfig(jsonObject, builder);
-    addGrpcConfig(jsonObject, builder);
+    addRpcConfig(jsonObject, builder);
     addServiceRegistryConfig(jsonObject, builder);
 
     return builder
@@ -90,15 +90,15 @@ public record Config(
     builder.httpConfig(httpConfig);
   }
 
-  private static void addGrpcConfig(JsonObject jsonObject, ConfigBuilder builder) {
-    JsonObject config = jsonObject.getJsonObject("grpcConfig", new JsonObject());
+  private static void addRpcConfig(JsonObject jsonObject, ConfigBuilder builder) {
+    JsonObject config = jsonObject.getJsonObject("rpcConfig", new JsonObject());
 
     if (isNullOrEmpty(config)) {
       return;
     }
 
-    GrpcConfig grpcConfig = GrpcConfig.builder().port(config.getInteger("port")).build();
-    builder.grpcConfig(grpcConfig);
+    RpcConfig rpcConfig = RpcConfig.builder().port(config.getInteger("port")).build();
+    builder.rpcConfig(rpcConfig);
   }
 
   private static void addRedisConfig(JsonObject jsonObject, ConfigBuilder builder) {
@@ -174,7 +174,7 @@ public record Config(
   public record HttpConfig(int port) {}
 
   @Builder
-  public record GrpcConfig(int port) {}
+  public record RpcConfig(int port) {}
 
   @Builder
   public record ServiceRegistryConfig(Protocol protocol, String host, int port) {

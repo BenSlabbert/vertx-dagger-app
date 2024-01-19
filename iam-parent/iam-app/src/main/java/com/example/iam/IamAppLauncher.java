@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.catalog;
+package com.example.iam;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
@@ -21,14 +21,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class CatalogAppLauncher extends Launcher {
+public class IamAppLauncher extends Launcher {
 
-  private static final Logger log = LoggerFactory.getLogger(CatalogAppLauncher.class);
-
-  static {
-    System.setProperty("org.jooq.no-tips", "true");
-    System.setProperty("org.jooq.no-logo", "true");
-  }
+  private static final Logger log = LoggerFactory.getLogger(IamAppLauncher.class);
 
   public static void main(String[] args) {
     // breaks on native image
@@ -39,7 +34,7 @@ public class CatalogAppLauncher extends Launcher {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
     log.info("parse: " + parse);
 
-    new CatalogAppLauncher().dispatch(args);
+    new IamAppLauncher().dispatch(args);
   }
 
   @Override
@@ -62,7 +57,7 @@ public class CatalogAppLauncher extends Launcher {
     if (!config.isEmpty()) return;
 
     try (var input =
-        CatalogAppLauncher.class.getClassLoader().getResourceAsStream("application.json")) {
+        IamAppLauncher.class.getClassLoader().getResourceAsStream("application.json")) {
       if (null == input) {
         throw new NoStackTraceException("application.json not found");
       }

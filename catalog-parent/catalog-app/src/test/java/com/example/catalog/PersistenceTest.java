@@ -54,7 +54,7 @@ public abstract class PersistenceTest {
   private static final Logger log = LoggerFactory.getLogger(PersistenceTest.class);
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int GRPC_PORT = getPort();
+  protected static final int RPC_PORT = getPort();
 
   protected TestPersistenceProvider provider;
 
@@ -133,7 +133,7 @@ public abstract class PersistenceTest {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.GrpcConfig(GRPC_PORT),
+            new Config.RpcConfig(RPC_PORT),
             new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             new Config.PostgresConfig(
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
@@ -141,7 +141,7 @@ public abstract class PersistenceTest {
                 Config.ServiceIdentifier.IAM,
                 Config.ServiceRegistryConfig.builder()
                     .protocol(RPC)
-                    .port(GRPC_PORT)
+                    .port(RPC_PORT)
                     .host("127.0.0.1")
                     .build()),
             new Config.VerticleConfig(1));

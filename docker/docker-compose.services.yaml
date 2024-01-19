@@ -17,12 +17,12 @@ services:
     depends_on:
     - "redis"
     mem_limit: "256m"
-  iam-grpc:
-    image: "iam-grpc:jvm-latest"
+  iam-rpc:
+    image: "iam-rpc:jvm-latest"
     ports:
     - "50051:50051"
     volumes:
-    - "./config/iam-grpc-config.json:/config.json"
+    - "./config/iam-rpc-config.json:/config.json"
     command:
     - "run"
     - "-conf"

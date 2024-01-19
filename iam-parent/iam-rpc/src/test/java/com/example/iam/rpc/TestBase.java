@@ -20,7 +20,7 @@ public abstract class TestBase {
     Config config =
         new Config(
             new Config.HttpConfig(0),
-            new Config.GrpcConfig(0),
+            new Config.RpcConfig(0),
             new Config.RedisConfig("127.0.0.1", 6379, 0),
             null,
             Map.of(),

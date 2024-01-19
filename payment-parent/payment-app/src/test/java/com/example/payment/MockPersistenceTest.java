@@ -31,7 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public abstract class MockPersistenceTest {
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int GRPC_PORT = getPort();
+  protected static final int RPC_PORT = getPort();
 
   protected TestMockPersistenceProvider provider;
   protected DSLContext dslContext = mock(DSLContext.class);
@@ -53,7 +53,7 @@ public abstract class MockPersistenceTest {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.GrpcConfig(GRPC_PORT),
+            new Config.RpcConfig(RPC_PORT),
             Config.RedisConfig.builder().build(),
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
             Map.of(),
