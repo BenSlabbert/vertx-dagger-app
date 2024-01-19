@@ -12,6 +12,7 @@ import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.PoolOptions;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,16 +28,18 @@ class PoolConfig implements AutoCloseable {
 
   @Provides
   @Singleton
-  static Pool providesPool(Vertx vertx, Config.PostgresConfig config) {
+  static Pool providesPool(Vertx vertx, Config config) {
     log.info("creating pg pool");
+    Config.PostgresConfig postgres = config.postgresConfig();
+    Objects.requireNonNull(postgres);
     PgConnectOptions connectOptions =
         new PgConnectOptions()
             .setConnectTimeout(5)
-            .setPort(config.port())
-            .setHost(config.host())
-            .setDatabase(config.database())
-            .setUser(config.username())
-            .setPassword(config.password())
+            .setPort(postgres.port())
+            .setHost(postgres.host())
+            .setDatabase(postgres.database())
+            .setUser(postgres.username())
+            .setPassword(postgres.password())
             .setCachePreparedStatements(true)
             .setPipeliningLimit(256);
 

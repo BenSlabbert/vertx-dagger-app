@@ -5,6 +5,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.config.Config;
 import com.example.commons.config.ParseConfig;
+import com.example.commons.future.FutureUtil;
 import com.example.reactivetest.ioc.DaggerProvider;
 import com.example.reactivetest.ioc.Provider;
 import com.example.reactivetest.web.handler.PersonHandler;
@@ -23,6 +24,8 @@ import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ApplicationVerticle extends AbstractVerticle {
 
@@ -121,9 +124,30 @@ public class ApplicationVerticle extends AbstractVerticle {
             });
   }
 
+  @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void stop(Promise<Void> stopPromise) {
-    log.warn("stopping");
-    stopPromise.complete();
+    System.err.println("stopping");
+
+    Set<AutoCloseable> closeables = dagger.providesServiceLifecycleManagement().closeables();
+    System.err.printf("closing created resources [%d]...%n", closeables.size());
+
+    AtomicInteger idx = new AtomicInteger(0);
+    for (AutoCloseable service : closeables) {
+      try {
+        System.err.printf("closing: [%d/%d]%n", idx.incrementAndGet(), closeables.size());
+        service.close();
+      } catch (Exception e) {
+        System.err.println("unable to close resources: " + e);
+      }
+    }
+
+    System.err.println("awaitTermination...start");
+    FutureUtil.awaitTermination()
+        .onComplete(
+            ar -> {
+              System.err.printf("awaitTermination...end: %b%n", ar.result());
+              stopPromise.complete();
+            });
   }
 }

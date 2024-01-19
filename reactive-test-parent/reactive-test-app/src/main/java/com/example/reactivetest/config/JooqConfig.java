@@ -3,6 +3,7 @@ package com.example.reactivetest.config;
 
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 import lombok.extern.java.Log;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -18,8 +19,9 @@ class JooqConfig {
 
   private static DSLContext dslContext = null;
 
+  @Singleton
   @Provides
-  static synchronized DSLContext providesDslContext() {
+  static DSLContext providesDslContext() {
     if (dslContext != null) return dslContext;
 
     log.info("creating dsl context");

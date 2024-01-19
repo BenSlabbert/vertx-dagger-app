@@ -4,7 +4,6 @@ package com.example.commons.config;
 import io.vertx.core.json.JsonObject;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -38,19 +37,6 @@ public record Config(
 
     ServiceIdentifier(String serviceName) {
       this.serviceName = serviceName;
-    }
-
-    static Set<String> names() {
-      return Arrays.stream(ServiceIdentifier.values())
-          .map(ServiceIdentifier::name)
-          .collect(Collectors.toSet());
-    }
-
-    static ServiceIdentifier fromString(String in) {
-      return Arrays.stream(ServiceIdentifier.values())
-          .filter(f -> f.serviceName.equals(in))
-          .findFirst()
-          .orElseThrow();
     }
   }
 

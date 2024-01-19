@@ -1,14 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.config;
 
-import dagger.Binds;
+import com.example.commons.pool.PoolModule;
 import dagger.Module;
-import dagger.multibindings.IntoSet;
 
-@Module(includes = {JooqConfig.class, PoolConfig.class})
-public interface ConfigModule {
-
-  @Binds
-  @IntoSet
-  AutoCloseable asAutoCloseable(PoolConfig closeablePool);
-}
+@Module(includes = {JooqConfig.class, PoolModule.class})
+public interface ConfigModule {}
