@@ -3,7 +3,6 @@ package com.example.iam.repository;
 
 import static java.util.logging.Level.SEVERE;
 
-import com.example.commons.config.Config;
 import com.example.commons.redis.RedisConstants;
 import com.example.iam.entity.User;
 import com.example.iam.web.route.dto.LoginResponseDto;
@@ -11,9 +10,7 @@ import com.example.iam.web.route.dto.RefreshResponseDto;
 import com.example.iam.web.route.dto.RegisterResponseDto;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
-import io.vertx.core.Vertx;
 import io.vertx.ext.web.handler.HttpException;
-import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import java.util.List;
 import javax.inject.Inject;
@@ -27,11 +24,8 @@ class RedisDB implements UserRepository, AutoCloseable {
   private final RedisAPI redisAPI;
 
   @Inject
-  RedisDB(Vertx vertx, Config.RedisConfig redisConfig) {
-    log.info("redisConfig.uri: " + redisConfig.uri());
-    Redis client = Redis.createClient(vertx, redisConfig.uri());
-    this.redisAPI = RedisAPI.api(client);
-
+  RedisDB(RedisAPI redisAPI) {
+    this.redisAPI = redisAPI;
     this.redisAPI
         .ping(List.of(""))
         .onFailure(err -> log.log(SEVERE, "failed to ping redis", err))

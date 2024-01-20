@@ -2,6 +2,7 @@
 package com.example.iam.ioc;
 
 import com.example.commons.config.Config;
+import com.example.commons.redis.RedisModule;
 import com.example.iam.repository.RepositoryModule;
 import com.example.iam.service.ServiceModule;
 import com.example.iam.service.TokenService;
@@ -11,7 +12,13 @@ import io.vertx.core.Vertx;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {RepositoryModule.class, Provider.EagerModule.class, ServiceModule.class})
+@Component(
+    modules = {
+      RepositoryModule.class,
+      RedisModule.class,
+      Provider.EagerModule.class,
+      ServiceModule.class
+    })
 public interface TestProvider extends Provider {
 
   TokenService tokenService();

@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam;
 
+import io.netty.resolver.dns.DefaultDnsServerAddressStreamProvider;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 public class IamAppLauncher extends Launcher {
@@ -34,7 +36,27 @@ public class IamAppLauncher extends Launcher {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
     log.info("parse: " + parse);
 
+    List<String> reachableNameServers = getReachableNameServers();
+    log.info("reachableNameServers: " + reachableNameServers);
+
     new IamAppLauncher().dispatch(args);
+  }
+
+  public static List<String> getReachableNameServers() {
+    // not sure if this is still needed
+    // root cause might be in the custom jlink runtime
+    return DefaultDnsServerAddressStreamProvider.defaultAddressList().stream()
+        .filter(
+            ns -> {
+              try {
+                return ns.getAddress().isReachable(1000);
+              } catch (IOException e) {
+                // do nothing
+              }
+              return false;
+            })
+        .map(ns -> ns.getAddress().getHostAddress())
+        .toList();
   }
 
   @Override

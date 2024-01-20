@@ -2,8 +2,8 @@
 package com.example.iam.ioc;
 
 import com.example.commons.config.Config;
+import com.example.commons.redis.RedisModule;
 import com.example.iam.repository.RepositoryModule;
-import com.example.iam.repository.UserRepository;
 import com.example.iam.service.ServiceLifecycleManagement;
 import com.example.iam.service.ServiceModule;
 import com.example.iam.web.route.handler.UserHandler;
@@ -12,17 +12,26 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
+import io.vertx.redis.client.RedisAPI;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {RepositoryModule.class, ServiceModule.class, Provider.EagerModule.class})
+@Component(
+    modules = {
+      RepositoryModule.class,
+      RedisModule.class,
+      ServiceModule.class,
+      Provider.EagerModule.class
+    })
 public interface Provider {
 
   @Nullable Void init();
 
   Config config();
+
+  RedisAPI redisAPI();
 
   ServiceLifecycleManagement providesServiceLifecycleManagement();
 
@@ -56,7 +65,7 @@ public interface Provider {
     EagerModule() {}
 
     @Provides
-    @Nullable static Void provideEager(UserRepository redisDB) {
+    @Nullable static Void provideEager(RedisAPI redisAPI) {
       // this eagerly builds any parameters specified and returns nothing
       return null;
     }

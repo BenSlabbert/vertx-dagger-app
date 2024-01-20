@@ -6,9 +6,16 @@ RUN apk --no-cache add curl ca-certificates binutils
 
 ARG JAVA_MINIMAL
 
-RUN jlink \
+COPY target/iam.jar app.jar
+
+# https://slinkydeveloper.com/Vert-x-Container-images-with-jlink/
+RUN MODS=$(jdeps -q --print-module-deps --ignore-missing-deps app.jar) && \
+    echo "MODS = $MODS" && \
+    MODS="$MODS,jdk.naming.dns" && \
+    echo "MODS = $MODS" && \
+    jlink \
     --verbose \
-    --add-modules java.base,java.sql,java.naming,java.security.jgss,java.security.sasl,java.instrument,jdk.unsupported,java.management \
+    --add-modules "$MODS" \
     --compress zip-6 \
     --strip-debug \
     --no-header-files \
@@ -27,6 +34,6 @@ WORKDIR /app
 
 COPY target/iam.jar app.jar
 
-ENTRYPOINT ["java", "-cp", "lib", "-jar", "app.jar", "-XX:+UseZGC", "-XX:+ZGenerational", "-Xlog:gc*", "-Xmx32M", "-Xms32M", "-Djava.net.preferIPv4Stack=true"]
+ENTRYPOINT ["java", "-jar", "app.jar", "-XX:+UseZGC", "-XX:+ZGenerational", "-Xlog:gc*", "-Xmx32M", "-Xms32M", "-Djava.net.preferIPv4Stack=true"]
 
 EXPOSE 8080

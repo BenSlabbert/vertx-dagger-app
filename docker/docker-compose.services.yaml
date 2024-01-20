@@ -7,6 +7,8 @@ services:
     volumes:
     - "./config/iam-config.json:/config.json"
     command:
+    - "run"
+    - "-conf"
     - "/config.json"
     - "-XX:+UseZGC"
     - "-XX:+ZGenerational"
@@ -15,12 +17,11 @@ services:
     - "-Xms32M"
     - "-Djava.net.preferIPv4Stack=true"
     depends_on:
-    - "redis"
+      redis:
+        condition: "service_healthy"
     mem_limit: "256m"
   iam-rpc:
     image: "iam-rpc:jvm-latest"
-    ports:
-    - "50051:50051"
     volumes:
     - "./config/iam-rpc-config.json:/config.json"
     command:
@@ -41,6 +42,8 @@ services:
     volumes:
     - "./config/catalog-config.json:/config.json"
     command:
+    - "run"
+    - "-conf"
     - "/config.json"
     - "-XX:+UseZGC"
     - "-XX:+ZGenerational"
@@ -49,9 +52,12 @@ services:
     - "-Xms32M"
     - "-Djava.net.preferIPv4Stack=true"
     depends_on:
-    - "redis"
-    - "postgres"
-    - "catalog-migrator"
+      redis:
+        condition: "service_healthy"
+      postgres:
+        condition: "service_healthy"
+      catalog-migrator:
+        condition: "service_completed_successfully"
     mem_limit: "256m"
   payment:
     image: "payment:jvm-latest"
@@ -70,22 +76,10 @@ services:
     - "-Xms32M"
     - "-Djava.net.preferIPv4Stack=true"
     depends_on:
-    - "postgres"
-    - "payment-migrator"
-    mem_limit: "256m"
-  catalog-migrator:
-    image: "catalog-migration:jvm-latest"
-    depends_on:
+      redis:
+        condition: "service_healthy"
       postgres:
-        condition: "service_started"
-    command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
-      \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres catalog"
-    mem_limit: "256m"
-  payment-migrator:
-    image: "payment-migration:jvm-latest"
-    depends_on:
-      postgres:
-        condition: "service_started"
-    command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
-      \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres payment"
+        condition: "service_healthy"
+      payment-migrator:
+        condition: "service_completed_successfully"
     mem_limit: "256m"

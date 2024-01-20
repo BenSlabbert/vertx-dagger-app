@@ -3,6 +3,7 @@ package com.example.iam.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
+import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
 import com.example.iam.ioc.DaggerProvider;
@@ -15,10 +16,12 @@ import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
-import io.vertx.ext.healthchecks.HealthChecks;
+import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
+import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -57,7 +60,6 @@ public class ApiVerticle extends AbstractVerticle {
   @Override
   public void start(Promise<Void> startPromise) {
     init();
-    log.info("starting api verticle on port: " + dagger.config().httpConfig());
 
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
@@ -79,27 +81,55 @@ public class ApiVerticle extends AbstractVerticle {
     apiRouter.post("/refresh").handler(userHandler::refresh);
     apiRouter.post("/register").handler(userHandler::register);
 
-    // https://vertx.io/docs/vertx-health-check/java/
-    mainRouter
-        .get("/health*")
-        .handler(HealthCheckHandler.createWithHealthChecks(HealthChecks.create(vertx)));
+    mainRouter.get("/health*").handler(getHealthCheckHandler());
+    mainRouter.get("/ping*").handler(getPingHandler());
 
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
-    vertx
-        .createHttpServer(
-            new HttpServerOptions().setPort(dagger.config().httpConfig().port()).setHost("0.0.0.0"))
-        .requestHandler(mainRouter)
-        .listen(
-            res -> {
-              if (res.succeeded()) {
-                log.info("started http server");
-                startPromise.complete();
-              } else {
-                log.error("failed to start verticle", res.cause());
-                startPromise.fail(res.cause());
-              }
+    log.info("ping redis before starting http server");
+    dagger
+        .redisAPI()
+        .ping(List.of())
+        .onFailure(startPromise::fail)
+        .onSuccess(
+            r -> {
+              Config.HttpConfig httpConfig = dagger.config().httpConfig();
+              log.info("starting api verticle on port: " + httpConfig.port());
+              vertx
+                  .createHttpServer(
+                      new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
+                  .requestHandler(mainRouter)
+                  .listen(
+                      res -> {
+                        if (res.succeeded()) {
+                          log.info("started http server");
+                          startPromise.complete();
+                        } else {
+                          log.error("failed to start verticle", res.cause());
+                          startPromise.fail(res.cause());
+                        }
+                      });
+            });
+  }
+
+  private HealthCheckHandler getPingHandler() {
+    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
+        .register("ping", promise -> promise.complete(Status.OK()));
+  }
+
+  private HealthCheckHandler getHealthCheckHandler() {
+    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
+        .register(
+            "redis",
+            Duration.ofSeconds(5L).toMillis(),
+            promise -> {
+              log.info("doing redis health check");
+              dagger
+                  .redisAPI()
+                  .ping(List.of())
+                  .onSuccess(r -> promise.complete(Status.OK()))
+                  .onFailure(err -> promise.complete(Status.KO()));
             });
   }
 
