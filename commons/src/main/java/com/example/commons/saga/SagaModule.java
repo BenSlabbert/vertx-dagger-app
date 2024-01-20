@@ -4,4 +4,7 @@ package com.example.commons.saga;
 import dagger.Module;
 
 @Module
-public interface SagaModule {}
+public interface SagaModule {
+
+  SagaBuilder sagaBuilder();
+}

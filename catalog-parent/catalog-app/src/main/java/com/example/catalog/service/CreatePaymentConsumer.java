@@ -58,9 +58,13 @@ class CreatePaymentConsumer implements Consumer {
 
   @Override
   public void register() {
-    consumer = vertx.eventBus().consumer(CMD_ADDRESS, this::handle);
-
-    consumer.setMaxBufferedMessages(1_000);
+    consumer =
+        vertx
+            .eventBus()
+            .consumer(CMD_ADDRESS, this::handle)
+            .setMaxBufferedMessages(1_000)
+            .exceptionHandler(err -> log.error("unhandled exception", err))
+            .endHandler(ignore -> log.warn("read stream closed"));
 
     consumer.completionHandler(
         ar -> {
@@ -71,10 +75,6 @@ class CreatePaymentConsumer implements Consumer {
 
           log.info("successfully registered consumer for address: " + CMD_ADDRESS);
         });
-
-    consumer.exceptionHandler(err -> log.error("unhandled exception", err));
-
-    consumer.endHandler(ignore -> log.warn("read stream closed"));
   }
 
   @Override

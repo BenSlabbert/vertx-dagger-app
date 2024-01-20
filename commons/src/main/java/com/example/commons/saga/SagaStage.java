@@ -23,7 +23,7 @@ class SagaStage {
   private final String commandAddress;
   private final EventBus eventBus;
 
-  public Future<Message<JsonObject>> sendCommand(String sagaId) {
+  Future<Message<JsonObject>> sendCommand(String sagaId) {
     log.info("%s: sending command to: %s".formatted(sagaId, commandAddress));
 
     return handler
@@ -38,7 +38,7 @@ class SagaStage {
                         .addHeader(SAGA_ID_HEADER, sagaId)));
   }
 
-  public Future<Message<Void>> sendRollbackCommand(String sagaId) {
+  Future<Message<Void>> sendRollbackCommand(String sagaId) {
     log.info("%s: sending rollback command to: %s".formatted(sagaId, commandAddress));
 
     return handler
@@ -53,7 +53,7 @@ class SagaStage {
                         .addHeader(SAGA_ROLLBACK_HEADER, Boolean.TRUE.toString())));
   }
 
-  public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
+  Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
     log.info("%s: handle result".formatted(sagaId));
     return handler.handleResult(sagaId, result);
   }

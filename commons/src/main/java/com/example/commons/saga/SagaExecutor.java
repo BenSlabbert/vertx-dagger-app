@@ -86,7 +86,7 @@ public class SagaExecutor {
   }
 
   @SuppressWarnings("java:S110")
-  public static class FailedSagaException extends NoStackTraceException {
+  private static class FailedSagaException extends NoStackTraceException {
 
     public FailedSagaException(String message) {
       super(message);
