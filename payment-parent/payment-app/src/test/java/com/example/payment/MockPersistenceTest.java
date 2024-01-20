@@ -13,7 +13,6 @@ import com.example.payment.repository.PaymentRepository;
 import io.restassured.RestAssured;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
-import java.util.Map;
 import java.util.Set;
 import javax.sql.DataSource;
 import lombok.extern.java.Log;
@@ -31,7 +30,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public abstract class MockPersistenceTest {
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int RPC_PORT = getPort();
 
   protected TestMockPersistenceProvider provider;
   protected DSLContext dslContext = mock(DSLContext.class);
@@ -53,10 +51,8 @@ public abstract class MockPersistenceTest {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.RpcConfig(RPC_PORT),
             Config.RedisConfig.builder().build(),
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
-            Map.of(),
             new Config.VerticleConfig(1));
 
     provider =
@@ -65,7 +61,6 @@ public abstract class MockPersistenceTest {
             .config(config)
             .httpConfig(config.httpConfig())
             .verticleConfig(config.verticleConfig())
-            .serviceRegistryConfig(config.serviceRegistryConfig())
             .postgresConfig(config.postgresConfig())
             .paymentRepository(paymentRepository)
             .dslContext(dslContext)

@@ -28,5 +28,3 @@ WORKDIR /app
 COPY target/iam-rpc.jar app.jar
 
 ENTRYPOINT ["java", "-cp", "lib", "-jar", "app.jar", "-XX:+UseZGC", "-XX:+ZGenerational", "-Xlog:gc*", "-Xmx32M", "-Xms32M", "-Djava.net.preferIPv4Stack=true"]
-
-EXPOSE 50051

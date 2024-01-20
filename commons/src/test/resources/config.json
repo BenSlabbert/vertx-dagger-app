@@ -2,9 +2,6 @@
   "httpConfig": {
     "port": 8080
   },
-  "rpcConfig": {
-    "port": 50051
-  },
   "redisConfig": {
     "host": "redis",
     "port": 6379,
@@ -12,12 +9,5 @@
   },
   "verticleConfig": {
     "numberOfInstances": 1
-  },
-  "serviceRegistryConfig": {
-    "IAM": {
-      "protocol": "RPC",
-      "host": "iam",
-      "port":  50051
-    }
   }
 }

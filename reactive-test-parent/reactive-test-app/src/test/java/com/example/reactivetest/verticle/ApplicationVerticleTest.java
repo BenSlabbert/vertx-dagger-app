@@ -11,7 +11,6 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.java.Log;
 import org.flywaydb.core.Flyway;
@@ -28,7 +27,6 @@ import org.testcontainers.utility.DockerImageName;
 class ApplicationVerticleTest {
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int RPC_PORT = getPort();
 
   private static final AtomicInteger counter = new AtomicInteger(0);
   private static final Network network = Network.newNetwork();
@@ -74,10 +72,8 @@ class ApplicationVerticleTest {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.RpcConfig(RPC_PORT),
             Config.RedisConfig.builder().build(),
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
-            Map.of(),
             new Config.VerticleConfig(1));
 
     JsonObject cfg = config.encode();

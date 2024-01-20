@@ -54,7 +54,6 @@ public class ApiVerticle extends AbstractVerticle {
     Objects.requireNonNull(config.httpConfig());
     Objects.requireNonNull(config.redisConfig());
     Objects.requireNonNull(config.verticleConfig());
-    Objects.requireNonNull(config.serviceRegistryConfig());
 
     this.dagger =
         DaggerProvider.builder()
@@ -63,7 +62,6 @@ public class ApiVerticle extends AbstractVerticle {
             .httpConfig(config.httpConfig())
             .redisConfig(config.redisConfig())
             .verticleConfig(config.verticleConfig())
-            .serviceRegistryConfig(config.serviceRegistryConfig())
             .postgresConfig(config.postgresConfig())
             .build();
 

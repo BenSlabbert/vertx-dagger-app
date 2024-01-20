@@ -5,7 +5,6 @@ import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.commons.config.Config;
 import dagger.BindsInstance;
 import io.vertx.core.Vertx;
-import java.util.Map;
 
 public interface BaseBuilder<
     BUILDER extends BaseBuilder<?, ? extends Provider>, PROVIDER extends Provider> {
@@ -27,9 +26,6 @@ public interface BaseBuilder<
 
   @BindsInstance
   BUILDER verticleConfig(Config.VerticleConfig verticleConfig);
-
-  @BindsInstance
-  BUILDER serviceRegistryConfig(Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig> map);
 
   @BindsInstance
   BUILDER authenticationIntegration(AuthenticationIntegration authenticationIntegration);

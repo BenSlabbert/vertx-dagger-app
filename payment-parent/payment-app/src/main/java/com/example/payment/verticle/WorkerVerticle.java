@@ -49,7 +49,6 @@ public class WorkerVerticle extends AbstractVerticle {
     Objects.requireNonNull(config.postgresConfig());
     Objects.requireNonNull(config.httpConfig());
     Objects.requireNonNull(config.verticleConfig());
-    Objects.requireNonNull(config.serviceRegistryConfig());
 
     this.dagger =
         DaggerProvider.builder()
@@ -57,7 +56,6 @@ public class WorkerVerticle extends AbstractVerticle {
             .config(config)
             .httpConfig(config.httpConfig())
             .verticleConfig(config.verticleConfig())
-            .serviceRegistryConfig(config.serviceRegistryConfig())
             .postgresConfig(config.postgresConfig())
             .build();
 

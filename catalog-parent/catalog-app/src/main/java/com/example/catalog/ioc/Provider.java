@@ -20,7 +20,6 @@ import dagger.Provides;
 import io.vertx.core.Vertx;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.sqlclient.Pool;
-import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -79,9 +78,6 @@ public interface Provider {
 
     @BindsInstance
     Builder postgresConfig(Config.PostgresConfig postgresConfig);
-
-    @BindsInstance
-    Builder serviceRegistryConfig(Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig> map);
 
     Provider build();
   }

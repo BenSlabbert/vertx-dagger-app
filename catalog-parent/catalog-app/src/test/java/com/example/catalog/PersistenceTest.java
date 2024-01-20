@@ -2,7 +2,6 @@
 package com.example.catalog;
 
 import static com.example.commons.FreePortUtility.getPort;
-import static com.example.commons.config.Config.ServiceRegistryConfig.Protocol.RPC;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -31,7 +30,6 @@ import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.SqlClient;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -54,7 +52,6 @@ public abstract class PersistenceTest {
   private static final Logger log = LoggerFactory.getLogger(PersistenceTest.class);
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int RPC_PORT = getPort();
 
   protected TestPersistenceProvider provider;
 
@@ -133,17 +130,9 @@ public abstract class PersistenceTest {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.RpcConfig(RPC_PORT),
             new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             new Config.PostgresConfig(
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
-            Map.of(
-                Config.ServiceIdentifier.IAM,
-                Config.ServiceRegistryConfig.builder()
-                    .protocol(RPC)
-                    .port(RPC_PORT)
-                    .host("127.0.0.1")
-                    .build()),
             new Config.VerticleConfig(1));
 
     provider =
@@ -154,7 +143,6 @@ public abstract class PersistenceTest {
             .redisConfig(config.redisConfig())
             .postgresConfig(config.postgresConfig())
             .verticleConfig(config.verticleConfig())
-            .serviceRegistryConfig(config.serviceRegistryConfig())
             .authenticationIntegration(authHandler)
             .build();
     provider.init();

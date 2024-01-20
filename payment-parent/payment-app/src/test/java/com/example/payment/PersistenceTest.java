@@ -34,7 +34,6 @@ import org.testcontainers.utility.DockerImageName;
 public abstract class PersistenceTest {
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int RPC_PORT = getPort();
 
   protected TestPersistenceProvider provider;
   protected Config config;
@@ -84,11 +83,9 @@ public abstract class PersistenceTest {
     config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.RpcConfig(RPC_PORT),
             Config.RedisConfig.builder().build(),
             new Config.PostgresConfig(
                 "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
-            Map.of(),
             new Config.VerticleConfig(1));
 
     provider =
@@ -97,7 +94,6 @@ public abstract class PersistenceTest {
             .config(config)
             .httpConfig(config.httpConfig())
             .verticleConfig(config.verticleConfig())
-            .serviceRegistryConfig(config.serviceRegistryConfig())
             .postgresConfig(config.postgresConfig())
             .build();
     provider.init();

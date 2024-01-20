@@ -22,7 +22,6 @@ import io.vertx.redis.client.RedisAPI;
 import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Transaction;
-import java.util.Map;
 import java.util.Set;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +31,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public abstract class MockRepositoryTest {
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int RPC_PORT = getPort();
 
   protected TestMockRepositoryProvider provider;
 
@@ -68,10 +66,8 @@ public abstract class MockRepositoryTest {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.RpcConfig(RPC_PORT),
             new Config.RedisConfig("127.0.0.1", 6379, 0),
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
-            Map.of(),
             new Config.VerticleConfig(1));
 
     provider =
@@ -82,7 +78,6 @@ public abstract class MockRepositoryTest {
             .redisConfig(config.redisConfig())
             .postgresConfig(config.postgresConfig())
             .verticleConfig(config.verticleConfig())
-            .serviceRegistryConfig(config.serviceRegistryConfig())
             .authenticationIntegration(authHandler)
             .suggestionService(suggestionService)
             .itemRepository(itemRepository)

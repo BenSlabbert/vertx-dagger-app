@@ -4,7 +4,6 @@ package com.example.payment.ioc;
 import com.example.commons.config.Config;
 import dagger.BindsInstance;
 import io.vertx.core.Vertx;
-import java.util.Map;
 
 public interface BaseBuilder<
     BUILDER extends BaseBuilder<?, ? extends Provider>, PROVIDER extends Provider> {
@@ -23,9 +22,6 @@ public interface BaseBuilder<
 
   @BindsInstance
   BUILDER postgresConfig(Config.PostgresConfig postgresConfig);
-
-  @BindsInstance
-  BUILDER serviceRegistryConfig(Map<Config.ServiceIdentifier, Config.ServiceRegistryConfig> map);
 
   PROVIDER build();
 }

@@ -16,12 +16,5 @@
     "username": "postgres",
     "password": "postgres",
     "database": "catalog"
-  },
-  "serviceRegistryConfig": {
-    "IAM": {
-      "protocol": "RPC",
-      "host": "iam-rpc",
-      "port":  50051
-    }
   }
 }

@@ -15,9 +15,6 @@ This repo also builds two docker images:
   "httpConfig": {
     "port": 8080
   },
-  "rpcConfig": {
-    "port": 50051
-  },
   "redisConfig": {
     "host": "127.0.0.1",
     "port": 6379,

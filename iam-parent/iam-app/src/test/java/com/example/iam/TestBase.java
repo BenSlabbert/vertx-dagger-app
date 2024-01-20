@@ -14,7 +14,6 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +27,6 @@ import org.testcontainers.utility.DockerImageName;
 public abstract class TestBase {
 
   protected static final int HTTP_PORT = getPort();
-  protected static final int RPC_PORT = getPort();
 
   protected TestProvider provider;
 
@@ -56,10 +54,8 @@ public abstract class TestBase {
     Config config =
         new Config(
             new Config.HttpConfig(HTTP_PORT),
-            new Config.RpcConfig(RPC_PORT),
             new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
             null,
-            Map.of(),
             new Config.VerticleConfig(1));
 
     provider =
