@@ -4,7 +4,6 @@ package com.example.iam.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.config.Config;
-import com.example.commons.config.ParseConfig;
 import com.example.commons.future.FutureUtil;
 import com.example.iam.ioc.DaggerProvider;
 import com.example.iam.ioc.Provider;
@@ -35,7 +34,7 @@ public class ApiVerticle extends AbstractVerticle {
   private void init() {
     log.info("ApiVerticle constructor");
     JsonObject cfg = config();
-    Config config = ParseConfig.get(cfg);
+    Config config = Config.fromJson(cfg);
 
     Objects.requireNonNull(vertx);
     Objects.requireNonNull(config);

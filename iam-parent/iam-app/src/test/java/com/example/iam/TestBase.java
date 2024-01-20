@@ -3,6 +3,7 @@ package com.example.iam;
 
 import static com.example.commons.FreePortUtility.getPort;
 
+import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.iam.ioc.DaggerTestProvider;
@@ -67,7 +68,7 @@ public abstract class TestBase {
             .providesRedisConfig(config.redisConfig())
             .build();
 
-    JsonObject cfg = config.encode();
+    JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
         new ApiVerticle(),
         new DeploymentOptions().setConfig(cfg),

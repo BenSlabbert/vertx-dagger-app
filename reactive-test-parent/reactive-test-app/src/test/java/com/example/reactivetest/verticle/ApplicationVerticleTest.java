@@ -3,6 +3,7 @@ package com.example.reactivetest.verticle;
 
 import static com.example.commons.FreePortUtility.getPort;
 
+import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.migration.FlywayProvider;
@@ -76,7 +77,7 @@ class ApplicationVerticleTest {
             new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
             new Config.VerticleConfig(1));
 
-    JsonObject cfg = config.encode();
+    JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
         new ApplicationVerticle(),
         new DeploymentOptions().setConfig(cfg),

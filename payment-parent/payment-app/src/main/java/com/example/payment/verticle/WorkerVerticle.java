@@ -2,7 +2,6 @@
 package com.example.payment.verticle;
 
 import com.example.commons.config.Config;
-import com.example.commons.config.ParseConfig;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.mesage.Consumer;
@@ -42,7 +41,7 @@ public class WorkerVerticle extends AbstractVerticle {
 
     log.info("WorkerVerticle constructor");
     JsonObject cfg = config();
-    Config config = ParseConfig.get(cfg);
+    Config config = Config.fromJson(cfg);
 
     Objects.requireNonNull(vertx);
     Objects.requireNonNull(config);

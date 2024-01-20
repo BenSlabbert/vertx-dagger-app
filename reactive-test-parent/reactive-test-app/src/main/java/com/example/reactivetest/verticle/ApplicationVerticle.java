@@ -4,7 +4,6 @@ package com.example.reactivetest.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.config.Config;
-import com.example.commons.config.ParseConfig;
 import com.example.commons.future.FutureUtil;
 import com.example.reactivetest.ioc.DaggerProvider;
 import com.example.reactivetest.ioc.Provider;
@@ -42,7 +41,7 @@ public class ApplicationVerticle extends AbstractVerticle {
 
   private void init() {
     JsonObject cfg = config();
-    Config config = ParseConfig.get(cfg);
+    Config config = Config.fromJson(cfg);
 
     Objects.requireNonNull(vertx);
     Objects.requireNonNull(config);

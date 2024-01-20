@@ -11,6 +11,7 @@ import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
 import com.example.catalog.verticle.ApiVerticle;
+import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.transaction.reactive.TransactionBoundary;
@@ -159,7 +160,7 @@ public abstract class PersistenceTest {
                             .build()))
             .register(vertx.eventBus(), IamRpcService.ADDRESS);
 
-    JsonObject cfg = config.encode();
+    JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
         new ApiVerticle(),
         new DeploymentOptions().setConfig(cfg),

@@ -3,7 +3,6 @@ package com.example.commons.config;
 
 import io.vertx.core.json.JsonObject;
 import lombok.Builder;
-import lombok.Getter;
 
 @Builder
 public record Config(
@@ -12,29 +11,7 @@ public record Config(
     PostgresConfig postgresConfig,
     VerticleConfig verticleConfig) {
 
-  /**
-   * <strong>NOTE:</strong> only use this for test!
-   *
-   * <p>this depends on jackson and reflection which we do not want in the running application
-   */
-  public JsonObject encode() {
-    String encode = new JsonObject().put("empty", this).encode();
-    return new JsonObject(encode).getJsonObject("empty");
-  }
-
-  @Getter
-  public enum ServiceIdentifier {
-    IAM("IAM"),
-    CATALOG("CATALOG");
-
-    private final String serviceName;
-
-    ServiceIdentifier(String serviceName) {
-      this.serviceName = serviceName;
-    }
-  }
-
-  static Config fromJson(JsonObject jsonObject) {
+  public static Config fromJson(JsonObject jsonObject) {
     JsonObject verticleConfig = jsonObject.getJsonObject("verticleConfig", new JsonObject());
 
     ConfigBuilder builder = Config.builder();

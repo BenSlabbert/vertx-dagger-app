@@ -3,6 +3,7 @@ package com.example.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.commons.ConfigEncoder;
 import com.example.payment.verticle.WorkerVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.ThreadingModel;
@@ -20,7 +21,7 @@ public class VerticleTest extends PersistenceTest {
         WorkerVerticle::new,
         new DeploymentOptions()
             .setThreadingModel(ThreadingModel.VIRTUAL_THREAD)
-            .setConfig(config.encode()),
+            .setConfig(ConfigEncoder.encode(config)),
         testContext.succeedingThenComplete());
   }
 

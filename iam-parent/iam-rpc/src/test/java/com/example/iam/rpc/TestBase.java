@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.rpc;
 
+import com.example.commons.ConfigEncoder;
 import com.example.commons.config.Config;
 import com.example.iam.rpc.verticle.RpcVerticle;
 import io.vertx.core.DeploymentOptions;
@@ -23,7 +24,7 @@ public abstract class TestBase {
             null,
             new Config.VerticleConfig(1));
 
-    JsonObject cfg = config.encode();
+    JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
         new RpcVerticle(),
         new DeploymentOptions().setConfig(cfg),

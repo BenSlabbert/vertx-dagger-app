@@ -2,7 +2,6 @@
 package com.example.iam.rpc.verticle;
 
 import com.example.commons.config.Config;
-import com.example.commons.config.ParseConfig;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;
 import com.example.iam.rpc.ioc.DaggerProvider;
@@ -72,7 +71,7 @@ public class RpcVerticle extends AbstractVerticle {
 
   private void init() {
     JsonObject cfg = config();
-    Config config = ParseConfig.get(cfg);
+    Config config = Config.fromJson(cfg);
 
     Objects.requireNonNull(vertx);
     Objects.requireNonNull(config);

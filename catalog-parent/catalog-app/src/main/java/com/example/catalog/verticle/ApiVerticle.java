@@ -8,7 +8,6 @@ import com.example.catalog.ioc.DaggerProvider;
 import com.example.catalog.ioc.Provider;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
-import com.example.commons.config.ParseConfig;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.mesage.Consumer;
@@ -46,7 +45,7 @@ public class ApiVerticle extends AbstractVerticle {
   private void init() {
     log.info("ApiVerticle constructor");
     JsonObject cfg = config();
-    Config config = ParseConfig.get(cfg);
+    Config config = Config.fromJson(cfg);
 
     Objects.requireNonNull(vertx);
     Objects.requireNonNull(config);
