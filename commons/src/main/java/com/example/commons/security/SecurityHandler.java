@@ -1,5 +1,5 @@
-/* Licensed under Apache-2.0 2023. */
-package com.example.reactivetest.web.handler;
+/* Licensed under Apache-2.0 2024. */
+package com.example.commons.security;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.UNAUTHORIZED;
 
@@ -8,7 +8,7 @@ import io.vertx.ext.auth.authorization.Authorization;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.HttpException;
 
-public class SecurityHandler {
+public final class SecurityHandler {
 
   private SecurityHandler() {}
 

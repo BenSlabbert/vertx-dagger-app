@@ -25,7 +25,6 @@ services:
     depends_on:
       redis:
         condition: "service_healthy"
-    mem_limit: "256m"
   iam-rpc:
     image: "iam-rpc:jvm-latest"
     volumes:
@@ -40,7 +39,6 @@ services:
     - "-Xmx32M"
     - "-Xms32M"
     - "-Djava.net.preferIPv4Stack=true"
-    mem_limit: "256m"
   catalog:
     image: "catalog:jvm-latest"
     ports:
@@ -64,7 +62,6 @@ services:
         condition: "service_healthy"
       catalog-migrator:
         condition: "service_completed_successfully"
-    mem_limit: "256m"
   payment:
     image: "payment:jvm-latest"
     ports:
@@ -88,4 +85,3 @@ services:
         condition: "service_healthy"
       payment-migrator:
         condition: "service_completed_successfully"
-    mem_limit: "256m"

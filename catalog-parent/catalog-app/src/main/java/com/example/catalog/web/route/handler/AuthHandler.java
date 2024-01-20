@@ -10,6 +10,7 @@ import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
+import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.HttpException;
 import javax.inject.Inject;
@@ -17,6 +18,8 @@ import javax.inject.Singleton;
 
 @Singleton
 public class AuthHandler implements Handler<RoutingContext> {
+
+  public static final RoleBasedAuthorization ROLE = RoleBasedAuthorization.create("my-role");
 
   private static final Logger log = LoggerFactory.getLogger(AuthHandler.class);
   private static final String BEARER = "Bearer ";
@@ -59,15 +62,24 @@ public class AuthHandler implements Handler<RoutingContext> {
         .onSuccess(
             resp -> {
               log.info("token valid? " + resp.isValid());
-              if (resp.isValid()) {
-                JsonObject principal = new JsonObject(resp.getUserPrincipal());
-                JsonObject attributes = new JsonObject(resp.getUserAttributes());
-                ctx.setUser(User.create(principal, attributes));
-                ctx.next();
+              if (!resp.isValid()) {
+                ctx.fail(new HttpException(UNAUTHORIZED.code()));
                 return;
               }
 
-              ctx.fail(new HttpException(UNAUTHORIZED.code()));
+              JsonObject principal = new JsonObject(resp.getUserPrincipal());
+              JsonObject attributes = new JsonObject(resp.getUserAttributes());
+
+              log.info("principal: " + principal);
+              log.info("attributes: " + attributes);
+
+              // todo: read the principal and attributes
+              //  to determine the proper roles
+              User user = User.create(principal, attributes);
+              user.authorizations().add("role-provider-id", ROLE);
+
+              ctx.setUser(user);
+              ctx.next();
             });
   }
 }

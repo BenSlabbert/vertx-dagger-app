@@ -5,10 +5,10 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
+import com.example.commons.security.SecurityHandler;
 import com.example.reactivetest.ioc.DaggerProvider;
 import com.example.reactivetest.ioc.Provider;
 import com.example.reactivetest.web.handler.PersonHandler;
-import com.example.reactivetest.web.handler.SecurityHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;

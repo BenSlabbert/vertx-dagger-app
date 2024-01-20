@@ -6,11 +6,13 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.catalog.ioc.DaggerProvider;
 import com.example.catalog.ioc.Provider;
+import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.mesage.Consumer;
+import com.example.commons.security.SecurityHandler;
 import com.example.commons.web.IntegerParser;
 import com.example.commons.web.LongParser;
 import com.example.commons.web.RequestParser;
@@ -115,6 +117,10 @@ public class ApiVerticle extends AbstractVerticle {
         // 100kB max body size
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L))
         .subRouter(apiRouter);
+
+    // roles added in dagger.authHandler()
+    // ensure request is authenticated correctly
+    apiRouter.route().handler(ctx -> SecurityHandler.hasRole(ctx, AuthHandler.ROLE));
 
     ItemHandler itemHandler = dagger.itemHandler();
 
