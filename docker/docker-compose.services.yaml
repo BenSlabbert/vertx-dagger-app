@@ -2,7 +2,11 @@
 services:
   iam:
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      test:
+      - "CMD"
+      - "curl"
+      - "-f"
+      - "http://localhost:8080/health"
     image: "iam:jvm-latest"
     ports:
     - "8080:8080"
