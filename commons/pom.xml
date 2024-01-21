@@ -119,6 +119,8 @@
             <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
             <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
             <arg>-Adagger.fastInit=enabled</arg>
+            <!--required by ErrorProne-->
+            <arg>-XDcompilePolicy=simple</arg>
             <arg>-Xplugin:ErrorProne</arg>
           </compilerArgs>
           <annotationProcessorPaths>

@@ -24,6 +24,8 @@ RUN MODS=$(jdeps -q --print-module-deps --ignore-missing-deps app.jar) && \
 
 FROM alpine:3
 
+RUN apk --no-cache add curl
+
 ARG JAVA_MINIMAL
 
 ENV JAVA_MINIMAL=/opt/jre

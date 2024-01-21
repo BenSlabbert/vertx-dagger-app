@@ -52,6 +52,10 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
+      <artifactId>vertx-hazelcast</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
       <artifactId>vertx-health-check</artifactId>
     </dependency>
     <dependency>
@@ -175,6 +179,8 @@
             <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
             <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
             <arg>-Adagger.fastInit=enabled</arg>
+            <!--required by ErrorProne-->
+            <arg>-XDcompilePolicy=simple</arg>
             <arg>-Xplugin:ErrorProne</arg>
           </compilerArgs>
           <annotationProcessorPaths>

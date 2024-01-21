@@ -1,4 +1,5 @@
 ---
+version: "3.8"
 services:
   redis:
     healthcheck:
@@ -25,3 +26,31 @@ services:
       POSTGRES_DB: "postgres"
     volumes:
     - "./create-all-databases.sql:/docker-entrypoint-initdb.d/create-all-databases.sql"
+  hazelcast:
+    healthcheck:
+      test: "curl -f http://localhost:5701/hazelcast/health || exit 1"
+      interval: "5s"
+      timeout: "1s"
+      retries: 10
+      start_period: "30s"
+    image: "hazelcast/hazelcast:5.3"
+    ports:
+    - "5701:5701"
+    environment:
+    - "JAVA_OPTS=-Xms512m -Xmx512m"
+    - "HZ_CLUSTERNAME=dev"
+    - "HZ_NETWORK_PUBLICADDRESS=hazelcast:5701"
+  hazelcast-mc:
+    healthcheck:
+      test: "curl -f http://localhost:8080 || exit 1"
+      interval: "5s"
+      timeout: "1s"
+      retries: 10
+      start_period: "30s"
+    image: "hazelcast/management-center:5.3"
+    ports:
+    - "8000:8080"
+    environment:
+    - "JAVA_OPTS=-Xms512m -Xmx512m"
+    - "MC_DEFAULT_CLUSTER=dev"
+    - "MC_DEFAULT_CLUSTER_MEMBERS=hazelcast"

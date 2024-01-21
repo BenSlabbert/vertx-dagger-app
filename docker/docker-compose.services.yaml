@@ -1,21 +1,25 @@
 ---
+version: "3.8"
 services:
   iam:
     healthcheck:
-      test:
-      - "CMD"
-      - "curl"
-      - "-f"
-      - "http://localhost:8080/health"
+      test: "curl -f http://localhost:8080/health || exit 1"
+      interval: "5s"
+      timeout: "1s"
+      retries: 3
+      start_period: "5s"
     image: "iam:jvm-latest"
     ports:
     - "8080:8080"
     volumes:
     - "./config/iam-config.json:/config.json"
+    - "./config/cluster.xml:/cluster.xml"
     command:
     - "run"
     - "-conf"
     - "/config.json"
+    - "-Dvertx.hazelcast.config=/cluster.xml"
+    - "-cluster"
     - "-XX:+UseZGC"
     - "-XX:+ZGenerational"
     - "-Xlog:gc*"
@@ -23,16 +27,21 @@ services:
     - "-Xms32M"
     - "-Djava.net.preferIPv4Stack=true"
     depends_on:
+      hazelcast:
+        condition: "service_healthy"
       redis:
         condition: "service_healthy"
   iam-rpc:
     image: "iam-rpc:jvm-latest"
     volumes:
     - "./config/iam-rpc-config.json:/config.json"
+    - "./config/cluster.xml:/cluster.xml"
     command:
     - "run"
     - "-conf"
     - "/config.json"
+    - "-Dvertx.hazelcast.config=/cluster.xml"
+    - "-cluster"
     - "-XX:+UseZGC"
     - "-XX:+ZGenerational"
     - "-Xlog:gc*"
@@ -45,10 +54,13 @@ services:
     - "8081:8080"
     volumes:
     - "./config/catalog-config.json:/config.json"
+    - "./config/cluster.xml:/cluster.xml"
     command:
     - "run"
     - "-conf"
     - "/config.json"
+    - "-Dvertx.hazelcast.config=/cluster.xml"
+    - "-cluster"
     - "-XX:+UseZGC"
     - "-XX:+ZGenerational"
     - "-Xlog:gc*"
@@ -68,10 +80,13 @@ services:
     - "8082:8080"
     volumes:
     - "./config/payment-config.json:/config.json"
+    - "./config/cluster.xml:/cluster.xml"
     command:
     - "run"
     - "-conf"
     - "/config.json"
+    - "-Dvertx.hazelcast.config=/cluster.xml"
+    - "-cluster"
     - "-XX:+UseZGC"
     - "-XX:+ZGenerational"
     - "-Xlog:gc*"

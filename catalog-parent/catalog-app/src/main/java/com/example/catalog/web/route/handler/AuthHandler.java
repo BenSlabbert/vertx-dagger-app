@@ -70,7 +70,11 @@ public class AuthHandler implements Handler<RoutingContext> {
               JsonObject principal = new JsonObject(resp.getUserPrincipal());
               JsonObject attributes = new JsonObject(resp.getUserAttributes());
 
+              // principal:
+              // {"access_token":"eyJ0.eyJh.zM","additional-props":"new-prop","iss":"iam","sub":"test"}
               log.info("principal: " + principal);
+              // attributes:
+              // {"accessToken":{"additional-props":"new-prop","iat":1705842251,"exp":1705842281,"iss":"iam","sub":"test"},"exp":1705842281,"iat":1705842251,"sub":"test","rootClaim":"accessToken"}
               log.info("attributes: " + attributes);
 
               // todo: read the principal and attributes
