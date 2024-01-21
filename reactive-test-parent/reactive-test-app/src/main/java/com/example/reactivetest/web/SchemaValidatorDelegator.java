@@ -1,10 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.web;
 
-import static io.vertx.json.schema.common.dsl.Keywords.minLength;
-import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
-import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
-
 import com.example.commons.config.Config;
 import com.example.commons.web.SchemaValidator;
 import com.example.reactivetest.web.dto.CreatePersonRequest;
@@ -14,9 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
 
-@Log
 @Singleton
 public class SchemaValidatorDelegator {
 
@@ -33,14 +27,7 @@ public class SchemaValidatorDelegator {
 
   private Map<Class<?>, JsonSchema> getRegistry() {
     Map<Class<?>, JsonSchema> map = new HashMap<>();
-
-    map.put(
-        CreatePersonRequest.class,
-        JsonSchema.of(
-            objectSchema()
-                .requiredProperty(CreatePersonRequest.NAME_FIELD, stringSchema().with(minLength(1)))
-                .toJson()));
-
+    map.put(CreatePersonRequest.class, CreatePersonRequest.getSchema());
     return map;
   }
 }

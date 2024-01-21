@@ -27,9 +27,7 @@ public class SchemaValidator {
                 .setBaseUri("http://127.0.0.1:" + httpConfig.port())
                 .setDraft(Draft.DRAFT7));
 
-    for (JsonSchema schema : registry.values()) {
-      repository.dereference(schema);
-    }
+    registry.values().forEach(repository::dereference);
   }
 
   public Boolean validate(Class<?> clazz, JsonObject jsonObject) {

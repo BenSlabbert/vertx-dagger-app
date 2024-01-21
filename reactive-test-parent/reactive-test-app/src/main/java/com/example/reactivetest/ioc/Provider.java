@@ -5,6 +5,7 @@ import com.example.commons.config.Config;
 import com.example.reactivetest.config.ConfigModule;
 import com.example.reactivetest.service.ServiceLifecycleManagement;
 import com.example.reactivetest.service.ServiceModule;
+import com.example.reactivetest.web.handler.HandlerModule;
 import com.example.reactivetest.web.handler.PersonHandler;
 import dagger.BindsInstance;
 import dagger.Component;
@@ -18,7 +19,13 @@ import javax.inject.Singleton;
 import org.jooq.DSLContext;
 
 @Singleton
-@Component(modules = {ConfigModule.class, ServiceModule.class, Provider.EagerModule.class})
+@Component(
+    modules = {
+      ConfigModule.class,
+      ServiceModule.class,
+      HandlerModule.class,
+      Provider.EagerModule.class
+    })
 public interface Provider {
 
   @Nullable Void init();
