@@ -1,9 +1,6 @@
-/* Licensed under Apache-2.0 2023. */
-package com.example.catalog.integration;
+/* Licensed under Apache-2.0 2024. */
+package com.example.iam.rpc.api;
 
-import com.example.iam.rpc.api.CheckTokenRequest;
-import com.example.iam.rpc.api.CheckTokenResponse;
-import com.example.iam.rpc.api.IamRpcService;
 import io.vertx.core.Future;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,6 +15,7 @@ class IamIntegration implements AuthenticationIntegration {
     this.iamRpcService = iamRpcService;
   }
 
+  @Override
   public Future<CheckTokenResponse> isTokenValid(String token) {
     return iamRpcService.check(CheckTokenRequest.builder().token(token).build());
   }

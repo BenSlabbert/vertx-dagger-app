@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.ioc;
 
-import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.commons.config.Config;
+import com.example.iam.rpc.api.AuthenticationIntegration;
 import dagger.BindsInstance;
 import io.vertx.core.Vertx;
 

@@ -3,7 +3,7 @@ package com.example.catalog.web.route.handler;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.UNAUTHORIZED;
 
-import com.example.catalog.integration.AuthenticationIntegration;
+import com.example.iam.rpc.api.AuthenticationIntegration;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.impl.logging.Logger;

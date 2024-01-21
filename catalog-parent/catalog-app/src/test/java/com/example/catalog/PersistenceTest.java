@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
 import com.example.catalog.verticle.ApiVerticle;
@@ -15,6 +14,7 @@ import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.transaction.reactive.TransactionBoundary;
+import com.example.iam.rpc.api.AuthenticationIntegration;
 import com.example.iam.rpc.api.CheckTokenResponse;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;

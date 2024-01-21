@@ -1,7 +1,6 @@
-/* Licensed under Apache-2.0 2023. */
-package com.example.catalog.integration;
+/* Licensed under Apache-2.0 2024. */
+package com.example.iam.rpc.api;
 
-import com.example.iam.rpc.api.CheckTokenResponse;
 import io.vertx.core.Future;
 
 public interface AuthenticationIntegration {

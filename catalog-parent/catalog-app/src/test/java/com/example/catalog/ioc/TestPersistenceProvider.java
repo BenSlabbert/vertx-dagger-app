@@ -19,7 +19,7 @@ import javax.inject.Singleton;
       MapperModule.class,
       ServiceModule.class,
       SagaModule.class,
-      IamRpcServiceProvider.class,
+      //      IamRpcApiModule.class,
       Provider.EagerModule.class
     })
 public interface TestPersistenceProvider extends Provider {

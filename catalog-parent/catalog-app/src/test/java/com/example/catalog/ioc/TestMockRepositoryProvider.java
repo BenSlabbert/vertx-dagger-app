@@ -21,7 +21,7 @@ import org.jooq.DSLContext;
       MapperModule.class,
       SagaModule.class,
       ServiceModule.class,
-      IamRpcServiceProvider.class,
+      //      IamRpcApiModule.class,
       Provider.EagerModule.class
     })
 public interface TestMockRepositoryProvider extends Provider {

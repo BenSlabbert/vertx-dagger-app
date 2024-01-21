@@ -7,12 +7,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.example.catalog.integration.AuthenticationIntegration;
 import com.example.catalog.ioc.DaggerTestMockRepositoryProvider;
 import com.example.catalog.ioc.TestMockRepositoryProvider;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
 import com.example.commons.config.Config;
+import com.example.iam.rpc.api.AuthenticationIntegration;
 import com.example.iam.rpc.api.CheckTokenResponse;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;

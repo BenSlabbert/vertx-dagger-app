@@ -2,7 +2,6 @@
 package com.example.catalog.ioc;
 
 import com.example.catalog.config.ConfigModule;
-import com.example.catalog.integration.IntegrationModule;
 import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ServiceLifecycleManagement;
@@ -12,7 +11,7 @@ import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import com.example.commons.mesage.Consumer;
 import com.example.commons.saga.SagaModule;
-import com.example.iam.rpc.api.IamRpcService;
+import com.example.iam.rpc.api.IamRpcApiModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -31,11 +30,10 @@ import org.jooq.DSLContext;
     modules = {
       RepositoryModule.class,
       ConfigModule.class,
-      IntegrationModule.class,
       MapperModule.class,
       SagaModule.class,
       ServiceModule.class,
-      IamRpcServiceProvider.class,
+      IamRpcApiModule.class,
       Provider.EagerModule.class
     })
 public interface Provider {
@@ -55,8 +53,6 @@ public interface Provider {
   Pool pool();
 
   RedisAPI redisAPI();
-
-  IamRpcService iamRpcService();
 
   @Component.Builder
   interface Builder {

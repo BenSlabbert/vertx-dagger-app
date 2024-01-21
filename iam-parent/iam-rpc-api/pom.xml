@@ -17,6 +17,15 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.google.dagger</groupId>
+      <artifactId>dagger</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.dagger</groupId>
+      <artifactId>dagger-compiler</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-codegen</artifactId>
       <classifier>processor</classifier>
@@ -51,6 +60,10 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <compilerArgs>
             <arg>-parameters</arg>
+            <arg>-Adagger.formatGeneratedSource=enabled</arg>
+            <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
+            <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
+            <arg>-Adagger.fastInit=enabled</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
@@ -68,6 +81,11 @@
               <groupId>io.vertx</groupId>
               <artifactId>vertx-service-proxy</artifactId>
               <version>${vertx.version}</version>
+            </path>
+            <path>
+              <groupId>com.google.dagger</groupId>
+              <artifactId>dagger-compiler</artifactId>
+              <version>${dagger.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
