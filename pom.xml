@@ -16,6 +16,7 @@
     <module>entity-generator</module>
     <module>code-gen-parent</module>
     <module>payment-parent</module>
+    <module>starter-parent</module>
   </modules>
 
   <properties>

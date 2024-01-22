@@ -89,6 +89,16 @@
       <artifactId>mapstruct</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.example.starter</groupId>
+      <artifactId>reactive-pool</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.example.starter</groupId>
+      <artifactId>redis</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
     </dependency>

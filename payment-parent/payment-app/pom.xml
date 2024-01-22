@@ -51,6 +51,11 @@
       <artifactId>HikariCP</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.example.starter</groupId>
+      <artifactId>jdbc-pool</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>org.jooq</groupId>
       <artifactId>jooq</artifactId>
     </dependency>

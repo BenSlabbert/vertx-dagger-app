@@ -59,6 +59,11 @@
       <artifactId>postgresql</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.example.starter</groupId>
+      <artifactId>reactive-pool</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.example.reactive-test.entity</groupId>
       <artifactId>reactive-test-entity</artifactId>
       <version>${revision}</version>

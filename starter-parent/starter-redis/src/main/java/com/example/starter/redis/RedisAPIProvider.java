@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.commons.redis;
+package com.example.starter.redis;
 
 import com.example.commons.config.Config;
 import dagger.Module;
@@ -9,6 +9,7 @@ import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,11 @@ class RedisAPIProvider implements AutoCloseable {
 
   @Provides
   @Singleton
-  static RedisAPI providesRedisAPI(Vertx vertx, Config.RedisConfig redisConfig) {
+  static RedisAPI providesRedisAPI(Vertx vertx, Config config) {
     log.info("creating redis api client");
+    Config.RedisConfig redisConfig = config.redisConfig();
+    Objects.requireNonNull(redisConfig);
+
     Redis client = Redis.createClient(vertx, redisConfig.uri());
     redisAPI = RedisAPI.api(client);
     return redisAPI;

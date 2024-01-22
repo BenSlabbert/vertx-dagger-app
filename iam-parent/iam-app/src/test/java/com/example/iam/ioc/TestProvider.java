@@ -2,10 +2,10 @@
 package com.example.iam.ioc;
 
 import com.example.commons.config.Config;
-import com.example.commons.redis.RedisModule;
 import com.example.iam.repository.RepositoryModule;
 import com.example.iam.service.ServiceModule;
 import com.example.iam.service.TokenService;
+import com.example.starter.redis.RedisModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import io.vertx.core.Vertx;

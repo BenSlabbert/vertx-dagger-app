@@ -43,6 +43,11 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>com.example.starter</groupId>
+      <artifactId>redis</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-auth-jwt</artifactId>
     </dependency>

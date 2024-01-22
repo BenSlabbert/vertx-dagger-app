@@ -1,5 +1,5 @@
-/* Licensed under Apache-2.0 2023. */
-package com.example.payment.config;
+/* Licensed under Apache-2.0 2024. */
+package com.example.starter.jdbc.pool;
 
 import static com.example.commons.thread.VirtualThreadFactory.THREAD_FACTORY;
 
@@ -12,13 +12,14 @@ import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
 
 @Module
-public class BlockingJdbcPoolConfig implements AutoCloseable {
+class BlockingJdbcPoolConfig implements AutoCloseable {
 
   private static final Logger log = LoggerFactory.getLogger(BlockingJdbcPoolConfig.class);
   private static HikariDataSource dataSource = null;
@@ -28,14 +29,32 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
 
   @Provides
   @Singleton
-  static DataSource dataSource(Config.PostgresConfig config) {
+  static DataSource dataSource(Config config) {
     log.info("creating hikari datasource");
+    Config.PostgresConfig postgres = config.postgresConfig();
+    Objects.requireNonNull(postgres);
+    HikariConfig cfg = getHikariConfig(postgres);
+    dataSource = new HikariDataSource(cfg);
+
+    try (var c = dataSource.getConnection()) {
+      String s = c.nativeSQL("select 1");
+      log.info("test connection: %s".formatted(s));
+    } catch (Exception e) {
+      log.error("failed to get connection", e);
+      throw new NoStackTraceException(e);
+    }
+
+    return dataSource;
+  }
+
+  private static HikariConfig getHikariConfig(Config.PostgresConfig postgres) {
     HikariConfig cfg = new HikariConfig();
 
-    cfg.setUsername(config.username());
-    cfg.setPassword(config.password());
+    cfg.setUsername(postgres.username());
+    cfg.setPassword(postgres.password());
     cfg.setJdbcUrl(
-        "jdbc:postgresql://%s:%d/%s".formatted(config.host(), config.port(), config.database()));
+        "jdbc:postgresql://%s:%d/%s"
+            .formatted(postgres.host(), postgres.port(), postgres.database()));
     cfg.setThreadFactory(THREAD_FACTORY);
     cfg.setConnectionTestQuery("select 1");
     cfg.setPoolName("payment-pool");
@@ -48,17 +67,7 @@ public class BlockingJdbcPoolConfig implements AutoCloseable {
     executor.setRemoveOnCancelPolicy(true);
     cfg.setScheduledExecutor(executor);
 
-    dataSource = new HikariDataSource(cfg);
-
-    try (var c = dataSource.getConnection()) {
-      String s = c.nativeSQL("select 1");
-      log.info("test connection: %s".formatted(s));
-    } catch (Exception e) {
-      log.error("failed to get connection", e);
-      throw new NoStackTraceException(e);
-    }
-
-    return dataSource;
+    return cfg;
   }
 
   @SuppressWarnings("java:S106") // logger is not available

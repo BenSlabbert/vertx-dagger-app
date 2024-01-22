@@ -1,14 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.config;
 
-import dagger.Binds;
+import com.example.starter.jdbc.pool.JdbcPoolModule;
 import dagger.Module;
-import dagger.multibindings.IntoSet;
 
-@Module(includes = {JooqConfig.class, BlockingJdbcPoolConfig.class})
-public interface ConfigModule {
-
-  @Binds
-  @IntoSet
-  AutoCloseable asAutoCloseablePoolConfig(BlockingJdbcPoolConfig closeablePool);
-}
+@Module(includes = {JooqConfig.class, JdbcPoolModule.class})
+public interface ConfigModule {}
