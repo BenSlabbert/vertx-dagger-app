@@ -69,7 +69,7 @@
     <maven-resource-plugin.version>3.3.1</maven-resource-plugin.version>
     <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
     <native-maven-plugin.version>0.9.28</native-maven-plugin.version>
-    <spotless.version>2.42.0</spotless.version>
+    <spotless.version>2.43.0</spotless.version>
   </properties>
 
   <dependencyManagement>
