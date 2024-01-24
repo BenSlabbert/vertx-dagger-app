@@ -74,7 +74,7 @@ class ApplicationVerticleTest {
         new Config(
             new Config.HttpConfig(HTTP_PORT),
             Config.RedisConfig.builder().build(),
-            new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
+            new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", dbName),
             new Config.VerticleConfig(1));
 
     JsonObject cfg = ConfigEncoder.encode(config);
