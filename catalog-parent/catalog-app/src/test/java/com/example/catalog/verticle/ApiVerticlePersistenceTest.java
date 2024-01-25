@@ -9,6 +9,7 @@ import static io.vertx.core.http.HttpHeaders.AUTHORIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.catalog.PersistenceTest;
+import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
@@ -17,14 +18,88 @@ import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.vertx.core.Future;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import io.vertx.junit5.VertxTestContext;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class ApiVerticlePersistenceTest extends PersistenceTest {
 
   private static final Logger log = LoggerFactory.getLogger(ApiVerticlePersistenceTest.class);
+
+  @Test
+  void nextPage(VertxTestContext testContext) {
+    persist(
+        conn -> {
+          ItemRepository itemRepository = provider.itemRepository();
+
+          final int size = 100;
+          List<Future<?>> futures = new ArrayList<>(size);
+
+          for (int i = 0; i < size; i++) {
+            futures.add(itemRepository.create(conn, "name1", 1L));
+          }
+
+          return Future.all(futures).map(cf -> null);
+        });
+
+    provider
+        .itemService()
+        .nextPage(0L, 3)
+        .onComplete(
+            testContext.succeeding(
+                page ->
+                    testContext.verify(
+                        () -> {
+                          assertThat(page.more()).isTrue();
+                          assertThat(page.items())
+                              .hasSize(3)
+                              .satisfiesExactly(
+                                  item -> assertThat(item.id()).isEqualTo(1L),
+                                  item -> assertThat(item.id()).isEqualTo(2L),
+                                  item -> assertThat(item.id()).isEqualTo(3L));
+                          testContext.completeNow();
+                        })));
+  }
+
+  @Test
+  void previousPage(VertxTestContext testContext) {
+    persist(
+        conn -> {
+          ItemRepository itemRepository = provider.itemRepository();
+
+          final int size = 100;
+          List<Future<?>> futures = new ArrayList<>(size);
+
+          for (int i = 0; i < size; i++) {
+            futures.add(itemRepository.create(conn, "name1", 1L));
+          }
+
+          return Future.all(futures).map(cf -> null);
+        });
+
+    provider
+        .itemService()
+        .previousPage(50L, 3)
+        .onComplete(
+            testContext.succeeding(
+                page ->
+                    testContext.verify(
+                        () -> {
+                          assertThat(page.more()).isTrue();
+                          assertThat(page.items())
+                              .hasSize(3)
+                              .satisfiesExactly(
+                                  item -> assertThat(item.id()).isEqualTo(47L),
+                                  item -> assertThat(item.id()).isEqualTo(48L),
+                                  item -> assertThat(item.id()).isEqualTo(49L));
+                          testContext.completeNow();
+                        })));
+  }
 
   @Test
   void apiTest() {
@@ -61,7 +136,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
     String getAllResponseJson =
         RestAssured.given()
             .header(AUTHORIZATION.toString(), "Bearer fake")
-            .get("/api/items?lastId=0&size=1")
+            .get("/api/items/next?fromId=0&size=1")
             .then()
             .assertThat()
             .statusCode(OK.code())
@@ -75,7 +150,9 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
     getAllResponseJson =
         RestAssured.given()
             .header(AUTHORIZATION.toString(), "Bearer fake")
-            .get("/api/items?lastId=%d&size=1".formatted(paginatedResponseDto.items().get(0).id()))
+            .get(
+                "/api/items/next?fromId=%d&size=1"
+                    .formatted(paginatedResponseDto.items().get(0).id()))
             .then()
             .assertThat()
             .statusCode(OK.code())

@@ -2,10 +2,8 @@
 package com.example.catalog.service;
 
 import com.example.catalog.mapper.FindOneResponseDtoMapper;
-import com.example.catalog.projection.item.ItemProjection;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
-import com.example.catalog.repository.sql.projection.ItemProjectionFactory.InsertItemProjection.CreatedItemProjection;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.CreateItemResponseDto;
 import com.example.catalog.web.route.dto.FindOneResponseDto;
@@ -55,11 +53,9 @@ public class ItemService extends TransactionBoundary {
         .onSuccess(sagaId -> log.info("%s: saga completed".formatted(sagaId)));
   }
 
-  public Future<PaginatedResponseDto> findAll(long lastId, int size) {
-    Future<List<ItemProjection>> page =
-        doInTransaction(conn -> itemRepository.getPage(conn, lastId, size + 1));
-
-    return page.map(projections -> projections.stream().map(findOneResponseDtoMapper::map).toList())
+  public Future<PaginatedResponseDto> nextPage(long fromId, int size) {
+    return doInTransaction(conn -> itemRepository.nextPage(conn, fromId, size + 1))
+        .map(projections -> projections.stream().map(findOneResponseDtoMapper::map).toList())
         .map(
             items -> {
               if (items.isEmpty()) {
@@ -76,15 +72,31 @@ public class ItemService extends TransactionBoundary {
             });
   }
 
+  public Future<PaginatedResponseDto> previousPage(long fromId, int size) {
+    return doInTransaction(conn -> itemRepository.previousPage(conn, fromId, size + 1))
+        .map(projections -> projections.stream().map(findOneResponseDtoMapper::map).toList())
+        .map(
+            items -> {
+              if (items.isEmpty()) {
+                return new PaginatedResponseDto(false, 0, List.of());
+              }
+
+              var more = items.size() > size;
+
+              if (more) {
+                items = items.subList(1, items.size());
+              }
+
+              return new PaginatedResponseDto(more, items.size(), items);
+            });
+  }
+
   public Future<SuggestResponseDto> suggest(String name) {
     return suggestionService.suggest(name).map(SuggestResponseDto::new);
   }
 
   public Future<CreateItemResponseDto> create(CreateItemRequestDto dto) {
-    Future<CreatedItemProjection> createdItem =
-        doInTransaction(conn -> itemRepository.create(conn, dto.name(), dto.priceInCents()));
-
-    return createdItem
+    return doInTransaction(conn -> itemRepository.create(conn, dto.name(), dto.priceInCents()))
         .onSuccess(item -> suggestionService.create(dto.name()))
         .map(
             item ->
@@ -93,15 +105,12 @@ public class ItemService extends TransactionBoundary {
   }
 
   public Future<Optional<FindOneResponseDto>> findById(long id) {
-    Future<Optional<ItemProjection>> itemProjection =
-        doInTransaction(conn -> itemRepository.findById(conn, id));
-
-    return itemProjection.map(maybeItem -> maybeItem.map(findOneResponseDtoMapper::map));
+    return doInTransaction(conn -> itemRepository.findById(conn, id))
+        .map(maybeItem -> maybeItem.map(findOneResponseDtoMapper::map));
   }
 
   public Future<Void> update(long id, UpdateItemRequestDto dto) {
-    Future<ItemProjection> itemProjection =
-        doInTransaction(
+    return doInTransaction(
             conn ->
                 itemRepository
                     .findById(conn, id)
@@ -113,17 +122,14 @@ public class ItemService extends TransactionBoundary {
 
                           return itemRepository
                               .update(conn, id, dto.name(), dto.priceInCents(), dto.version())
-                              .map(ignore -> maybeItem.get());
-                        }));
-
-    return itemProjection
+                              .map(ignore1 -> maybeItem.get());
+                        }))
         .onSuccess(oldItem -> suggestionService.update(oldItem.getName(), dto.name()))
         .map(ignore -> null);
   }
 
   public Future<Void> delete(long id) {
-    Future<ItemProjection> itemProjection =
-        doInTransaction(
+    return doInTransaction(
             conn ->
                 itemRepository
                     .findById(conn, id)
@@ -133,10 +139,8 @@ public class ItemService extends TransactionBoundary {
                             throw new NoStackTraceException("no item for id: " + id);
                           }
 
-                          return itemRepository.delete(conn, id).map(ignore -> maybeItem.get());
-                        }));
-
-    return itemProjection
+                          return itemRepository.delete(conn, id).map(ignore1 -> maybeItem.get());
+                        }))
         .onSuccess(item -> suggestionService.delete(item.getName()))
         .map(ignore -> null);
   }

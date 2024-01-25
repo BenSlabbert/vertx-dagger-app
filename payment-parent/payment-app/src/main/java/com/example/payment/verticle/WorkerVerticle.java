@@ -65,6 +65,7 @@ public class WorkerVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
+    vertx.exceptionHandler(err -> log.error("unhandled exception", err));
     init();
 
     log.info("starting WorkerVerticle");

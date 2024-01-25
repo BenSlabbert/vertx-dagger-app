@@ -59,6 +59,7 @@ public class ApiVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
+    vertx.exceptionHandler(err -> log.error("unhandled exception", err));
     init();
 
     Router mainRouter = Router.router(vertx);

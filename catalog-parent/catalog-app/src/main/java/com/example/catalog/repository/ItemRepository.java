@@ -12,7 +12,9 @@ public interface ItemRepository {
 
   Future<CreatedItemProjection> create(SqlClient conn, String name, long priceInCents);
 
-  Future<List<ItemProjection>> getPage(SqlClient conn, long lastId, int size);
+  Future<List<ItemProjection>> nextPage(SqlClient conn, long fromId, int size);
+
+  Future<List<ItemProjection>> previousPage(SqlClient conn, long fromId, int size);
 
   Future<Optional<ItemProjection>> findById(SqlClient conn, long id);
 

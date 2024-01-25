@@ -6,6 +6,8 @@ import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
 import com.example.catalog.service.ItemService;
 import com.example.catalog.service.ServiceModule;
+import com.example.catalog.web.WebModule;
+import com.example.catalog.web.route.handler.HandlerModule;
 import com.example.commons.saga.SagaModule;
 import dagger.BindsInstance;
 import dagger.Component;
@@ -21,7 +23,8 @@ import org.jooq.DSLContext;
       MapperModule.class,
       SagaModule.class,
       ServiceModule.class,
-      //      IamRpcApiModule.class,
+      HandlerModule.class,
+      WebModule.class,
       Provider.EagerModule.class
     })
 public interface TestMockRepositoryProvider extends Provider {

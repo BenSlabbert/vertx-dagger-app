@@ -27,8 +27,13 @@ public class ItemProjectionFactory {
     return new InsertItemProjection(name, priceInCents);
   }
 
-  public FindItemPageProjection createFindItemPageProjection(long lastId, int size) {
-    return new FindItemPageProjection(lastId, size);
+  public FindNextItemPageProjection createFindNextItemPageProjection(long fromId, int size) {
+    return new FindNextItemPageProjection(fromId, size);
+  }
+
+  public FindPreviousItemPageProjection createFindPreviousItemPageProjection(
+      long fromId, int size) {
+    return new FindPreviousItemPageProjection(fromId, size);
   }
 
   public FindByIdProjection createFindByIdProjection(long id) {
@@ -134,13 +139,13 @@ public class ItemProjectionFactory {
     }
   }
 
-  public class FindItemPageProjection implements Projection<List<ItemProjection>> {
+  public class FindNextItemPageProjection implements Projection<List<ItemProjection>> {
 
-    private final long lastId;
+    private final long fromId;
     private final int size;
 
-    private FindItemPageProjection(long lastId, int size) {
-      this.lastId = lastId;
+    private FindNextItemPageProjection(long fromId, int size) {
+      this.fromId = fromId;
       this.size = size;
     }
 
@@ -148,7 +153,33 @@ public class ItemProjectionFactory {
     public AttachableQueryPart getSql() {
       return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS, ITEM.VERSION)
           .from(ITEM)
-          .where(ITEM.ID.greaterThan(lastId))
+          .where(ITEM.ID.greaterThan(fromId))
+          .orderBy(ITEM.ID.asc())
+          .limit(size);
+    }
+
+    @Override
+    public List<ItemProjection> parse(RowSet<Row> rowSet) {
+      return ItemProjection.map(rowSet);
+    }
+  }
+
+  public class FindPreviousItemPageProjection implements Projection<List<ItemProjection>> {
+
+    private final long fromId;
+    private final int size;
+
+    private FindPreviousItemPageProjection(long fromId, int size) {
+      this.fromId = fromId;
+      this.size = size;
+    }
+
+    @Override
+    public AttachableQueryPart getSql() {
+      return dsl.select(ITEM.ID, ITEM.NAME, ITEM.PRICE_IN_CENTS, ITEM.VERSION)
+          .from(ITEM)
+          .where(ITEM.ID.lessThan(fromId))
+          .orderBy(ITEM.ID.desc())
           .limit(size);
     }
 

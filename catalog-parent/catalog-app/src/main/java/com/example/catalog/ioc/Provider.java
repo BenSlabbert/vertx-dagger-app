@@ -4,9 +4,12 @@ package com.example.catalog.ioc;
 import com.example.catalog.config.ConfigModule;
 import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.RepositoryModule;
+import com.example.catalog.service.ItemService;
 import com.example.catalog.service.ServiceLifecycleManagement;
 import com.example.catalog.service.ServiceModule;
+import com.example.catalog.web.WebModule;
 import com.example.catalog.web.route.handler.AuthHandler;
+import com.example.catalog.web.route.handler.HandlerModule;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
 import com.example.commons.mesage.Consumer;
@@ -34,6 +37,8 @@ import org.jooq.DSLContext;
       SagaModule.class,
       ServiceModule.class,
       IamRpcApiModule.class,
+      HandlerModule.class,
+      WebModule.class,
       Provider.EagerModule.class
     })
 public interface Provider {
@@ -49,6 +54,8 @@ public interface Provider {
   Config config();
 
   ItemHandler itemHandler();
+
+  ItemService itemService();
 
   Pool pool();
 

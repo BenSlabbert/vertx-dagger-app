@@ -34,6 +34,7 @@ public class ApplicationVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
+    vertx.exceptionHandler(err -> log.error("unhandled exception", err));
     log.info("starting");
     init();
     createRoutes(startPromise);

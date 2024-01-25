@@ -71,6 +71,7 @@ public class ApiVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
+    vertx.exceptionHandler(err -> log.error("unhandled exception", err));
     init();
     log.info("starting ApiVerticle");
 
@@ -125,16 +126,26 @@ public class ApiVerticle extends AbstractVerticle {
     ItemHandler itemHandler = dagger.itemHandler();
 
     // api routes
-    apiRouter.post("/execute").handler(itemHandler::execute);
+    apiRouter.post("/execute").handler(itemHandler::executeSaga);
 
     apiRouter
-        .get("/items")
+        .get("/items/next")
         .handler(
             ctx -> {
               RequestParser rp = RequestParser.create(ctx);
-              Long lastId = rp.getQueryParam("lastId", 0L, LongParser.create());
+              Long fromId = rp.getQueryParam("fromId", 0L, LongParser.create());
               Integer size = rp.getQueryParam("size", 10, IntegerParser.create());
-              itemHandler.findAll(ctx, new ItemHandler.FindAllRequestDto(lastId, size));
+              itemHandler.nextPage(ctx, fromId, size);
+            });
+
+    apiRouter
+        .get("/items/previous")
+        .handler(
+            ctx -> {
+              RequestParser rp = RequestParser.create(ctx);
+              Long fromId = rp.getQueryParam("fromId", 0L, LongParser.create());
+              Integer size = rp.getQueryParam("size", 10, IntegerParser.create());
+              itemHandler.previousPage(ctx, fromId, size);
             });
 
     apiRouter.post("/create").handler(itemHandler::create);

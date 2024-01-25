@@ -4,4 +4,9 @@ package com.example.catalog.service;
 import dagger.Module;
 
 @Module(includes = ServiceModuleBindings.class)
-public interface ServiceModule {}
+public interface ServiceModule {
+
+  ItemService itemService();
+
+  ServiceLifecycleManagement serviceLifecycleManagement();
+}
