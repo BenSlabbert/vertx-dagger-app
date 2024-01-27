@@ -2,6 +2,7 @@
 package com.example.catalog.projection.item;
 
 import io.vertx.codegen.annotations.DataObject;
+import io.vertx.codegen.json.annotations.JsonGen;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import io.vertx.sqlclient.templates.annotations.Column;
@@ -13,10 +14,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+@Data(staticConstructor = "of")
 @Builder
 @RowMapped
-@DataObject(publicConverter = false)
+@JsonGen
+@DataObject
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemProjection {

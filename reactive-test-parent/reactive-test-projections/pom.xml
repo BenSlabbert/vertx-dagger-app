@@ -60,15 +60,35 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <useIncrementalCompilation>false</useIncrementalCompilation>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <release>${java.version}</release>
+          <parameters>true</parameters>
+          <encoding>${project.build.sourceEncoding}</encoding>
           <compilerArgs>
             <arg>-parameters</arg>
           </compilerArgs>
-          <annotationProcessors>
-            <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
-            <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
-          </annotationProcessors>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <groupId>io.vertx</groupId>
+              <artifactId>vertx-codegen</artifactId>
+              <version>${vertx.version}</version>
+              <classifier>processor</classifier>
+            </path>
+            <path>
+              <groupId>io.vertx</groupId>
+              <artifactId>vertx-sql-client-templates</artifactId>
+              <version>${vertx.version}</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
 </project>
