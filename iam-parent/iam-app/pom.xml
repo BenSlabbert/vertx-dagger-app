@@ -43,6 +43,11 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>com.example.iam.auth.api</groupId>
+      <artifactId>iam-auth-api</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.example.starter</groupId>
       <artifactId>redis</artifactId>
       <version>${revision}</version>

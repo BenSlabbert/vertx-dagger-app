@@ -6,11 +6,11 @@ import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.iam.TestBase;
-import com.example.iam.web.route.dto.LoginRequestDto;
-import com.example.iam.web.route.dto.LoginResponseDto;
-import com.example.iam.web.route.dto.RefreshRequestDto;
-import com.example.iam.web.route.dto.RefreshResponseDto;
-import com.example.iam.web.route.dto.RegisterRequestDto;
+import com.example.iam.auth.api.dto.LoginRequestDto;
+import com.example.iam.auth.api.dto.LoginResponseDto;
+import com.example.iam.auth.api.dto.RefreshRequestDto;
+import com.example.iam.auth.api.dto.RefreshResponseDto;
+import com.example.iam.auth.api.dto.RegisterRequestDto;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

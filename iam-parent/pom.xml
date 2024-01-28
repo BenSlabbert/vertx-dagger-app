@@ -15,6 +15,7 @@
     <module>iam-app</module>
     <module>iam-rpc</module>
     <module>iam-rpc-api</module>
+    <module>iam-auth-api</module>
   </modules>
 
 </project>

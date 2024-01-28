@@ -1,25 +1,41 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.iam.web.route.dto;
+package com.example.iam.auth.api.dto;
 
 import com.example.commons.web.serialization.JsonWriter;
+import com.google.auto.value.AutoBuilder;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
-import lombok.Builder;
 
-@Builder
 public record RefreshResponseDto(String token, String refreshToken) implements JsonWriter {
 
   public static String TOKEN_FIELD = "token";
   public static String REFRESH_TOKEN_FIELD = "refreshToken";
 
   public RefreshResponseDto(JsonObject jsonObject) {
-    this(
-        Objects.requireNonNull(jsonObject.getString(TOKEN_FIELD)),
-        Objects.requireNonNull(jsonObject.getString(REFRESH_TOKEN_FIELD)));
+    this(jsonObject.getString(TOKEN_FIELD), jsonObject.getString(REFRESH_TOKEN_FIELD));
+  }
+
+  public RefreshResponseDto {
+    Objects.requireNonNull(token);
+    Objects.requireNonNull(refreshToken);
   }
 
   @Override
   public JsonObject toJson() {
     return new JsonObject().put(TOKEN_FIELD, token).put(REFRESH_TOKEN_FIELD, refreshToken);
+  }
+
+  public static Builder builder() {
+    return new AutoBuilder_RefreshResponseDto_Builder();
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder token(String token);
+
+    Builder refreshToken(String refreshToken);
+
+    RefreshResponseDto build();
   }
 }

@@ -5,9 +5,6 @@ import static java.util.logging.Level.SEVERE;
 
 import com.example.commons.redis.RedisConstants;
 import com.example.iam.entity.User;
-import com.example.iam.web.route.dto.LoginResponseDto;
-import com.example.iam.web.route.dto.RefreshResponseDto;
-import com.example.iam.web.route.dto.RegisterResponseDto;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
 import io.vertx.ext.web.handler.HttpException;
@@ -38,12 +35,11 @@ class RedisDB implements UserRepository, AutoCloseable {
   }
 
   @Override
-  public Future<LoginResponseDto> login(
-      String username, String password, String token, String refreshToken) {
+  public Future<Void> login(String username, String password, String token, String refreshToken) {
 
     return redisAPI
         .jsonGet(List.of(prefixId(username), "$." + User.PASSWORD_FIELD))
-        .map(
+        .compose(
             resp -> {
               if (null == resp) {
                 throw new HttpException(HttpResponseStatus.BAD_REQUEST.code());
@@ -61,19 +57,19 @@ class RedisDB implements UserRepository, AutoCloseable {
                 throw new HttpException(HttpResponseStatus.NOT_FOUND.code());
               }
 
-              return new LoginResponseDto(token, refreshToken);
+              return Future.<Void>succeededFuture();
             })
-        .compose(dto -> updateRefreshToken(username, refreshToken, dto))
+        .compose(dto -> updateRefreshToken(username, refreshToken))
         .onSuccess(resp -> log.info("user logged in"));
   }
 
   @Override
-  public Future<RefreshResponseDto> refresh(
+  public Future<Void> refresh(
       String username, String oldRefreshToken, String newToken, String newRefreshToken) {
 
     return redisAPI
         .jsonGet(List.of(prefixId(username), "$." + User.REFRESH_TOKEN_FIELD))
-        .map(
+        .compose(
             resp -> {
               if (null == resp) {
                 throw new HttpException(HttpResponseStatus.BAD_REQUEST.code());
@@ -86,14 +82,14 @@ class RedisDB implements UserRepository, AutoCloseable {
                 throw new HttpException(HttpResponseStatus.NOT_FOUND.code());
               }
 
-              return new RefreshResponseDto(newToken, newRefreshToken);
+              return Future.<Void>succeededFuture();
             })
-        .compose(dto -> updateRefreshToken(username, newRefreshToken, dto))
+        .compose(dto -> updateRefreshToken(username, newRefreshToken))
         .onSuccess(resp -> log.info("user refreshed"));
   }
 
   @Override
-  public Future<RegisterResponseDto> register(
+  public Future<Void> register(
       String username, String password, String token, String refreshToken) {
 
     return redisAPI
@@ -103,19 +99,19 @@ class RedisDB implements UserRepository, AutoCloseable {
                 RedisConstants.DOCUMENT_ROOT,
                 new User(username, password, refreshToken).toJson().encode(),
                 RedisConstants.SET_IF_DOES_NOT_EXIST))
-        .map(
+        .compose(
             resp -> {
               if (null == resp) {
                 // value could not be set
                 throw new HttpException(HttpResponseStatus.CONFLICT.code());
               }
 
-              return new RegisterResponseDto();
+              return Future.<Void>succeededFuture();
             })
         .onSuccess(resp -> log.info("user registered"));
   }
 
-  private <T> Future<T> updateRefreshToken(String username, String newRefreshToken, T echo) {
+  private Future<Void> updateRefreshToken(String username, String newRefreshToken) {
     return redisAPI
         .jsonSet(
             List.of(
@@ -124,7 +120,7 @@ class RedisDB implements UserRepository, AutoCloseable {
                 // must quote values back to redis
                 "\"" + newRefreshToken + "\"",
                 RedisConstants.SET_IF_EXIST))
-        .map(resp -> echo);
+        .mapEmpty();
   }
 
   private static String prefixId(String username) {
