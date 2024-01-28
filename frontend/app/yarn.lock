@@ -857,7 +857,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte-inspector@npm:^2.0.0-next.0 || ^2.0.0":
+"@sveltejs/vite-plugin-svelte-inspector@npm:^2.0.0":
   version: 2.0.0
   resolution: "@sveltejs/vite-plugin-svelte-inspector@npm:2.0.0"
   dependencies:
@@ -870,11 +870,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@sveltejs/vite-plugin-svelte@npm:3.0.1"
+"@sveltejs/vite-plugin-svelte@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@sveltejs/vite-plugin-svelte@npm:3.0.2"
   dependencies:
-    "@sveltejs/vite-plugin-svelte-inspector": "npm:^2.0.0-next.0 || ^2.0.0"
+    "@sveltejs/vite-plugin-svelte-inspector": "npm:^2.0.0"
     debug: "npm:^4.3.4"
     deepmerge: "npm:^4.3.1"
     kleur: "npm:^4.1.5"
@@ -884,7 +884,7 @@ __metadata:
   peerDependencies:
     svelte: ^4.0.0 || ^5.0.0-next.0
     vite: ^5.0.0
-  checksum: 1d026ca2c0f819d49dad3274667319fbcb5df14378d54eaf102379259a588d6e6ecb5775b1352add7c78c1a0b6d7075bd5b87f4cda2c82b18970ee8ae829f040
+  checksum: 3ae05335415dbd9633c22e2d84b802cae5507c20d8eb4c057e0b3988233340cb13fb06ee06b689dab123f21e3db41f5e7e30001d63b847f236c626cab13f0df0
   languageName: node
   linkType: hard
 
@@ -1339,7 +1339,7 @@ __metadata:
     "@playwright/test": "npm:^1.41.1"
     "@sveltejs/adapter-node": "npm:^4.0.1"
     "@sveltejs/kit": "npm:^2.5.0"
-    "@sveltejs/vite-plugin-svelte": "npm:^3.0.1"
+    "@sveltejs/vite-plugin-svelte": "npm:^3.0.2"
     "@typescript-eslint/eslint-plugin": "npm:^6.19.1"
     "@typescript-eslint/parser": "npm:^6.19.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
