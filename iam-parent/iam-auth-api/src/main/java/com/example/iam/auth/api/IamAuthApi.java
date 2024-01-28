@@ -11,9 +11,9 @@ import io.vertx.core.Future;
 
 public interface IamAuthApi {
 
-  Future<LoginResponseDto> login(LoginRequestDto user);
+  Future<LoginResponseDto> login(LoginRequestDto req);
 
-  Future<RefreshResponseDto> refresh(RefreshRequestDto user);
+  Future<RefreshResponseDto> refresh(RefreshRequestDto req);
 
-  Future<RegisterResponseDto> register(RegisterRequestDto user);
+  Future<RegisterResponseDto> register(RegisterRequestDto req);
 }

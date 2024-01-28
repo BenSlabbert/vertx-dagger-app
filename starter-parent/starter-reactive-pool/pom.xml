@@ -10,6 +10,10 @@
   <groupId>com.example.starter</groupId>
   <artifactId>reactive-pool</artifactId>
 
+  <properties>
+    <finalName>reactive-pool-starter</finalName>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.ongres.scram</groupId>
@@ -41,6 +45,7 @@
   </dependencies>
 
   <build>
+    <finalName>${finalName}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

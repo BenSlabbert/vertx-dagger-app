@@ -10,6 +10,10 @@
   <groupId>com.example.starter</groupId>
   <artifactId>redis</artifactId>
 
+  <properties>
+    <finalName>redis-starter</finalName>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.example.commons</groupId>
@@ -33,6 +37,7 @@
   </dependencies>
 
   <build>
+    <finalName>${finalName}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

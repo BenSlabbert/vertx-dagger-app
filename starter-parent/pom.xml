@@ -15,6 +15,7 @@
     <module>starter-reactive-pool</module>
     <module>starter-jdbc-pool</module>
     <module>starter-redis</module>
+    <module>starter-iam-auth-client</module>
   </modules>
 
 </project>

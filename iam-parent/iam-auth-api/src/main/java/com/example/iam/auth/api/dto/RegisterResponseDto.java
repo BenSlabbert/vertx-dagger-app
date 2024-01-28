@@ -7,6 +7,10 @@ import io.vertx.core.json.JsonObject;
 
 public record RegisterResponseDto() implements JsonWriter {
 
+  public RegisterResponseDto(JsonObject ignore) {
+    this();
+  }
+
   @Override
   public JsonObject toJson() {
     return new JsonObject();
