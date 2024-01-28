@@ -6,6 +6,9 @@ import static com.example.commons.FreePortUtility.getPort;
 import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
+import com.example.commons.config.Config.HttpConfig;
+import com.example.commons.config.Config.PostgresConfig;
+import com.example.commons.config.Config.VerticleConfig;
 import com.example.migration.FlywayProvider;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
@@ -71,11 +74,19 @@ class ApplicationVerticleTest {
     flyway.migrate();
 
     Config config =
-        new Config(
-            new Config.HttpConfig(HTTP_PORT),
-            Config.RedisConfig.builder().build(),
-            new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", dbName),
-            new Config.VerticleConfig(1));
+        Config.builder()
+            .httpConfig(HttpConfig.builder().port(HTTP_PORT).build())
+            .postgresConfig(
+                PostgresConfig.builder()
+                    .host("127.0.0.1")
+                    .port(postgres.getMappedPort(5432))
+                    .database(dbName)
+                    .host("postgres")
+                    .username("postgres")
+                    .password("postgres")
+                    .build())
+            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
+            .build();
 
     JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(

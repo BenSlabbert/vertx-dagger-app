@@ -1,20 +1,37 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.commons.config;
 
+import com.google.auto.value.AutoBuilder;
 import io.vertx.core.json.JsonObject;
-import lombok.Builder;
+import javax.annotation.Nullable;
 
-@Builder
 public record Config(
-    HttpConfig httpConfig,
-    RedisConfig redisConfig,
-    PostgresConfig postgresConfig,
-    VerticleConfig verticleConfig) {
+    @Nullable HttpConfig httpConfig,
+    @Nullable RedisConfig redisConfig,
+    @Nullable PostgresConfig postgresConfig,
+    @Nullable VerticleConfig verticleConfig) {
+
+  public static Builder builder() {
+    return new AutoBuilder_Config_Builder();
+  }
+
+  @AutoBuilder
+  public interface Builder {
+    Builder httpConfig(@Nullable HttpConfig httpConfig);
+
+    Builder redisConfig(@Nullable RedisConfig redisConfig);
+
+    Builder postgresConfig(@Nullable PostgresConfig postgresConfig);
+
+    Builder verticleConfig(@Nullable VerticleConfig verticleConfig);
+
+    Config build();
+  }
 
   public static Config fromJson(JsonObject jsonObject) {
     JsonObject verticleConfig = jsonObject.getJsonObject("verticleConfig", new JsonObject());
 
-    ConfigBuilder builder = Config.builder();
+    Builder builder = Config.builder();
     addHttpConfig(jsonObject, builder);
     addRedisConfig(jsonObject, builder);
     addPostgresConfig(jsonObject, builder);
@@ -27,7 +44,7 @@ public record Config(
         .build();
   }
 
-  private static void addHttpConfig(JsonObject jsonObject, ConfigBuilder builder) {
+  private static void addHttpConfig(JsonObject jsonObject, Builder builder) {
     JsonObject config = jsonObject.getJsonObject("httpConfig", new JsonObject());
 
     if (isNullOrEmpty(config)) {
@@ -38,7 +55,7 @@ public record Config(
     builder.httpConfig(httpConfig);
   }
 
-  private static void addRedisConfig(JsonObject jsonObject, ConfigBuilder builder) {
+  private static void addRedisConfig(JsonObject jsonObject, Builder builder) {
     JsonObject config = jsonObject.getJsonObject("redisConfig", new JsonObject());
 
     if (isNullOrEmpty(config)) {
@@ -53,7 +70,7 @@ public record Config(
             .build());
   }
 
-  private static void addPostgresConfig(JsonObject jsonObject, ConfigBuilder builder) {
+  private static void addPostgresConfig(JsonObject jsonObject, Builder builder) {
     JsonObject config = jsonObject.getJsonObject("postgresConfig", new JsonObject());
 
     if (isNullOrEmpty(config)) {
@@ -74,21 +91,76 @@ public record Config(
     return null == config || config.isEmpty();
   }
 
-  @Builder
-  public record VerticleConfig(int numberOfInstances) {}
+  public record VerticleConfig(int numberOfInstances) {
 
-  @Builder
-  public record HttpConfig(int port) {}
+    public static Builder builder() {
+      return new AutoBuilder_Config_VerticleConfig_Builder();
+    }
 
-  @Builder
+    @AutoBuilder
+    public interface Builder {
+      Builder numberOfInstances(int numberOfInstances);
+
+      VerticleConfig build();
+    }
+  }
+
+  public record HttpConfig(int port) {
+
+    public static Builder builder() {
+      return new AutoBuilder_Config_HttpConfig_Builder();
+    }
+
+    @AutoBuilder
+    public interface Builder {
+      Builder port(int port);
+
+      HttpConfig build();
+    }
+  }
+
   public record RedisConfig(String host, int port, int database) {
 
     public String uri() {
       return String.format("redis://%s:%d/%d", host, port, database);
     }
+
+    public static Builder builder() {
+      return new AutoBuilder_Config_RedisConfig_Builder();
+    }
+
+    @AutoBuilder
+    public interface Builder {
+      Builder host(String host);
+
+      Builder port(int port);
+
+      Builder database(int database);
+
+      RedisConfig build();
+    }
   }
 
-  @Builder
   public record PostgresConfig(
-      String host, int port, String username, String password, String database) {}
+      String host, int port, String username, String password, String database) {
+
+    public static Builder builder() {
+      return new AutoBuilder_Config_PostgresConfig_Builder();
+    }
+
+    @AutoBuilder
+    public interface Builder {
+      Builder host(String host);
+
+      Builder port(int port);
+
+      Builder username(String username);
+
+      Builder password(String password);
+
+      Builder database(String database);
+
+      PostgresConfig build();
+    }
+  }
 }

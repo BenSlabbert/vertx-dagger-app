@@ -8,11 +8,9 @@ import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.List;
 import java.util.stream.Stream;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-@Log
 @ExtendWith(VertxExtension.class)
 class FutureUtilTest {
 
@@ -51,7 +49,6 @@ class FutureUtilTest {
 
   private void getTaskReturningVoid() {
     assertThat(Thread.currentThread().isVirtual()).isTrue();
-    log.info("from virtual thread: %d".formatted(Thread.currentThread().threadId()));
   }
 
   private String getTaskReturningValue() {

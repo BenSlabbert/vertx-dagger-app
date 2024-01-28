@@ -17,6 +17,7 @@
     <module>code-gen-parent</module>
     <module>payment-parent</module>
     <module>starter-parent</module>
+    <module>client-parent</module>
   </modules>
 
   <properties>

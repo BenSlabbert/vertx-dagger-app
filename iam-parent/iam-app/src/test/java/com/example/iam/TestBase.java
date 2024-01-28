@@ -6,6 +6,9 @@ import static com.example.commons.FreePortUtility.getPort;
 import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
+import com.example.commons.config.Config.HttpConfig;
+import com.example.commons.config.Config.RedisConfig;
+import com.example.commons.config.Config.VerticleConfig;
 import com.example.iam.ioc.DaggerTestProvider;
 import com.example.iam.ioc.TestProvider;
 import com.example.iam.verticle.ApiVerticle;
@@ -53,11 +56,16 @@ public abstract class TestBase {
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     Config config =
-        new Config(
-            new Config.HttpConfig(HTTP_PORT),
-            new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
-            null,
-            new Config.VerticleConfig(1));
+        Config.builder()
+            .httpConfig(HttpConfig.builder().port(HTTP_PORT).build())
+            .redisConfig(
+                RedisConfig.builder()
+                    .host("127.0.0.1")
+                    .port(redis.getMappedPort(6379))
+                    .database(0)
+                    .build())
+            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
+            .build();
 
     provider =
         DaggerTestProvider.builder()

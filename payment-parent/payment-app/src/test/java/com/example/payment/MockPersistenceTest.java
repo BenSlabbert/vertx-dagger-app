@@ -7,6 +7,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.example.commons.config.Config;
+import com.example.commons.config.Config.HttpConfig;
+import com.example.commons.config.Config.PostgresConfig;
+import com.example.commons.config.Config.VerticleConfig;
 import com.example.payment.ioc.DaggerTestMockPersistenceProvider;
 import com.example.payment.ioc.TestMockPersistenceProvider;
 import com.example.payment.repository.PaymentRepository;
@@ -48,12 +51,20 @@ public abstract class MockPersistenceTest {
 
   @BeforeEach
   void prepare(Vertx vertx) {
+
     Config config =
-        new Config(
-            new Config.HttpConfig(HTTP_PORT),
-            Config.RedisConfig.builder().build(),
-            new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
-            new Config.VerticleConfig(1));
+        Config.builder()
+            .httpConfig(HttpConfig.builder().port(HTTP_PORT).build())
+            .postgresConfig(
+                PostgresConfig.builder()
+                    .host("127.0.0.1")
+                    .port(5432)
+                    .username("postgres")
+                    .password("postgres")
+                    .database("postgres")
+                    .build())
+            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
+            .build();
 
     provider =
         DaggerTestMockPersistenceProvider.builder()

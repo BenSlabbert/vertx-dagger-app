@@ -20,10 +20,10 @@ public class SagaBuilder {
     this.vertx = vertx;
   }
 
-  private SagaStage.SagaStageBuilder stageBuilder = new SagaStage.SagaStageBuilder();
+  private SagaStage.Builder stageBuilder = SagaStage.builder();
 
   public SagaBuilder withStage() {
-    stageBuilder = new SagaStage.SagaStageBuilder();
+    stageBuilder = SagaStage.builder();
     return this;
   }
 

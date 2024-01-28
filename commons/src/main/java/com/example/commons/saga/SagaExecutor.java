@@ -3,16 +3,17 @@ package com.example.commons.saga;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
-import static java.util.logging.Level.SEVERE;
 
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import java.util.List;
 import java.util.ListIterator;
-import lombok.extern.java.Log;
 
-@Log
 public class SagaExecutor {
+
+  private static final Logger log = LoggerFactory.getLogger(SagaExecutor.class);
 
   private final String sagaId;
   private final ListIterator<SagaStage> iterator;
@@ -45,7 +46,7 @@ public class SagaExecutor {
         .compose(msg -> stage.handleResult(sagaId, msg))
         .recover(
             throwable -> {
-              log.log(SEVERE, "%s failed to execute saga".formatted(sagaId), throwable);
+              log.error("%s failed to execute saga".formatted(sagaId), throwable);
               return previous().map(ignore -> FALSE);
             })
         .compose(
@@ -80,7 +81,7 @@ public class SagaExecutor {
               }
 
               // sendRollbackCommand failed, log the error and keep unwinding
-              log.log(SEVERE, "%s failed to execute saga rollback".formatted(sagaId), throwable);
+              log.error("%s failed to execute saga rollback".formatted(sagaId), throwable);
               return previous();
             });
   }

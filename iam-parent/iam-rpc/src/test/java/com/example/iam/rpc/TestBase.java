@@ -3,6 +3,8 @@ package com.example.iam.rpc;
 
 import com.example.commons.ConfigEncoder;
 import com.example.commons.config.Config;
+import com.example.commons.config.Config.RedisConfig;
+import com.example.commons.config.Config.VerticleConfig;
 import com.example.iam.rpc.verticle.RpcVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
@@ -18,11 +20,10 @@ public abstract class TestBase {
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     Config config =
-        new Config(
-            new Config.HttpConfig(0),
-            new Config.RedisConfig("127.0.0.1", 6379, 0),
-            null,
-            new Config.VerticleConfig(1));
+        Config.builder()
+            .redisConfig(RedisConfig.builder().host("127.0.0.1").port(6379).database(0).build())
+            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
+            .build();
 
     JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(

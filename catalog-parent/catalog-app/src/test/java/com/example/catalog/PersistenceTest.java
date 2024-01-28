@@ -13,6 +13,7 @@ import com.example.catalog.verticle.ApiVerticle;
 import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
+import com.example.commons.config.Config.RedisConfig;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.iam.rpc.api.AuthenticationIntegration;
 import com.example.iam.rpc.api.CheckTokenResponse;
@@ -129,12 +130,24 @@ public abstract class PersistenceTest {
                     .build()));
 
     Config config =
-        new Config(
-            new Config.HttpConfig(HTTP_PORT),
-            new Config.RedisConfig("127.0.0.1", redis.getMappedPort(6379), 0),
-            new Config.PostgresConfig(
-                "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
-            new Config.VerticleConfig(1));
+        Config.builder()
+            .httpConfig(Config.HttpConfig.builder().port(HTTP_PORT).build())
+            .redisConfig(
+                RedisConfig.builder()
+                    .host("127.0.0.1")
+                    .port(redis.getMappedPort(6379))
+                    .database(0)
+                    .build())
+            .postgresConfig(
+                Config.PostgresConfig.builder()
+                    .host("127.0.0.1")
+                    .port(postgres.getMappedPort(5432))
+                    .username("postgres")
+                    .password("postgres")
+                    .database(dbName)
+                    .build())
+            .verticleConfig(Config.VerticleConfig.builder().numberOfInstances(1).build())
+            .build();
 
     provider =
         DaggerTestPersistenceProvider.builder()

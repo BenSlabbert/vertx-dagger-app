@@ -20,12 +20,6 @@
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.testcontainers</groupId>
-          <artifactId>testcontainers</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>

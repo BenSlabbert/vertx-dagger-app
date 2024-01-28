@@ -14,10 +14,8 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.Checkpoint;
 import io.vertx.junit5.VertxTestContext;
 import java.util.concurrent.atomic.AtomicBoolean;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 
-@Log
 class SagaExecutorTest extends TestBase {
 
   @Test

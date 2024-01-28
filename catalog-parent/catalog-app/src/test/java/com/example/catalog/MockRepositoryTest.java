@@ -12,6 +12,10 @@ import com.example.catalog.ioc.TestMockRepositoryProvider;
 import com.example.catalog.repository.ItemRepository;
 import com.example.catalog.repository.SuggestionService;
 import com.example.commons.config.Config;
+import com.example.commons.config.Config.HttpConfig;
+import com.example.commons.config.Config.PostgresConfig;
+import com.example.commons.config.Config.RedisConfig;
+import com.example.commons.config.Config.VerticleConfig;
 import com.example.iam.rpc.api.AuthenticationIntegration;
 import com.example.iam.rpc.api.CheckTokenResponse;
 import io.vertx.core.Future;
@@ -64,11 +68,19 @@ public abstract class MockRepositoryTest {
     when(transaction.commit()).thenReturn(Future.succeededFuture());
 
     Config config =
-        new Config(
-            new Config.HttpConfig(HTTP_PORT),
-            new Config.RedisConfig("127.0.0.1", 6379, 0),
-            new Config.PostgresConfig("127.0.0.1", 5432, "postgres", "postgres", "postgres"),
-            new Config.VerticleConfig(1));
+        Config.builder()
+            .httpConfig(HttpConfig.builder().port(HTTP_PORT).build())
+            .redisConfig(RedisConfig.builder().host("127.0.0.1").port(6379).database(0).build())
+            .postgresConfig(
+                PostgresConfig.builder()
+                    .host("127.0.0.1")
+                    .port(5432)
+                    .username("postgres")
+                    .password("postgres")
+                    .database("postgres")
+                    .build())
+            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
+            .build();
 
     provider =
         DaggerTestMockRepositoryProvider.builder()

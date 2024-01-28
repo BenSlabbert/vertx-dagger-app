@@ -81,12 +81,18 @@ public abstract class PersistenceTest {
     flyway.migrate();
 
     config =
-        new Config(
-            new Config.HttpConfig(HTTP_PORT),
-            Config.RedisConfig.builder().build(),
-            new Config.PostgresConfig(
-                "127.0.0.1", postgres.getMappedPort(5432), "postgres", "postgres", dbName),
-            new Config.VerticleConfig(1));
+        Config.builder()
+            .httpConfig(Config.HttpConfig.builder().port(HTTP_PORT).build())
+            .postgresConfig(
+                Config.PostgresConfig.builder()
+                    .host("127.0.0.1")
+                    .port(postgres.getMappedPort(5432))
+                    .username("postgres")
+                    .password("postgres")
+                    .database(dbName)
+                    .build())
+            .verticleConfig(Config.VerticleConfig.builder().numberOfInstances(1).build())
+            .build();
 
     provider =
         DaggerTestPersistenceProvider.builder()

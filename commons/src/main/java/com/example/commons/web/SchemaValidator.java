@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.commons.web;
 
-import static java.util.logging.Level.WARNING;
-
 import com.example.commons.config.Config;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.Draft;
 import io.vertx.json.schema.JsonSchema;
@@ -11,10 +11,10 @@ import io.vertx.json.schema.JsonSchemaOptions;
 import io.vertx.json.schema.OutputUnit;
 import io.vertx.json.schema.SchemaRepository;
 import java.util.Map;
-import lombok.extern.java.Log;
 
-@Log
 public class SchemaValidator {
+
+  private static final Logger log = LoggerFactory.getLogger(SchemaValidator.class);
 
   private final Map<Class<?>, JsonSchema> registry;
   private final SchemaRepository repository;
@@ -34,7 +34,7 @@ public class SchemaValidator {
     JsonSchema schema = registry.get(clazz);
 
     if (null == schema) {
-      log.log(WARNING, "no schema found for: {0}", new Object[] {clazz});
+      log.warn("no schema found for: " + clazz);
       return Boolean.FALSE;
     }
 
