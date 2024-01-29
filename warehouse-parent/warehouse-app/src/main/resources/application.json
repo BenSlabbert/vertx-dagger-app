@@ -1,0 +1,15 @@
+{
+  "httpConfig": {
+    "port": 8084
+  },
+  "verticleConfig": {
+    "numberOfInstances": 1
+  },
+  "postgresConfig": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "username": "postgres",
+    "password": "postgres",
+    "database": "payment"
+  }
+}

@@ -18,6 +18,7 @@
     <module>payment-parent</module>
     <module>starter-parent</module>
     <module>client-parent</module>
+    <module>warehouse-parent</module>
   </modules>
 
   <properties>
