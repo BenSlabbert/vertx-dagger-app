@@ -1,7 +1,10 @@
 {
   "iamConfig" : {
     "host" : "http://localhost:8080/api",
-    "username" : "admin",
-    "password" : "admin"
+    "username" : "truck",
+    "password" : "password"
+  },
+  "warehouseConfig" : {
+    "host" : "http://localhost:8084/api"
   }
 }

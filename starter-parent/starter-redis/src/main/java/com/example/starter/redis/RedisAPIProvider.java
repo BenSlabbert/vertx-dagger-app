@@ -12,15 +12,16 @@ import io.vertx.redis.client.RedisAPI;
 import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 
 @Module
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 class RedisAPIProvider implements AutoCloseable {
 
   private static final Logger log = LoggerFactory.getLogger(RedisAPIProvider.class);
 
   private static RedisAPI redisAPI = null;
+
+  @Inject
+  RedisAPIProvider() {}
 
   @Provides
   @Singleton

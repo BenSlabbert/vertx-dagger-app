@@ -8,10 +8,10 @@
   </parent>
 
   <groupId>com.example.starter</groupId>
-  <artifactId>redis</artifactId>
+  <artifactId>warehouse-api-client</artifactId>
 
   <properties>
-    <finalName>redis-starter</finalName>
+    <finalName>warehouse-api-client-starter</finalName>
   </properties>
 
   <dependencies>
@@ -25,8 +25,22 @@
       <artifactId>dagger</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.example.iam.auth.api</groupId>
+      <artifactId>iam-auth-api</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-redis-client</artifactId>
+      <artifactId>vertx-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.example.warehouse.api</groupId>
+      <artifactId>warehouse-api</artifactId>
+      <version>${revision}</version>
     </dependency>
   </dependencies>
 
@@ -66,6 +80,38 @@
             </path>
           </annotationProcessorPaths>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <includeScope>compile</includeScope>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

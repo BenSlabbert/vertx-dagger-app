@@ -16,6 +16,7 @@
     <module>starter-jdbc-pool</module>
     <module>starter-redis</module>
     <module>starter-iam-auth-client</module>
+    <module>starter-warehouse-api-client</module>
   </modules>
 
 </project>

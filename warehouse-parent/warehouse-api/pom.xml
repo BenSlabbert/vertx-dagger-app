@@ -3,15 +3,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example.parent</groupId>
-    <artifactId>starter-parent</artifactId>
+    <artifactId>warehouse-parent</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <groupId>com.example.starter</groupId>
-  <artifactId>iam-auth-client</artifactId>
+  <groupId>com.example.warehouse.api</groupId>
+  <artifactId>warehouse-api</artifactId>
 
   <properties>
-    <finalName>iam-auth-client-starter</finalName>
+    <finalName>warehouse-api</finalName>
   </properties>
 
   <dependencies>
@@ -21,21 +21,17 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
-      <groupId>com.google.dagger</groupId>
-      <artifactId>dagger</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.example.iam.auth.api</groupId>
-      <artifactId>iam-auth-api</artifactId>
-      <version>${revision}</version>
-    </dependency>
-    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-web-client</artifactId>
+      <artifactId>vertx-json-schema</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.auto.value</groupId>
+      <artifactId>auto-value-annotations</artifactId>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -54,24 +50,13 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <compilerArgs>
             <arg>-parameters</arg>
-            <arg>-Adagger.formatGeneratedSource=enabled</arg>
-            <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
-            <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
-            <arg>-Adagger.fastInit=enabled</arg>
-            <!--required by ErrorProne-->
-            <arg>-XDcompilePolicy=simple</arg>
-            <arg>-Xplugin:ErrorProne</arg>
+            <arg>-Acom.google.auto.value.AutoBuilderIsUnstable=true</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
-              <groupId>com.google.errorprone</groupId>
-              <artifactId>error_prone_core</artifactId>
-              <version>${errorprone.version}</version>
-            </path>
-            <path>
-              <groupId>com.google.dagger</groupId>
-              <artifactId>dagger-compiler</artifactId>
-              <version>${dagger.version}</version>
+              <groupId>com.google.auto.value</groupId>
+              <artifactId>auto-value</artifactId>
+              <version>${google-auto-value.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>

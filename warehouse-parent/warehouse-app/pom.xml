@@ -41,6 +41,11 @@
       <classifier>linux-x86_64</classifier>
     </dependency>
     <dependency>
+      <groupId>com.example.starter</groupId>
+      <artifactId>reactive-pool</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
     </dependency>
@@ -55,6 +60,11 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-opentelemetry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.example.warehouse.api</groupId>
+      <artifactId>warehouse-api</artifactId>
+      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

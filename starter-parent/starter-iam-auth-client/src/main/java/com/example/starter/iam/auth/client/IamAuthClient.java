@@ -35,7 +35,7 @@ public final class IamAuthClient implements IamAuthApi {
         .post("/login")
         .putHeader(CONTENT_TYPE.toString(), APPLICATION_JSON.toString())
         .sendJson(req)
-        .map(h -> new LoginResponseDto(h.bodyAsJsonObject()));
+        .map(b -> new LoginResponseDto(b.bodyAsJsonObject()));
   }
 
   @Override
@@ -44,7 +44,7 @@ public final class IamAuthClient implements IamAuthApi {
         .post("/refresh")
         .putHeader(CONTENT_TYPE.toString(), APPLICATION_JSON.toString())
         .sendJson(req)
-        .map(h -> new RefreshResponseDto(h.bodyAsJsonObject()));
+        .map(b -> new RefreshResponseDto(b.bodyAsJsonObject()));
   }
 
   @Override
@@ -53,6 +53,6 @@ public final class IamAuthClient implements IamAuthApi {
         .post("/register")
         .putHeader(CONTENT_TYPE.toString(), APPLICATION_JSON.toString())
         .sendJson(req)
-        .map(h -> new RegisterResponseDto(h.bodyAsJsonObject()));
+        .map(b -> new RegisterResponseDto(b.bodyAsJsonObject()));
   }
 }

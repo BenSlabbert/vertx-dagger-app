@@ -2,8 +2,11 @@
 package com.example.client.truck.ioc;
 
 import com.example.client.truck.config.IamConfig;
+import com.example.client.truck.config.WarehouseConfig;
 import com.example.starter.iam.auth.client.IamAuthClientFactory;
 import com.example.starter.iam.auth.client.IamAuthClientModule;
+import com.example.starter.warehouse.client.WarehouseClientFactory;
+import com.example.starter.warehouse.client.WarehouseClientModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -14,12 +17,19 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {IamAuthClientModule.class, Provider.EagerModule.class})
+@Component(
+    modules = {WarehouseClientModule.class, IamAuthClientModule.class, Provider.EagerModule.class})
 public interface Provider {
 
   @Nullable Void init();
 
   IamAuthClientFactory iamAuthClientFactory();
+
+  WarehouseClientFactory warehouseClientFactory();
+
+  IamConfig iamConfig();
+
+  WarehouseConfig warehouseConfig();
 
   @Component.Builder
   interface Builder {
@@ -29,6 +39,9 @@ public interface Provider {
 
     @BindsInstance
     Builder iamConfig(IamConfig config);
+
+    @BindsInstance
+    Builder warehouseConfig(WarehouseConfig warehouseConfig);
 
     Provider build();
   }

@@ -94,7 +94,7 @@ public class ApiVerticle extends AbstractVerticle {
         .ping(List.of())
         .onFailure(startPromise::fail)
         .onSuccess(
-            r -> {
+            ignore -> {
               Config.HttpConfig httpConfig = dagger.config().httpConfig();
               log.info("starting api verticle on port: " + httpConfig.port());
               vertx

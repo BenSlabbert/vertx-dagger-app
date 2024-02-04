@@ -16,15 +16,16 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 
 @Module
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 class PoolConfig implements AutoCloseable {
 
   private static final Logger log = LoggerFactory.getLogger(PoolConfig.class);
 
   private static Pool pool = null;
+
+  @Inject
+  PoolConfig() {}
 
   @Provides
   @Singleton

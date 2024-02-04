@@ -51,6 +51,11 @@
       <artifactId>vertx-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.example.starter</groupId>
+      <artifactId>warehouse-api-client</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.google.auto.value</groupId>
       <artifactId>auto-value-annotations</artifactId>
       <scope>provided</scope>
