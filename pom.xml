@@ -37,7 +37,7 @@
     <!--deps-->
     <vertx.version>4.5.2</vertx.version>
     <junit-jupiter.version>5.10.2</junit-jupiter.version>
-    <assertj-core.version>3.25.2</assertj-core.version>
+    <assertj-core.version>3.25.3</assertj-core.version>
     <lombok.version>1.18.30</lombok.version>
     <!--blocking migration to java 21-->
     <mockito.version>5.10.0</mockito.version>
