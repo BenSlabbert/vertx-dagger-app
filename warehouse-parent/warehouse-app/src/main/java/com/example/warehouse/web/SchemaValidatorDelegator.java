@@ -3,7 +3,6 @@ package com.example.warehouse.web;
 
 import com.example.commons.config.Config;
 import com.example.commons.web.SchemaValidator;
-import com.example.warehouse.api.dto.GetNextDeliveryJobRequestDto;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.JsonSchema;
 import java.util.Map;
@@ -26,6 +25,9 @@ public class SchemaValidatorDelegator {
 
   private Map<Class<?>, JsonSchema> getRegistry() {
     return Map.ofEntries(
-        Map.entry(GetNextDeliveryJobRequestDto.class, GetNextDeliveryJobRequestDto.getSchema()));
+        // todo we can probably delete this since we will use a vertx event
+        //        Map.entry(GetNextDeliveryJobRequestDto.class,
+        // GetNextDeliveryJobRequestDto.getSchema())
+        );
   }
 }

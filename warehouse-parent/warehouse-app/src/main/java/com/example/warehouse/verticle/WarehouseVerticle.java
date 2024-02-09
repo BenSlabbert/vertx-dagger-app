@@ -9,7 +9,6 @@ import com.example.commons.future.FutureUtil;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.warehouse.ioc.DaggerProvider;
 import com.example.warehouse.ioc.Provider;
-import com.example.warehouse.web.route.handler.ApiHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
@@ -73,11 +72,6 @@ public class WarehouseVerticle extends AbstractVerticle {
 
     // main routes
     mainRouter.route("/api/*").subRouter(apiRouter);
-
-    ApiHandler apiHandler = dagger.apiHandler();
-
-    // api routes
-    apiRouter.get("/next").handler(apiHandler::getNextDeliveryJob);
 
     mainRouter.get("/health*").handler(getHealthCheckHandler());
     mainRouter.get("/ping*").handler(getPingHandler());

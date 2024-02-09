@@ -8,10 +8,10 @@
   </parent>
 
   <groupId>com.example.starter</groupId>
-  <artifactId>iam-auth-client</artifactId>
+  <artifactId>starter-iam-auth-client</artifactId>
 
   <properties>
-    <finalName>iam-auth-client-starter</finalName>
+    <finalName>starter-iam-auth-client</finalName>
   </properties>
 
   <dependencies>

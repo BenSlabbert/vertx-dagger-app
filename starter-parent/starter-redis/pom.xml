@@ -8,10 +8,10 @@
   </parent>
 
   <groupId>com.example.starter</groupId>
-  <artifactId>redis</artifactId>
+  <artifactId>starter-redis</artifactId>
 
   <properties>
-    <finalName>redis-starter</finalName>
+    <finalName>starter-redis</finalName>
   </properties>
 
   <dependencies>

@@ -13,7 +13,7 @@
 
   <modules>
     <module>warehouse-app</module>
-    <module>warehouse-api</module>
+    <module>warehouse-rpc-api</module>
   </modules>
 
 </project>

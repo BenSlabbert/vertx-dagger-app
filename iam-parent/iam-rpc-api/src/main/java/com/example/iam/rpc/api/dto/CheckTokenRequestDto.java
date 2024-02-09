@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2024. */
-package com.example.iam.rpc.api;
+package com.example.iam.rpc.api.dto;
 
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.codegen.json.annotations.JsonGen;
@@ -15,21 +15,17 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class CheckTokenResponse {
+public class CheckTokenRequestDto {
 
-  private boolean valid;
+  private String token;
 
-  private String userPrincipal;
-
-  private String userAttributes;
-
-  public CheckTokenResponse(JsonObject jsonObject) {
-    CheckTokenResponseConverter.fromJson(jsonObject, this);
+  public CheckTokenRequestDto(JsonObject jsonObject) {
+    CheckTokenRequestDtoConverter.fromJson(jsonObject, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-    CheckTokenResponseConverter.toJson(this, json);
+    CheckTokenRequestDtoConverter.toJson(this, json);
     return json;
   }
 }

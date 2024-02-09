@@ -8,10 +8,10 @@
   </parent>
 
   <groupId>com.example.starter</groupId>
-  <artifactId>jdbc-pool</artifactId>
+  <artifactId>starter-jdbc-pool</artifactId>
 
   <properties>
-    <finalName>jdbc-pool-starter</finalName>
+    <finalName>starter-jdbc-pool</finalName>
   </properties>
 
   <dependencies>

@@ -5,7 +5,6 @@ import com.example.commons.config.Config;
 import com.example.starter.reactive.pool.PoolModule;
 import com.example.warehouse.service.ServiceLifecycleManagement;
 import com.example.warehouse.service.ServiceModule;
-import com.example.warehouse.web.route.handler.ApiHandler;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -23,8 +22,6 @@ public interface Provider {
   @Nullable Void init();
 
   Config config();
-
-  ApiHandler apiHandler();
 
   ServiceLifecycleManagement serviceLifecycleManagement();
 

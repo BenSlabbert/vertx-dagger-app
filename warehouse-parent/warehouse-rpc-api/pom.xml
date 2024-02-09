@@ -7,8 +7,8 @@
     <version>${revision}</version>
   </parent>
 
-  <groupId>com.example.warehouse.api</groupId>
-  <artifactId>warehouse-api</artifactId>
+  <groupId>com.example.warehouse.rpc.api</groupId>
+  <artifactId>warehouse-rpc-api</artifactId>
 
   <properties>
     <finalName>warehouse-api</finalName>
@@ -21,6 +21,20 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
+      <groupId>com.google.dagger</groupId>
+      <artifactId>dagger</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.dagger</groupId>
+      <artifactId>dagger-compiler</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-codegen</artifactId>
+      <classifier>processor</classifier>
+    </dependency>
+    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
     </dependency>
@@ -29,8 +43,12 @@
       <artifactId>vertx-json-schema</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.auto.value</groupId>
-      <artifactId>auto-value-annotations</artifactId>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-service-proxy</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -50,13 +68,32 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <compilerArgs>
             <arg>-parameters</arg>
-            <arg>-Acom.google.auto.value.AutoBuilderIsUnstable=true</arg>
+            <arg>-Adagger.formatGeneratedSource=enabled</arg>
+            <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
+            <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
+            <arg>-Adagger.fastInit=enabled</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
-              <groupId>com.google.auto.value</groupId>
-              <artifactId>auto-value</artifactId>
-              <version>${google-auto-value.version}</version>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <groupId>io.vertx</groupId>
+              <artifactId>vertx-codegen</artifactId>
+              <version>${vertx.version}</version>
+              <classifier>processor</classifier>
+            </path>
+            <path>
+              <groupId>io.vertx</groupId>
+              <artifactId>vertx-service-proxy</artifactId>
+              <version>${vertx.version}</version>
+            </path>
+            <path>
+              <groupId>com.google.dagger</groupId>
+              <artifactId>dagger-compiler</artifactId>
+              <version>${dagger.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>

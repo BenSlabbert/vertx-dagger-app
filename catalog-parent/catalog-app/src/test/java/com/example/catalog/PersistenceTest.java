@@ -15,10 +15,10 @@ import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.RedisConfig;
 import com.example.commons.transaction.reactive.TransactionBoundary;
-import com.example.iam.rpc.api.AuthenticationIntegration;
-import com.example.iam.rpc.api.CheckTokenResponse;
+import com.example.iam.rpc.api.IamRpcIntegration;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;
+import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import com.example.migration.FlywayProvider;
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;
@@ -119,11 +119,11 @@ public abstract class PersistenceTest {
     flyway.clean();
     flyway.migrate();
 
-    AuthenticationIntegration authHandler = mock(AuthenticationIntegration.class);
+    IamRpcIntegration authHandler = mock(IamRpcIntegration.class);
     when(authHandler.isTokenValid(anyString()))
         .thenReturn(
             Future.succeededFuture(
-                CheckTokenResponse.builder()
+                CheckTokenResponseDto.builder()
                     .valid(true)
                     .userPrincipal(JsonObject.of().encode())
                     .userAttributes(JsonObject.of().encode())
@@ -166,7 +166,7 @@ public abstract class PersistenceTest {
                 vertx,
                 request ->
                     Future.succeededFuture(
-                        CheckTokenResponse.builder()
+                        CheckTokenResponseDto.builder()
                             .valid(true)
                             .userAttributes(new JsonObject().encode())
                             .userPrincipal(new JsonObject().encode())

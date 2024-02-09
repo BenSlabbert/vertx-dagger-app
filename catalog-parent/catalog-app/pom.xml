@@ -89,12 +89,12 @@
     </dependency>
     <dependency>
       <groupId>com.example.starter</groupId>
-      <artifactId>reactive-pool</artifactId>
+      <artifactId>starter-reactive-pool</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>com.example.starter</groupId>
-      <artifactId>redis</artifactId>
+      <artifactId>starter-redis</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>

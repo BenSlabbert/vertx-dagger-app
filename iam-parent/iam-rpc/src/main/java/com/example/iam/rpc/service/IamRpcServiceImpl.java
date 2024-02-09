@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.rpc.service;
 
-import com.example.iam.rpc.api.CheckTokenRequest;
-import com.example.iam.rpc.api.CheckTokenResponse;
 import com.example.iam.rpc.api.IamRpcService;
+import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
+import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import io.vertx.core.Future;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
@@ -20,14 +20,14 @@ public class IamRpcServiceImpl implements IamRpcService {
   private final TokenService tokenService;
 
   @Override
-  public Future<CheckTokenResponse> check(CheckTokenRequest request) {
+  public Future<CheckTokenResponseDto> check(CheckTokenRequestDto request) {
     log.info("check token is valid");
 
     return tokenService
         .isValidToken(request.getToken())
         .map(
             user ->
-                CheckTokenResponse.builder()
+                CheckTokenResponseDto.builder()
                     .userPrincipal(user.principal().encode())
                     .userAttributes(user.attributes().encode())
                     .valid(true)

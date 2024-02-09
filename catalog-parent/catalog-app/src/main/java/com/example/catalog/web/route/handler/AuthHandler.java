@@ -3,7 +3,7 @@ package com.example.catalog.web.route.handler;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.UNAUTHORIZED;
 
-import com.example.iam.rpc.api.AuthenticationIntegration;
+import com.example.iam.rpc.api.IamRpcIntegration;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.impl.logging.Logger;
@@ -26,7 +26,7 @@ public class AuthHandler implements Handler<RoutingContext> {
   private static final Logger log = LoggerFactory.getLogger(AuthHandler.class);
   private static final String BEARER = "Bearer ";
 
-  private final AuthenticationIntegration authenticationIntegration;
+  private final IamRpcIntegration authenticationIntegration;
 
   @Override
   public void handle(RoutingContext ctx) {

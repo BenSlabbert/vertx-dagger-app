@@ -6,7 +6,6 @@ import com.example.client.truck.config.WarehouseConfig;
 import com.example.client.truck.ioc.DaggerProvider;
 import com.example.client.truck.ioc.Provider;
 import com.example.starter.iam.auth.client.IamAuthClient;
-import com.example.starter.warehouse.client.WarehouseClient;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.impl.logging.Logger;
@@ -49,9 +48,6 @@ public class TruckVerticle extends AbstractVerticle {
 
     IamAuthClient iamAuthClient =
         dagger.iamAuthClientFactory().create("http://127.0.0.1/api", 8080);
-
-    WarehouseClient warehouseClient =
-        dagger.warehouseClientFactory().create("http://127.0.0.1/api", 8084);
 
     log.info("starting TruckVerticle");
 

@@ -8,10 +8,10 @@
   </parent>
 
   <groupId>com.example.starter</groupId>
-  <artifactId>reactive-pool</artifactId>
+  <artifactId>starter-reactive-pool</artifactId>
 
   <properties>
-    <finalName>reactive-pool-starter</finalName>
+    <finalName>starter-reactive-pool</finalName>
   </properties>
 
   <dependencies>

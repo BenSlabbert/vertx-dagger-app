@@ -8,5 +8,5 @@ import dagger.Module;
 interface IamRpcApiModuleBindings {
 
   @Binds
-  AuthenticationIntegration toAuthenticationIntegration(IamIntegration iamIntegration);
+  IamRpcIntegration toAuthenticationIntegration(IamRpcIntegrationImpl iamIntegration);
 }

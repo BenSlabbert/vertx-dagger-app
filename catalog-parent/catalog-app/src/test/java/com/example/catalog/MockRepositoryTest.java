@@ -16,8 +16,8 @@ import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.PostgresConfig;
 import com.example.commons.config.Config.RedisConfig;
 import com.example.commons.config.Config.VerticleConfig;
-import com.example.iam.rpc.api.AuthenticationIntegration;
-import com.example.iam.rpc.api.CheckTokenResponse;
+import com.example.iam.rpc.api.IamRpcIntegration;
+import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -46,11 +46,11 @@ public abstract class MockRepositoryTest {
 
   @BeforeEach
   void prepare(Vertx vertx) {
-    AuthenticationIntegration authHandler = mock(AuthenticationIntegration.class);
+    IamRpcIntegration authHandler = mock(IamRpcIntegration.class);
     when(authHandler.isTokenValid(anyString()))
         .thenReturn(
             Future.succeededFuture(
-                CheckTokenResponse.builder()
+                CheckTokenResponseDto.builder()
                     .valid(true)
                     .userPrincipal(JsonObject.of().encode())
                     .userAttributes(JsonObject.of().encode())

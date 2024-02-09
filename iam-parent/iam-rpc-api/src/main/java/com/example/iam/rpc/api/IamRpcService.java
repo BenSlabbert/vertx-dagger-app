@@ -1,6 +1,8 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.rpc.api;
 
+import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
+import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.Future;
@@ -16,5 +18,5 @@ public interface IamRpcService {
     return new IamRpcServiceVertxEBProxy(vertx, ADDRESS);
   }
 
-  Future<CheckTokenResponse> check(CheckTokenRequest request);
+  Future<CheckTokenResponseDto> check(CheckTokenRequestDto request);
 }
