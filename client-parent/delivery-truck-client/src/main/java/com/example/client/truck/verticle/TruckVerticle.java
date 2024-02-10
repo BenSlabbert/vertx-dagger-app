@@ -6,6 +6,7 @@ import com.example.client.truck.config.WarehouseConfig;
 import com.example.client.truck.ioc.DaggerProvider;
 import com.example.client.truck.ioc.Provider;
 import com.example.starter.iam.auth.client.IamAuthClient;
+import com.example.warehouse.rpc.api.WarehouseRpcService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.impl.logging.Logger;
@@ -48,6 +49,9 @@ public class TruckVerticle extends AbstractVerticle {
 
     IamAuthClient iamAuthClient =
         dagger.iamAuthClientFactory().create("http://127.0.0.1/api", 8080);
+
+    WarehouseRpcService warehouseRpcIntegration = dagger.warehouseRpcService();
+    warehouseRpcIntegration.getNextDeliveryJob(null);
 
     log.info("starting TruckVerticle");
 

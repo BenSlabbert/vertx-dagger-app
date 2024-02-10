@@ -69,11 +69,11 @@ public abstract class TestBase {
 
     provider =
         DaggerTestProvider.builder()
-            .providesVertx(vertx)
-            .providesConfig(config)
-            .providesHttpConfig(config.httpConfig())
-            .providesVerticleConfig(config.verticleConfig())
-            .providesRedisConfig(config.redisConfig())
+            .vertx(vertx)
+            .config(config)
+            .httpConfig(config.httpConfig())
+            .verticleConfig(config.verticleConfig())
+            .redisConfig(config.redisConfig())
             .build();
 
     JsonObject cfg = ConfigEncoder.encode(config);

@@ -3,7 +3,8 @@ package com.example.catalog.web.route.handler;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.UNAUTHORIZED;
 
-import com.example.iam.rpc.api.IamRpcIntegration;
+import com.example.iam.rpc.api.IamRpcService;
+import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.impl.logging.Logger;
@@ -26,7 +27,7 @@ public class AuthHandler implements Handler<RoutingContext> {
   private static final Logger log = LoggerFactory.getLogger(AuthHandler.class);
   private static final String BEARER = "Bearer ";
 
-  private final IamRpcIntegration authenticationIntegration;
+  private final IamRpcService authenticationIntegration;
 
   @Override
   public void handle(RoutingContext ctx) {
@@ -50,7 +51,7 @@ public class AuthHandler implements Handler<RoutingContext> {
 
     String token = authHeader.substring(BEARER.length());
     authenticationIntegration
-        .isTokenValid(token)
+        .check(CheckTokenRequestDto.builder().token(token).build())
         .onFailure(
             err -> {
               log.error("iam call failed", err);

@@ -14,6 +14,6 @@ class WarehouseRpcServiceProvider {
   @Provides
   @Singleton
   static WarehouseRpcService provideWarehouseRpcService(Vertx vertx) {
-    return WarehouseRpcService.createClientProxy(vertx);
+    return new WarehouseRpcServiceVertxEBProxy(vertx, WarehouseRpcService.ADDRESS);
   }
 }

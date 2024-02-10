@@ -6,5 +6,5 @@ import dagger.Module;
 @Module(includes = {IamRpcServiceProvider.class, IamRpcApiModuleBindings.class})
 public interface IamRpcApiModule {
 
-  IamRpcIntegration authenticationIntegration();
+  IamRpcService iamRpcService();
 }

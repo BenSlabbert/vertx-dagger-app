@@ -27,19 +27,19 @@ public interface TestProvider extends Provider {
   interface Builder {
 
     @BindsInstance
-    Builder providesVertx(Vertx vertx);
+    Builder vertx(Vertx vertx);
 
     @BindsInstance
-    Builder providesConfig(Config config);
+    Builder config(Config config);
 
     @BindsInstance
-    Builder providesHttpConfig(Config.HttpConfig httpConfig);
+    Builder httpConfig(Config.HttpConfig httpConfig);
 
     @BindsInstance
-    Builder providesVerticleConfig(Config.VerticleConfig httpConfig);
+    Builder verticleConfig(Config.VerticleConfig verticleConfig);
 
     @BindsInstance
-    Builder providesRedisConfig(Config.RedisConfig httpConfig);
+    Builder redisConfig(Config.RedisConfig redisConfig);
 
     TestProvider build();
   }

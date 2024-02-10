@@ -2,7 +2,7 @@
 package com.example.catalog.ioc;
 
 import com.example.commons.config.Config;
-import com.example.iam.rpc.api.IamRpcIntegration;
+import com.example.iam.rpc.api.IamRpcService;
 import dagger.BindsInstance;
 import io.vertx.core.Vertx;
 
@@ -28,7 +28,7 @@ public interface BaseBuilder<
   BUILDER verticleConfig(Config.VerticleConfig verticleConfig);
 
   @BindsInstance
-  BUILDER authenticationIntegration(IamRpcIntegration authenticationIntegration);
+  BUILDER iamRpcService(IamRpcService iamRpcService);
 
   PROVIDER build();
 }

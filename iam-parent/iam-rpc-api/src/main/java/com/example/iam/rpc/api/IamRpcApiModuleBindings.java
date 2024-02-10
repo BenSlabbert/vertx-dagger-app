@@ -1,12 +1,7 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.rpc.api;
 
-import dagger.Binds;
 import dagger.Module;
 
 @Module
-interface IamRpcApiModuleBindings {
-
-  @Binds
-  IamRpcIntegration toAuthenticationIntegration(IamRpcIntegrationImpl iamIntegration);
-}
+interface IamRpcApiModuleBindings {}

@@ -3,7 +3,7 @@ package com.example.catalog;
 
 import static com.example.commons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -15,7 +15,6 @@ import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.RedisConfig;
 import com.example.commons.transaction.reactive.TransactionBoundary;
-import com.example.iam.rpc.api.IamRpcIntegration;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;
 import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
@@ -119,8 +118,8 @@ public abstract class PersistenceTest {
     flyway.clean();
     flyway.migrate();
 
-    IamRpcIntegration authHandler = mock(IamRpcIntegration.class);
-    when(authHandler.isTokenValid(anyString()))
+    IamRpcService authHandler = mock(IamRpcService.class);
+    when(authHandler.check(any()))
         .thenReturn(
             Future.succeededFuture(
                 CheckTokenResponseDto.builder()
@@ -157,7 +156,7 @@ public abstract class PersistenceTest {
             .redisConfig(config.redisConfig())
             .postgresConfig(config.postgresConfig())
             .verticleConfig(config.verticleConfig())
-            .authenticationIntegration(authHandler)
+            .iamRpcService(authHandler)
             .build();
     provider.init();
 

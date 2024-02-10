@@ -3,8 +3,8 @@ package com.example.warehouse.rpc.api;
 
 import dagger.Module;
 
-@Module(includes = WarehouseRpcApiModuleBindings.class)
+@Module(includes = {WarehouseRpcServiceProvider.class, WarehouseRpcApiModuleBindings.class})
 public interface WarehouseRpcApiModule {
 
-  WarehouseRpcIntegration warehouseRpcIntegration();
+  WarehouseRpcService warehouseRpcService();
 }

@@ -3,7 +3,6 @@ package com.example.catalog;
 
 import static com.example.commons.FreePortUtility.getPort;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -16,7 +15,7 @@ import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.PostgresConfig;
 import com.example.commons.config.Config.RedisConfig;
 import com.example.commons.config.Config.VerticleConfig;
-import com.example.iam.rpc.api.IamRpcIntegration;
+import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -46,8 +45,8 @@ public abstract class MockRepositoryTest {
 
   @BeforeEach
   void prepare(Vertx vertx) {
-    IamRpcIntegration authHandler = mock(IamRpcIntegration.class);
-    when(authHandler.isTokenValid(anyString()))
+    IamRpcService authHandler = mock(IamRpcService.class);
+    when(authHandler.check(any()))
         .thenReturn(
             Future.succeededFuture(
                 CheckTokenResponseDto.builder()
@@ -90,7 +89,7 @@ public abstract class MockRepositoryTest {
             .redisConfig(config.redisConfig())
             .postgresConfig(config.postgresConfig())
             .verticleConfig(config.verticleConfig())
-            .authenticationIntegration(authHandler)
+            .iamRpcService(authHandler)
             .suggestionService(suggestionService)
             .itemRepository(itemRepository)
             .pool(pool)

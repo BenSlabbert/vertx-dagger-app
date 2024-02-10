@@ -5,6 +5,8 @@ import com.example.client.truck.config.IamConfig;
 import com.example.client.truck.config.WarehouseConfig;
 import com.example.starter.iam.auth.client.IamAuthClientFactory;
 import com.example.starter.iam.auth.client.IamAuthClientModule;
+import com.example.warehouse.rpc.api.WarehouseRpcApiModule;
+import com.example.warehouse.rpc.api.WarehouseRpcService;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -15,7 +17,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {IamAuthClientModule.class, Provider.EagerModule.class})
+@Component(
+    modules = {WarehouseRpcApiModule.class, IamAuthClientModule.class, Provider.EagerModule.class})
 public interface Provider {
 
   @Nullable Void init();
@@ -25,6 +28,8 @@ public interface Provider {
   IamConfig iamConfig();
 
   WarehouseConfig warehouseConfig();
+
+  WarehouseRpcService warehouseRpcService();
 
   @Component.Builder
   interface Builder {
