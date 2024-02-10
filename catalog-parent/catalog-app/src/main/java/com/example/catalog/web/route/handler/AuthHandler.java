@@ -27,7 +27,7 @@ public class AuthHandler implements Handler<RoutingContext> {
   private static final Logger log = LoggerFactory.getLogger(AuthHandler.class);
   private static final String BEARER = "Bearer ";
 
-  private final IamRpcService authenticationIntegration;
+  private final IamRpcService iamRpcService;
 
   @Override
   public void handle(RoutingContext ctx) {
@@ -50,7 +50,7 @@ public class AuthHandler implements Handler<RoutingContext> {
     }
 
     String token = authHeader.substring(BEARER.length());
-    authenticationIntegration
+    iamRpcService
         .check(CheckTokenRequestDto.builder().token(token).build())
         .onFailure(
             err -> {
