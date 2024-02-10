@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
-public class IamRpcServiceImpl implements IamRpcService {
+class IamRpcServiceImpl implements IamRpcService {
 
   private static final Logger log = LoggerFactory.getLogger(IamRpcServiceImpl.class);
 

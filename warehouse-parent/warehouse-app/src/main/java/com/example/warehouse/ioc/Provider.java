@@ -3,6 +3,7 @@ package com.example.warehouse.ioc;
 
 import com.example.commons.config.Config;
 import com.example.starter.reactive.pool.PoolModule;
+import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.service.ServiceLifecycleManagement;
 import com.example.warehouse.service.ServiceModule;
 import dagger.BindsInstance;
@@ -24,6 +25,8 @@ public interface Provider {
   Config config();
 
   ServiceLifecycleManagement serviceLifecycleManagement();
+
+  WarehouseRpcService warehouseRpcService();
 
   Pool pool();
 

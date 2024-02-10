@@ -6,11 +6,15 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
+import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.warehouse.ioc.DaggerProvider;
 import com.example.warehouse.ioc.Provider;
+import com.example.warehouse.rpc.api.WarehouseRpcService;
+import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxProxyHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
@@ -31,6 +35,7 @@ public class WarehouseVerticle extends AbstractVerticle {
   private static final Logger log = LoggerFactory.getLogger(WarehouseVerticle.class);
 
   private Provider dagger;
+  private MessageConsumer<JsonObject> consumer;
 
   private void init() {
     log.info("WarehouseVerticle constructor");
@@ -58,10 +63,31 @@ public class WarehouseVerticle extends AbstractVerticle {
   @Override
   public void start(Promise<Void> startPromise) {
     vertx.exceptionHandler(err -> log.error("unhandled exception", err));
+    log.info("starting");
     init();
 
+    vertx
+        .eventBus()
+        .addInboundInterceptor(
+            ctx -> {
+              log.info("inbound interceptor");
+              ctx.next();
+            })
+        .addOutboundInterceptor(
+            ctx -> {
+              log.info("outbound interceptor");
+              ctx.next();
+            });
+
+    this.consumer =
+        new WarehouseRpcServiceVertxProxyHandler(vertx, dagger.warehouseRpcService())
+            .register(vertx.eventBus(), WarehouseRpcService.ADDRESS)
+            .setMaxBufferedMessages(100)
+            .fetch(10)
+            .exceptionHandler(err -> log.error("exception in event bus", err))
+            .endHandler(ignore -> log.info("end handler"));
+
     Router mainRouter = Router.router(vertx);
-    Router apiRouter = Router.router(vertx);
 
     mainRouter
         .route()
@@ -71,8 +97,6 @@ public class WarehouseVerticle extends AbstractVerticle {
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
     // main routes
-    mainRouter.route("/api/*").subRouter(apiRouter);
-
     mainRouter.get("/health*").handler(getHealthCheckHandler());
     mainRouter.get("/ping*").handler(getPingHandler());
 
@@ -116,6 +140,7 @@ public class WarehouseVerticle extends AbstractVerticle {
   @Override
   public void stop(Promise<Void> stopPromise) {
     System.err.println("stopping");
+    MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
     Set<AutoCloseable> closeables = dagger.serviceLifecycleManagement().closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
@@ -130,13 +155,9 @@ public class WarehouseVerticle extends AbstractVerticle {
       }
     }
 
-    System.err.println("awaitTermination...start");
-    FutureUtil.awaitTermination()
-        .onComplete(
-            ar -> {
-              System.err.printf("awaitTermination...end: %b%n", ar.result());
-              stopPromise.complete();
-            });
+    consumer.unregister().onComplete(multiCompletePromise::complete);
+
+    FutureUtil.awaitTermination().onComplete(multiCompletePromise::complete);
   }
 
   private static class DbPing extends TransactionBoundary {

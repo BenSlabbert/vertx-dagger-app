@@ -21,6 +21,8 @@ public interface Provider {
 
   IamRpcService iamRpcService();
 
+  Config config();
+
   @Component.Builder
   interface Builder {
 
