@@ -2,11 +2,12 @@
 package com.example.client.truck.ioc;
 
 import com.example.client.truck.config.IamConfig;
-import com.example.client.truck.config.WarehouseConfig;
+import com.example.client.truck.service.JobService;
+import com.example.client.truck.service.ServiceModule;
 import com.example.starter.iam.auth.client.IamAuthClientFactory;
 import com.example.starter.iam.auth.client.IamAuthClientModule;
 import com.example.warehouse.rpc.api.WarehouseRpcApiModule;
-import com.example.warehouse.rpc.api.WarehouseRpcService;
+import com.example.warehouse.rpc.api.WarehouseRpcServiceProviderFactory;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -18,7 +19,12 @@ import javax.inject.Singleton;
 
 @Singleton
 @Component(
-    modules = {WarehouseRpcApiModule.class, IamAuthClientModule.class, Provider.EagerModule.class})
+    modules = {
+      WarehouseRpcApiModule.class,
+      IamAuthClientModule.class,
+      Provider.EagerModule.class,
+      ServiceModule.class
+    })
 public interface Provider {
 
   @Nullable Void init();
@@ -27,9 +33,9 @@ public interface Provider {
 
   IamConfig iamConfig();
 
-  WarehouseConfig warehouseConfig();
+  WarehouseRpcServiceProviderFactory warehouseRpcServiceProviderFactory();
 
-  WarehouseRpcService warehouseRpcService();
+  JobService jobService();
 
   @Component.Builder
   interface Builder {
@@ -39,9 +45,6 @@ public interface Provider {
 
     @BindsInstance
     Builder iamConfig(IamConfig config);
-
-    @BindsInstance
-    Builder warehouseConfig(WarehouseConfig warehouseConfig);
 
     Provider build();
   }

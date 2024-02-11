@@ -36,6 +36,11 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>com.example.iam.rpc.api</groupId>
+      <artifactId>iam-rpc-api</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-transport-native-epoll</artifactId>
       <classifier>linux-x86_64</classifier>
@@ -44,6 +49,10 @@
       <groupId>com.example.starter</groupId>
       <artifactId>starter-reactive-pool</artifactId>
       <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-auth-jwt</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>

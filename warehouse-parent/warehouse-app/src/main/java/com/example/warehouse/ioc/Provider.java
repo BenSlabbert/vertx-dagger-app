@@ -2,6 +2,8 @@
 package com.example.warehouse.ioc;
 
 import com.example.commons.config.Config;
+import com.example.iam.rpc.api.IamRpcApiModule;
+import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.starter.reactive.pool.PoolModule;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.service.ServiceLifecycleManagement;
@@ -17,7 +19,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {PoolModule.class, ServiceModule.class, Provider.EagerModule.class})
+@Component(
+    modules = {
+      IamRpcApiModule.class,
+      PoolModule.class,
+      ServiceModule.class,
+      Provider.EagerModule.class
+    })
 public interface Provider {
 
   @Nullable Void init();
@@ -27,6 +35,8 @@ public interface Provider {
   ServiceLifecycleManagement serviceLifecycleManagement();
 
   WarehouseRpcService warehouseRpcService();
+
+  IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider();
 
   Pool pool();
 

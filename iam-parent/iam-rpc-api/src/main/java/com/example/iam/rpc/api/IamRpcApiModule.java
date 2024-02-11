@@ -7,4 +7,6 @@ import dagger.Module;
 public interface IamRpcApiModule {
 
   IamRpcService iamRpcService();
+
+  IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider();
 }

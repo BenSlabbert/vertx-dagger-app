@@ -1,6 +1,7 @@
 {
   "iamConfig" : {
-    "host" : "http://localhost:8080/api",
+    "host" : "http://localhost/api",
+    "port" : "8080",
     "username" : "truck",
     "password" : "password"
   },

@@ -19,13 +19,20 @@ import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.authentication.AuthenticationProvider;
+import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
+import io.vertx.ext.auth.jwt.authorization.JWTAuthorization;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
+import io.vertx.serviceproxy.AuthenticationInterceptor;
+import io.vertx.serviceproxy.AuthorizationInterceptor;
+import io.vertx.serviceproxy.ServiceBinder;
 import io.vertx.sqlclient.Pool;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,7 +52,7 @@ public class WarehouseVerticle extends AbstractVerticle {
     Objects.requireNonNull(vertx);
     Objects.requireNonNull(config);
     Objects.requireNonNull(config.httpConfig());
-    Objects.requireNonNull(config.redisConfig());
+    Objects.requireNonNull(config.postgresConfig());
     Objects.requireNonNull(config.verticleConfig());
 
     this.dagger =
@@ -79,9 +86,22 @@ public class WarehouseVerticle extends AbstractVerticle {
               ctx.next();
             });
 
+    AuthenticationProvider authenticationProvider =
+        this.dagger.iamRpcServiceAuthenticationProvider();
+
+    // this way we need to provide the interceptors ourselves (no reflection)
+    new WarehouseRpcServiceVertxProxyHandler(vertx, dagger.warehouseRpcService())
+        .register(vertx, WarehouseRpcService.ADDRESS, List.of());
+
     this.consumer =
-        new WarehouseRpcServiceVertxProxyHandler(vertx, dagger.warehouseRpcService())
-            .register(vertx.eventBus(), WarehouseRpcService.ADDRESS)
+        // this method uses reflection to call the VertxProxyHandler constructor
+        new ServiceBinder(vertx)
+            .setAddress(WarehouseRpcService.ADDRESS)
+            .addInterceptor("action", AuthenticationInterceptor.create(authenticationProvider))
+            .addInterceptor(
+                AuthorizationInterceptor.create(JWTAuthorization.create("permissions"))
+                    .addAuthorization(RoleBasedAuthorization.create("truck-client")))
+            .register(WarehouseRpcService.class, dagger.warehouseRpcService())
             .setMaxBufferedMessages(100)
             .fetch(10)
             .exceptionHandler(err -> log.error("exception in event bus", err))

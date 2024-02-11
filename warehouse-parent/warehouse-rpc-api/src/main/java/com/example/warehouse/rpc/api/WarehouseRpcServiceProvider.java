@@ -1,19 +1,23 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse.rpc.api;
 
-import dagger.Module;
-import dagger.Provides;
+import dagger.assisted.Assisted;
+import dagger.assisted.AssistedInject;
 import io.vertx.core.Vertx;
-import javax.inject.Singleton;
+import io.vertx.core.eventbus.DeliveryOptions;
 
-@Module
-class WarehouseRpcServiceProvider {
+public class WarehouseRpcServiceProvider {
 
-  private WarehouseRpcServiceProvider() {}
+  private final Vertx vertx;
+  private final DeliveryOptions deliveryOptions;
 
-  @Provides
-  @Singleton
-  static WarehouseRpcService provideWarehouseRpcService(Vertx vertx) {
-    return new WarehouseRpcServiceVertxEBProxy(vertx, WarehouseRpcService.ADDRESS);
+  @AssistedInject
+  WarehouseRpcServiceProvider(Vertx vertx, @Assisted DeliveryOptions deliveryOptions) {
+    this.vertx = vertx;
+    this.deliveryOptions = deliveryOptions;
+  }
+
+  public WarehouseRpcService get() {
+    return new WarehouseRpcServiceVertxEBProxy(vertx, WarehouseRpcService.ADDRESS, deliveryOptions);
   }
 }
