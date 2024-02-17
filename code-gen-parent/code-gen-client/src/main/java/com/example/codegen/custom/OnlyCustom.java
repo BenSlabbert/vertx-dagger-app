@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.codegen.custom;
 
-import com.example.codegen.generator.annotation.Advised;
+import com.example.codegen.generator.advice.annotation.Advised;
 import java.util.Map;
 import javax.inject.Inject;
 

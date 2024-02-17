@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 2024. */
 package my.test;
 
-import com.example.codegen.generator.annotation.Advice;
-import com.example.codegen.generator.annotation.Advised;
+import com.example.codegen.generator.advice.annotation.Advice;
+import com.example.codegen.generator.advice.annotation.Advised;
 import java.util.List;
 import java.util.Map;
 

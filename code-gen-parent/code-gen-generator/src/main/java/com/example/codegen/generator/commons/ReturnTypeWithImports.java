@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.codegen.generator.generator;
+package com.example.codegen.generator.commons;
 
 import java.util.Arrays;
 import java.util.HashSet;

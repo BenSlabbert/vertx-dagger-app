@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.codegen.generator.annotation;
+package com.example.codegen.generator.advice.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

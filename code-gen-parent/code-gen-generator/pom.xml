@@ -16,8 +16,13 @@
       <artifactId>auto-service</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.dagger</groupId>
-      <artifactId>dagger</artifactId>
+      <groupId>com.example.commons</groupId>
+      <artifactId>commons</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web</artifactId>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
