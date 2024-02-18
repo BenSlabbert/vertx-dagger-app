@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.codegen.custom;
 
-import com.example.codegen.generator.advice.annotation.Advice;
+import com.example.codegen.annotation.advice.Advice;
 import java.util.Arrays;
 import javax.inject.Inject;
 

@@ -3,8 +3,8 @@ package com.example.codegen.client;
 
 import com.example.codegen.advice.DependencyB;
 import com.example.codegen.advice.MeasureAdvice;
+import com.example.codegen.annotation.advice.Advised;
 import com.example.codegen.custom.Custom;
-import com.example.codegen.generator.advice.annotation.Advised;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

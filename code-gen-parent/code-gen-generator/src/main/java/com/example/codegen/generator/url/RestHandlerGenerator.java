@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 2024. */
-package com.example.codegen.generator.url.generator;
+package com.example.codegen.generator.url;
 
+import com.example.codegen.annotation.url.RestHandler;
 import com.example.codegen.generator.commons.GenerationException;
-import com.example.codegen.generator.url.annotation.RestHandler;
 import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.PrintWriter;

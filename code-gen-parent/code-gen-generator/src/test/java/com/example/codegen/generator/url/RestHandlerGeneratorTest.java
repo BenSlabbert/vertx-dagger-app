@@ -4,7 +4,6 @@ package com.example.codegen.generator.url;
 import static com.google.common.truth.Truth.assertAbout;
 import static com.google.common.truth.Truth.assertThat;
 
-import com.example.codegen.generator.url.generator.RestHandlerGenerator;
 import com.google.testing.compile.JavaFileObjects;
 import com.google.testing.compile.JavaSourceSubjectFactory;
 import java.net.URL;

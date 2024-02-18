@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2024. */
 package my.test;
 
-import com.example.codegen.generator.url.annotation.RestHandler;
+import com.example.codegen.annotation.url.RestHandler;
 
 public class RestHandlerPathOnlyTest {
 

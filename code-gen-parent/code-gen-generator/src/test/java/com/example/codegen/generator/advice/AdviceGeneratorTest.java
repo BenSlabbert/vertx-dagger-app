@@ -4,7 +4,6 @@ package com.example.codegen.generator.advice;
 import static com.google.common.truth.Truth.assertAbout;
 import static com.google.common.truth.Truth.assertThat;
 
-import com.example.codegen.generator.advice.generator.AdviceGenerator;
 import com.google.testing.compile.JavaFileObjects;
 import com.google.testing.compile.JavaSourceSubjectFactory;
 import java.net.URL;

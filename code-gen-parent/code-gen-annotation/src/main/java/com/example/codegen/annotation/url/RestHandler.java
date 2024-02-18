@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2024. */
-package com.example.codegen.generator.url.annotation;
+package com.example.codegen.annotation.url;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

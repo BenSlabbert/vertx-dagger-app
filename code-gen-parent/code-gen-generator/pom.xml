@@ -16,6 +16,11 @@
       <artifactId>auto-service</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.example.code-gen</groupId>
+      <artifactId>code-gen-annotation</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>

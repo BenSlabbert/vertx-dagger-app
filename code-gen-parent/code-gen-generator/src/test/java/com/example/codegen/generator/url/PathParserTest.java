@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 2024. */
-package com.example.codegen.generator.url.generator;
+package com.example.codegen.generator.url;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

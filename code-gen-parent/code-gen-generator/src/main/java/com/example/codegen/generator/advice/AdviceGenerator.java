@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
-package com.example.codegen.generator.advice.generator;
+package com.example.codegen.generator.advice;
 
-import com.example.codegen.generator.advice.annotation.Advised;
+import com.example.codegen.annotation.advice.Advised;
 import com.example.codegen.generator.commons.GenerationException;
 import com.example.codegen.generator.commons.ReturnTypeWithImports;
 import com.google.auto.service.AutoService;

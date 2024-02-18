@@ -17,7 +17,12 @@
   <dependencies>
     <dependency>
       <groupId>org.example.code-gen</groupId>
-      <artifactId>code-gen-generator</artifactId>
+      <artifactId>code-gen-annotation</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.example.commons</groupId>
+      <artifactId>commons</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>
@@ -32,6 +37,10 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web</artifactId>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
