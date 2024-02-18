@@ -7,6 +7,7 @@ import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ItemService;
 import com.example.catalog.service.ServiceLifecycleManagement;
 import com.example.catalog.service.ServiceModule;
+import com.example.catalog.verticle.ApiVerticle;
 import com.example.catalog.web.WebModule;
 import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.HandlerModule;
@@ -45,7 +46,7 @@ public interface Provider {
 
   @Nullable Void init();
 
-  ServiceLifecycleManagement providesServiceLifecycleManagement();
+  ServiceLifecycleManagement serviceLifecycleManagement();
 
   Set<Consumer> consumers();
 
@@ -60,6 +61,8 @@ public interface Provider {
   Pool pool();
 
   RedisAPI redisAPI();
+
+  ApiVerticle apiVerticle();
 
   @Component.Builder
   interface Builder {

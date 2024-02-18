@@ -3,8 +3,7 @@ package com.example.catalog.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
-import com.example.catalog.ioc.DaggerProvider;
-import com.example.catalog.ioc.Provider;
+import com.example.catalog.service.ServiceLifecycleManagement;
 import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.config.Config;
@@ -18,61 +17,41 @@ import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
+import io.vertx.redis.client.RedisAPI;
+import io.vertx.sqlclient.Pool;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import lombok.NoArgsConstructor;
+import javax.inject.Inject;
+import lombok.RequiredArgsConstructor;
 
-@NoArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ApiVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(ApiVerticle.class);
 
-  private Provider dagger;
-  private Set<Consumer> consumers = Set.of();
-
-  private void init() {
-    log.info("ApiVerticle constructor");
-    JsonObject cfg = config();
-    Config config = Config.fromJson(cfg);
-
-    Objects.requireNonNull(vertx);
-    Objects.requireNonNull(config);
-    Objects.requireNonNull(config.postgresConfig());
-    Objects.requireNonNull(config.httpConfig());
-    Objects.requireNonNull(config.redisConfig());
-    Objects.requireNonNull(config.verticleConfig());
-
-    this.dagger =
-        DaggerProvider.builder()
-            .vertx(vertx)
-            .config(config)
-            .httpConfig(config.httpConfig())
-            .redisConfig(config.redisConfig())
-            .verticleConfig(config.verticleConfig())
-            .postgresConfig(config.postgresConfig())
-            .build();
-
-    this.dagger.init();
-  }
+  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final Set<Consumer> consumers;
+  private final ItemHandler itemHandler;
+  private final AuthHandler authHandler;
+  private final RedisAPI redisAPI;
+  private final Config config;
+  private final Pool pool;
 
   @Override
   public void start(Promise<Void> startPromise) {
     vertx.exceptionHandler(err -> log.error("unhandled exception", err));
-    init();
     log.info("starting ApiVerticle");
 
     checkConnections(startPromise)
         .onSuccess(
             ignore -> {
-              Config.HttpConfig httpConfig = dagger.config().httpConfig();
+              Config.HttpConfig httpConfig = config.httpConfig();
               log.info("starting api verticle on port: " + httpConfig.port());
 
               vertx
@@ -84,7 +63,6 @@ public class ApiVerticle extends AbstractVerticle {
                         if (res.succeeded()) {
                           log.info("started http server");
                           log.info("register consumers");
-                          consumers = dagger.consumers();
                           consumers.forEach(Consumer::register);
                           startPromise.complete();
                         } else {
@@ -104,7 +82,7 @@ public class ApiVerticle extends AbstractVerticle {
         // CORS config
         .handler(CorsHandler.create())
         // auth handler
-        .handler(dagger.authHandler());
+        .handler(authHandler);
 
     // main routes
     mainRouter
@@ -118,7 +96,6 @@ public class ApiVerticle extends AbstractVerticle {
     apiRouter.route().handler(ctx -> SecurityHandler.hasRole(ctx, AuthHandler.ROLE));
 
     // api routes
-    ItemHandler itemHandler = dagger.itemHandler();
     itemHandler.configureRoutes(apiRouter);
 
     // https://vertx.io/docs/vertx-health-check/java/
@@ -136,9 +113,7 @@ public class ApiVerticle extends AbstractVerticle {
   }
 
   private Future<?> checkDbConnection(Promise<Void> startPromise) {
-    return dagger
-        .pool()
-        .getConnection()
+    return pool.getConnection()
         .onFailure(startPromise::fail)
         .onSuccess(
             conn ->
@@ -148,7 +123,7 @@ public class ApiVerticle extends AbstractVerticle {
   }
 
   private Future<?> checkRedisConnection(Promise<Void> startPromise) {
-    return dagger.redisAPI().ping(List.of()).onFailure(startPromise::fail);
+    return redisAPI.ping(List.of()).onFailure(startPromise::fail);
   }
 
   @SuppressWarnings("java:S106") // logger is not available
@@ -157,7 +132,7 @@ public class ApiVerticle extends AbstractVerticle {
     System.err.println("stopping");
     MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
-    Set<AutoCloseable> closeables = dagger.providesServiceLifecycleManagement().closeables();
+    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     Future.all(consumers.stream().map(Consumer::unregister).toList())

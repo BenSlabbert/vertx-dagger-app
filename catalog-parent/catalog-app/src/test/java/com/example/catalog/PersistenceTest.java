@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
-import com.example.catalog.verticle.ApiVerticle;
 import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
@@ -174,7 +173,7 @@ public abstract class PersistenceTest {
 
     JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
-        new ApiVerticle(),
+        provider.apiVerticle(),
         new DeploymentOptions().setConfig(cfg),
         testContext.succeedingThenComplete());
   }
