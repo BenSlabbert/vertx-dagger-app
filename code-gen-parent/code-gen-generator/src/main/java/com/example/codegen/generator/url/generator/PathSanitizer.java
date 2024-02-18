@@ -18,11 +18,19 @@ final class PathSanitizer {
     path = path.replaceAll("/\\{int:([^}]+)}/", "/:$1/");
     path = path.replaceAll("/\\{long:([^}]+)}/", "/:$1/");
     path = path.replaceAll("/\\{string:([^}]+)}/", "/:$1/");
+    path = path.replaceAll("/\\{float:([^}]+)}/", "/:$1/");
+    path = path.replaceAll("/\\{double:([^}]+)}/", "/:$1/");
+    path = path.replaceAll("/\\{boolean:([^}]+)}/", "/:$1/");
+    path = path.replaceAll("/\\{ts:([^}]+)}/", "/:$1/");
 
     // for the end of the path with no trailing /
     path = path.replaceAll("/\\{int:([^}]+)}", "/:$1");
     path = path.replaceAll("/\\{long:([^}]+)}", "/:$1");
     path = path.replaceAll("/\\{string:([^}]+)}", "/:$1");
+    path = path.replaceAll("/\\{float:([^}]+)}", "/:$1");
+    path = path.replaceAll("/\\{double:([^}]+)}", "/:$1");
+    path = path.replaceAll("/\\{boolean:([^}]+)}", "/:$1");
+    path = path.replaceAll("/\\{ts:([^}]+)}", "/:$1");
 
     return path;
   }

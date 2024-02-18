@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.commons.web;
 
-public class StringParser implements Parser<String> {
+public final class StringParser implements Parser<String> {
 
   private StringParser() {}
 

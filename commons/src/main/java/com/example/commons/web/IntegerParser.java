@@ -3,7 +3,7 @@ package com.example.commons.web;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-public class IntegerParser implements Parser<Integer> {
+public final class IntegerParser implements Parser<Integer> {
 
   private IntegerParser() {}
 

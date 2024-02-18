@@ -3,7 +3,7 @@ package com.example.commons.web;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-public class LongParser implements Parser<Long> {
+public final class LongParser implements Parser<Long> {
 
   private LongParser() {}
 

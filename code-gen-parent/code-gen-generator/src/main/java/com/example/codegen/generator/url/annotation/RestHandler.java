@@ -22,6 +22,16 @@ public @interface RestHandler {
    * with a single static method parse(io.vertx.ext.web.RoutingContext) that returns the record type
    * <br>
    * generated class will create a sanitized path that can be used by the io.vertx.ext.web.Router
+   * <br>
+   * allowable types are int, long, string, boolean, float, double and unix timestamp (ts) <br>
+   * {int:paramName} <br>
+   * {long:paramName} <br>
+   * {string:paramName} <br>
+   * {boolean:paramName} <br>
+   * {float:paramName} <br>
+   * {double:paramName} <br>
+   * {ts:paramName} - 1708267289273 (unix millis) for example, will be converted to a
+   * java.time.Instant
    */
   String path();
 }

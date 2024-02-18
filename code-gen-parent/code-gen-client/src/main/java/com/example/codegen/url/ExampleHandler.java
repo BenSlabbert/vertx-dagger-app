@@ -3,6 +3,7 @@ package com.example.codegen.url;
 
 import com.example.codegen.generator.url.annotation.RestHandler;
 import io.vertx.ext.web.RoutingContext;
+import java.time.Instant;
 
 public class ExampleHandler {
 
@@ -46,5 +47,20 @@ public class ExampleHandler {
     int query1 = params.query1();
     String query2 = params.query2();
     long query3 = params.query3();
+  }
+
+  @RestHandler(
+      path =
+          "/some/prefix/{float:param1}?query1={double:query1}&query2={boolean:query2}&query3={ts:query3}")
+  public void types(RoutingContext ctx) {
+    String path = ExampleHandlerTypesParamParser.PATH;
+    System.err.println("path: " + path);
+    ExampleHandlerTypesParamParser.ExampleHandlerTypesParams params =
+        ExampleHandlerTypesParamParser.parse(ctx);
+
+    float param1 = params.param1();
+    double query1 = params.query1();
+    boolean query2 = params.query2();
+    Instant query3 = params.query3();
   }
 }

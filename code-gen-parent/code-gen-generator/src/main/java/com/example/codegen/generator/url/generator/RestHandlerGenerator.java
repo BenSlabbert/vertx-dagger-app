@@ -95,9 +95,14 @@ public class RestHandlerGenerator extends AbstractProcessor {
       out.println("import com.example.commons.web.LongParser;");
       out.println("import com.example.commons.web.RequestParser;");
       out.println("import com.example.commons.web.StringParser;");
+      out.println("import com.example.commons.web.BooleanParser;");
+      out.println("import com.example.commons.web.FloatParser;");
+      out.println("import com.example.commons.web.DoubleParser;");
+      out.println("import com.example.commons.web.InstantParser;");
       out.println("import com.example.commons.web.RequestParser;");
       out.println("import io.vertx.ext.web.RoutingContext;");
       out.println("import javax.annotation.processing.Generated;");
+      out.println("import java.time.Instant;");
       out.println();
 
       out.printf(
@@ -122,6 +127,10 @@ public class RestHandlerGenerator extends AbstractProcessor {
             switch (pathParam.type()) {
               case INT -> "Integer";
               case LONG -> "Long";
+              case BOOLEAN -> "Boolean";
+              case FLOAT -> "Float";
+              case DOUBLE -> "Double";
+              case TIMESTAMP -> "Instant";
               case STRING -> "String";
             };
 
@@ -135,6 +144,10 @@ public class RestHandlerGenerator extends AbstractProcessor {
             switch (queryParam.type()) {
               case INT -> "Integer";
               case LONG -> "Long";
+              case BOOLEAN -> "Boolean";
+              case FLOAT -> "Float";
+              case DOUBLE -> "Double";
+              case TIMESTAMP -> "Instant";
               case STRING -> "String";
             };
 
@@ -166,6 +179,10 @@ public class RestHandlerGenerator extends AbstractProcessor {
                           case INT -> "int";
                           case LONG -> "long";
                           case STRING -> "String";
+                          case BOOLEAN -> "boolean";
+                          case FLOAT -> "float";
+                          case DOUBLE -> "double";
+                          case TIMESTAMP -> "Instant";
                         };
 
                     return type + " " + name;

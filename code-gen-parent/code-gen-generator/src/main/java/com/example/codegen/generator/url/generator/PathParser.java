@@ -48,6 +48,10 @@ final class PathParser {
         case "int" -> params.add(new Param(Type.INT, name));
         case "string" -> params.add(new Param(Type.STRING, name));
         case "long" -> params.add(new Param(Type.LONG, name));
+        case "boolean" -> params.add(new Param(Type.BOOLEAN, name));
+        case "float" -> params.add(new Param(Type.FLOAT, name));
+        case "double" -> params.add(new Param(Type.DOUBLE, name));
+        case "ts" -> params.add(new Param(Type.TIMESTAMP, name));
         case null, default -> throw new GenerationException("illegal path parameter type: " + type);
       }
 
@@ -63,6 +67,10 @@ final class PathParser {
   enum Type {
     INT,
     LONG,
+    BOOLEAN,
+    FLOAT,
+    DOUBLE,
+    TIMESTAMP,
     STRING
   }
 }
