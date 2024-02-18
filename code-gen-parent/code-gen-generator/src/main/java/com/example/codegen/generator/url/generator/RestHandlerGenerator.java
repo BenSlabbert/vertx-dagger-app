@@ -6,9 +6,11 @@ import com.example.codegen.generator.url.annotation.RestHandler;
 import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -68,7 +70,7 @@ public class RestHandlerGenerator extends AbstractProcessor {
     ExecutableElement ee = (ExecutableElement) elementToBeAdvised;
     String path = getPath(ee);
 
-    List<PathParser.Param> pathParams = PathParser.parse(path);
+    PathParser.ParseResult parseResult = PathParser.parse(path);
     String sanitized = PathSanitizer.sanitize(path);
 
     Name methodName = ee.getSimpleName();
@@ -95,8 +97,13 @@ public class RestHandlerGenerator extends AbstractProcessor {
       out.println("import com.example.commons.web.StringParser;");
       out.println("import com.example.commons.web.RequestParser;");
       out.println("import io.vertx.ext.web.RoutingContext;");
+      out.println("import javax.annotation.processing.Generated;");
       out.println();
 
+      out.printf(
+          "@Generated(value = \"%s\", date = \"%s\")%n",
+          getClass().getCanonicalName(),
+          LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
       out.printf("public final class %s {%n", generatedClassName);
       out.println();
       out.println("\tprivate " + generatedClassName + "() {}");
@@ -109,7 +116,7 @@ public class RestHandlerGenerator extends AbstractProcessor {
       out.println("\t\tRequestParser rp = RequestParser.create(ctx);");
       out.println();
 
-      for (PathParser.Param pathParam : pathParams) {
+      for (PathParser.Param pathParam : parseResult.pathParams()) {
         String name = pathParam.name();
         String type =
             switch (pathParam.type()) {
@@ -122,10 +129,25 @@ public class RestHandlerGenerator extends AbstractProcessor {
             "\t\t%s %s = rp.getPathParam(\"%s\", %sParser.create());%n", type, name, name, type);
       }
 
+      for (PathParser.Param queryParam : parseResult.queryParams()) {
+        String name = queryParam.name();
+        String type =
+            switch (queryParam.type()) {
+              case INT -> "Integer";
+              case LONG -> "Long";
+              case STRING -> "String";
+            };
+
+        out.printf(
+            "\t\t%s %s = rp.getQueryParam(\"%s\", %sParser.create());%n", type, name, name, type);
+      }
+
       out.println();
       out.printf("\t\treturn new %s(", generatedRecordName);
       String args =
-          pathParams.stream().map(PathParser.Param::name).collect(Collectors.joining(", "));
+          Stream.concat(parseResult.pathParams().stream(), parseResult.queryParams().stream())
+              .map(PathParser.Param::name)
+              .collect(Collectors.joining(", "));
       out.printf("%s", args);
       out.println(");");
       out.println("\t}");
@@ -135,7 +157,7 @@ public class RestHandlerGenerator extends AbstractProcessor {
       out.printf("\tpublic record %s(", generatedRecordName);
 
       String recordArgs =
-          pathParams.stream()
+          Stream.concat(parseResult.pathParams().stream(), parseResult.queryParams().stream())
               .map(
                   p -> {
                     String name = p.name();

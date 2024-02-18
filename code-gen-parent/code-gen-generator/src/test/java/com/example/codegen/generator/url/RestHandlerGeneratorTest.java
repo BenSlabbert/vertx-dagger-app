@@ -13,8 +13,19 @@ import org.junit.jupiter.api.Test;
 class RestHandlerGeneratorTest {
 
   @Test
-  void test() {
-    URL resource = this.getClass().getClassLoader().getResource("RestHandlerTest.java");
+  void pathOnly() {
+    URL resource = this.getClass().getClassLoader().getResource("RestHandlerPathOnlyTest.java");
+    assertThat(resource).isNotNull();
+
+    assertAbout(JavaSourceSubjectFactory.javaSource())
+        .that(JavaFileObjects.forResource(resource))
+        .processedWith(new RestHandlerGenerator())
+        .compilesWithoutError();
+  }
+
+  @Test
+  void queryOnly() {
+    URL resource = this.getClass().getClassLoader().getResource("RestHandlerQueryOnlyTest.java");
     assertThat(resource).isNotNull();
 
     assertAbout(JavaSourceSubjectFactory.javaSource())

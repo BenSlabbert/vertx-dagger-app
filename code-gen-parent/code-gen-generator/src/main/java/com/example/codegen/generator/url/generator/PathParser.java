@@ -5,21 +5,29 @@ import com.example.codegen.generator.commons.GenerationException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 final class PathParser {
 
   private PathParser() {}
 
-  static List<Param> parse(String path) {
-    List<Param> params = new ArrayList<>();
-    getPairs(path, params);
-    return params;
+  static ParseResult parse(String path) {
+    Set<String> names = new HashSet<>();
+    List<Param> pathParams = new ArrayList<>();
+    List<Param> queryParams = new ArrayList<>();
+
+    int queryStart = path.indexOf('?');
+    if (-1 != queryStart) {
+      String queryString = path.substring(queryStart + 1);
+      path = path.substring(0, queryStart);
+      updateParams(queryString, queryParams, names);
+    }
+
+    updateParams(path, pathParams, names);
+    return new ParseResult(queryParams, pathParams);
   }
 
-  static void getPairs(String path, List<Param> params) {
-    Set<String> names = new HashSet<>();
+  static void updateParams(String path, List<Param> params, Set<String> names) {
     int idx = path.indexOf('{');
     while (idx != -1) {
       int endIdx = path.indexOf('}');
@@ -36,20 +44,19 @@ final class PathParser {
         throw new GenerationException("duplicate path parameter: " + name);
       }
 
-      if (Objects.equals(type, "int")) {
-        params.add(new Param(Type.INT, name));
-      } else if (Objects.equals(type, "string")) {
-        params.add(new Param(Type.STRING, name));
-      } else if (Objects.equals(type, "long")) {
-        params.add(new Param(Type.LONG, name));
-      } else {
-        throw new GenerationException("illegal path parameter type: " + type);
+      switch (type) {
+        case "int" -> params.add(new Param(Type.INT, name));
+        case "string" -> params.add(new Param(Type.STRING, name));
+        case "long" -> params.add(new Param(Type.LONG, name));
+        case null, default -> throw new GenerationException("illegal path parameter type: " + type);
       }
 
       path = path.substring(endIdx + 1);
       idx = path.indexOf('{');
     }
   }
+
+  record ParseResult(List<Param> queryParams, List<Param> pathParams) {}
 
   record Param(Type type, String name) {}
 

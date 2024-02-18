@@ -11,7 +11,8 @@ import java.lang.annotation.Target;
 public @interface RestHandler {
 
   /**
-   * path must be in the form of /some/prefix/{int:param1}/path/{string:param2}/more-path <br>
+   * path must be in the form of
+   * /some/prefix/{int:param1}/path/{string:param2}/more-path?q={string:q}&size={int:size} <br>
    * in this example, the path has two parameters, int and one String <br>
    * the code generator will generate a record type as follows: <br>
    * record MethodNameParams(int param1, String param2) {} <br>
@@ -22,6 +23,5 @@ public @interface RestHandler {
    * <br>
    * generated class will create a sanitized path that can be used by the io.vertx.ext.web.Router
    */
-  // todo: add query parameters
   String path();
 }
