@@ -1,24 +1,21 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web.route.handler;
 
-import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
-import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
-import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
-import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
-import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 import com.example.catalog.service.ItemService;
 import com.example.catalog.web.SchemaValidatorDelegator;
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
+import com.example.codegen.annotation.url.RestHandler;
+import com.example.commons.web.ResponseWriter;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.HttpException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -33,85 +30,97 @@ class ItemHandlerImpl implements ItemHandler {
   private final SchemaValidatorDelegator schemaValidatorDelegator;
 
   @Override
+  public void configureRoutes(Router router) {
+    router.post(ItemHandlerImpl_ExecuteSaga_ParamParser.PATH).handler(this::executeSaga);
+    router.get(ItemHandlerImpl_NextPage_ParamParser.PATH).handler(this::nextPage);
+    router.get(ItemHandlerImpl_PreviousPage_ParamParser.PATH).handler(this::previousPage);
+    router.get(ItemHandlerImpl_Suggest_ParamParser.PATH).handler(this::suggest);
+    router.get(ItemHandlerImpl_FindOne_ParamParser.PATH).handler(this::findOne);
+    router.delete(ItemHandlerImpl_DeleteOne_ParamParser.PATH).handler(this::deleteOne);
+    router.post(ItemHandlerImpl_Create_ParamParser.PATH).handler(this::create);
+    router.post(ItemHandlerImpl_Update_ParamParser.PATH).handler(this::update);
+
+    log.info("Configured routes for ItemHandler");
+    log.info("-------------------------");
+    router
+        .getRoutes()
+        .forEach(
+            route -> {
+              log.info("Path: " + route.getPath());
+              log.info("Methods: " + route.methods());
+              log.info("-------------------------");
+            });
+  }
+
+  @Override
+  @RestHandler(path = "/execute")
   public void executeSaga(RoutingContext ctx) {
     itemService
         .execute()
         .onFailure(
             err -> {
               log.error("failed to find all items", err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+              ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(
-            sagaId ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(OK.code())
-                    .end(new JsonObject().put("sagaId", sagaId).toBuffer())
-                    .onFailure(ctx::fail));
+        .onSuccess(sagaId -> ResponseWriter.write(ctx, new JsonObject().put("sagaId", sagaId), OK));
   }
 
   @Override
-  public void nextPage(RoutingContext ctx, long fromId, int size) {
+  @RestHandler(path = "/next?fromId={long:fromId=0L}&size={int:size=10}")
+  public void nextPage(RoutingContext ctx) {
+    var params = ItemHandlerImpl_NextPage_ParamParser.parse(ctx);
+
     itemService
-        .nextPage(fromId, size)
+        .nextPage(params.fromId(), params.size())
         .onFailure(
             err -> {
-              log.error("failed to find all items", err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+              log.error("failed get next page", err);
+              ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(OK.code())
-                    .end(dto.toJson().toBuffer())
-                    .onFailure(ctx::fail));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
   }
 
   @Override
-  public void previousPage(RoutingContext ctx, long fromId, int size) {
+  @RestHandler(path = "/previous?fromId={long:fromId=0L}&size={int:size=10}")
+  public void previousPage(RoutingContext ctx) {
+    var params = ItemHandlerImpl_PreviousPage_ParamParser.parse(ctx);
+
     itemService
-        .previousPage(fromId, size)
+        .previousPage(params.fromId(), params.size())
         .onFailure(
             err -> {
-              log.error("failed to find all items", err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+              log.error("failed to get previous", err);
+              ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(OK.code())
-                    .end(dto.toJson().toBuffer())
-                    .onFailure(ctx::fail));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
   }
 
   @Override
-  public void suggest(RoutingContext ctx, String name) {
+  @RestHandler(path = "/suggest?s={string:s}")
+  public void suggest(RoutingContext ctx) {
+    var params = ItemHandlerImpl_Suggest_ParamParser.parse(ctx);
+
     itemService
-        .suggest(name)
+        .suggest(params.s())
         .onFailure(
             err -> {
-              log.error("failed to find suggestion: " + name, err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+              log.error("failed to find suggestion: " + params.s(), err);
+              ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(OK.code())
-                    .end(dto.toJson().toBuffer())
-                    .onFailure(ctx::fail));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
   }
 
   @Override
-  public void findOne(RoutingContext ctx, long id) {
+  @RestHandler(path = "/{long:id}")
+  public void findOne(RoutingContext ctx) {
+    var params = ItemHandlerImpl_FindOne_ParamParser.parse(ctx);
+
     itemService
-        .findById(id)
+        .findById(params.id())
         .onFailure(
             err -> {
-              log.error("failed to find item: " + id, err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+              log.error("failed to find item: " + params.id(), err);
+              ResponseWriter.writeInternalError(ctx);
             })
         .onSuccess(
             dto -> {
@@ -120,40 +129,34 @@ class ItemHandlerImpl implements ItemHandler {
                 return;
               }
 
-              ctx.response()
-                  .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                  .setStatusCode(OK.code())
-                  .end(dto.get().toJson().toBuffer())
-                  .onFailure(ctx::fail);
+              ResponseWriter.write(ctx, dto.get(), OK);
             });
   }
 
   @Override
-  public void deleteOne(RoutingContext ctx, long id) {
+  @RestHandler(path = "/{long:id}")
+  public void deleteOne(RoutingContext ctx) {
+    var params = ItemHandlerImpl_DeleteOne_ParamParser.parse(ctx);
+
     itemService
-        .delete(id)
+        .delete(params.id())
         .onFailure(
             err -> {
-              log.error("failed to delete item: " + id, err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+              log.error("failed to delete item: " + params.id(), err);
+              ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(NO_CONTENT.code())
-                    .end()
-                    .onFailure(ctx::fail));
+        .onSuccess(dto -> ResponseWriter.writeNoContent(ctx));
   }
 
   @Override
+  @RestHandler(path = "/create")
   public void create(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(CreateItemRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
       log.error("invalid create item request params");
-      ctx.response().setStatusCode(BAD_REQUEST.code()).end();
+      ResponseWriter.writeBadRequest(ctx);
       return;
     }
 
@@ -162,41 +165,32 @@ class ItemHandlerImpl implements ItemHandler {
         .onFailure(
             err -> {
               log.error("failed to create item", err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+              ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(CREATED.code())
-                    .end(dto.toJson().toBuffer())
-                    .onFailure(ctx::fail));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
   }
 
   @Override
-  public void update(RoutingContext ctx, long id) {
+  @RestHandler(path = "/{long:id}")
+  public void update(RoutingContext ctx) {
+    var params = ItemHandlerImpl_Update_ParamParser.parse(ctx);
+
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(UpdateItemRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
       log.error("invalid create item request params");
-      ctx.response().setStatusCode(BAD_REQUEST.code()).end();
+      ResponseWriter.writeBadRequest(ctx);
       return;
     }
 
     itemService
-        .update(id, new UpdateItemRequestDto(body))
+        .update(params.id(), new UpdateItemRequestDto(body))
         .onFailure(
             err -> {
               log.error("failed to create item", err);
-              ctx.fail(new HttpException(INTERNAL_SERVER_ERROR.code()));
+              ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(
-            dto ->
-                ctx.response()
-                    .putHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .setStatusCode(NO_CONTENT.code())
-                    .end()
-                    .onFailure(ctx::fail));
+        .onSuccess(dto -> ResponseWriter.writeNoContent(ctx));
   }
 }

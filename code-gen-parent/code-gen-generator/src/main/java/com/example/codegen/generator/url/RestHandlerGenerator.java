@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,8 +83,8 @@ public class RestHandlerGenerator extends AbstractProcessor {
     String string =
         methodName.toString().substring(0, 1).toUpperCase() + methodName.toString().substring(1);
 
-    String generatedClassName = enclosingClassName.toString() + string + "ParamParser";
-    String generatedRecordName = enclosingClassName.toString() + string + "Params";
+    String generatedClassName = enclosingClassName.toString() + "_" + string + "_" + "ParamParser";
+    String generatedRecordName = enclosingClassName.toString() + "_" + string + "_" + "Params";
 
     JavaFileObject builderFile =
         processingEnv.getFiler().createSourceFile(classPackage + "." + generatedClassName);
@@ -109,15 +110,15 @@ public class RestHandlerGenerator extends AbstractProcessor {
           "@Generated(value = \"%s\", date = \"%s\")%n",
           getClass().getCanonicalName(),
           LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
-      out.printf("public final class %s {%n", generatedClassName);
+      out.printf("final class %s {%n", generatedClassName);
       out.println();
       out.println("\tprivate " + generatedClassName + "() {}");
       out.println();
 
-      out.printf("\tpublic static final String PATH = \"%s\";%n", sanitized);
+      out.printf("\tstatic final String PATH = \"%s\";%n", sanitized);
       out.println();
 
-      out.printf("\tpublic static %s parse(RoutingContext ctx) {%n", generatedRecordName);
+      out.printf("\tstatic %s parse(RoutingContext ctx) {%n", generatedRecordName);
       out.println("\t\tRequestParser rp = RequestParser.create(ctx);");
       out.println();
 
@@ -134,8 +135,21 @@ public class RestHandlerGenerator extends AbstractProcessor {
               case STRING -> "String";
             };
 
-        out.printf(
-            "\t\t%s %s = rp.getPathParam(\"%s\", %sParser.create());%n", type, name, name, type);
+        Optional<String> optional = pathParam.defaultValue();
+        if (optional.isPresent()) {
+          if (pathParam.type() == PathParser.Type.STRING) {
+            out.printf(
+                "\t\t%s %s = rp.getPathParam(\"%s\", \"%s\", %sParser.create());%n",
+                type, name, name, optional.get(), type);
+          } else {
+            out.printf(
+                "\t\t%s %s = rp.getPathParam(\"%s\", %s, %sParser.create());%n",
+                type, name, name, optional.get(), type);
+          }
+        } else {
+          out.printf(
+              "\t\t%s %s = rp.getPathParam(\"%s\", %sParser.create());%n", type, name, name, type);
+        }
       }
 
       for (PathParser.Param queryParam : parseResult.queryParams()) {
@@ -151,8 +165,21 @@ public class RestHandlerGenerator extends AbstractProcessor {
               case STRING -> "String";
             };
 
-        out.printf(
-            "\t\t%s %s = rp.getQueryParam(\"%s\", %sParser.create());%n", type, name, name, type);
+        Optional<String> optional = queryParam.defaultValue();
+        if (optional.isPresent()) {
+          if (queryParam.type() == PathParser.Type.STRING) {
+            out.printf(
+                "\t\t%s %s = rp.getQueryParam(\"%s\", \"%s\", %sParser.create());%n",
+                type, name, name, optional.get(), type);
+          } else {
+            out.printf(
+                "\t\t%s %s = rp.getQueryParam(\"%s\", %s, %sParser.create());%n",
+                type, name, name, optional.get(), type);
+          }
+        } else {
+          out.printf(
+              "\t\t%s %s = rp.getQueryParam(\"%s\", %sParser.create());%n", type, name, name, type);
+        }
       }
 
       out.println();
@@ -167,7 +194,7 @@ public class RestHandlerGenerator extends AbstractProcessor {
       out.println();
 
       // print the generated record type
-      out.printf("\tpublic record %s(", generatedRecordName);
+      out.printf("\trecord %s(", generatedRecordName);
 
       String recordArgs =
           Stream.concat(parseResult.pathParams().stream(), parseResult.queryParams().stream())

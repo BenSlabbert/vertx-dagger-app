@@ -1,10 +1,19 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.codegen.generator.url;
 
+import static com.example.codegen.generator.url.PathParser.Type.BOOLEAN;
+import static com.example.codegen.generator.url.PathParser.Type.DOUBLE;
+import static com.example.codegen.generator.url.PathParser.Type.FLOAT;
+import static com.example.codegen.generator.url.PathParser.Type.INT;
+import static com.example.codegen.generator.url.PathParser.Type.LONG;
+import static com.example.codegen.generator.url.PathParser.Type.STRING;
+import static com.example.codegen.generator.url.PathParser.Type.TIMESTAMP;
+
 import com.example.codegen.generator.commons.GenerationException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 final class PathParser {
@@ -38,20 +47,30 @@ final class PathParser {
       }
 
       String type = split[0];
-      String name = split[1];
+      String[] nameAndDefault = split[1].split("=");
+
+      if (nameAndDefault.length > 2) {
+        throw new GenerationException("illegal path parameter: " + param);
+      }
+
+      String name = nameAndDefault[0];
+      String defaultValue = null;
+      if (2 == nameAndDefault.length) {
+        defaultValue = nameAndDefault[1];
+      }
 
       if (!names.add(name)) {
         throw new GenerationException("duplicate path parameter: " + name);
       }
 
       switch (type) {
-        case "int" -> params.add(new Param(Type.INT, name));
-        case "string" -> params.add(new Param(Type.STRING, name));
-        case "long" -> params.add(new Param(Type.LONG, name));
-        case "boolean" -> params.add(new Param(Type.BOOLEAN, name));
-        case "float" -> params.add(new Param(Type.FLOAT, name));
-        case "double" -> params.add(new Param(Type.DOUBLE, name));
-        case "ts" -> params.add(new Param(Type.TIMESTAMP, name));
+        case "int" -> params.add(new Param(INT, name, Optional.ofNullable(defaultValue)));
+        case "string" -> params.add(new Param(STRING, name, Optional.ofNullable(defaultValue)));
+        case "long" -> params.add(new Param(LONG, name, Optional.ofNullable(defaultValue)));
+        case "boolean" -> params.add(new Param(BOOLEAN, name, Optional.ofNullable(defaultValue)));
+        case "float" -> params.add(new Param(FLOAT, name, Optional.ofNullable(defaultValue)));
+        case "double" -> params.add(new Param(DOUBLE, name, Optional.ofNullable(defaultValue)));
+        case "ts" -> params.add(new Param(TIMESTAMP, name, Optional.ofNullable(defaultValue)));
         case null, default -> throw new GenerationException("illegal path parameter type: " + type);
       }
 
@@ -62,7 +81,7 @@ final class PathParser {
 
   record ParseResult(List<Param> queryParams, List<Param> pathParams) {}
 
-  record Param(Type type, String name) {}
+  record Param(Type type, String name, Optional<String> defaultValue) {}
 
   enum Type {
     INT,

@@ -31,7 +31,15 @@ public @interface RestHandler {
    * {float:paramName} <br>
    * {double:paramName} <br>
    * {ts:paramName} - 1708267289273 (unix millis) for example, will be converted to a
-   * java.time.Instant
+   * java.time.Instant <br>
+   * default values can be specified as follows: <br>
+   * {int:paramName=10} <br>
+   * {long:paramName=10L} <br>
+   * {string:paramName=hello} <br>
+   * {boolean:paramName=true} <br>
+   * {float:paramName=10.0F} <br>
+   * {double:paramName=10.0} <br>
+   * {ts:paramName=1708267289273} <br>
    */
   String path();
 }

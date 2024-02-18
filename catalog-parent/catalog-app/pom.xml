@@ -48,6 +48,11 @@
       <artifactId>client</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.example.code-gen</groupId>
+      <artifactId>code-gen-annotation</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.ongres.scram</groupId>
       <artifactId>common</artifactId>
     </dependency>
@@ -228,6 +233,11 @@
             <arg>-Xplugin:ErrorProne</arg>
           </compilerArgs>
           <annotationProcessorPaths>
+            <path>
+              <groupId>org.example.code-gen</groupId>
+              <artifactId>code-gen-generator</artifactId>
+              <version>${revision}</version>
+            </path>
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>

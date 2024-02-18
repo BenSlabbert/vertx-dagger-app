@@ -5,7 +5,8 @@ import com.example.codegen.annotation.url.RestHandler;
 
 public class RestHandlerPathOnlyTest {
 
-  private static final String PATH = "/some/prefix/{int:param1}/path/{string:param2}/more-path";
+  private static final String PATH =
+      "/some/prefix/{int:param1=1}/path/{string:param2=abc}/more-path";
 
   @RestHandler(path = PATH)
   public void handler() {}

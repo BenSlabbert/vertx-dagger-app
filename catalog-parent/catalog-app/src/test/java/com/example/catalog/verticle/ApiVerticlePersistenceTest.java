@@ -136,7 +136,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
     String getAllResponseJson =
         RestAssured.given()
             .header(AUTHORIZATION.toString(), "Bearer fake")
-            .get("/api/items/next?fromId=0&size=1")
+            .get("/api/next?fromId=0&size=1")
             .then()
             .assertThat()
             .statusCode(OK.code())
@@ -150,9 +150,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
     getAllResponseJson =
         RestAssured.given()
             .header(AUTHORIZATION.toString(), "Bearer fake")
-            .get(
-                "/api/items/next?fromId=%d&size=1"
-                    .formatted(paginatedResponseDto.items().get(0).id()))
+            .get("/api/next?fromId=%d&size=1".formatted(paginatedResponseDto.items().get(0).id()))
             .then()
             .assertThat()
             .statusCode(OK.code())
@@ -185,7 +183,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
             new UpdateItemRequestDto("name2updated", 3L, createItemResponseDto.version())
                 .toJson()
                 .encode())
-        .post("/api/edit/" + createItemResponseDto.id())
+        .post("/api/" + createItemResponseDto.id())
         .then()
         .assertThat()
         .statusCode(NO_CONTENT.code());

@@ -1,7 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.verticle;
 
-import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.catalog.ioc.DaggerProvider;
@@ -13,10 +12,6 @@ import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.mesage.Consumer;
 import com.example.commons.security.SecurityHandler;
-import com.example.commons.web.IntegerParser;
-import com.example.commons.web.LongParser;
-import com.example.commons.web.RequestParser;
-import com.example.commons.web.StringParser;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -29,7 +24,6 @@ import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
-import io.vertx.ext.web.handler.HttpException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -123,91 +117,9 @@ public class ApiVerticle extends AbstractVerticle {
     // ensure request is authenticated correctly
     apiRouter.route().handler(ctx -> SecurityHandler.hasRole(ctx, AuthHandler.ROLE));
 
-    ItemHandler itemHandler = dagger.itemHandler();
-
     // api routes
-    apiRouter.post("/execute").handler(itemHandler::executeSaga);
-
-    apiRouter
-        .get("/items/next")
-        .handler(
-            ctx -> {
-              RequestParser rp = RequestParser.create(ctx);
-              Long fromId = rp.getQueryParam("fromId", 0L, LongParser.create());
-              Integer size = rp.getQueryParam("size", 10, IntegerParser.create());
-              itemHandler.nextPage(ctx, fromId, size);
-            });
-
-    apiRouter
-        .get("/items/previous")
-        .handler(
-            ctx -> {
-              RequestParser rp = RequestParser.create(ctx);
-              Long fromId = rp.getQueryParam("fromId", 0L, LongParser.create());
-              Integer size = rp.getQueryParam("size", 10, IntegerParser.create());
-              itemHandler.previousPage(ctx, fromId, size);
-            });
-
-    apiRouter.post("/create").handler(itemHandler::create);
-
-    apiRouter
-        .get("/suggest")
-        .handler(
-            ctx -> {
-              RequestParser rp = RequestParser.create(ctx);
-              String s = rp.getQueryParam("s", "", StringParser.create());
-              if (null == s || s.isEmpty()) {
-                ctx.fail(new HttpException(BAD_REQUEST.code()));
-                return;
-              }
-
-              itemHandler.suggest(ctx, s);
-            });
-
-    apiRouter
-        .get("/:id")
-        .handler(
-            ctx -> {
-              RequestParser rp = RequestParser.create(ctx);
-              Long id = rp.getPathParam("id", LongParser.create());
-
-              if (null == id) {
-                ctx.fail(new HttpException(BAD_REQUEST.code()));
-                return;
-              }
-
-              itemHandler.findOne(ctx, id);
-            });
-
-    apiRouter
-        .delete("/:id")
-        .handler(
-            ctx -> {
-              RequestParser rp = RequestParser.create(ctx);
-              Long id = rp.getPathParam("id", LongParser.create());
-
-              if (null == id) {
-                ctx.fail(new HttpException(BAD_REQUEST.code()));
-                return;
-              }
-
-              itemHandler.deleteOne(ctx, id);
-            });
-
-    apiRouter
-        .post("/edit/:id")
-        .handler(
-            ctx -> {
-              RequestParser rp = RequestParser.create(ctx);
-              Long id = rp.getPathParam("id", LongParser.create());
-
-              if (null == id) {
-                ctx.fail(new HttpException(BAD_REQUEST.code()));
-                return;
-              }
-
-              itemHandler.update(ctx, id);
-            });
+    ItemHandler itemHandler = dagger.itemHandler();
+    itemHandler.configureRoutes(apiRouter);
 
     // https://vertx.io/docs/vertx-health-check/java/
     mainRouter

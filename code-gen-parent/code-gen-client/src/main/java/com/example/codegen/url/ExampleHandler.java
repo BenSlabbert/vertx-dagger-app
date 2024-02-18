@@ -9,10 +9,10 @@ public class ExampleHandler {
 
   @RestHandler(path = "/some/prefix/{int:param1}/path/{string:param2}/more-path/{long:param3}")
   public void pathHandler(RoutingContext ctx) {
-    String path = ExampleHandlerPathHandlerParamParser.PATH;
+    String path = ExampleHandler_PathHandler_ParamParser.PATH;
     System.err.println("path: " + path);
-    ExampleHandlerPathHandlerParamParser.ExampleHandlerPathHandlerParams params =
-        ExampleHandlerPathHandlerParamParser.parse(ctx);
+    ExampleHandler_PathHandler_ParamParser.ExampleHandler_PathHandler_Params params =
+        ExampleHandler_PathHandler_ParamParser.parse(ctx);
 
     int param1 = params.param1();
     String param2 = params.param2();
@@ -20,12 +20,13 @@ public class ExampleHandler {
   }
 
   @RestHandler(
-      path = "/some/prefix?query1={int:query1}&query2={string:query2}&query3={long:query3}")
+      path =
+          "/some/prefix?query1={int:query1=1}&query2={string:query2=abc}&query3={long:query3=4L}")
   public void queryHandler(RoutingContext ctx) {
-    String path = ExampleHandlerQueryHandlerParamParser.PATH;
+    String path = ExampleHandler_QueryHandler_ParamParser.PATH;
     System.err.println("path: " + path);
-    ExampleHandlerQueryHandlerParamParser.ExampleHandlerQueryHandlerParams params =
-        ExampleHandlerQueryHandlerParamParser.parse(ctx);
+    ExampleHandler_QueryHandler_ParamParser.ExampleHandler_QueryHandler_Params params =
+        ExampleHandler_QueryHandler_ParamParser.parse(ctx);
 
     int query1 = params.query1();
     String query2 = params.query2();
@@ -34,12 +35,12 @@ public class ExampleHandler {
 
   @RestHandler(
       path =
-          "/some/prefix/{int:param1}/path/{string:param2}/more-path/{long:param3}?query1={int:query1}&query2={string:query2}&query3={long:query3}")
+          "/some/prefix/{int:param1=3}/path/{string:param2=cvb}/more-path/{long:param3}?query1={int:query1}&query2={string:query2}&query3={long:query3}")
   public void both(RoutingContext ctx) {
-    String path = ExampleHandlerBothParamParser.PATH;
+    String path = ExampleHandler_Both_ParamParser.PATH;
     System.err.println("path: " + path);
-    ExampleHandlerBothParamParser.ExampleHandlerBothParams params =
-        ExampleHandlerBothParamParser.parse(ctx);
+    ExampleHandler_Both_ParamParser.ExampleHandler_Both_Params params =
+        ExampleHandler_Both_ParamParser.parse(ctx);
 
     int param1 = params.query1();
     String param2 = params.query2();
@@ -53,10 +54,10 @@ public class ExampleHandler {
       path =
           "/some/prefix/{float:param1}?query1={double:query1}&query2={boolean:query2}&query3={ts:query3}")
   public void types(RoutingContext ctx) {
-    String path = ExampleHandlerTypesParamParser.PATH;
+    String path = ExampleHandler_Types_ParamParser.PATH;
     System.err.println("path: " + path);
-    ExampleHandlerTypesParamParser.ExampleHandlerTypesParams params =
-        ExampleHandlerTypesParamParser.parse(ctx);
+    ExampleHandler_Types_ParamParser.ExampleHandler_Types_Params params =
+        ExampleHandler_Types_ParamParser.parse(ctx);
 
     float param1 = params.param1();
     double query1 = params.query1();

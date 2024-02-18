@@ -16,6 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
@@ -48,6 +49,10 @@ class RedisSuggestionService implements SuggestionService, AutoCloseable {
 
   @Override
   public Future<List<String>> suggest(String name) {
+    if (StringUtils.isEmpty(name)) {
+      return Future.succeededFuture(List.of());
+    }
+
     return redisAPI
         .ftSugget(List.of(ITEM_SUGGESTION_DICTIONARY, name, FUZZY, MAX, Integer.toString(5)))
         .map(
