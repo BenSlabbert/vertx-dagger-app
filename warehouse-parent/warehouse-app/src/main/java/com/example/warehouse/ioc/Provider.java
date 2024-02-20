@@ -8,6 +8,7 @@ import com.example.starter.reactive.pool.PoolModule;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.service.ServiceLifecycleManagement;
 import com.example.warehouse.service.ServiceModule;
+import com.example.warehouse.verticle.WarehouseVerticle;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -39,6 +40,8 @@ public interface Provider {
   IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider();
 
   Pool pool();
+
+  WarehouseVerticle warehouseVerticle();
 
   @Component.Builder
   interface Builder {

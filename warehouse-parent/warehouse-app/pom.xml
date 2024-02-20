@@ -13,7 +13,7 @@
   <properties>
     <finalName>warehouse</finalName>
     <launcher.class>com.example.warehouse.WarehouseLauncher</launcher.class>
-    <main.verticle>com.example.warehouse.verticle.WarehouseVerticle</main.verticle>
+    <main.verticle>com.example.warehouse.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->

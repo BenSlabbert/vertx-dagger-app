@@ -8,10 +8,10 @@ import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.transaction.reactive.TransactionBoundary;
-import com.example.warehouse.ioc.DaggerProvider;
-import com.example.warehouse.ioc.Provider;
+import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxProxyHandler;
+import com.example.warehouse.service.ServiceLifecycleManagement;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -19,7 +19,6 @@ import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
 import io.vertx.ext.auth.jwt.authorization.JWTAuthorization;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
@@ -33,45 +32,40 @@ import io.vertx.serviceproxy.ServiceBinder;
 import io.vertx.sqlclient.Pool;
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.inject.Inject;
 
 public class WarehouseVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(WarehouseVerticle.class);
 
-  private Provider dagger;
+  private final IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider;
+  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final WarehouseRpcService warehouseRpcService;
+  private final Config config;
+  private final Pool pool;
+
   private MessageConsumer<JsonObject> consumer;
 
-  private void init() {
-    log.info("WarehouseVerticle constructor");
-    JsonObject cfg = config();
-    Config config = Config.fromJson(cfg);
-
-    Objects.requireNonNull(vertx);
-    Objects.requireNonNull(config);
-    Objects.requireNonNull(config.httpConfig());
-    Objects.requireNonNull(config.postgresConfig());
-    Objects.requireNonNull(config.verticleConfig());
-
-    this.dagger =
-        DaggerProvider.builder()
-            .vertx(vertx)
-            .config(config)
-            .httpConfig(config.httpConfig())
-            .postgresConfig(config.postgresConfig())
-            .verticleConfig(config.verticleConfig())
-            .build();
-
-    this.dagger.init();
+  @Inject
+  WarehouseVerticle(
+      IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider,
+      ServiceLifecycleManagement serviceLifecycleManagement,
+      WarehouseRpcService warehouseRpcService,
+      Config config,
+      Pool pool) {
+    this.iamRpcServiceAuthenticationProvider = iamRpcServiceAuthenticationProvider;
+    this.serviceLifecycleManagement = serviceLifecycleManagement;
+    this.warehouseRpcService = warehouseRpcService;
+    this.config = config;
+    this.pool = pool;
   }
 
   @Override
   public void start(Promise<Void> startPromise) {
     vertx.exceptionHandler(err -> log.error("unhandled exception", err));
     log.info("starting");
-    init();
 
     vertx
         .eventBus()
@@ -86,22 +80,20 @@ public class WarehouseVerticle extends AbstractVerticle {
               ctx.next();
             });
 
-    AuthenticationProvider authenticationProvider =
-        this.dagger.iamRpcServiceAuthenticationProvider();
-
     // this way we need to provide the interceptors ourselves (no reflection)
-    new WarehouseRpcServiceVertxProxyHandler(vertx, dagger.warehouseRpcService())
+    new WarehouseRpcServiceVertxProxyHandler(vertx, warehouseRpcService)
         .register(vertx, WarehouseRpcService.ADDRESS, List.of());
 
     this.consumer =
         // this method uses reflection to call the VertxProxyHandler constructor
         new ServiceBinder(vertx)
             .setAddress(WarehouseRpcService.ADDRESS)
-            .addInterceptor("action", AuthenticationInterceptor.create(authenticationProvider))
+            .addInterceptor(
+                "action", AuthenticationInterceptor.create(iamRpcServiceAuthenticationProvider))
             .addInterceptor(
                 AuthorizationInterceptor.create(JWTAuthorization.create("permissions"))
                     .addAuthorization(RoleBasedAuthorization.create("truck-client")))
-            .register(WarehouseRpcService.class, dagger.warehouseRpcService())
+            .register(WarehouseRpcService.class, warehouseRpcService)
             .setMaxBufferedMessages(100)
             .fetch(10)
             .exceptionHandler(err -> log.error("exception in event bus", err))
@@ -123,7 +115,7 @@ public class WarehouseVerticle extends AbstractVerticle {
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
-    Config.HttpConfig httpConfig = dagger.config().httpConfig();
+    Config.HttpConfig httpConfig = config.httpConfig();
     log.info("starting on port: " + httpConfig.port());
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
@@ -152,7 +144,7 @@ public class WarehouseVerticle extends AbstractVerticle {
             Duration.ofSeconds(5L).toMillis(),
             promise -> {
               log.info("doing db health check");
-              new DbPing(dagger.pool()).check(promise);
+              new DbPing(pool).check(promise);
             });
   }
 
@@ -162,7 +154,7 @@ public class WarehouseVerticle extends AbstractVerticle {
     System.err.println("stopping");
     MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
-    Set<AutoCloseable> closeables = dagger.serviceLifecycleManagement().closeables();
+    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     AtomicInteger idx = new AtomicInteger(0);
