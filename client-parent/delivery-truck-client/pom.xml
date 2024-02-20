@@ -14,7 +14,7 @@
   <properties>
     <finalName>delivery-truck-client</finalName>
     <launcher.class>com.example.client.truck.TruckClientLauncher</launcher.class>
-    <main.verticle>com.example.client.truck.verticle.TruckVerticle</main.verticle>
+    <main.verticle>com.example.client.truck.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->

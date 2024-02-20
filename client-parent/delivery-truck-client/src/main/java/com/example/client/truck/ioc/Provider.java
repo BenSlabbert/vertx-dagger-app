@@ -4,6 +4,7 @@ package com.example.client.truck.ioc;
 import com.example.client.truck.config.IamConfig;
 import com.example.client.truck.service.JobService;
 import com.example.client.truck.service.ServiceModule;
+import com.example.client.truck.verticle.TruckVerticle;
 import com.example.starter.iam.auth.client.IamAuthClientFactory;
 import com.example.starter.iam.auth.client.IamAuthClientModule;
 import com.example.warehouse.rpc.api.WarehouseRpcApiModule;
@@ -36,6 +37,8 @@ public interface Provider {
   WarehouseRpcServiceProviderFactory warehouseRpcServiceProviderFactory();
 
   JobService jobService();
+
+  TruckVerticle truckVerticle();
 
   @Component.Builder
   interface Builder {
