@@ -6,19 +6,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.iam.rpc.TestBase;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
-import com.example.iam.rpc.ioc.DaggerTestProvider;
-import com.example.iam.rpc.ioc.TestProvider;
-import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.serviceproxy.ServiceException;
 import org.junit.jupiter.api.Test;
 
 class IamRpcServiceTest extends TestBase {
 
   @Test
-  void checkSession(Vertx vertx, VertxTestContext testContext) {
-    TestProvider provider = DaggerTestProvider.builder().vertx(vertx).build();
-
+  void checkSession(VertxTestContext testContext) {
     IamRpcService rpcService = provider.iamRpcService();
 
     rpcService
@@ -28,7 +22,8 @@ class IamRpcServiceTest extends TestBase {
                 err ->
                     testContext.verify(
                         () -> {
-                          assertThat(err).isInstanceOf(ServiceException.class);
+                          assertThat(err).isInstanceOf(IllegalStateException.class);
+                          assertThat(err).hasMessageContaining("Invalid format for JWT");
                           testContext.completeNow();
                         })));
   }

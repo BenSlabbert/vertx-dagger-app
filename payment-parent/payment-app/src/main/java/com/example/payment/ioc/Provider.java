@@ -9,6 +9,7 @@ import com.example.payment.scope.TransactionModule;
 import com.example.payment.service.ServiceLifecycleManagement;
 import com.example.payment.service.ServiceModule;
 import com.example.payment.service.TestingScopeService;
+import com.example.payment.verticle.WorkerVerticle;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -38,9 +39,11 @@ public interface Provider {
 
   Set<Consumer> consumers();
 
-  ServiceLifecycleManagement providesServiceLifecycleManagement();
+  ServiceLifecycleManagement serviceLifecycleManagement();
 
-  TestingScopeService providesTestingScopeService();
+  TestingScopeService testingScopeService();
+
+  WorkerVerticle workerVerticle();
 
   @Component.Builder
   interface Builder {

@@ -6,61 +6,49 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
-import com.example.iam.ioc.DaggerProvider;
-import com.example.iam.ioc.Provider;
+import com.example.iam.service.ServiceLifecycleManagement;
 import com.example.iam.web.route.handler.UserHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
+import io.vertx.redis.client.RedisAPI;
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import lombok.NoArgsConstructor;
+import javax.inject.Inject;
 
-@NoArgsConstructor
 public class ApiVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(ApiVerticle.class);
 
-  private Provider dagger;
+  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final UserHandler userHandler;
+  private final RedisAPI redisAPI;
+  private final Config config;
 
-  private void init() {
-    log.info("ApiVerticle constructor");
-    JsonObject cfg = config();
-    Config config = Config.fromJson(cfg);
-
-    Objects.requireNonNull(vertx);
-    Objects.requireNonNull(config);
-    Objects.requireNonNull(config.httpConfig());
-    Objects.requireNonNull(config.redisConfig());
-    Objects.requireNonNull(config.verticleConfig());
-
-    this.dagger =
-        DaggerProvider.builder()
-            .vertx(vertx)
-            .config(config)
-            .httpConfig(config.httpConfig())
-            .redisConfig(config.redisConfig())
-            .verticleConfig(config.verticleConfig())
-            .build();
-
-    this.dagger.init();
+  @Inject
+  ApiVerticle(
+      ServiceLifecycleManagement serviceLifecycleManagement,
+      UserHandler userHandler,
+      RedisAPI redisAPI,
+      Config config) {
+    this.serviceLifecycleManagement = serviceLifecycleManagement;
+    this.userHandler = userHandler;
+    this.redisAPI = redisAPI;
+    this.config = config;
   }
 
   @Override
   public void start(Promise<Void> startPromise) {
     vertx.exceptionHandler(err -> log.error("unhandled exception", err));
-    init();
 
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
@@ -75,8 +63,6 @@ public class ApiVerticle extends AbstractVerticle {
     // main routes
     mainRouter.route("/api/*").subRouter(apiRouter);
 
-    UserHandler userHandler = dagger.userHandler();
-
     // api routes
     apiRouter.post("/login").handler(userHandler::login);
     apiRouter.post("/refresh").handler(userHandler::refresh);
@@ -89,13 +75,12 @@ public class ApiVerticle extends AbstractVerticle {
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
     log.info("ping redis before starting http server");
-    dagger
-        .redisAPI()
+    redisAPI
         .ping(List.of())
         .onFailure(startPromise::fail)
         .onSuccess(
             ignore -> {
-              Config.HttpConfig httpConfig = dagger.config().httpConfig();
+              Config.HttpConfig httpConfig = config.httpConfig();
               log.info("starting api verticle on port: " + httpConfig.port());
               vertx
                   .createHttpServer(
@@ -126,8 +111,7 @@ public class ApiVerticle extends AbstractVerticle {
             Duration.ofSeconds(5L).toMillis(),
             promise -> {
               log.info("doing redis health check");
-              dagger
-                  .redisAPI()
+              redisAPI
                   .ping(List.of())
                   .onSuccess(r -> promise.complete(Status.OK()))
                   .onFailure(err -> promise.complete(Status.KO()));
@@ -139,7 +123,7 @@ public class ApiVerticle extends AbstractVerticle {
   public void stop(Promise<Void> stopPromise) {
     System.err.println("stopping");
 
-    Set<AutoCloseable> closeables = dagger.providesServiceLifecycleManagement().closeables();
+    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     AtomicInteger idx = new AtomicInteger(0);

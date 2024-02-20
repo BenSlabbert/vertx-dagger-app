@@ -5,6 +5,7 @@ import com.example.commons.config.Config;
 import com.example.reactivetest.config.ConfigModule;
 import com.example.reactivetest.service.ServiceLifecycleManagement;
 import com.example.reactivetest.service.ServiceModule;
+import com.example.reactivetest.verticle.ApplicationVerticle;
 import com.example.reactivetest.web.handler.HandlerModule;
 import com.example.reactivetest.web.handler.PersonHandler;
 import dagger.BindsInstance;
@@ -30,11 +31,13 @@ public interface Provider {
 
   @Nullable Void init();
 
-  ServiceLifecycleManagement providesServiceLifecycleManagement();
+  ServiceLifecycleManagement serviceLifecycleManagement();
 
   Config config();
 
   PersonHandler personHandler();
+
+  ApplicationVerticle applicationVerticle();
 
   @Component.Builder
   interface Builder {

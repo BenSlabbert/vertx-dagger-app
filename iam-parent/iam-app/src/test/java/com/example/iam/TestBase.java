@@ -11,7 +11,6 @@ import com.example.commons.config.Config.RedisConfig;
 import com.example.commons.config.Config.VerticleConfig;
 import com.example.iam.ioc.DaggerTestProvider;
 import com.example.iam.ioc.TestProvider;
-import com.example.iam.verticle.ApiVerticle;
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
@@ -78,7 +77,7 @@ public abstract class TestBase {
 
     JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
-        new ApiVerticle(),
+        provider.apiVerticle(),
         new DeploymentOptions().setConfig(cfg),
         testContext.succeedingThenComplete());
   }

@@ -4,6 +4,7 @@ package com.example.iam.rpc.ioc;
 import com.example.commons.config.Config;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.service.ServiceModule;
+import com.example.iam.rpc.verticle.RpcVerticle;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -22,6 +23,8 @@ public interface Provider {
   IamRpcService iamRpcService();
 
   Config config();
+
+  RpcVerticle rpcVerticle();
 
   @Component.Builder
   interface Builder {

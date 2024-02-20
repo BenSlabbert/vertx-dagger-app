@@ -14,7 +14,7 @@
   <properties>
     <finalName>iam-rpc</finalName>
     <launcher.class>com.example.iam.rpc.IamRpcLauncher</launcher.class>
-    <main.verticle>com.example.iam.rpc.verticle.RpcVerticle</main.verticle>
+    <main.verticle>com.example.iam.rpc.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->

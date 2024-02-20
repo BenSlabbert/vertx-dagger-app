@@ -14,7 +14,7 @@
   <properties>
     <finalName>iam</finalName>
     <launcher.class>com.example.iam.IamAppLauncher</launcher.class>
-    <main.verticle>com.example.iam.verticle.ApiVerticle</main.verticle>
+    <main.verticle>com.example.iam.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->

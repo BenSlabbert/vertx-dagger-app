@@ -7,8 +7,6 @@ import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
 import com.example.commons.config.Config;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;
-import com.example.iam.rpc.ioc.DaggerProvider;
-import com.example.iam.rpc.ioc.Provider;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -21,22 +19,27 @@ import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
-import java.util.Objects;
-import lombok.NoArgsConstructor;
+import javax.inject.Inject;
 
-@NoArgsConstructor
 public class RpcVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(RpcVerticle.class);
 
-  private Provider dagger;
+  private final IamRpcService iamRpcService;
+  private final Config config;
+
   private MessageConsumer<JsonObject> consumer;
+
+  @Inject
+  RpcVerticle(IamRpcService iamRpcService, Config config) {
+    this.iamRpcService = iamRpcService;
+    this.config = config;
+  }
 
   @Override
   public void start(Promise<Void> startPromise) {
     vertx.exceptionHandler(err -> log.error("unhandled exception", err));
     log.info("starting");
-    init();
 
     vertx
         .eventBus()
@@ -52,7 +55,7 @@ public class RpcVerticle extends AbstractVerticle {
             });
 
     this.consumer =
-        new IamRpcServiceVertxProxyHandler(vertx, dagger.iamRpcService())
+        new IamRpcServiceVertxProxyHandler(vertx, iamRpcService)
             .register(vertx.eventBus(), IamRpcService.ADDRESS)
             .setMaxBufferedMessages(100)
             .fetch(10)
@@ -75,7 +78,7 @@ public class RpcVerticle extends AbstractVerticle {
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
-    Config.HttpConfig httpConfig = dagger.config().httpConfig();
+    Config.HttpConfig httpConfig = config.httpConfig();
     log.info("starting on port: " + httpConfig.port());
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
@@ -117,20 +120,5 @@ public class RpcVerticle extends AbstractVerticle {
                 stopPromise.fail(ar.cause());
               }
             });
-  }
-
-  private void init() {
-    JsonObject cfg = config();
-    Config config = Config.fromJson(cfg);
-
-    Objects.requireNonNull(vertx);
-    Objects.requireNonNull(config);
-    Objects.requireNonNull(config.httpConfig());
-
-    log.info("create dagger");
-    this.dagger = DaggerProvider.builder().vertx(vertx).config(config).build();
-    log.info("init dagger deps");
-    this.dagger.init();
-    log.info("dagger init complete");
   }
 }

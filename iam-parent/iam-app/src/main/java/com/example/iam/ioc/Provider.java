@@ -5,6 +5,7 @@ import com.example.commons.config.Config;
 import com.example.iam.repository.RepositoryModule;
 import com.example.iam.service.ServiceLifecycleManagement;
 import com.example.iam.service.ServiceModule;
+import com.example.iam.verticle.ApiVerticle;
 import com.example.iam.web.route.handler.UserHandler;
 import com.example.starter.redis.RedisModule;
 import dagger.BindsInstance;
@@ -33,9 +34,11 @@ public interface Provider {
 
   RedisAPI redisAPI();
 
-  ServiceLifecycleManagement providesServiceLifecycleManagement();
+  ServiceLifecycleManagement serviceLifecycleManagement();
 
   UserHandler userHandler();
+
+  ApiVerticle apiVerticle();
 
   @Component.Builder
   interface Builder {

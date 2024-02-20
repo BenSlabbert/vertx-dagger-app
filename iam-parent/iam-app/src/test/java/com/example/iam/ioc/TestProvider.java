@@ -16,8 +16,8 @@ import javax.inject.Singleton;
     modules = {
       RepositoryModule.class,
       RedisModule.class,
-      Provider.EagerModule.class,
-      ServiceModule.class
+      ServiceModule.class,
+      Provider.EagerModule.class
     })
 public interface TestProvider extends Provider {
 

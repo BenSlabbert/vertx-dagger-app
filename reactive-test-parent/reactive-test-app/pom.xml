@@ -14,7 +14,7 @@
   <properties>
     <finalName>reactive-test-app</finalName>
     <launcher.class>com.example.reactivetest.ReactiveTestLauncher</launcher.class>
-    <main.verticle>com.example.reactivetest.verticle.ApplicationVerticle</main.verticle>
+    <main.verticle>com.example.reactivetest.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->

@@ -1,72 +1,42 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.verticle;
 
-import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.mesage.Consumer;
-import com.example.payment.ioc.DaggerProvider;
-import com.example.payment.ioc.Provider;
-import com.example.payment.service.TestingScopeService;
+import com.example.payment.service.ServiceLifecycleManagement;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.ThreadingModel;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
-import io.vertx.core.json.JsonObject;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import lombok.NoArgsConstructor;
+import javax.inject.Inject;
+import javax.sql.DataSource;
 
-@NoArgsConstructor
 public class WorkerVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(WorkerVerticle.class);
 
-  private Provider dagger;
-  private Set<Consumer> consumers = Set.of();
+  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final Set<Consumer> consumers;
+  private final DataSource dataSource;
 
-  private void init() {
-    Context orCreateContext = vertx.getOrCreateContext();
-    log.info("orCreateContext:" + orCreateContext);
-    log.info("context:" + context);
-    boolean workerContext = orCreateContext.isWorkerContext();
-    ThreadingModel threadingModel = orCreateContext.threadingModel();
-    if (!workerContext && threadingModel != ThreadingModel.VIRTUAL_THREAD) {
-      throw new IllegalStateException("not running in a worker/virtual thread context");
-    }
-
-    log.info("WorkerVerticle constructor");
-    JsonObject cfg = config();
-    Config config = Config.fromJson(cfg);
-
-    Objects.requireNonNull(vertx);
-    Objects.requireNonNull(config);
-    Objects.requireNonNull(config.postgresConfig());
-    Objects.requireNonNull(config.httpConfig());
-    Objects.requireNonNull(config.verticleConfig());
-
-    this.dagger =
-        DaggerProvider.builder()
-            .vertx(vertx)
-            .config(config)
-            .httpConfig(config.httpConfig())
-            .verticleConfig(config.verticleConfig())
-            .postgresConfig(config.postgresConfig())
-            .build();
-
-    this.dagger.init();
-    TestingScopeService testingScopeService = this.dagger.providesTestingScopeService();
-    testingScopeService.handle();
+  @Inject
+  WorkerVerticle(
+      ServiceLifecycleManagement serviceLifecycleManagement,
+      DataSource dataSource,
+      Set<Consumer> consumers) {
+    this.serviceLifecycleManagement = serviceLifecycleManagement;
+    this.dataSource = dataSource;
+    this.consumers = consumers;
   }
 
   @Override
   public void start(Promise<Void> startPromise) {
     vertx.exceptionHandler(err -> log.error("unhandled exception", err));
-    init();
 
     log.info("starting WorkerVerticle");
     log.info("starting WorkerVerticle on thread: %s".formatted(Thread.currentThread().getName()));
@@ -79,13 +49,12 @@ public class WorkerVerticle extends AbstractVerticle {
             .formatted(threadingModel, workerContext, eventLoopContext));
 
     checkDbConnection(startPromise);
-    consumers = dagger.consumers();
     consumers.forEach(Consumer::register);
     startPromise.complete();
   }
 
   private void checkDbConnection(Promise<Void> startPromise) {
-    try (var ignore = dagger.dataSource().getConnection()) {
+    try (var ignore = dataSource.getConnection()) {
       log.info("connected to database");
     } catch (Exception e) {
       log.error("failed to get DB connection", e);
@@ -99,7 +68,7 @@ public class WorkerVerticle extends AbstractVerticle {
     System.err.println("stopping");
     MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
-    Set<AutoCloseable> closeables = dagger.providesServiceLifecycleManagement().closeables();
+    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     Future.all(consumers.stream().map(Consumer::unregister).toList())

@@ -32,7 +32,7 @@ public class TruckVerticle extends AbstractVerticle {
   private volatile long timerId = 0L;
 
   @Inject
-  public TruckVerticle(
+  TruckVerticle(
       WarehouseRpcServiceProviderFactory warehouseRpcServiceProviderFactory,
       IamAuthClientFactory iamAuthClientFactory,
       JobService jobService,

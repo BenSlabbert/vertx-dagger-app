@@ -13,7 +13,7 @@
   <properties>
     <finalName>payment</finalName>
     <launcher.class>com.example.payment.PaymentAppLauncher</launcher.class>
-    <main.verticle>com.example.payment.verticle.WorkerVerticle</main.verticle>
+    <main.verticle>com.example.payment.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->

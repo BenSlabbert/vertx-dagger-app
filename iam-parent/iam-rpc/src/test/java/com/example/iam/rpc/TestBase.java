@@ -6,9 +6,9 @@ import static com.example.commons.FreePortUtility.getPort;
 import com.example.commons.ConfigEncoder;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.HttpConfig;
-import com.example.commons.config.Config.RedisConfig;
 import com.example.commons.config.Config.VerticleConfig;
-import com.example.iam.rpc.verticle.RpcVerticle;
+import com.example.iam.rpc.ioc.DaggerTestProvider;
+import com.example.iam.rpc.ioc.TestProvider;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -22,18 +22,21 @@ public abstract class TestBase {
 
   protected static final int HTTP_PORT = getPort();
 
+  protected TestProvider provider;
+
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     Config config =
         Config.builder()
-            .redisConfig(RedisConfig.builder().host("127.0.0.1").port(6379).database(0).build())
             .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
             .httpConfig(HttpConfig.builder().port(HTTP_PORT).build())
             .build();
 
+    provider = DaggerTestProvider.builder().vertx(vertx).config(config).build();
+
     JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
-        new RpcVerticle(),
+        provider.rpcVerticle(),
         new DeploymentOptions().setConfig(cfg),
         testContext.succeedingThenComplete());
   }

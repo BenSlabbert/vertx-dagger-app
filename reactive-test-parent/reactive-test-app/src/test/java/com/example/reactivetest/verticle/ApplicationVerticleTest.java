@@ -10,6 +10,8 @@ import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.PostgresConfig;
 import com.example.commons.config.Config.VerticleConfig;
 import com.example.migration.FlywayProvider;
+import com.example.reactivetest.ioc.DaggerProvider;
+import com.example.reactivetest.ioc.Provider;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -34,6 +36,8 @@ class ApplicationVerticleTest {
 
   private static final AtomicInteger counter = new AtomicInteger(0);
   private static final Network network = Network.newNetwork();
+
+  protected Provider provider;
 
   protected static final GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
@@ -88,9 +92,12 @@ class ApplicationVerticleTest {
             .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
             .build();
 
+    provider = DaggerProvider.builder().vertx(vertx).config(config).build();
+    provider.init();
+
     JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
-        new ApplicationVerticle(),
+        provider.applicationVerticle(),
         new DeploymentOptions().setConfig(cfg),
         testContext.succeedingThenComplete());
   }
