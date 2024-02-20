@@ -10,6 +10,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static java.util.logging.Level.SEVERE;
 
+import com.example.codegen.annotation.url.RestHandler;
 import com.example.reactivetest.config.Events;
 import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;
 import com.example.reactivetest.service.PersonService;
@@ -24,6 +25,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +53,26 @@ class PersonHandlerImpl implements PersonHandler, AutoCloseable {
     this.schemaValidatorDelegator = schemaValidatorDelegator;
   }
 
-  public void create(RoutingContext ctx) {
+  @Override
+  public void configureRoutes(Router router) {
+    router.get(PersonHandlerImpl_GetAll_ParamParser.PATH).handler(this::getAll);
+    router.get(PersonHandlerImpl_Sse_ParamParser.PATH).handler(this::sse);
+    router.post(PersonHandlerImpl_Create_ParamParser.PATH).handler(this::create);
+
+    log.info("Configured routes for PersonHandler");
+    log.info("-------------------------");
+    router
+        .getRoutes()
+        .forEach(
+            route -> {
+              log.info("Path: " + route.getPath());
+              log.info("Methods: " + route.methods());
+              log.info("-------------------------");
+            });
+  }
+
+  @RestHandler(path = "/create")
+  void create(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(CreatePersonRequest.class, body);
 
@@ -76,7 +97,8 @@ class PersonHandlerImpl implements PersonHandler, AutoCloseable {
             });
   }
 
-  public void getAll(RoutingContext ctx) {
+  @RestHandler(path = "/all")
+  void getAll(RoutingContext ctx) {
     personService
         .findAll()
         .onFailure(err -> ctx.end().onFailure(ctx::fail))
@@ -97,7 +119,8 @@ class PersonHandlerImpl implements PersonHandler, AutoCloseable {
   }
 
   // todo move this to the service package
-  public void sse(RoutingContext ctx) {
+  @RestHandler(path = "/sse")
+  void sse(RoutingContext ctx) {
     HttpServerResponse response = ctx.response();
     response.setChunked(true);
 

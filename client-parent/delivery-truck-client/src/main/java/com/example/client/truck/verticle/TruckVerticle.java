@@ -64,11 +64,13 @@ public class TruckVerticle extends AbstractVerticle {
               startPromise.complete();
             });
 
-    iamAuthClient.refresh(
-        RefreshRequestDto.builder()
-            .token(login.result().refreshToken())
-            .username(iamConfig.username())
-            .build());
+    iamAuthClient
+        .refresh(
+            RefreshRequestDto.builder()
+                .token(login.result().refreshToken())
+                .username(iamConfig.username())
+                .build())
+        .onFailure(startPromise::fail);
 
     WarehouseRpcServiceProvider provider =
         warehouseRpcServiceProviderFactory.create(

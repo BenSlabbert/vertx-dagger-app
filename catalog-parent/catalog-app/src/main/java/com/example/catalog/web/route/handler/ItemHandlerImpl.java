@@ -52,9 +52,8 @@ class ItemHandlerImpl implements ItemHandler {
             });
   }
 
-  @Override
   @RestHandler(path = "/execute")
-  public void executeSaga(RoutingContext ctx) {
+  void executeSaga(RoutingContext ctx) {
     itemService
         .execute()
         .onFailure(
@@ -65,9 +64,8 @@ class ItemHandlerImpl implements ItemHandler {
         .onSuccess(sagaId -> ResponseWriter.write(ctx, new JsonObject().put("sagaId", sagaId), OK));
   }
 
-  @Override
   @RestHandler(path = "/next?fromId={long:fromId=0L}&size={int:size=10}")
-  public void nextPage(RoutingContext ctx) {
+  void nextPage(RoutingContext ctx) {
     var params = ItemHandlerImpl_NextPage_ParamParser.parse(ctx);
 
     itemService
@@ -80,9 +78,8 @@ class ItemHandlerImpl implements ItemHandler {
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
   }
 
-  @Override
   @RestHandler(path = "/previous?fromId={long:fromId=0L}&size={int:size=10}")
-  public void previousPage(RoutingContext ctx) {
+  void previousPage(RoutingContext ctx) {
     var params = ItemHandlerImpl_PreviousPage_ParamParser.parse(ctx);
 
     itemService
@@ -95,9 +92,8 @@ class ItemHandlerImpl implements ItemHandler {
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
   }
 
-  @Override
   @RestHandler(path = "/suggest?s={string:s}")
-  public void suggest(RoutingContext ctx) {
+  void suggest(RoutingContext ctx) {
     var params = ItemHandlerImpl_Suggest_ParamParser.parse(ctx);
 
     itemService
@@ -110,9 +106,8 @@ class ItemHandlerImpl implements ItemHandler {
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
   }
 
-  @Override
   @RestHandler(path = "/{long:id}")
-  public void findOne(RoutingContext ctx) {
+  void findOne(RoutingContext ctx) {
     var params = ItemHandlerImpl_FindOne_ParamParser.parse(ctx);
 
     itemService
@@ -133,9 +128,8 @@ class ItemHandlerImpl implements ItemHandler {
             });
   }
 
-  @Override
   @RestHandler(path = "/{long:id}")
-  public void deleteOne(RoutingContext ctx) {
+  void deleteOne(RoutingContext ctx) {
     var params = ItemHandlerImpl_DeleteOne_ParamParser.parse(ctx);
 
     itemService
@@ -148,9 +142,8 @@ class ItemHandlerImpl implements ItemHandler {
         .onSuccess(dto -> ResponseWriter.writeNoContent(ctx));
   }
 
-  @Override
   @RestHandler(path = "/create")
-  public void create(RoutingContext ctx) {
+  void create(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(CreateItemRequestDto.class, body);
 
@@ -170,9 +163,8 @@ class ItemHandlerImpl implements ItemHandler {
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
   }
 
-  @Override
   @RestHandler(path = "/{long:id}")
-  public void update(RoutingContext ctx) {
+  void update(RoutingContext ctx) {
     var params = ItemHandlerImpl_Update_ParamParser.parse(ctx);
 
     JsonObject body = ctx.body().asJsonObject();

@@ -28,7 +28,7 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.serviceproxy.AuthenticationInterceptor;
 import io.vertx.serviceproxy.AuthorizationInterceptor;
-import io.vertx.serviceproxy.ServiceBinder;
+import io.vertx.serviceproxy.impl.InterceptorHolder;
 import io.vertx.sqlclient.Pool;
 import java.time.Duration;
 import java.util.List;
@@ -80,20 +80,20 @@ public class WarehouseVerticle extends AbstractVerticle {
               ctx.next();
             });
 
-    // this way we need to provide the interceptors ourselves (no reflection)
-    new WarehouseRpcServiceVertxProxyHandler(vertx, warehouseRpcService)
-        .register(vertx, WarehouseRpcService.ADDRESS, List.of());
+    var authenticationInterceptor =
+        new InterceptorHolder(
+            AuthenticationInterceptor.create(iamRpcServiceAuthenticationProvider));
+    var roleInterceptor =
+        new InterceptorHolder(
+            AuthorizationInterceptor.create(JWTAuthorization.create("permissions"))
+                .addAuthorization(RoleBasedAuthorization.create("truck-client")));
 
     this.consumer =
-        // this method uses reflection to call the VertxProxyHandler constructor
-        new ServiceBinder(vertx)
-            .setAddress(WarehouseRpcService.ADDRESS)
-            .addInterceptor(
-                "action", AuthenticationInterceptor.create(iamRpcServiceAuthenticationProvider))
-            .addInterceptor(
-                AuthorizationInterceptor.create(JWTAuthorization.create("permissions"))
-                    .addAuthorization(RoleBasedAuthorization.create("truck-client")))
-            .register(WarehouseRpcService.class, warehouseRpcService)
+        new WarehouseRpcServiceVertxProxyHandler(vertx, warehouseRpcService)
+            .register(
+                vertx,
+                WarehouseRpcService.ADDRESS,
+                List.of(authenticationInterceptor, roleInterceptor))
             .setMaxBufferedMessages(100)
             .fetch(10)
             .exceptionHandler(err -> log.error("exception in event bus", err))

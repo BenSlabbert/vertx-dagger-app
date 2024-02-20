@@ -53,6 +53,7 @@ public class ApplicationVerticle extends AbstractVerticle {
   void createRoutes(Promise<Void> startPromise) {
     Router mainRouter = Router.router(vertx);
     Router apiRouter = Router.router(vertx);
+    Router personRouter = Router.router(vertx);
 
     mainRouter
         .route()
@@ -88,10 +89,9 @@ public class ApplicationVerticle extends AbstractVerticle {
         .route()
         .handler(ctx -> SecurityHandler.hasRole(ctx, RoleBasedAuthorization.create("my-role")));
 
-    // api routes
-    apiRouter.get("/persons/all").handler(personHandler::getAll);
-    apiRouter.post("/persons/create").handler(personHandler::create);
-    apiRouter.get("/persons/sse").handler(personHandler::sse);
+    // person routes
+    apiRouter.route("/persons/*").subRouter(personRouter);
+    personHandler.configureRoutes(personRouter);
 
     // https://vertx.io/docs/vertx-health-check/java/
     mainRouter

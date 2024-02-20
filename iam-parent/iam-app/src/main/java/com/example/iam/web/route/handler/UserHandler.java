@@ -6,6 +6,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static java.util.logging.Level.SEVERE;
 
+import com.example.codegen.annotation.url.RestHandler;
 import com.example.commons.web.ResponseWriter;
 import com.example.iam.auth.api.IamAuthApi;
 import com.example.iam.auth.api.dto.LoginRequestDto;
@@ -13,6 +14,7 @@ import com.example.iam.auth.api.dto.RefreshRequestDto;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
 import com.example.iam.web.SchemaValidatorDelegator;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -26,12 +28,30 @@ public class UserHandler {
   private final SchemaValidatorDelegator schemaValidatorDelegator;
 
   @Inject
-  public UserHandler(IamAuthApi iamAuthApi, SchemaValidatorDelegator schemaValidatorDelegator) {
+  UserHandler(IamAuthApi iamAuthApi, SchemaValidatorDelegator schemaValidatorDelegator) {
     this.iamAuthApi = iamAuthApi;
     this.schemaValidatorDelegator = schemaValidatorDelegator;
   }
 
-  public void login(RoutingContext ctx) {
+  public void configureRoutes(Router router) {
+    router.post(UserHandler_Login_ParamParser.PATH).handler(this::login);
+    router.post(UserHandler_Refresh_ParamParser.PATH).handler(this::refresh);
+    router.post(UserHandler_Register_ParamParser.PATH).handler(this::register);
+
+    log.info("Configured routes for UserHandler");
+    log.info("-------------------------");
+    router
+        .getRoutes()
+        .forEach(
+            route -> {
+              log.info("Path: " + route.getPath());
+              log.info("Methods: " + route.methods());
+              log.info("-------------------------");
+            });
+  }
+
+  @RestHandler(path = "/login")
+  void login(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(LoginRequestDto.class, body);
 
@@ -51,7 +71,8 @@ public class UserHandler {
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
   }
 
-  public void refresh(RoutingContext ctx) {
+  @RestHandler(path = "/refresh")
+  void refresh(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(RefreshRequestDto.class, body);
 
@@ -71,7 +92,8 @@ public class UserHandler {
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
   }
 
-  public void register(RoutingContext ctx) {
+  @RestHandler(path = "/register")
+  void register(RoutingContext ctx) {
     JsonObject body = ctx.body().asJsonObject();
     Boolean valid = schemaValidatorDelegator.validate(RegisterRequestDto.class, body);
 

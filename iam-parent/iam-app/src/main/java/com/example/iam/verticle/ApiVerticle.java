@@ -64,9 +64,7 @@ public class ApiVerticle extends AbstractVerticle {
     mainRouter.route("/api/*").subRouter(apiRouter);
 
     // api routes
-    apiRouter.post("/login").handler(userHandler::login);
-    apiRouter.post("/refresh").handler(userHandler::refresh);
-    apiRouter.post("/register").handler(userHandler::register);
+    userHandler.configureRoutes(apiRouter);
 
     mainRouter.get("/health*").handler(getHealthCheckHandler());
     mainRouter.get("/ping*").handler(getPingHandler());
