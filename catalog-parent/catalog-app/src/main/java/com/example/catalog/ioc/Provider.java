@@ -5,13 +5,14 @@ import com.example.catalog.config.ConfigModule;
 import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ItemService;
-import com.example.catalog.service.ServiceLifecycleManagement;
 import com.example.catalog.service.ServiceModule;
 import com.example.catalog.verticle.ApiVerticle;
 import com.example.catalog.web.WebModule;
 import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.HandlerModule;
 import com.example.catalog.web.route.handler.ItemHandler;
+import com.example.commons.closer.CloserModule;
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.commons.mesage.Consumer;
 import com.example.commons.saga.SagaModule;
@@ -32,6 +33,7 @@ import org.jooq.DSLContext;
 @Singleton
 @Component(
     modules = {
+      CloserModule.class,
       RepositoryModule.class,
       ConfigModule.class,
       MapperModule.class,
@@ -45,8 +47,6 @@ import org.jooq.DSLContext;
 public interface Provider {
 
   @Nullable Void init();
-
-  ServiceLifecycleManagement serviceLifecycleManagement();
 
   Set<Consumer> consumers();
 
@@ -63,6 +63,8 @@ public interface Provider {
   RedisAPI redisAPI();
 
   ApiVerticle apiVerticle();
+
+  ClosingService closingService();
 
   @Component.Builder
   interface Builder {

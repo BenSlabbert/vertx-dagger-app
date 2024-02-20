@@ -3,10 +3,10 @@ package com.example.reactivetest.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.security.SecurityHandler;
-import com.example.reactivetest.service.ServiceLifecycleManagement;
 import com.example.reactivetest.web.handler.PersonHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
@@ -29,16 +29,13 @@ public class ApplicationVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(ApplicationVerticle.class);
 
-  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final ClosingService closingService;
   private final PersonHandler personHandler;
   private final Config config;
 
   @Inject
-  ApplicationVerticle(
-      ServiceLifecycleManagement serviceLifecycleManagement,
-      PersonHandler personHandler,
-      Config config) {
-    this.serviceLifecycleManagement = serviceLifecycleManagement;
+  ApplicationVerticle(ClosingService closingService, PersonHandler personHandler, Config config) {
+    this.closingService = closingService;
     this.personHandler = personHandler;
     this.config = config;
   }
@@ -124,7 +121,7 @@ public class ApplicationVerticle extends AbstractVerticle {
   public void stop(Promise<Void> stopPromise) {
     System.err.println("stopping");
 
-    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
+    Set<AutoCloseable> closeables = closingService.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     AtomicInteger idx = new AtomicInteger(0);

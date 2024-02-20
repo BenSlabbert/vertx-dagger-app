@@ -10,6 +10,4 @@ public interface ServiceModule {
   IamAuthApi iamAuthApi();
 
   TokenService tokenService();
-
-  ServiceLifecycleManagement serviceLifecycleManagement();
 }

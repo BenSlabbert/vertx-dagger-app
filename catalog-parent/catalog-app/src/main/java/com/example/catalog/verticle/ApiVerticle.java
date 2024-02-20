@@ -3,9 +3,9 @@ package com.example.catalog.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
-import com.example.catalog.service.ServiceLifecycleManagement;
 import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.ItemHandler;
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
@@ -35,7 +35,7 @@ public class ApiVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(ApiVerticle.class);
 
-  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final ClosingService closingService;
   private final Set<Consumer> consumers;
   private final ItemHandler itemHandler;
   private final AuthHandler authHandler;
@@ -132,7 +132,7 @@ public class ApiVerticle extends AbstractVerticle {
     System.err.println("stopping");
     MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
-    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
+    Set<AutoCloseable> closeables = closingService.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     Future.all(consumers.stream().map(Consumer::unregister).toList())

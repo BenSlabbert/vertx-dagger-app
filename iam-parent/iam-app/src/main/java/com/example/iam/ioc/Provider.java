@@ -1,9 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.ioc;
 
+import com.example.commons.closer.CloserModule;
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.iam.repository.RepositoryModule;
-import com.example.iam.service.ServiceLifecycleManagement;
 import com.example.iam.service.ServiceModule;
 import com.example.iam.verticle.ApiVerticle;
 import com.example.iam.web.route.handler.UserHandler;
@@ -21,6 +22,7 @@ import javax.inject.Singleton;
 @Singleton
 @Component(
     modules = {
+      CloserModule.class,
       RepositoryModule.class,
       RedisModule.class,
       ServiceModule.class,
@@ -34,7 +36,7 @@ public interface Provider {
 
   RedisAPI redisAPI();
 
-  ServiceLifecycleManagement serviceLifecycleManagement();
+  ClosingService closingService();
 
   UserHandler userHandler();
 

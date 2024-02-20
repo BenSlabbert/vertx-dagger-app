@@ -1,12 +1,13 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.ioc;
 
+import com.example.commons.closer.CloserModule;
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.commons.mesage.Consumer;
 import com.example.payment.config.ConfigModule;
 import com.example.payment.repository.RepositoryModule;
 import com.example.payment.scope.TransactionModule;
-import com.example.payment.service.ServiceLifecycleManagement;
 import com.example.payment.service.ServiceModule;
 import com.example.payment.service.TestingScopeService;
 import com.example.payment.verticle.WorkerVerticle;
@@ -25,6 +26,7 @@ import org.jooq.DSLContext;
 @Singleton
 @Component(
     modules = {
+      CloserModule.class,
       ServiceModule.class,
       ConfigModule.class,
       RepositoryModule.class,
@@ -39,7 +41,7 @@ public interface Provider {
 
   Set<Consumer> consumers();
 
-  ServiceLifecycleManagement serviceLifecycleManagement();
+  ClosingService closingService();
 
   TestingScopeService testingScopeService();
 

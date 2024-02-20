@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.verticle;
 
+import com.example.commons.closer.ClosingService;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.mesage.Consumer;
-import com.example.payment.service.ServiceLifecycleManagement;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -20,16 +20,13 @@ public class WorkerVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(WorkerVerticle.class);
 
-  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final ClosingService closingService;
   private final Set<Consumer> consumers;
   private final DataSource dataSource;
 
   @Inject
-  WorkerVerticle(
-      ServiceLifecycleManagement serviceLifecycleManagement,
-      DataSource dataSource,
-      Set<Consumer> consumers) {
-    this.serviceLifecycleManagement = serviceLifecycleManagement;
+  WorkerVerticle(ClosingService closingService, DataSource dataSource, Set<Consumer> consumers) {
+    this.closingService = closingService;
     this.dataSource = dataSource;
     this.consumers = consumers;
   }
@@ -68,7 +65,7 @@ public class WorkerVerticle extends AbstractVerticle {
     System.err.println("stopping");
     MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
-    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
+    Set<AutoCloseable> closeables = closingService.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     Future.all(consumers.stream().map(Consumer::unregister).toList())

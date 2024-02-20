@@ -1,12 +1,13 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse.ioc;
 
+import com.example.commons.closer.CloserModule;
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.iam.rpc.api.IamRpcApiModule;
 import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.starter.reactive.pool.PoolModule;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
-import com.example.warehouse.service.ServiceLifecycleManagement;
 import com.example.warehouse.service.ServiceModule;
 import com.example.warehouse.verticle.WarehouseVerticle;
 import dagger.BindsInstance;
@@ -22,6 +23,7 @@ import javax.inject.Singleton;
 @Singleton
 @Component(
     modules = {
+      CloserModule.class,
       IamRpcApiModule.class,
       PoolModule.class,
       ServiceModule.class,
@@ -33,7 +35,7 @@ public interface Provider {
 
   Config config();
 
-  ServiceLifecycleManagement serviceLifecycleManagement();
+  ClosingService closingService();
 
   WarehouseRpcService warehouseRpcService();
 

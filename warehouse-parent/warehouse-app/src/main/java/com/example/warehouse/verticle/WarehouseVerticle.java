@@ -4,6 +4,7 @@ package com.example.warehouse.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
@@ -11,7 +12,6 @@ import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxProxyHandler;
-import com.example.warehouse.service.ServiceLifecycleManagement;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -41,7 +41,7 @@ public class WarehouseVerticle extends AbstractVerticle {
   private static final Logger log = LoggerFactory.getLogger(WarehouseVerticle.class);
 
   private final IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider;
-  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final ClosingService closingService;
   private final WarehouseRpcService warehouseRpcService;
   private final Config config;
   private final Pool pool;
@@ -51,12 +51,12 @@ public class WarehouseVerticle extends AbstractVerticle {
   @Inject
   WarehouseVerticle(
       IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider,
-      ServiceLifecycleManagement serviceLifecycleManagement,
+      ClosingService closingService,
       WarehouseRpcService warehouseRpcService,
       Config config,
       Pool pool) {
     this.iamRpcServiceAuthenticationProvider = iamRpcServiceAuthenticationProvider;
-    this.serviceLifecycleManagement = serviceLifecycleManagement;
+    this.closingService = closingService;
     this.warehouseRpcService = warehouseRpcService;
     this.config = config;
     this.pool = pool;
@@ -154,7 +154,7 @@ public class WarehouseVerticle extends AbstractVerticle {
     System.err.println("stopping");
     MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
-    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
+    Set<AutoCloseable> closeables = closingService.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     AtomicInteger idx = new AtomicInteger(0);

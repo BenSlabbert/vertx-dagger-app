@@ -7,7 +7,5 @@ import dagger.Module;
 @Module(includes = ServiceModuleBindings.class)
 public interface ServiceModule {
 
-  ServiceLifecycleManagement serviceLifecycleManagement();
-
   WarehouseRpcService warehouseRpcService();
 }

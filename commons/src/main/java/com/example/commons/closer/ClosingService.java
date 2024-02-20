@@ -1,17 +1,17 @@
 /* Licensed under Apache-2.0 2024. */
-package com.example.warehouse.service;
+package com.example.commons.closer;
 
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class ServiceLifecycleManagement {
+public class ClosingService {
 
   private final Set<AutoCloseable> closeables;
 
   @Inject
-  ServiceLifecycleManagement(Set<AutoCloseable> closeables) {
+  ClosingService(Set<AutoCloseable> closeables) {
     this.closeables = closeables;
   }
 

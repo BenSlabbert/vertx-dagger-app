@@ -1,9 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.ioc;
 
+import com.example.commons.closer.CloserModule;
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.reactivetest.config.ConfigModule;
-import com.example.reactivetest.service.ServiceLifecycleManagement;
 import com.example.reactivetest.service.ServiceModule;
 import com.example.reactivetest.verticle.ApplicationVerticle;
 import com.example.reactivetest.web.handler.HandlerModule;
@@ -22,6 +23,7 @@ import org.jooq.DSLContext;
 @Singleton
 @Component(
     modules = {
+      CloserModule.class,
       ConfigModule.class,
       ServiceModule.class,
       HandlerModule.class,
@@ -31,7 +33,7 @@ public interface Provider {
 
   @Nullable Void init();
 
-  ServiceLifecycleManagement serviceLifecycleManagement();
+  ClosingService closingService();
 
   Config config();
 

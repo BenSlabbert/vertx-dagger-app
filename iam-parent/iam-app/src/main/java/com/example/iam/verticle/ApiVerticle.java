@@ -4,9 +4,9 @@ package com.example.iam.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
+import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
-import com.example.iam.service.ServiceLifecycleManagement;
 import com.example.iam.web.route.handler.UserHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
@@ -29,18 +29,15 @@ public class ApiVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(ApiVerticle.class);
 
-  private final ServiceLifecycleManagement serviceLifecycleManagement;
+  private final ClosingService closingService;
   private final UserHandler userHandler;
   private final RedisAPI redisAPI;
   private final Config config;
 
   @Inject
   ApiVerticle(
-      ServiceLifecycleManagement serviceLifecycleManagement,
-      UserHandler userHandler,
-      RedisAPI redisAPI,
-      Config config) {
-    this.serviceLifecycleManagement = serviceLifecycleManagement;
+      ClosingService closingService, UserHandler userHandler, RedisAPI redisAPI, Config config) {
+    this.closingService = closingService;
     this.userHandler = userHandler;
     this.redisAPI = redisAPI;
     this.config = config;
@@ -121,7 +118,7 @@ public class ApiVerticle extends AbstractVerticle {
   public void stop(Promise<Void> stopPromise) {
     System.err.println("stopping");
 
-    Set<AutoCloseable> closeables = serviceLifecycleManagement.closeables();
+    Set<AutoCloseable> closeables = closingService.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     AtomicInteger idx = new AtomicInteger(0);

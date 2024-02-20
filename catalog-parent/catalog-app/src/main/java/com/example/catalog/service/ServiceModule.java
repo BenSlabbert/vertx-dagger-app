@@ -7,6 +7,4 @@ import dagger.Module;
 public interface ServiceModule {
 
   ItemService itemService();
-
-  ServiceLifecycleManagement serviceLifecycleManagement();
 }
