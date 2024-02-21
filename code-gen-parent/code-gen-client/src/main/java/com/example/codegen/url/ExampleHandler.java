@@ -7,6 +7,12 @@ import java.time.Instant;
 
 public class ExampleHandler {
 
+  @RestHandler(path = "/some/prefix")
+  public void none(RoutingContext ctx) {
+    String path = ExampleHandler_None_ParamParser.PATH;
+    System.err.println("path: " + path);
+  }
+
   @RestHandler(path = "/some/prefix/{int:param1}/path/{string:param2}/more-path/{long:param3}")
   public void pathHandler(RoutingContext ctx) {
     String path = ExampleHandler_PathHandler_ParamParser.PATH;
