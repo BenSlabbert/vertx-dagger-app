@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Module
-class PoolConfig implements AutoCloseable {
+final class PoolConfig implements AutoCloseable {
 
   private static final Logger log = LoggerFactory.getLogger(PoolConfig.class);
 

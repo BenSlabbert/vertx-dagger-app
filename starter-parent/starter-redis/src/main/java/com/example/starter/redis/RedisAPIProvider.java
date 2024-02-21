@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Module
-class RedisAPIProvider implements AutoCloseable {
+final class RedisAPIProvider implements AutoCloseable {
 
   private static final Logger log = LoggerFactory.getLogger(RedisAPIProvider.class);
 

@@ -39,7 +39,7 @@ public interface Provider {
   }
 
   @Module
-  class EagerModule {
+  final class EagerModule {
 
     @Inject
     EagerModule() {}

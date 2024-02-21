@@ -1,5 +1,5 @@
-/* Licensed under Apache-2.0 2023. */
-package com.example.payment.config;
+/* Licensed under Apache-2.0 2024. */
+package com.example.commons.jooq;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,16 +13,15 @@ import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 
 @Module
-class JooqConfig {
+final class DataSourceDslContextConfig {
 
-  private static final Logger log = LoggerFactory.getLogger(JooqConfig.class);
+  private static final Logger log = LoggerFactory.getLogger(DataSourceDslContextConfig.class);
 
-  private JooqConfig() {}
+  private DataSourceDslContextConfig() {}
 
   @Provides
   @Singleton
   static DSLContext dslContext(DataSource dataSource) {
-    log.info("creating dsl context");
     Settings settings = new Settings().withFetchSize(128);
     DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES, settings);
 

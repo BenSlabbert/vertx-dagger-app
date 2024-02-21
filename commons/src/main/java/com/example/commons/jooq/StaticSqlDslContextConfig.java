@@ -1,10 +1,8 @@
-/* Licensed under Apache-2.0 2023. */
-package com.example.catalog.config;
+/* Licensed under Apache-2.0 2024. */
+package com.example.commons.jooq;
 
 import dagger.Module;
 import dagger.Provides;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import javax.inject.Singleton;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -13,16 +11,13 @@ import org.jooq.conf.StatementType;
 import org.jooq.impl.DSL;
 
 @Module
-class JooqConfig {
+final class StaticSqlDslContextConfig {
 
-  private static final Logger log = LoggerFactory.getLogger(JooqConfig.class);
-
-  private JooqConfig() {}
+  private StaticSqlDslContextConfig() {}
 
   @Provides
   @Singleton
-  static DSLContext providesDslContext() {
-    log.info("creating dsl context");
+  static DSLContext dslContext() {
     Settings settings = new Settings().withStatementType(StatementType.STATIC_STATEMENT);
     return DSL.using(SQLDialect.POSTGRES, settings);
   }

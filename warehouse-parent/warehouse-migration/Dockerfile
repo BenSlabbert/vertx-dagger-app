@@ -1,0 +1,7 @@
+FROM azul/zulu-openjdk-alpine:21-latest
+
+WORKDIR /app
+
+COPY target/warehouse-migration-*-jar-with-dependencies.jar app.jar
+
+ENTRYPOINT ["java", "-cp", "lib", "-jar", "app.jar", "-Xmx32M", "-Xms32M", "-Djava.net.preferIPv4Stack=true", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseEpsilonGC"]

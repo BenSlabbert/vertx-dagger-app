@@ -4,6 +4,7 @@ package com.example.warehouse.ioc;
 import com.example.commons.closer.CloserModule;
 import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
+import com.example.commons.jooq.StaticSqlDslContextModule;
 import com.example.iam.rpc.api.IamRpcApiModule;
 import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.starter.reactive.pool.PoolModule;
@@ -23,6 +24,7 @@ import javax.inject.Singleton;
 @Singleton
 @Component(
     modules = {
+      StaticSqlDslContextModule.class,
       CloserModule.class,
       IamRpcApiModule.class,
       PoolModule.class,
@@ -64,7 +66,7 @@ public interface Provider {
   }
 
   @Module
-  class EagerModule {
+  final class EagerModule {
 
     @Inject
     EagerModule() {}

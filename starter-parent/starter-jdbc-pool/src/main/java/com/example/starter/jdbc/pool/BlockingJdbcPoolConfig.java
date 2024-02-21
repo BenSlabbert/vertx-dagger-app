@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 import javax.sql.DataSource;
 
 @Module
-class BlockingJdbcPoolConfig implements AutoCloseable {
+final class BlockingJdbcPoolConfig implements AutoCloseable {
 
   private static final Logger log = LoggerFactory.getLogger(BlockingJdbcPoolConfig.class);
   private static HikariDataSource dataSource = null;

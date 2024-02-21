@@ -4,11 +4,12 @@ package com.example.reactivetest.ioc;
 import com.example.commons.closer.CloserModule;
 import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
-import com.example.reactivetest.config.ConfigModule;
+import com.example.commons.jooq.StaticSqlDslContextModule;
 import com.example.reactivetest.service.ServiceModule;
 import com.example.reactivetest.verticle.ApplicationVerticle;
 import com.example.reactivetest.web.handler.HandlerModule;
 import com.example.reactivetest.web.handler.PersonHandler;
+import com.example.starter.reactive.pool.PoolModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -23,8 +24,9 @@ import org.jooq.DSLContext;
 @Singleton
 @Component(
     modules = {
+      StaticSqlDslContextModule.class,
+      PoolModule.class,
       CloserModule.class,
-      ConfigModule.class,
       ServiceModule.class,
       HandlerModule.class,
       Provider.EagerModule.class
@@ -54,7 +56,7 @@ public interface Provider {
   }
 
   @Module
-  class EagerModule {
+  final class EagerModule {
 
     @Inject
     EagerModule() {}

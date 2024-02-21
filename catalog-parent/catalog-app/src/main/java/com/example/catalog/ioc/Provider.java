@@ -1,7 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.ioc;
 
-import com.example.catalog.config.ConfigModule;
 import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ItemService;
@@ -14,9 +13,12 @@ import com.example.catalog.web.route.handler.ItemHandler;
 import com.example.commons.closer.CloserModule;
 import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
+import com.example.commons.jooq.StaticSqlDslContextModule;
 import com.example.commons.mesage.Consumer;
 import com.example.commons.saga.SagaModule;
 import com.example.iam.rpc.api.IamRpcApiModule;
+import com.example.starter.reactive.pool.PoolModule;
+import com.example.starter.redis.RedisModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
@@ -33,9 +35,11 @@ import org.jooq.DSLContext;
 @Singleton
 @Component(
     modules = {
+      StaticSqlDslContextModule.class,
+      PoolModule.class,
+      RedisModule.class,
       CloserModule.class,
       RepositoryModule.class,
-      ConfigModule.class,
       MapperModule.class,
       SagaModule.class,
       ServiceModule.class,
@@ -88,7 +92,7 @@ public interface Provider {
   }
 
   @Module
-  class EagerModule {
+  final class EagerModule {
 
     @Inject
     EagerModule() {}

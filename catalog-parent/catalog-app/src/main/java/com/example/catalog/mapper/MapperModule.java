@@ -5,7 +5,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class MapperModule {
+public final class MapperModule {
 
   private MapperModule() {}
 

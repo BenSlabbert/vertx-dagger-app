@@ -7,7 +7,7 @@ import io.vertx.core.Vertx;
 import javax.inject.Singleton;
 
 @Module
-class IamRpcServiceProvider {
+final class IamRpcServiceProvider {
 
   private IamRpcServiceProvider() {}
 

@@ -14,6 +14,9 @@
   <modules>
     <module>warehouse-app</module>
     <module>warehouse-rpc-api</module>
+    <module>warehouse-migration</module>
+    <module>warehouse-generator</module>
+    <module>warehouse-entity</module>
   </modules>
 
 </project>
