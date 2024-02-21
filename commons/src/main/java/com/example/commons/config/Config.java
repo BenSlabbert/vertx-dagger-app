@@ -8,8 +8,7 @@ import javax.annotation.Nullable;
 public record Config(
     @Nullable HttpConfig httpConfig,
     @Nullable RedisConfig redisConfig,
-    @Nullable PostgresConfig postgresConfig,
-    @Nullable VerticleConfig verticleConfig) {
+    @Nullable PostgresConfig postgresConfig) {
 
   public static Builder builder() {
     return new AutoBuilder_Config_Builder();
@@ -23,25 +22,17 @@ public record Config(
 
     Builder postgresConfig(@Nullable PostgresConfig postgresConfig);
 
-    Builder verticleConfig(@Nullable VerticleConfig verticleConfig);
-
     Config build();
   }
 
   public static Config fromJson(JsonObject jsonObject) {
-    JsonObject verticleConfig = jsonObject.getJsonObject("verticleConfig", new JsonObject());
-
     Builder builder = Config.builder();
+
     addHttpConfig(jsonObject, builder);
     addRedisConfig(jsonObject, builder);
     addPostgresConfig(jsonObject, builder);
 
-    return builder
-        .verticleConfig(
-            VerticleConfig.builder()
-                .numberOfInstances(verticleConfig.getInteger("numberOfInstances", 1))
-                .build())
-        .build();
+    return builder.build();
   }
 
   private static void addHttpConfig(JsonObject jsonObject, Builder builder) {
@@ -89,20 +80,6 @@ public record Config(
 
   private static boolean isNullOrEmpty(JsonObject config) {
     return null == config || config.isEmpty();
-  }
-
-  public record VerticleConfig(int numberOfInstances) {
-
-    public static Builder builder() {
-      return new AutoBuilder_Config_VerticleConfig_Builder();
-    }
-
-    @AutoBuilder
-    public interface Builder {
-      Builder numberOfInstances(int numberOfInstances);
-
-      VerticleConfig build();
-    }
   }
 
   public record HttpConfig(int port) {

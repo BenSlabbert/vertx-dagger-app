@@ -18,9 +18,6 @@ public interface BaseBuilder<
   BUILDER httpConfig(Config.HttpConfig httpConfig);
 
   @BindsInstance
-  BUILDER verticleConfig(Config.VerticleConfig verticleConfig);
-
-  @BindsInstance
   BUILDER postgresConfig(Config.PostgresConfig postgresConfig);
 
   PROVIDER build();

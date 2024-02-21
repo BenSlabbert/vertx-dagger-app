@@ -57,9 +57,6 @@ public interface Provider {
     @BindsInstance
     Builder redisConfig(Config.RedisConfig redisConfig);
 
-    @BindsInstance
-    Builder verticleConfig(Config.VerticleConfig verticleConfig);
-
     Provider build();
   }
 

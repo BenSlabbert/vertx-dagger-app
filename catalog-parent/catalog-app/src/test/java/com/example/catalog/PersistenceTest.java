@@ -144,7 +144,6 @@ public abstract class PersistenceTest {
                     .password("postgres")
                     .database(dbName)
                     .build())
-            .verticleConfig(Config.VerticleConfig.builder().numberOfInstances(1).build())
             .build();
 
     provider =
@@ -154,7 +153,6 @@ public abstract class PersistenceTest {
             .httpConfig(config.httpConfig())
             .redisConfig(config.redisConfig())
             .postgresConfig(config.postgresConfig())
-            .verticleConfig(config.verticleConfig())
             .iamRpcService(authHandler)
             .build();
     provider.init();

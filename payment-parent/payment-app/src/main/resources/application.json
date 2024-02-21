@@ -2,9 +2,6 @@
   "httpConfig": {
     "port": 8082
   },
-  "verticleConfig": {
-    "numberOfInstances": 1
-  },
   "postgresConfig": {
     "host": "127.0.0.1",
     "port": 5432,

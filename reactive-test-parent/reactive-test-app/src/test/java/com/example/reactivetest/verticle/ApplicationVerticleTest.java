@@ -8,7 +8,6 @@ import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.PostgresConfig;
-import com.example.commons.config.Config.VerticleConfig;
 import com.example.migration.FlywayProvider;
 import com.example.reactivetest.ioc.DaggerProvider;
 import com.example.reactivetest.ioc.Provider;
@@ -89,7 +88,6 @@ class ApplicationVerticleTest {
                     .username("postgres")
                     .password("postgres")
                     .build())
-            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
             .build();
 
     provider = DaggerProvider.builder().vertx(vertx).config(config).build();

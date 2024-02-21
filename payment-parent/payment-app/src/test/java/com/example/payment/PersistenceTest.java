@@ -91,7 +91,6 @@ public abstract class PersistenceTest {
                     .password("postgres")
                     .database(dbName)
                     .build())
-            .verticleConfig(Config.VerticleConfig.builder().numberOfInstances(1).build())
             .build();
 
     provider =
@@ -99,7 +98,6 @@ public abstract class PersistenceTest {
             .vertx(vertx)
             .config(config)
             .httpConfig(config.httpConfig())
-            .verticleConfig(config.verticleConfig())
             .postgresConfig(config.postgresConfig())
             .build();
     provider.init();

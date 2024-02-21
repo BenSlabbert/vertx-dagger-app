@@ -7,9 +7,6 @@
     "port": 6379,
     "database": 0
   },
-  "verticleConfig": {
-    "numberOfInstances": 1
-  },
   "postgresConfig": {
     "host": "postgres",
     "port": 5432,

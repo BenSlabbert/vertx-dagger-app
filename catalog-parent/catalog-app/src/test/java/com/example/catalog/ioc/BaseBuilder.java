@@ -25,9 +25,6 @@ public interface BaseBuilder<
   BUILDER postgresConfig(Config.PostgresConfig postgresConfig);
 
   @BindsInstance
-  BUILDER verticleConfig(Config.VerticleConfig verticleConfig);
-
-  @BindsInstance
   BUILDER iamRpcService(IamRpcService iamRpcService);
 
   PROVIDER build();

@@ -6,7 +6,6 @@ import static com.example.commons.FreePortUtility.getPort;
 import com.example.commons.ConfigEncoder;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.HttpConfig;
-import com.example.commons.config.Config.VerticleConfig;
 import com.example.iam.rpc.ioc.DaggerTestProvider;
 import com.example.iam.rpc.ioc.TestProvider;
 import io.vertx.core.DeploymentOptions;
@@ -27,10 +26,7 @@ public abstract class TestBase {
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) {
     Config config =
-        Config.builder()
-            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
-            .httpConfig(HttpConfig.builder().port(HTTP_PORT).build())
-            .build();
+        Config.builder().httpConfig(HttpConfig.builder().port(HTTP_PORT).build()).build();
 
     provider = DaggerTestProvider.builder().vertx(vertx).config(config).build();
 

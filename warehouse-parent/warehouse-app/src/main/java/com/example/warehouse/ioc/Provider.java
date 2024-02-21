@@ -60,9 +60,6 @@ public interface Provider {
     @BindsInstance
     Builder postgresConfig(Config.PostgresConfig postgresConfig);
 
-    @BindsInstance
-    Builder verticleConfig(Config.VerticleConfig verticleConfig);
-
     Provider build();
   }
 

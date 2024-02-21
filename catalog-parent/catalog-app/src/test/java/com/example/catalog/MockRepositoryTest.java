@@ -14,7 +14,6 @@ import com.example.commons.config.Config;
 import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.PostgresConfig;
 import com.example.commons.config.Config.RedisConfig;
-import com.example.commons.config.Config.VerticleConfig;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import io.vertx.core.Future;
@@ -78,7 +77,6 @@ public abstract class MockRepositoryTest {
                     .password("postgres")
                     .database("postgres")
                     .build())
-            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
             .build();
 
     provider =
@@ -88,7 +86,6 @@ public abstract class MockRepositoryTest {
             .httpConfig(config.httpConfig())
             .redisConfig(config.redisConfig())
             .postgresConfig(config.postgresConfig())
-            .verticleConfig(config.verticleConfig())
             .iamRpcService(authHandler)
             .suggestionService(suggestionService)
             .itemRepository(itemRepository)

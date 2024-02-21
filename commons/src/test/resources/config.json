@@ -6,8 +6,5 @@
     "host": "redis",
     "port": 6379,
     "database": 0
-  },
-  "verticleConfig": {
-    "numberOfInstances": 1
   }
 }

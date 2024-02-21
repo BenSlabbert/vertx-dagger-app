@@ -1,8 +1,5 @@
 {
   "httpConfig": {
     "port": 8085
-  },
-  "verticleConfig": {
-    "numberOfInstances": 1
   }
 }

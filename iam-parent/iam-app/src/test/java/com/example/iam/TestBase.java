@@ -8,7 +8,6 @@ import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.RedisConfig;
-import com.example.commons.config.Config.VerticleConfig;
 import com.example.iam.ioc.DaggerTestProvider;
 import com.example.iam.ioc.TestProvider;
 import io.restassured.RestAssured;
@@ -63,7 +62,6 @@ public abstract class TestBase {
                     .port(redis.getMappedPort(6379))
                     .database(0)
                     .build())
-            .verticleConfig(VerticleConfig.builder().numberOfInstances(1).build())
             .build();
 
     provider =
@@ -71,7 +69,6 @@ public abstract class TestBase {
             .vertx(vertx)
             .config(config)
             .httpConfig(config.httpConfig())
-            .verticleConfig(config.verticleConfig())
             .redisConfig(config.redisConfig())
             .build();
 

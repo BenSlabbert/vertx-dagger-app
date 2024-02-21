@@ -13,8 +13,5 @@
     "username": "postgres",
     "password": "postgres",
     "database": "postgres"
-  },
-  "verticleConfig": {
-    "numberOfInstances": 1
   }
 }

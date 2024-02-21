@@ -36,9 +36,6 @@ public interface TestProvider extends Provider {
     Builder httpConfig(Config.HttpConfig httpConfig);
 
     @BindsInstance
-    Builder verticleConfig(Config.VerticleConfig verticleConfig);
-
-    @BindsInstance
     Builder redisConfig(Config.RedisConfig redisConfig);
 
     TestProvider build();

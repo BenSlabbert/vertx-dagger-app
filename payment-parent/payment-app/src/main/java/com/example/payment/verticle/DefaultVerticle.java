@@ -32,14 +32,12 @@ public class DefaultVerticle extends AbstractVerticle {
     Objects.requireNonNull(config);
     Objects.requireNonNull(config.postgresConfig());
     Objects.requireNonNull(config.httpConfig());
-    Objects.requireNonNull(config.verticleConfig());
 
     this.dagger =
         DaggerProvider.builder()
             .vertx(vertx)
             .config(config)
             .httpConfig(config.httpConfig())
-            .verticleConfig(config.verticleConfig())
             .postgresConfig(config.postgresConfig())
             .build();
 
