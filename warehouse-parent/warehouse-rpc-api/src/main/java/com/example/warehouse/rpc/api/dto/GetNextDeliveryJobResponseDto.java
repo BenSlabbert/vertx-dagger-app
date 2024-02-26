@@ -17,7 +17,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class GetNextDeliveryJobResponseDto {
 
-  private String jobId;
+  private Long deliveryId;
 
   public GetNextDeliveryJobResponseDto(JsonObject jsonObject) {
     GetNextDeliveryJobResponseDtoConverter.fromJson(jsonObject, this);

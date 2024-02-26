@@ -4,7 +4,8 @@ CREATE
 			id serial8 PRIMARY KEY,
 			version int4 NOT NULL DEFAULT 1,
 			identifier uuid NOT NULL UNIQUE,
-			name text NOT NULL
+			name text NOT NULL,
+			CONSTRAINT truck_unq UNIQUE(identifier)
 		);
 
 CREATE

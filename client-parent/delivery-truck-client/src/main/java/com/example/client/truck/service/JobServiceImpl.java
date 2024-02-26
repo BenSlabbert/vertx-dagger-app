@@ -52,12 +52,12 @@ class JobServiceImpl implements JobService {
   }
 
   void handle(GetNextDeliveryJobResponseDto resp) {
-    if (null == resp || null == resp.getJobId()) {
+    if (null == resp || null == resp.getDeliveryId()) {
       log.info("No jobs found");
       return;
     }
 
-    log.info("Job found: %s".formatted(resp.getJobId()));
+    log.info("Job found: %s".formatted(resp.getDeliveryId()));
   }
 
   private Future<GetNextDeliveryJobResponseDto> getNetDelivery() {

@@ -48,7 +48,7 @@ final class PoolConfig implements AutoCloseable {
         new PoolOptions()
             .setConnectionTimeout(10)
             .setConnectionTimeoutUnit(TimeUnit.SECONDS)
-            .setMaxSize(1);
+            .setMaxSize(2);
 
     pool =
         PgBuilder.pool()
