@@ -526,14 +526,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.41.2":
-  version: 1.41.2
-  resolution: "@playwright/test@npm:1.41.2"
+"@playwright/test@npm:^1.42.0":
+  version: 1.42.0
+  resolution: "@playwright/test@npm:1.42.0"
   dependencies:
-    playwright: "npm:1.41.2"
+    playwright: "npm:1.42.0"
   bin:
     playwright: cli.js
-  checksum: e87405987fa024f75acc223c47fcb2da0a66b2fa0cd9a583ca5b02aac12be353d0c262bf6a22b9bc40550c86c8b7629e70cd27f508ec370d9c92bb72f74581e7
+  checksum: bb696e89da47dd1ab46201fa4652f331bea3b75e9c804e358f83216f69d83a972a302d249a8e4c08cbc8fc72110a6e62562e679a474b5ed6246f09a9fc9bda6b
   languageName: node
   linkType: hard
 
@@ -1336,7 +1336,7 @@ __metadata:
   resolution: "app@workspace:."
   dependencies:
     "@picocss/pico": "npm:^2.0.3"
-    "@playwright/test": "npm:^1.41.2"
+    "@playwright/test": "npm:^1.42.0"
     "@sveltejs/adapter-node": "npm:^4.0.1"
     "@sveltejs/kit": "npm:^2.5.2"
     "@sveltejs/vite-plugin-svelte": "npm:^3.0.2"
@@ -1347,9 +1347,9 @@ __metadata:
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-svelte: "npm:^2.35.1"
     prettier: "npm:^3.2.5"
-    prettier-plugin-svelte: "npm:^3.2.1"
+    prettier-plugin-svelte: "npm:^3.2.2"
     svelte: "npm:^4.2.12"
-    svelte-check: "npm:^3.6.4"
+    svelte-check: "npm:^3.6.5"
     svelte-eslint-parser: "npm:^0.33.1"
     tslib: "npm:^2.6.2"
     typescript: "npm:^5.3.3"
@@ -3658,27 +3658,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.41.2":
-  version: 1.41.2
-  resolution: "playwright-core@npm:1.41.2"
+"playwright-core@npm:1.42.0":
+  version: 1.42.0
+  resolution: "playwright-core@npm:1.42.0"
   bin:
     playwright-core: cli.js
-  checksum: 77ff881ebb9cc0654edd00c5ff202f5f61aee7a5318e1f12a82e30a3636de21e8b5982fae6138e5bb90115ae509c15a640cf85b10b3e2daebb2bb286da54fd4c
+  checksum: 18caeb7e0a1194be7a0c6178d49a5960c55230958dea16be14da2c1f5426427f9f195b59a4c481d0f530d585fa381fc5fc7c82f2a45edd3628ee745df63e9e69
   languageName: node
   linkType: hard
 
-"playwright@npm:1.41.2":
-  version: 1.41.2
-  resolution: "playwright@npm:1.41.2"
+"playwright@npm:1.42.0":
+  version: 1.42.0
+  resolution: "playwright@npm:1.42.0"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.41.2"
+    playwright-core: "npm:1.42.0"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 272399f622dc2df90fbef147b9b1cfab5d7a78cc364bdfa98d2bf08faa9894346f58629fe4fef41b108ca2cb203b3970d7886b7f392cb0399c75b521478e2920
+  checksum: a900d377e20106f539ae3fde0e89468089d1bcdb766ecf00b883de49f6f164254df568971994eecec339238430656a17c8cbf28f881ceea42a62a143347bfa5c
   languageName: node
   linkType: hard
 
@@ -3777,13 +3777,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "prettier-plugin-svelte@npm:3.2.1"
+"prettier-plugin-svelte@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "prettier-plugin-svelte@npm:3.2.2"
   peerDependencies:
     prettier: ^3.0.0
     svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
-  checksum: 101866f486fceeba4a833618477a73dcdc899bdf2c3dd35c39bcf5722f0096659de0241ffbbc44d116bd3a0cc1cfc0bd0906ed6b8e3abaf71e48fbffbcb7db6b
+  checksum: c824dc8e2d533059058db5b3c17ea49141401c4c3aa7f320eb76caa23bd4392019b837a4f98e62b91589844e18ad7fe8148671260fc08b04a3b5db0190d0c7bd
   languageName: node
   linkType: hard
 
@@ -4436,9 +4436,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^3.6.4":
-  version: 3.6.4
-  resolution: "svelte-check@npm:3.6.4"
+"svelte-check@npm:^3.6.5":
+  version: 3.6.5
+  resolution: "svelte-check@npm:3.6.5"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.17"
     chokidar: "npm:^3.4.1"
@@ -4452,7 +4452,7 @@ __metadata:
     svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0
   bin:
     svelte-check: bin/svelte-check
-  checksum: 448cfeee4e9caab7f3d49b5f313b093f64c9ef254c2dffb3f5f492a6375da5c6900d34d879c60f59cc59814a175ed762397de5cffd73801ddc608db4e2336c00
+  checksum: 546e0afed2aef1f3a1816eec8b7c543252ac03d155429c09b7561f8b6138b2ddc545c080c93653daf6d813ea3c2e355c207df7a497f9860780d36ae64a9849a7
   languageName: node
   linkType: hard
 
