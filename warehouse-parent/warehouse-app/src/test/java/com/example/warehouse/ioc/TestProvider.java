@@ -4,13 +4,13 @@ package com.example.warehouse.ioc;
 import com.example.commons.closer.CloserModule;
 import com.example.commons.config.Config;
 import com.example.commons.jooq.StaticSqlDslContextModule;
-import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.starter.reactive.pool.PoolModule;
 import com.example.warehouse.repository.RepositoryModule;
 import com.example.warehouse.service.ServiceModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import io.vertx.core.Vertx;
+import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import javax.inject.Singleton;
 
 @Singleton
@@ -41,8 +41,7 @@ public interface TestProvider extends Provider {
     Builder postgresConfig(Config.PostgresConfig postgresConfig);
 
     @BindsInstance
-    Builder iamRpcServiceAuthenticationProvider(
-        IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider);
+    Builder authenticationProvider(AuthenticationProvider authenticationProvider);
 
     TestProvider build();
   }

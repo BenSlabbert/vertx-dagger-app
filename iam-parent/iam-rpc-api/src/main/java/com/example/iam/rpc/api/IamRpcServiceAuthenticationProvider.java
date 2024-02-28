@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 
 @Singleton
-public class IamRpcServiceAuthenticationProvider implements AuthenticationProvider {
+class IamRpcServiceAuthenticationProvider implements AuthenticationProvider {
 
   private final IamRpcService iamRpcService;
 

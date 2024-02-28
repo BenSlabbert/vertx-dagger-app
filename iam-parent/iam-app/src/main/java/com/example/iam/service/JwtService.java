@@ -75,6 +75,9 @@ class JwtService implements TokenService {
     }
 
     return jwtAuth.generateToken(
+        // this is the root claim
+        // new JsonObject()
+        // .put("permissions", new JsonArray().add("truck-client").add("eventbus")),
         new JsonObject().put("additional-props", "new-prop"),
         new JWTOptions()
             .setExpiresInSeconds(lifetimeSeconds)

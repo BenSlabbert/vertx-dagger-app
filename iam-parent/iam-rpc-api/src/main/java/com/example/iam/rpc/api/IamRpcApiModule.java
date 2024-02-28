@@ -2,11 +2,12 @@
 package com.example.iam.rpc.api;
 
 import dagger.Module;
+import io.vertx.ext.auth.authentication.AuthenticationProvider;
 
 @Module(includes = {IamRpcServiceProvider.class, IamRpcApiModuleBindings.class})
 public interface IamRpcApiModule {
 
   IamRpcService iamRpcService();
 
-  IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider();
+  AuthenticationProvider iamRpcServiceAuthenticationProvider();
 }

@@ -6,7 +6,6 @@ import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.commons.jooq.StaticSqlDslContextModule;
 import com.example.iam.rpc.api.IamRpcApiModule;
-import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.starter.reactive.pool.PoolModule;
 import com.example.warehouse.repository.RepositoryModule;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
@@ -17,6 +16,7 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
+import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.sqlclient.Pool;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -43,7 +43,7 @@ public interface Provider {
 
   WarehouseRpcService warehouseRpcService();
 
-  IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider();
+  AuthenticationProvider iamRpcServiceAuthenticationProvider();
 
   Pool pool();
 

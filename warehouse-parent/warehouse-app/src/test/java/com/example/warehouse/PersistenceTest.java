@@ -2,25 +2,23 @@
 package com.example.warehouse;
 
 import static com.example.commons.FreePortUtility.getPort;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
-import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.migration.FlywayProvider;
 import com.example.warehouse.ioc.DaggerTestProvider;
 import com.example.warehouse.ioc.TestProvider;
 import io.vertx.core.DeploymentOptions;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.User;
-import io.vertx.ext.auth.authentication.Credentials;
+import io.vertx.ext.auth.JWTOptions;
+import io.vertx.ext.auth.PubSecKeyOptions;
+import io.vertx.ext.auth.jwt.JWTAuth;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,6 +42,7 @@ public abstract class PersistenceTest {
   private static final Network network = Network.newNetwork();
 
   protected TestProvider provider;
+  protected String jwtToken;
 
   protected static final GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
@@ -101,10 +100,24 @@ public abstract class PersistenceTest {
                     .build())
             .build();
 
-    var mockAuthProvider = mock(IamRpcServiceAuthenticationProvider.class);
-
-    when(mockAuthProvider.authenticate(any(Credentials.class)))
-        .thenReturn(Future.succeededFuture(User.fromName("user")));
+    JWTAuth jwtAuth =
+        JWTAuth.create(
+            vertx,
+            new JWTAuthOptions()
+                .addPubSecKey(
+                    new PubSecKeyOptions()
+                        .setId("authKey1")
+                        .setAlgorithm("HS256")
+                        .setBuffer("password")));
+    jwtToken =
+        jwtAuth.generateToken(
+            // this is the root claim
+            new JsonObject()
+                .put("permissions", new JsonArray().add("truck-client").add("eventbus")),
+            new JWTOptions()
+                .setExpiresInSeconds(Integer.MAX_VALUE)
+                .setIssuer("iam")
+                .setSubject("sneaky"));
 
     provider =
         DaggerTestProvider.builder()
@@ -112,7 +125,7 @@ public abstract class PersistenceTest {
             .config(config)
             .httpConfig(config.httpConfig())
             .postgresConfig(config.postgresConfig())
-            .iamRpcServiceAuthenticationProvider(mockAuthProvider)
+            .authenticationProvider(jwtAuth)
             .build();
 
     provider.init();

@@ -9,16 +9,19 @@ import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
 import com.example.commons.future.MultiCompletePromise;
 import com.example.commons.transaction.reactive.TransactionBoundary;
-import com.example.iam.rpc.api.IamRpcServiceAuthenticationProvider;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxProxyHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.User;
+import io.vertx.ext.auth.authentication.AuthenticationProvider;
+import io.vertx.ext.auth.authorization.PermissionBasedAuthorization;
 import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
 import io.vertx.ext.auth.jwt.authorization.JWTAuthorization;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
@@ -40,7 +43,7 @@ public class WarehouseVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(WarehouseVerticle.class);
 
-  private final IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider;
+  private final AuthenticationProvider iamRpcServiceAuthenticationProvider;
   private final ClosingService closingService;
   private final WarehouseRpcService warehouseRpcService;
   private final Config config;
@@ -50,7 +53,7 @@ public class WarehouseVerticle extends AbstractVerticle {
 
   @Inject
   WarehouseVerticle(
-      IamRpcServiceAuthenticationProvider iamRpcServiceAuthenticationProvider,
+      AuthenticationProvider iamRpcServiceAuthenticationProvider,
       ClosingService closingService,
       WarehouseRpcService warehouseRpcService,
       Config config,
@@ -83,17 +86,40 @@ public class WarehouseVerticle extends AbstractVerticle {
     var authenticationInterceptor =
         new InterceptorHolder(
             AuthenticationInterceptor.create(iamRpcServiceAuthenticationProvider));
+
+    InterceptorHolder permissionsInterceptorHolder =
+        new InterceptorHolder(
+            (vertx, interceptorContext, body) -> {
+              // we come here if the user is authenticated
+              // user has a valid token
+              final ContextInternal vertxContext = (ContextInternal) vertx.getOrCreateContext();
+              User user = (User) interceptorContext.get("user");
+
+              // jwt auth only does PermissionBasedAuthorization
+              // we will need to add roles if we want to use them
+              user.authorizations()
+                  .add("role-provider-id", RoleBasedAuthorization.create("service-client"));
+
+              log.info("user: " + user);
+              return vertxContext.succeededFuture(body);
+            });
+
     var roleInterceptor =
         new InterceptorHolder(
+            // look for a claim called "permissions"
             AuthorizationInterceptor.create(JWTAuthorization.create("permissions"))
-                .addAuthorization(RoleBasedAuthorization.create("truck-client")));
+                // this authorization is added above in the permissionsInterceptorHolder
+                .addAuthorization(RoleBasedAuthorization.create("service-client"))
+                // one of the permissions must be called "truck-client"
+                // this is coming off the root claim in the JWT token
+                .addAuthorization(PermissionBasedAuthorization.create("truck-client")));
 
     this.consumer =
         new WarehouseRpcServiceVertxProxyHandler(vertx, warehouseRpcService)
             .register(
                 vertx,
                 WarehouseRpcService.ADDRESS,
-                List.of(authenticationInterceptor, roleInterceptor))
+                List.of(authenticationInterceptor, permissionsInterceptorHolder, roleInterceptor))
             .setMaxBufferedMessages(100)
             .fetch(10)
             .exceptionHandler(err -> log.error("exception in event bus", err))
