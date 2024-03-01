@@ -4,3 +4,5 @@ profile:
   name: "qodana.starter"
 projectJDK: "21"
 linter: "jetbrains/qodana-jvm:latest"
+include:
+- name: "CheckDependencyLicenses"
