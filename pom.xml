@@ -40,7 +40,7 @@
     <assertj-core.version>3.25.3</assertj-core.version>
     <lombok.version>1.18.30</lombok.version>
     <!--blocking migration to java 21-->
-    <mockito.version>5.10.0</mockito.version>
+    <mockito.version>5.11.0</mockito.version>
     <rest-assured.version>5.4.0</rest-assured.version>
     <commons-codec.version>1.16.1</commons-codec.version>
     <testcontainers.version>1.19.6</testcontainers.version>
