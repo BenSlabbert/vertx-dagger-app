@@ -51,6 +51,10 @@
       <artifactId>vertx-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-opentelemetry</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.example.warehouse.rpc.api</groupId>
       <artifactId>warehouse-rpc-api</artifactId>
       <version>${revision}</version>

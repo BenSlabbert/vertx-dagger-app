@@ -1,6 +1,11 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.client.truck;
 
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Launcher;
 import io.vertx.core.Vertx;
@@ -9,6 +14,7 @@ import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import io.vertx.tracing.opentelemetry.OpenTelemetryOptions;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -69,6 +75,15 @@ public class TruckClientLauncher extends Launcher {
   @Override
   public void beforeStartingVertx(VertxOptions options) {
     log.info("beforeStartingVertx");
+
+    // setup tracing
+    SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder().build();
+    OpenTelemetry openTelemetry =
+        OpenTelemetrySdk.builder()
+            .setTracerProvider(sdkTracerProvider)
+            .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+            .buildAndRegisterGlobal();
+    options.setTracingOptions(new OpenTelemetryOptions(openTelemetry));
 
     // use native transport
     options.setPreferNativeTransport(true);
