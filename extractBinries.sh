@@ -3,7 +3,7 @@
 rm -rf bin app.tar
 mkdir bin
 
-for img in iam iam-rpc catalog payment reactive-test-app
+for img in iam iam-rpc catalog payment reactive-test-app warehouse delivery-truck-client iam-admin-cli-client
 do
   id=$(docker create "$img":native-upx-latest)
   docker cp "$id":/app - > app.tar

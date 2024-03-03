@@ -45,6 +45,7 @@ native: wrapper
 	docker buildx build --progress plain -f Dockerfile.native . -t reactive-test-app:native-latest --build-arg MODULE=reactive-test-parent/reactive-test-app --build-arg BINARY=reactive-test-app
 	docker buildx build --progress plain -f Dockerfile.native . -t warehouse:native-latest --build-arg MODULE=warehouse-parent/warehouse-app --build-arg BINARY=warehouse
 	docker buildx build --progress plain -f Dockerfile.native . -t delivery-truck-client:native-latest --build-arg MODULE=client-parent/delivery-truck-client --build-arg BINARY=delivery-truck-client
+	docker buildx build --progress plain -f Dockerfile.native . -t iam-admin-cli-client:native-latest --build-arg MODULE=client-parent/iam-admin-cli-client --build-arg BINARY=iam-admin-cli-client
 	${M} install -DtestImageTag=native
 	# create upx images
 	docker buildx build --progress plain -f Dockerfile.upx . -t iam:native-upx-latest --build-arg MODULE=iam-parent/iam-app --build-arg BINARY=iam
@@ -54,6 +55,7 @@ native: wrapper
 	docker buildx build --progress plain -f Dockerfile.upx . -t reactive-test-app:native-upx-latest --build-arg MODULE=reactive-test-parent/reactive-test-app --build-arg BINARY=reactive-test-app
 	docker buildx build --progress plain -f Dockerfile.upx . -t warehouse:native-upx-latest --build-arg MODULE=warehouse-parent/warehouse-app --build-arg BINARY=warehouse
 	docker buildx build --progress plain -f Dockerfile.upx . -t delivery-truck-client:native-upx-latest --build-arg MODULE=client-parent/delivery-truck-client --build-arg BINARY=delivery-truck-client
+	docker buildx build --progress plain -f Dockerfile.upx . -t iam-admin-cli-client:native-upx-latest --build-arg MODULE=client-parent/iam-admin-cli-client --build-arg BINARY=iam-admin-cli-client
 
 .PHONY: dockerSave
 dockerSave:
@@ -64,6 +66,7 @@ dockerSave:
 	docker save reactive-test-app:native-latest | gzip > reactive-test-app-native_latest.tar.gz
 	docker save warehouse:native-latest | gzip > warehouse-native_latest.tar.gz
 	docker save delivery-truck-client:native-latest | gzip > delivery-truck-client-native_latest.tar.gz
+	docker save iam-admin-cli-client:native-latest | gzip > iam-admin-cli-client-native_latest.tar.gz
 	docker save iam:native-upx-latest | gzip > iam-native-upx_latest.tar.gz
 	docker save iam-rpc:native-upx-latest | gzip > iam-rpc-native-upx_latest.tar.gz
 	docker save catalog:native-upx-latest | gzip > catalog-native-upx_latest.tar.gz
@@ -71,6 +74,7 @@ dockerSave:
 	docker save reactive-test-app:native-upx-latest | gzip > reactive-test-app-native-upx_latest.tar.gz
 	docker save warehouse:native-upx-latest | gzip > warehouse-native-upx_latest.tar.gz
 	docker save delivery-truck-client:native-upx-latest | gzip > delivery-truck-client-native-upx_latest.tar.gz
+	docker save iam-admin-cli-client:native-upx-latest | gzip > iam-admin-cli-client-native-upx_latest.tar.gz
 	./extractBinries.sh
 
 .PHONY: clean

@@ -5,6 +5,7 @@ import com.example.commons.thread.VirtualThreadFactory;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.impl.NoStackTraceException;
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -51,18 +52,24 @@ public final class FutureUtil {
   /** will block the current thread until the future is completed */
   @SuppressWarnings("java:S106") // logger generally not available during shutdown
   public static <T> void blockingExecution(Future<T> future) {
+    blockingExecution(future, Duration.ofSeconds(30L));
+  }
+
+  /** will block the current thread until the future is completed */
+  @SuppressWarnings("java:S106") // logger generally not available during shutdown
+  public static <T> void blockingExecution(Future<T> future, Duration duration) {
     CountDownLatch latch = new CountDownLatch(1);
 
     future.onComplete(
         ar -> {
           if (ar.failed()) {
-            System.err.println("closing pg pool failed: " + ar.cause());
+            System.err.println("future failed: " + ar.cause());
           }
           latch.countDown();
         });
 
     try {
-      boolean await = latch.await(30L, TimeUnit.SECONDS);
+      boolean await = latch.await(duration.toMillis(), TimeUnit.MILLISECONDS);
       if (!await) {
         System.err.println("closing timed out");
       }

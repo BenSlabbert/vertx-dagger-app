@@ -13,6 +13,7 @@
 
   <modules>
     <module>delivery-truck-client</module>
+    <module>iam-admin-cli-client</module>
   </modules>
 
 </project>

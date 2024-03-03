@@ -4,8 +4,5 @@
     "port" : 8080,
     "username" : "truck",
     "password" : "password"
-  },
-  "warehouseConfig" : {
-    "host" : "http://localhost:8084/api"
   }
 }
