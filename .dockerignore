@@ -1,6 +1,8 @@
 .idea/
 .git/
 target/
+frontend/
+docker/
 iam-parent/iam-app/Dockerfile
 catalog-parent/catalog-app/Dockerfile
 Dockerfile.native
