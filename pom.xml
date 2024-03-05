@@ -19,6 +19,7 @@
     <module>starter-parent</module>
     <module>client-parent</module>
     <module>warehouse-parent</module>
+    <module>plugin-parent</module>
   </modules>
 
   <properties>

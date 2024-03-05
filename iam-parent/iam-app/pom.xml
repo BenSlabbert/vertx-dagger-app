@@ -368,7 +368,6 @@
                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
                 <buildArg>-H:+IncludeAllLocales</buildArg>
                 <buildArg>-H:+BuildReport</buildArg>
-                <buildArg>--enable-sbom</buildArg>
                 <buildArg>--verbose</buildArg>
                 <buildArg>--static</buildArg>
                 <buildArg>--libc=musl</buildArg>
