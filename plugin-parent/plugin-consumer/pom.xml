@@ -10,23 +10,38 @@
   <groupId>com.example.plugin.consumer</groupId>
   <artifactId>plugin-consumer</artifactId>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.example.plugin.openapi</groupId>
-        <artifactId>openapi-handler-generator-maven-plugin</artifactId>
-        <version>${revision}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>openapi-gen</goal>
-            </goals>
-            <configuration>
-              <path>xxx</path>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.example.plugin.openapi</groupId>
+      <artifactId>openapi-handler-generator-maven-plugin</artifactId>
+      <version>${revision}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>test-plugin</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.example.plugin.openapi</groupId>
+            <artifactId>openapi-handler-generator-maven-plugin</artifactId>
+            <version>${revision}</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>openapi-gen</goal>
+                </goals>
+                <configuration>
+                  <path>xxx</path>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>

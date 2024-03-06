@@ -13,6 +13,7 @@ public class OpenApiHandlerGeneratorMojo extends AbstractMojo {
 
   @Inject private SomeLogic someLogic;
 
+  /** full path to the openapi file */
   @Parameter(property = "openapi-gen.path", required = true)
   private String path;
 
