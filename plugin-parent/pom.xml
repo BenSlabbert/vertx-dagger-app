@@ -13,6 +13,7 @@
 
   <modules>
     <module>openapi-handler-generator</module>
+    <module>plugin-consumer</module>
   </modules>
 
 </project>
