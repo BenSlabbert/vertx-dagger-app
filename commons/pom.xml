@@ -125,7 +125,6 @@
             <!--required by ErrorProne-->
             <arg>-XDcompilePolicy=simple</arg>
             <arg>-Xplugin:ErrorProne</arg>
-            <arg>-Acom.google.auto.value.AutoBuilderIsUnstable=true</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>

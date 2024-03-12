@@ -10,7 +10,17 @@
   <groupId>com.example.plugin.consumer</groupId>
   <artifactId>plugin-consumer</artifactId>
 
+  <properties>
+    <generatedPackage>com.example.plugin.consumer.gen.api</generatedPackage>
+    <generatedSourcesRoot>${project.build.directory}/generated-sources/open-api-gen</generatedSourcesRoot>
+  </properties>
+
   <dependencies>
+    <dependency>
+      <groupId>com.google.auto.value</groupId>
+      <artifactId>auto-value-annotations</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>com.example.plugin.openapi</groupId>
       <artifactId>openapi-handler-generator-maven-plugin</artifactId>
@@ -34,7 +44,49 @@
                   <goal>openapi-gen</goal>
                 </goals>
                 <configuration>
-                  <path>xxx</path>
+                  <file>${project.basedir}/src/main/resources/api.yaml</file>
+                  <basePackage>${generatedPackage}</basePackage>
+                  <outputDirectory>${generatedSourcesRoot}</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <useIncrementalCompilation>false</useIncrementalCompilation>
+              <source>${java.version}</source>
+              <target>${java.version}</target>
+              <release>${java.version}</release>
+              <parameters>true</parameters>
+              <encoding>${project.build.sourceEncoding}</encoding>
+              <compilerArgs>
+                <arg>-parameters</arg>
+              </compilerArgs>
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>com.google.auto.value</groupId>
+                  <artifactId>auto-value</artifactId>
+                  <version>${google-auto-value.version}</version>
+                </path>
+              </annotationProcessorPaths>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>add-source</id>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <sources>
+                    <source>${generatedSourcesRoot}</source>
+                  </sources>
                 </configuration>
               </execution>
             </executions>

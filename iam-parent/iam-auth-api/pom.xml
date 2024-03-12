@@ -51,7 +51,6 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <compilerArgs>
             <arg>-parameters</arg>
-            <arg>-Acom.google.auto.value.AutoBuilderIsUnstable=true</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>

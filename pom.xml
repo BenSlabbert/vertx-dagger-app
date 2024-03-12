@@ -75,6 +75,7 @@
     <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
     <native-maven-plugin.version>0.10.1</native-maven-plugin.version>
     <spotless.version>2.43.0</spotless.version>
+    <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -319,6 +320,11 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>${build-helper-maven-plugin.version}</version>
+        </plugin>
         <plugin>
           <groupId>com.diffplug.spotless</groupId>
           <artifactId>spotless-maven-plugin</artifactId>
