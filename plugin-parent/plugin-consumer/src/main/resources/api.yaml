@@ -22,6 +22,9 @@ components:
         body:
           type: "string"
           required: true
+        registered:
+          type: "boolean"
+          required: true
   parameters:
     post-id:
       name: "post-id"

@@ -1,6 +1,10 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.plugin.openapi;
 
+import com.example.plugin.openapi.type.In;
+import com.example.plugin.openapi.type.Method;
+import com.example.plugin.openapi.type.ParamType;
+import com.example.plugin.openapi.type.SchemaType;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;

@@ -3,6 +3,10 @@ package com.example.plugin.openapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.plugin.openapi.type.In;
+import com.example.plugin.openapi.type.Method;
+import com.example.plugin.openapi.type.ParamType;
+import com.example.plugin.openapi.type.SchemaType;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;

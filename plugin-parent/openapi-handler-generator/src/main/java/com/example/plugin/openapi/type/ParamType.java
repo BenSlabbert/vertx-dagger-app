@@ -1,12 +1,12 @@
 /* Licensed under Apache-2.0 2024. */
-package com.example.plugin.openapi;
+package com.example.plugin.openapi.type;
 
-enum ParamType {
+public enum ParamType {
   INTEGER,
   STRING,
   BOOLEAN;
 
-  String print() {
+  public String print() {
     return switch (this) {
       case INTEGER -> "int";
       case STRING -> "String";
@@ -14,7 +14,15 @@ enum ParamType {
     };
   }
 
-  static ParamType fromString(String type) {
+  public String printParserPrefix() {
+    return switch (this) {
+      case INTEGER -> "Integer";
+      case STRING -> "String";
+      case BOOLEAN -> "Boolean";
+    };
+  }
+
+  public static ParamType fromString(String type) {
     return switch (type.trim().toLowerCase()) {
       case "integer" -> ParamType.INTEGER;
       case "string" -> ParamType.STRING;
