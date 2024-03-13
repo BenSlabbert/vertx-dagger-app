@@ -1,25 +1,12 @@
-# iam app
+# Vert.x Dagger App
 
 Licensed under Apache 2.0 https://www.apache.org/licenses/LICENSE-2.0.txt
 
-Using [dagger2](https://dagger.dev/) and [vertx](https://vertx.io/) to talk to [redis](https://redis.io/).
+Using [dagger2](https://dagger.dev/) and [vertx](https://vertx.io/).
 
-This repo also builds two docker images:
-1. iam:jvm-latest -> JVM runtime
-2. iam:native-latest -> [static graalvm image](https://www.graalvm.org/latest/reference-manual/native-image/guides/build-static-executables/#build-a-static-native-executable).
+The idea behind this project is to learn Vert.X and Dagger2.
 
-## Example config
+This project is attempting to do as much as possible at compile time,
+and to use the least amount of reflection as possible.
 
-```json
-{
-  "httpConfig": {
-    "port": 8080
-  },
-  "redisConfig": {
-    "host": "127.0.0.1",
-    "port": 6379,
-    "database": 0
-  }
-}
-```
-
+This project also generate [GraalVM](https://www.graalvm.org/) builds.
