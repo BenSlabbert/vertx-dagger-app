@@ -71,6 +71,7 @@ jobs:
     - run: "make M='/tmp/mvnd/bin/mvnd' fmtCheck"
     - run: "make M='/tmp/mvnd/bin/mvnd -Djava.util.logging.config.file=$(pwd)/logging.properties\
         \ --fail-at-end'"
+    - run: "make M='/tmp/mvnd/bin/mvnd -P test-plugin -pl plugin-parent/plugin-consumer'"
   build-frontend:
     runs-on: "ubuntu-latest"
     steps:
