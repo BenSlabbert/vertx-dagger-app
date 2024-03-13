@@ -14,11 +14,21 @@ public final class StringUtils {
     return str.substring(0, 1).toUpperCase() + str.substring(1);
   }
 
+  /** The path will look like /users/{id}, so for the above path we will generate: getUsersById */
+  public static String getMethodNameFromPath(Method method, String path) {
+    String classNameFromPath = getClassNameFromPath(method, path);
+    return classNameFromPath.substring(0, 1).toLowerCase() + classNameFromPath.substring(1);
+  }
+
   /**
    * The path will look like /users/{id}, so for the above path we will generate:
    * GetUsersByIdParameterParser
    */
   public static String getParameterParserClassName(Method method, String path) {
+    return getClassNameFromPath(method, path) + "ParameterParser";
+  }
+
+  private static String getClassNameFromPath(Method method, String path) {
     path = removeIllegalCharsAndCapitalizeNextChar(path);
 
     String[] parts = path.split("/");
@@ -33,7 +43,7 @@ public final class StringUtils {
       }
       sb.append(capitalizeFirstChar(part));
     }
-    return capitalizeFirstChar(method.print()) + sb + "ParameterParser";
+    return capitalizeFirstChar(method.print()) + sb;
   }
 
   /** makes the name a safe java variable name */
