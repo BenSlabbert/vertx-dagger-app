@@ -36,7 +36,7 @@
     <nativeImageOptimizationLevel>b</nativeImageOptimizationLevel>
 
     <!--deps-->
-    <vertx.version>4.5.4</vertx.version>
+    <vertx.version>4.5.5</vertx.version>
     <junit-jupiter.version>5.10.2</junit-jupiter.version>
     <assertj-core.version>3.25.3</assertj-core.version>
     <lombok.version>1.18.30</lombok.version>
