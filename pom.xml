@@ -40,7 +40,6 @@
     <junit-jupiter.version>5.10.2</junit-jupiter.version>
     <assertj-core.version>3.25.3</assertj-core.version>
     <lombok.version>1.18.30</lombok.version>
-    <!--blocking migration to java 21-->
     <mockito.version>5.11.0</mockito.version>
     <picocli.version>4.7.5</picocli.version>
     <rest-assured.version>5.4.0</rest-assured.version>
