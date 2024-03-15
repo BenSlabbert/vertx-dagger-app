@@ -50,6 +50,7 @@ public class DefaultVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) {
     init();
     workerVerticle = dagger.workerVerticle();
+    workerVerticle.init(vertx, context);
     workerVerticle.start(startPromise);
   }
 

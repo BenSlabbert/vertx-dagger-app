@@ -30,6 +30,7 @@ public class DefaultVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) {
     init();
     rpcVerticle = dagger.rpcVerticle();
+    rpcVerticle.init(vertx, context);
     rpcVerticle.start(startPromise);
   }
 

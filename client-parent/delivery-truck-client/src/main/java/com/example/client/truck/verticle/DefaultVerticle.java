@@ -30,6 +30,7 @@ public class DefaultVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) {
     init();
     truckVerticle = dagger.truckVerticle();
+    truckVerticle.init(vertx, context);
     truckVerticle.start(startPromise);
   }
 

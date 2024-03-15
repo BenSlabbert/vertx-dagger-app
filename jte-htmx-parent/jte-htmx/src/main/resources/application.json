@@ -1,0 +1,5 @@
+{
+  "httpConfig": {
+    "port": 8080
+  }
+}

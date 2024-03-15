@@ -38,6 +38,7 @@ public class DefaultVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) {
     init();
     apiVerticle = dagger.apiVerticle();
+    apiVerticle.init(vertx, context);
     apiVerticle.start(startPromise);
   }
 
