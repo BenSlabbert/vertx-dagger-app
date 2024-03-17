@@ -1,0 +1,6 @@
+.svelte-kit/
+node_modules/
+.env
+.env.*
+playwright-report/
+test-results/

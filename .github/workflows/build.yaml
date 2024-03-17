@@ -107,3 +107,38 @@ jobs:
         name: "ui-docker"
         path: "frontend/app/app-sveltekit_latest.tar.gz"
         retention-days: 30
+  build-htmx-frontend:
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "actions/checkout@v4"
+    - name: "Setup node"
+      uses: "actions/setup-node@v4"
+      with:
+        node-version: 20
+        cache: "yarn"
+        cache-dependency-path: "jte-htmx-parent/frontend/app/yarn.lock"
+    - run: "yarn --version"
+    - run: "make -C jte-htmx-parent/frontend/app"
+    - run: "make lint -C jte-htmx-parent/frontend/app"
+    - run: "make test -C jte-htmx-parent/frontend/app"
+    - run: "make buildDev -C jte-htmx-parent/frontend/app"
+    - run: "make buildDocker -C jte-htmx-parent/frontend/app"
+    - run: "make dockerSave -C jte-htmx-parent/frontend/app"
+    - uses: "actions/upload-artifact@v4"
+      if: "always()"
+      with:
+        name: "ui-build-jte-htmx-parent"
+        path: "jte-htmx-parent/frontend/app/build/"
+        retention-days: 30
+    - uses: "actions/upload-artifact@v4"
+      if: "always()"
+      with:
+        name: "playwright-report-jte-htmx-parent"
+        path: "jte-htmx-parent/frontend/app/playwright-report/"
+        retention-days: 30
+    - uses: "actions/upload-artifact@v4"
+      if: "always()"
+      with:
+        name: "ui-docker-jte-htmx-parent"
+        path: "jte-htmx-parent/frontend/app/app-sveltekit_latest.tar.gz"
+        retention-days: 30

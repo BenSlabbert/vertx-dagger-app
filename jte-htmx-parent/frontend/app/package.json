@@ -5,14 +5,14 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"buildDev": "vite build",
+		"buildDocker": "vite build --mode docker",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
-		"test": "npm run test:integration && npm run test:unit",
+		"test": "vitest run --reporter=default",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write .",
-		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"format": "prettier --write ."
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.42.1",
