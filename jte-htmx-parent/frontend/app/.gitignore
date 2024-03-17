@@ -1,0 +1,17 @@
+.DS_Store
+node_modules
+.yarn/
+.yarnrc.yml
+!.yarn/plugins
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+.pnp.*
+/test-results/
+/playwright-report/
+/playwright/.cache/
