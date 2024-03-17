@@ -12,3 +12,5 @@ and to use the least amount of reflection as possible.
 This project also contains a nmber of annotation processors and maven plugins to generate source code.
 
 This project also generate [GraalVM](https://www.graalvm.org/) builds.
+
+The module jte-htmx-parent also contains a frontend using Svelte 5 + htmx with [JTE templates](https://jte.gg/).
