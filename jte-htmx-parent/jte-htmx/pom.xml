@@ -22,6 +22,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.example.code-gen</groupId>
+      <artifactId>code-gen-annotation</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
@@ -68,6 +73,12 @@
       <groupId>com.google.auto.value</groupId>
       <artifactId>auto-value-annotations</artifactId>
       <version>${google-auto-value.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.example.code-gen</groupId>
+      <artifactId>code-gen-generator</artifactId>
+      <version>${revision}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -188,6 +199,11 @@
             <arg>-Xplugin:ErrorProne</arg>
           </compilerArgs>
           <annotationProcessorPaths>
+            <path>
+              <groupId>org.example.code-gen</groupId>
+              <artifactId>code-gen-generator</artifactId>
+              <version>${revision}</version>
+            </path>
             <path>
               <groupId>com.google.auto.value</groupId>
               <artifactId>auto-value</artifactId>

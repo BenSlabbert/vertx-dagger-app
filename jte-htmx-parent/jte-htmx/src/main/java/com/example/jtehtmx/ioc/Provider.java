@@ -2,23 +2,29 @@
 package com.example.jtehtmx.ioc;
 
 import com.example.commons.config.Config;
+import com.example.jtehtmx.config.JteConfig;
 import com.example.jtehtmx.verticle.JteHtmxVerticle;
+import com.example.jtehtmx.web.handler.ExampleHandler;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.logging.Logger;
+import io.vertx.core.impl.logging.LoggerFactory;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {Provider.EagerModule.class})
+@Component(modules = {JteConfig.class, Provider.EagerModule.class})
 public interface Provider {
 
   @Nullable Void init();
 
   JteHtmxVerticle jteHtmxVerticle();
+
+  ExampleHandler exampleHandler();
 
   @Component.Builder
   interface Builder {
@@ -38,12 +44,15 @@ public interface Provider {
   @Module
   final class EagerModule {
 
+    private static final Logger log = LoggerFactory.getLogger(EagerModule.class);
+
     @Inject
     EagerModule() {}
 
     @Provides
-    @Nullable static Void provideEager() {
+    @Nullable static Void provideEager(Config config) {
       // this eagerly builds any parameters specified and returns nothing
+      log.info("profile: " + config.profile());
       return null;
     }
   }

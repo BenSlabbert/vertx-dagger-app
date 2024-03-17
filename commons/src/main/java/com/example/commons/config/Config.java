@@ -6,6 +6,7 @@ import io.vertx.core.json.JsonObject;
 import javax.annotation.Nullable;
 
 public record Config(
+    Profile profile,
     @Nullable HttpConfig httpConfig,
     @Nullable RedisConfig redisConfig,
     @Nullable PostgresConfig postgresConfig) {
@@ -16,6 +17,8 @@ public record Config(
 
   @AutoBuilder
   public interface Builder {
+    Builder profile(Profile profile);
+
     Builder httpConfig(@Nullable HttpConfig httpConfig);
 
     Builder redisConfig(@Nullable RedisConfig redisConfig);
@@ -28,11 +31,17 @@ public record Config(
   public static Config fromJson(JsonObject jsonObject) {
     Builder builder = Config.builder();
 
+    addProfile(jsonObject, builder);
     addHttpConfig(jsonObject, builder);
     addRedisConfig(jsonObject, builder);
     addPostgresConfig(jsonObject, builder);
 
     return builder.build();
+  }
+
+  private static void addProfile(JsonObject jsonObject, Builder builder) {
+    String profile = jsonObject.getString("profile", null);
+    builder.profile(Profile.fromString(profile));
   }
 
   private static void addHttpConfig(JsonObject jsonObject, Builder builder) {
@@ -80,6 +89,20 @@ public record Config(
 
   private static boolean isNullOrEmpty(JsonObject config) {
     return null == config || config.isEmpty();
+  }
+
+  public enum Profile {
+    DEV,
+    PROD;
+
+    static Profile fromString(String value) {
+      return switch (value) {
+        case "dev" -> DEV;
+        case "prod" -> PROD;
+        case null -> PROD;
+        default -> throw new IllegalArgumentException("Invalid profile: " + value);
+      };
+    }
   }
 
   public record HttpConfig(int port) {

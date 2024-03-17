@@ -1,31 +1,17 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jtehtmx.verticle;
 
-import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_ENCODING;
-import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
-import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
-import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
-import com.example.jtehtmx.template.ExampleDto;
-import gg.jte.CodeResolver;
-import gg.jte.ContentType;
-import gg.jte.TemplateEngine;
-import gg.jte.TemplateOutput;
-import gg.jte.output.StringOutput;
-import gg.jte.output.Utf8ByteOutput;
-import gg.jte.resolve.DirectoryCodeResolver;
-import io.netty.handler.codec.http.HttpHeaderValues;
+import com.example.jtehtmx.web.handler.ExampleHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
@@ -33,51 +19,24 @@ import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import javax.inject.Inject;
 
 public class JteHtmxVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(JteHtmxVerticle.class);
 
+  private final ExampleHandler exampleHandler;
   private final Config config;
 
   @Inject
-  JteHtmxVerticle(Config config) {
+  JteHtmxVerticle(Config config, ExampleHandler exampleHandler) {
+    this.exampleHandler = exampleHandler;
     this.config = config;
   }
 
   @Override
   public void start(Promise<Void> startPromise) {
     vertx.exceptionHandler(err -> log.error("unhandled exception", err));
-
-    // used in dev mode
-    // allows hot reloading of jte templates
-    CodeResolver codeResolver =
-        new DirectoryCodeResolver(
-            Path.of(
-                "/home/ben/IdeaProjects/vertx-dagger-app/jte-htmx-parent/jte-htmx/src/main/jte"));
-    TemplateEngine te = TemplateEngine.create(codeResolver, ContentType.Html);
-    TemplateOutput strOutput = new StringOutput();
-
-    ExampleDto exampleDto = ExampleDto.builder().title("title").description("description").build();
-    te.render("Example.jte", exampleDto, strOutput);
-    System.out.println(strOutput);
-
-    // used in prod mode
-    // use precompiled jte templates
-    if (false) {
-      TemplateEngine templateEngine = TemplateEngine.createPrecompiled(ContentType.Html);
-      templateEngine.setBinaryStaticContent(true);
-      Utf8ByteOutput output = new Utf8ByteOutput();
-      templateEngine.render("Example.jte", new ExampleDto("title", "description"), output);
-
-      int contentLength = output.getContentLength();
-      String string = new String(output.toByteArray(), StandardCharsets.UTF_8);
-      System.out.println(contentLength);
-      System.out.println(string);
-    }
 
     Router mainRouter = Router.router(vertx);
 
@@ -116,20 +75,7 @@ public class JteHtmxVerticle extends AbstractVerticle {
               ctx.next();
             });
 
-    mainRouter
-        .post("/clicked")
-        .handler(
-            ctx -> {
-              HttpServerResponse response = ctx.response();
-              String output = strOutput.toString();
-              response.putHeader(CONTENT_LENGTH, Integer.toString(output.length()));
-              response.putHeader(CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
-              response.putHeader(CONTENT_ENCODING, "UTF-8");
-              response.setStatusCode(OK.code());
-
-              Buffer buffer = Buffer.buffer(output);
-              response.end(buffer).onFailure(ctx::fail);
-            });
+    exampleHandler.configureRoutes(mainRouter);
 
     Config.HttpConfig httpConfig = config.httpConfig();
     log.info("starting api verticle on port: " + httpConfig.port());
