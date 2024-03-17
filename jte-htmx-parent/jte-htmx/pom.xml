@@ -65,6 +65,12 @@
       <artifactId>vertx-web</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.google.auto.value</groupId>
+      <artifactId>auto-value-annotations</artifactId>
+      <version>${google-auto-value.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <scope>runtime</scope>
@@ -183,14 +189,9 @@
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
-              <groupId>org.example.code-gen</groupId>
-              <artifactId>code-gen-generator</artifactId>
-              <version>${revision}</version>
-            </path>
-            <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>${lombok.version}</version>
+              <groupId>com.google.auto.value</groupId>
+              <artifactId>auto-value</artifactId>
+              <version>${google-auto-value.version}</version>
             </path>
             <path>
               <groupId>com.google.errorprone</groupId>

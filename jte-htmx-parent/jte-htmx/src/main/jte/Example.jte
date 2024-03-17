@@ -1,15 +1,8 @@
-@import com.example.jtehtmx.template.Page
+@import com.example.jtehtmx.template.ExampleDto
 
-@param Page page
-
-<head>
-    @if(page.getDescription() != null)
-    <meta name="description" content="${page.getDescription()}">
-    @endif
-    <title>${page.getTitle()}</title>
-</head>
+@param ExampleDto page
 
 <body>
-    <h1>${page.getTitle()}</h1>
-    <p>Welcome to my example page!</p>
+    <h3>${page.title()}</h3>
+    <p>${page.description()}</p>
 </body>

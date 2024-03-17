@@ -4,12 +4,13 @@ package com.example.jtehtmx.verticle;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_ENCODING;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
 import com.example.commons.config.Config;
 import com.example.commons.future.FutureUtil;
-import com.example.jtehtmx.template.Page;
+import com.example.jtehtmx.template.ExampleDto;
 import gg.jte.CodeResolver;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
@@ -19,8 +20,10 @@ import gg.jte.output.Utf8ByteOutput;
 import gg.jte.resolve.DirectoryCodeResolver;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.impl.logging.Logger;
@@ -30,10 +33,8 @@ import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
-import io.vertx.ext.web.handler.StaticHandler;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.time.Duration;
 import javax.inject.Inject;
 
 public class JteHtmxVerticle extends AbstractVerticle {
@@ -59,20 +60,24 @@ public class JteHtmxVerticle extends AbstractVerticle {
                 "/home/ben/IdeaProjects/vertx-dagger-app/jte-htmx-parent/jte-htmx/src/main/jte"));
     TemplateEngine te = TemplateEngine.create(codeResolver, ContentType.Html);
     TemplateOutput strOutput = new StringOutput();
-    te.render("Example.jte", new Page("title", "description"), strOutput);
+
+    ExampleDto exampleDto = ExampleDto.builder().title("title").description("description").build();
+    te.render("Example.jte", exampleDto, strOutput);
     System.out.println(strOutput);
 
     // used in prod mode
     // use precompiled jte templates
-    TemplateEngine templateEngine = TemplateEngine.createPrecompiled(ContentType.Html);
-    templateEngine.setBinaryStaticContent(true);
-    Utf8ByteOutput output = new Utf8ByteOutput();
-    templateEngine.render("Example.jte", new Page("title", "description"), output);
+    if (false) {
+      TemplateEngine templateEngine = TemplateEngine.createPrecompiled(ContentType.Html);
+      templateEngine.setBinaryStaticContent(true);
+      Utf8ByteOutput output = new Utf8ByteOutput();
+      templateEngine.render("Example.jte", new ExampleDto("title", "description"), output);
 
-    int contentLength = output.getContentLength();
-    String string = new String(output.toByteArray(), StandardCharsets.UTF_8);
-    System.out.println(contentLength);
-    System.out.println(string);
+      int contentLength = output.getContentLength();
+      String string = new String(output.toByteArray(), StandardCharsets.UTF_8);
+      System.out.println(contentLength);
+      System.out.println(string);
+    }
 
     Router mainRouter = Router.router(vertx);
 
@@ -85,20 +90,44 @@ public class JteHtmxVerticle extends AbstractVerticle {
 
     mainRouter.get("/health*").handler(getHealthCheckHandler());
     mainRouter.get("/ping*").handler(getPingHandler());
+    mainRouter
+        .route()
+        .handler(
+            ctx -> {
+              HttpMethod method = ctx.request().method();
+              String path = ctx.request().path();
+              String query = ctx.request().query();
 
-    mainRouter.get("/*").handler(StaticHandler.create("fe").setCachingEnabled(false));
+              if (null == query) {
+                log.info("[%s] %s".formatted(method, path));
+              } else {
+                log.info("[%s] %s?%s".formatted(method, path, query));
+              }
+
+              MultiMap parsedHeaderValues = ctx.request().headers();
+              String htmxRequest = parsedHeaderValues.get("HX-Request");
+
+              if (!Boolean.parseBoolean(htmxRequest)) {
+                log.warn("request is not an htmx request");
+                ctx.fail(BAD_REQUEST.code());
+                return;
+              }
+
+              ctx.next();
+            });
+
     mainRouter
         .post("/clicked")
         .handler(
             ctx -> {
               HttpServerResponse response = ctx.response();
-              response.putHeader(CONTENT_LENGTH, Integer.toString(output.getContentLength()));
+              String output = strOutput.toString();
+              response.putHeader(CONTENT_LENGTH, Integer.toString(output.length()));
               response.putHeader(CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
               response.putHeader(CONTENT_ENCODING, "UTF-8");
               response.setStatusCode(OK.code());
 
-              byte[] byteArray = output.toByteArray();
-              Buffer buffer = Buffer.buffer(byteArray);
+              Buffer buffer = Buffer.buffer(output);
               response.end(buffer).onFailure(ctx::fail);
             });
 
@@ -126,13 +155,7 @@ public class JteHtmxVerticle extends AbstractVerticle {
 
   private HealthCheckHandler getHealthCheckHandler() {
     return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
-        .register(
-            "available",
-            Duration.ofSeconds(5L).toMillis(),
-            promise -> {
-              log.info("doing redis health check");
-              promise.complete(Status.OK());
-            });
+        .register("available", promise -> promise.complete(Status.OK()));
   }
 
   @SuppressWarnings("java:S106") // logger is not available
