@@ -12,7 +12,7 @@ public record Config(
     @Nullable PostgresConfig postgresConfig) {
 
   public static Builder builder() {
-    return new AutoBuilder_Config_Builder();
+    return new AutoBuilder_Config_Builder().profile(Profile.PROD);
   }
 
   @AutoBuilder
