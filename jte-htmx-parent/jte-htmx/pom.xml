@@ -232,7 +232,6 @@
             </goals>
             <phase>package</phase>
             <configuration>
-              <includeScope>compile</includeScope>
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
             </configuration>
           </execution>
@@ -272,6 +271,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <skip>${shade.skip}</skip>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
@@ -320,6 +320,45 @@
                 <argument>.</argument>
                 <argument>-t</argument>
                 <argument>${finalName}:jvm-latest</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>run-jar</id>
+            <configuration>
+              <executable>java</executable>
+              <workingDirectory>${project.build.directory}</workingDirectory>
+              <arguments>
+                <argument>-Xms64M</argument>
+                <argument>-Xmx64M</argument>
+                <argument>-XX:MaxMetaspaceSize=64M</argument>
+                <argument>-Djava.net.preferIPv4Stack=true</argument>
+                <argument>-jar</argument>
+                <argument>${project.build.directory}/${finalName}.jar</argument>
+                <argument>run</argument>
+                <argument>--conf</argument>
+                <argument>${project.basedir}/src/main/resources/application.json</argument>
+                <argument>${main.verticle}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>run-classes</id>
+            <configuration>
+              <executable>java</executable>
+              <workingDirectory>${project.build.directory}</workingDirectory>
+              <arguments>
+                <argument>-Xms64M</argument>
+                <argument>-Xmx64M</argument>
+                <argument>-XX:MaxMetaspaceSize=64M</argument>
+                <argument>-Djava.net.preferIPv4Stack=true</argument>
+                <argument>-cp</argument>
+                <argument>classes:lib/*</argument>
+                <argument>${exec.mainClass}</argument>
+                <argument>run</argument>
+                <argument>--conf</argument>
+                <argument>${project.basedir}/src/main/resources/application.json</argument>
+                <argument>${main.verticle}</argument>
               </arguments>
             </configuration>
           </execution>

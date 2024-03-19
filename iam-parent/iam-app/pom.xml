@@ -237,7 +237,6 @@
             </goals>
             <phase>package</phase>
             <configuration>
-              <includeScope>compile</includeScope>
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
             </configuration>
           </execution>
@@ -277,6 +276,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <skip>${shade.skip}</skip>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>

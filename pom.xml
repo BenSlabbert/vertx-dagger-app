@@ -33,6 +33,7 @@
 
     <!--config-->
     <docker.skip>false</docker.skip>
+    <shade.skip>false</shade.skip>
     <skipJooqGeneration>false</skipJooqGeneration>
     <nativeImageOptimizationLevel>b</nativeImageOptimizationLevel>
 
