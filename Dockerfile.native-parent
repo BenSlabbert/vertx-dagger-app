@@ -1,4 +1,4 @@
-FROM container-registry.oracle.com/graalvm/native-image:21-muslib
+FROM container-registry.oracle.com/graalvm/native-image:22-muslib
 
 COPY . .
 
