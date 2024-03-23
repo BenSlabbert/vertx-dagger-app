@@ -1,10 +1,13 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.client.admincli;
 
-import com.example.client.admincli.command.PingCommand;
+import com.example.client.admincli.command.LoginCommand;
+import com.example.client.admincli.command.RefreshCommand;
+import com.example.client.admincli.command.RegisterCommand;
 import com.example.client.admincli.config.IamConfig;
 import com.example.client.admincli.ioc.DaggerProvider;
 import com.example.client.admincli.ioc.Provider;
+import com.example.commons.future.FutureUtil;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.buffer.Buffer;
@@ -22,14 +25,14 @@ import picocli.CommandLine.Option;
     mixinStandardHelpOptions = true,
     version = "checksum 4.0",
     description = "default command",
-    subcommands = {PingCommand.class})
-class Main {
+    subcommands = {RegisterCommand.class, LoginCommand.class, RefreshCommand.class})
+public class Main {
 
   @Option(
       required = true,
       names = {"-c", "--config"},
       description = "path to config.json")
-  private static File configFile;
+  static File configFile;
 
   static class DaggerIFactory implements CommandLine.IFactory {
 
@@ -39,7 +42,14 @@ class Main {
     @Override
     public synchronized <K> K create(Class<K> aClass) throws Exception {
       if (provider == null) {
-        Vertx vertx = Vertx.builder().with(new VertxOptions()).build();
+        VertxOptions vertxOptions = new VertxOptions().setPreferNativeTransport(true);
+        Vertx vertx = Vertx.builder().with(vertxOptions).build();
+        vertx.exceptionHandler(err -> System.err.println("unhandled exception: " + err));
+
+        if (null == configFile) {
+          throw new IllegalArgumentException("config file is required");
+        }
+
         Buffer buffer = vertx.fileSystem().readFileBlocking(configFile.getAbsolutePath());
         JsonObject cfg = new JsonObject(buffer.toString(StandardCharsets.UTF_8));
         provider = DaggerProvider.builder().vertx(vertx).iamConfig(IamConfig.fromJson(cfg)).build();
@@ -50,8 +60,6 @@ class Main {
       if (map.containsKey(aClass)) {
         return (K) map.get(aClass);
       }
-
-      provider.err().println("dagger cannot create instance of type: " + aClass.getName());
 
       return defaultFactory.create(aClass);
     }
@@ -64,6 +72,8 @@ class Main {
         new CommandLine(new Main(), new DaggerIFactory())
             .setColorScheme(CommandLine.Help.defaultColorScheme(Ansi.AUTO))
             .execute(args);
+
+    FutureUtil.awaitTerminationSync();
 
     System.exit(exitCode);
   }

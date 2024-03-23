@@ -32,8 +32,10 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <!--config-->
-    <docker.skip>false</docker.skip>
-    <shade.skip>false</shade.skip>
+    <quickBuild>false</quickBuild>
+    <docker.skip>${quickBuild}</docker.skip>
+    <shade.skip>${quickBuild}</shade.skip>
+    <copyJarDeps.skip>${quickBuild}</copyJarDeps.skip>
     <skipJooqGeneration>false</skipJooqGeneration>
     <nativeImageOptimizationLevel>b</nativeImageOptimizationLevel>
 
@@ -62,6 +64,7 @@
     <hikari-cp.version>5.1.0</hikari-cp.version>
     <google-auto-value.version>1.10.4</google-auto-value.version>
     <jte.version>3.1.9</jte.version>
+    <hazelcast.version>5.3.6</hazelcast.version>
 
     <!--plugins-->
     <exec-maven-plugin.version>3.2.0</exec-maven-plugin.version>
@@ -129,6 +132,11 @@
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-core</artifactId>
         <version>${flyway.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.hazelcast</groupId>
+        <artifactId>hazelcast</artifactId>
+        <version>${hazelcast.version}</version>
       </dependency>
       <dependency>
         <groupId>com.zaxxer</groupId>
@@ -332,6 +340,7 @@
           <artifactId>spotless-maven-plugin</artifactId>
           <version>${spotless.version}</version>
           <configuration>
+            <skip>${quickBuild}</skip>
             <yaml>
               <includes>
                 <include>**/*.yaml</include>

@@ -20,12 +20,6 @@ services:
     - "/config.json"
     - "-Dvertx.hazelcast.config=/cluster.xml"
     - "-cluster"
-    - "-XX:+UseZGC"
-    - "-XX:+ZGenerational"
-    - "-Xlog:gc*"
-    - "-Xmx32M"
-    - "-Xms32M"
-    - "-Djava.net.preferIPv4Stack=true"
     depends_on:
       hazelcast:
         condition: "service_healthy"
@@ -42,12 +36,6 @@ services:
     - "/config.json"
     - "-Dvertx.hazelcast.config=/cluster.xml"
     - "-cluster"
-    - "-XX:+UseZGC"
-    - "-XX:+ZGenerational"
-    - "-Xlog:gc*"
-    - "-Xmx32M"
-    - "-Xms32M"
-    - "-Djava.net.preferIPv4Stack=true"
   catalog:
     image: "catalog:jvm-latest"
     ports:
@@ -61,12 +49,6 @@ services:
     - "/config.json"
     - "-Dvertx.hazelcast.config=/cluster.xml"
     - "-cluster"
-    - "-XX:+UseZGC"
-    - "-XX:+ZGenerational"
-    - "-Xlog:gc*"
-    - "-Xmx32M"
-    - "-Xms32M"
-    - "-Djava.net.preferIPv4Stack=true"
     depends_on:
       redis:
         condition: "service_healthy"
@@ -87,12 +69,6 @@ services:
     - "/config.json"
     - "-Dvertx.hazelcast.config=/cluster.xml"
     - "-cluster"
-    - "-XX:+UseZGC"
-    - "-XX:+ZGenerational"
-    - "-Xlog:gc*"
-    - "-Xmx32M"
-    - "-Xms32M"
-    - "-Djava.net.preferIPv4Stack=true"
     depends_on:
       redis:
         condition: "service_healthy"

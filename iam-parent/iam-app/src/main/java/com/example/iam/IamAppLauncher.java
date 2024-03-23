@@ -14,6 +14,7 @@ import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.metrics.MetricsOptions;
 import io.vertx.tracing.opentelemetry.OpenTelemetryOptions;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -84,6 +85,8 @@ public class IamAppLauncher extends Launcher {
             .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
             .buildAndRegisterGlobal();
     options.setTracingOptions(new OpenTelemetryOptions(openTelemetry));
+
+    options.setMetricsOptions(new MetricsOptions().setEnabled(true));
 
     // use native transport
     options.setPreferNativeTransport(true);

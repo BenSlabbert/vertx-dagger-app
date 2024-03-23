@@ -3,7 +3,6 @@ package com.example.client.admincli.ioc;
 
 import com.example.client.admincli.auth.AuthModule;
 import com.example.client.admincli.command.CommandModule;
-import com.example.client.admincli.command.PingCommand;
 import com.example.client.admincli.config.ConfigModule;
 import com.example.client.admincli.config.IamConfig;
 import com.example.starter.iam.auth.client.IamAuthClientModule;
@@ -31,8 +30,6 @@ import javax.inject.Singleton;
 public interface Provider {
 
   @Nullable Void init();
-
-  PingCommand pingCommand();
 
   Map<Class<?>, Object> commandByClass();
 

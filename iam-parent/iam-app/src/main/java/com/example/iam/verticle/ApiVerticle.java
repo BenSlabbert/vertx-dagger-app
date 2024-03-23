@@ -105,7 +105,7 @@ public class ApiVerticle extends AbstractVerticle {
             "redis",
             Duration.ofSeconds(5L).toMillis(),
             promise -> {
-              log.info("doing redis health check");
+              log.debug("doing redis health check");
               redisAPI
                   .ping(List.of())
                   .onSuccess(r -> promise.complete(Status.OK()))

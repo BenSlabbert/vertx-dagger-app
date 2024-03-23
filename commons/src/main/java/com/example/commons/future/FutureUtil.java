@@ -17,7 +17,7 @@ public final class FutureUtil {
 
   private FutureUtil() {}
 
-  public static final ExecutorService EXECUTOR =
+  private static final ExecutorService EXECUTOR =
       Executors.newThreadPerTaskExecutor(VirtualThreadFactory.THREAD_FACTORY);
 
   public static <T> Future<T> run(Supplier<T> task) {
@@ -28,6 +28,41 @@ public final class FutureUtil {
   public static Future<Void> run(Runnable runnable) {
     CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(runnable, EXECUTOR);
     return Future.fromCompletionStage(completableFuture);
+  }
+
+  /**
+   * Uses a separate thread to block until the future is complete.
+   *
+   * @return a completed {@link Future}
+   */
+  public static <T> Future<T> runFutureSync(Future<T> future) {
+    var task =
+        EXECUTOR.submit(
+            () -> {
+              while (!future.isComplete()) {
+                /* spin until complete */
+              }
+            });
+
+    try {
+      task.get(30L, TimeUnit.SECONDS);
+      return future;
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      return Future.failedFuture(e);
+    } catch (Exception e) {
+      return Future.failedFuture(e);
+    }
+  }
+
+  public static Boolean awaitTerminationSync() {
+    try {
+      EXECUTOR.shutdown();
+      return EXECUTOR.awaitTermination(10L, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new NoStackTraceException(e);
+    }
   }
 
   public static Future<Boolean> awaitTermination() {

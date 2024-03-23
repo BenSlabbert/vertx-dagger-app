@@ -37,6 +37,10 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.example.iam.rpc.api</groupId>
       <artifactId>iam-rpc-api</artifactId>
       <version>${revision}</version>

@@ -13,10 +13,17 @@ import com.example.iam.auth.api.dto.RegisterRequestDto;
 import com.example.iam.auth.api.dto.RegisterResponseDto;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpStatusClass;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
+import io.vertx.ext.web.handler.HttpException;
+import java.util.function.Function;
 
 public final class IamAuthClient implements IamAuthApi {
 
@@ -32,27 +39,37 @@ public final class IamAuthClient implements IamAuthApi {
   @Override
   public Future<LoginResponseDto> login(LoginRequestDto req) {
     return webClient
-        .post("/login")
+        .post("/api/login")
         .putHeader(CONTENT_TYPE.toString(), APPLICATION_JSON.toString())
-        .sendJson(req)
-        .map(b -> new LoginResponseDto(b.bodyAsJsonObject()));
+        .sendJson(req.toJson())
+        .compose(resp -> handleResponse(resp, LoginResponseDto::new));
   }
 
   @Override
   public Future<RefreshResponseDto> refresh(RefreshRequestDto req) {
     return webClient
-        .post("/refresh")
+        .post("/api/refresh")
         .putHeader(CONTENT_TYPE.toString(), APPLICATION_JSON.toString())
-        .sendJson(req)
-        .map(b -> new RefreshResponseDto(b.bodyAsJsonObject()));
+        .sendJson(req.toJson())
+        .compose(resp -> handleResponse(resp, RefreshResponseDto::new));
   }
 
   @Override
   public Future<RegisterResponseDto> register(RegisterRequestDto req) {
     return webClient
-        .post("/register")
+        .post("/api/register")
         .putHeader(CONTENT_TYPE.toString(), APPLICATION_JSON.toString())
-        .sendJson(req)
-        .map(b -> new RegisterResponseDto(b.bodyAsJsonObject()));
+        .sendJson(req.toJson())
+        .compose(resp -> handleResponse(resp, RegisterResponseDto::new));
+  }
+
+  private <T> Future<T> handleResponse(
+      HttpResponse<Buffer> resp, Function<JsonObject, T> function) {
+    var status = HttpResponseStatus.valueOf(resp.statusCode());
+    if (status.codeClass() == HttpStatusClass.SUCCESS) {
+      return Future.succeededFuture(function.apply(resp.bodyAsJsonObject()));
+    } else {
+      return Future.failedFuture(new HttpException(resp.statusCode()));
+    }
   }
 }
