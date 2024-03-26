@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.service;
 
+import com.example.iam.entity.ACL;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -11,6 +12,8 @@ import io.vertx.ext.auth.authentication.TokenCredentials;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import java.time.Duration;
+import java.util.List;
+import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -56,8 +59,9 @@ class JwtService implements TokenService {
   }
 
   @Override
-  public String authToken(String username) {
-    return generateToken(jwtAuth, username, Duration.ofSeconds(30L));
+  public String authToken(String username, ACL acl) {
+    return generateToken(
+        jwtAuth, username, Duration.ofSeconds(30L), json -> json.put("acl", acl.toJson()));
   }
 
   @Override
@@ -66,6 +70,11 @@ class JwtService implements TokenService {
   }
 
   private String generateToken(JWTAuth jwtAuth, String username, Duration duration) {
+    return generateToken(jwtAuth, username, duration, ignore -> {});
+  }
+
+  private String generateToken(
+      JWTAuth jwtAuth, String username, Duration duration, Consumer<JsonObject> customizer) {
     // default max lifetime in seconds: 24 hours
     int lifetimeSeconds = 60 * 60 * 24;
     if (duration.toSeconds() <= Integer.MAX_VALUE) {
@@ -74,14 +83,15 @@ class JwtService implements TokenService {
       log.warning("given token duration exceeds: Integer.MAX_VALUE, using default");
     }
 
+    JsonObject rootClaim = new JsonObject().put("additional-props", "new-prop");
+    customizer.accept(rootClaim);
     return jwtAuth.generateToken(
-        // this is the root claim
-        // new JsonObject()
-        // .put("permissions", new JsonArray().add("truck-client").add("eventbus")),
-        new JsonObject().put("additional-props", "new-prop"),
+        rootClaim,
         new JWTOptions()
             .setExpiresInSeconds(lifetimeSeconds)
             .setIssuer("iam")
+            .setSubject("access-token")
+            .setAudience(List.of("vertx-dagger-app"))
             .setSubject(username));
   }
 }

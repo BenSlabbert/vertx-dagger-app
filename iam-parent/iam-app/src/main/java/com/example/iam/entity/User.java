@@ -8,17 +8,20 @@ import io.vertx.core.json.JsonObject;
 import lombok.Builder;
 
 @Builder
-public record User(String username, String password, String refreshToken) implements JsonWriter {
+public record User(String username, String password, String refreshToken, ACL acl)
+    implements JsonWriter {
 
   public static final String USERNAME_FIELD = "username";
   public static final String PASSWORD_FIELD = "password";
   public static final String REFRESH_TOKEN_FIELD = "refreshToken";
+  public static final String ACl_FIELD = "acl";
 
   public User(JsonObject jsonObject) {
     this(
         requireNonNull(jsonObject.getString(USERNAME_FIELD)),
         requireNonNull(jsonObject.getString(PASSWORD_FIELD)),
-        requireNonNull(jsonObject.getString(REFRESH_TOKEN_FIELD)));
+        requireNonNull(jsonObject.getString(REFRESH_TOKEN_FIELD)),
+        new ACL(requireNonNull(jsonObject.getJsonObject(ACl_FIELD))));
   }
 
   @Override
@@ -26,6 +29,7 @@ public record User(String username, String password, String refreshToken) implem
     return new JsonObject()
         .put(USERNAME_FIELD, username)
         .put(PASSWORD_FIELD, password)
-        .put(REFRESH_TOKEN_FIELD, refreshToken);
+        .put(REFRESH_TOKEN_FIELD, refreshToken)
+        .put(ACl_FIELD, acl.toJson());
   }
 }

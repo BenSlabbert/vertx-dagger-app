@@ -8,8 +8,8 @@ import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.RedisConfig;
-import com.example.iam.ioc.DaggerTestProvider;
-import com.example.iam.ioc.TestProvider;
+import com.example.iam.ioc.DaggerProvider;
+import com.example.iam.ioc.Provider;
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
@@ -26,11 +26,11 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
 @ExtendWith(VertxExtension.class)
-public abstract class TestBase {
+public abstract class VerticleTestBase {
 
   protected static final int HTTP_PORT = getPort();
 
-  protected TestProvider provider;
+  protected Provider provider;
 
   private static final Network network = Network.newNetwork();
 
@@ -65,7 +65,7 @@ public abstract class TestBase {
             .build();
 
     provider =
-        DaggerTestProvider.builder()
+        DaggerProvider.builder()
             .vertx(vertx)
             .config(config)
             .httpConfig(config.httpConfig())

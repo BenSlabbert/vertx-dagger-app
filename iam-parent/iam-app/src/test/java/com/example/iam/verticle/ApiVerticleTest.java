@@ -5,12 +5,13 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.iam.TestBase;
+import com.example.iam.VerticleTestBase;
 import com.example.iam.auth.api.dto.LoginRequestDto;
 import com.example.iam.auth.api.dto.LoginResponseDto;
 import com.example.iam.auth.api.dto.RefreshRequestDto;
 import com.example.iam.auth.api.dto.RefreshResponseDto;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
+import com.example.iam.auth.api.perms.AdminAccessProvider;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -23,7 +24,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class ApiVerticleTest extends TestBase {
+class ApiVerticleTest extends VerticleTestBase {
 
   static Stream<Arguments> loginInvalidRequestSource() {
     return Stream.of(
@@ -75,9 +76,9 @@ class ApiVerticleTest extends TestBase {
 
   static Stream<Arguments> registerInvalidRequestSource() {
     return Stream.of(
-        Arguments.of(new RegisterRequestDto("", "")),
-        Arguments.of(new RegisterRequestDto("1", "")),
-        Arguments.of(new RegisterRequestDto("", "1")));
+        Arguments.of(new RegisterRequestDto("", "", AdminAccessProvider.createAccess())),
+        Arguments.of(new RegisterRequestDto("1", "", AdminAccessProvider.createAccess())),
+        Arguments.of(new RegisterRequestDto("", "1", AdminAccessProvider.createAccess())));
   }
 
   @ParameterizedTest
@@ -99,7 +100,10 @@ class ApiVerticleTest extends TestBase {
 
   @Test
   void fullHappyPath() {
-    String register = new RegisterRequestDto("name", "pswd").toJson().encode();
+    String register =
+        new RegisterRequestDto("name", "pswd", AdminAccessProvider.createAccess())
+            .toJson()
+            .encode();
     String login = new LoginRequestDto("name", "pswd").toJson().encode();
 
     RestAssured.given()

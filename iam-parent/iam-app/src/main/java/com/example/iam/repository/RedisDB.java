@@ -4,12 +4,18 @@ package com.example.iam.repository;
 import static java.util.logging.Level.SEVERE;
 
 import com.example.commons.redis.RedisConstants;
+import com.example.iam.entity.ACL;
 import com.example.iam.entity.User;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
+import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.handler.HttpException;
 import io.vertx.redis.client.RedisAPI;
+import io.vertx.redis.client.ResponseType;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.java.Log;
@@ -35,8 +41,36 @@ class RedisDB implements UserRepository, AutoCloseable {
   }
 
   @Override
-  public Future<Void> login(String username, String password, String token, String refreshToken) {
+  public Future<User> findByUsername(String username) {
+    return redisAPI
+        .jsonGet(List.of(prefixId(username), RedisConstants.DOCUMENT_ROOT))
+        .map(
+            resp -> {
+              if (null == resp) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
 
+              if (ResponseType.BULK != resp.type()) {
+                throw new NoStackTraceException("expected BULK response type");
+              }
+
+              JsonArray array = new JsonArray(resp.toBuffer());
+
+              if (array.isEmpty()) {
+                throw new HttpException(HttpResponseStatus.NOT_FOUND.code());
+              }
+
+              if (1 != array.size()) {
+                throw new NoStackTraceException("expected only one element in array");
+              }
+
+              JsonObject o = (JsonObject) array.iterator().next();
+              return new User(o);
+            });
+  }
+
+  @Override
+  public Future<Void> login(String username, String password, String token, String refreshToken) {
     return redisAPI
         .jsonGet(List.of(prefixId(username), "$." + User.PASSWORD_FIELD))
         .compose(
@@ -90,14 +124,29 @@ class RedisDB implements UserRepository, AutoCloseable {
 
   @Override
   public Future<Void> register(
-      String username, String password, String token, String refreshToken) {
+      String username,
+      String password,
+      String token,
+      String refreshToken,
+      String group,
+      String role,
+      Set<String> permissions) {
+    if (permissions.isEmpty()) {
+      throw new NoStackTraceException("permissions cannot be empty");
+    }
 
     return redisAPI
         .jsonSet(
             List.of(
                 prefixId(username),
                 RedisConstants.DOCUMENT_ROOT,
-                new User(username, password, refreshToken).toJson().encode(),
+                new User(
+                        username,
+                        password,
+                        refreshToken,
+                        ACL.builder().group(group).role(role).permissions(permissions).build())
+                    .toJson()
+                    .encode(),
                 RedisConstants.SET_IF_DOES_NOT_EXIST))
         .compose(
             resp -> {

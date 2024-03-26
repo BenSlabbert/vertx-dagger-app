@@ -6,15 +6,18 @@ import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 
 import com.example.commons.web.serialization.JsonWriter;
+import com.example.iam.auth.api.perms.Access;
 import com.google.auto.value.AutoBuilder;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.JsonSchema;
 import java.util.Objects;
 
-public record RegisterRequestDto(String username, String password) implements JsonWriter {
+public record RegisterRequestDto(String username, String password, Access access)
+    implements JsonWriter {
 
   public static String USERNAME_FIELD = "username";
   public static String PASSWORD_FIELD = "password";
+  public static String ACCESS_FIELD = "access";
 
   private static final JsonSchema SCHEMA =
       JsonSchema.of(
@@ -24,17 +27,24 @@ public record RegisterRequestDto(String username, String password) implements Js
               .toJson());
 
   public RegisterRequestDto(JsonObject jsonObject) {
-    this(jsonObject.getString(USERNAME_FIELD), jsonObject.getString(PASSWORD_FIELD));
+    this(
+        jsonObject.getString(USERNAME_FIELD),
+        jsonObject.getString(PASSWORD_FIELD),
+        Access.fromJson(jsonObject.getJsonObject(ACCESS_FIELD)));
   }
 
   public RegisterRequestDto {
     Objects.requireNonNull(username);
     Objects.requireNonNull(password);
+    Objects.requireNonNull(access);
   }
 
   @Override
   public JsonObject toJson() {
-    return new JsonObject().put(USERNAME_FIELD, username).put(PASSWORD_FIELD, password);
+    return new JsonObject()
+        .put(USERNAME_FIELD, username)
+        .put(PASSWORD_FIELD, password)
+        .put(ACCESS_FIELD, access.toJson());
   }
 
   public static JsonSchema getSchema() {
@@ -51,6 +61,8 @@ public record RegisterRequestDto(String username, String password) implements Js
     Builder username(String username);
 
     Builder password(String password);
+
+    Builder access(Access access);
 
     RegisterRequestDto build();
   }

@@ -70,6 +70,7 @@ public class Main {
   public static void main(String... args) {
     int exitCode =
         new CommandLine(new Main(), new DaggerIFactory())
+            .setCaseInsensitiveEnumValuesAllowed(true)
             .setColorScheme(CommandLine.Help.defaultColorScheme(Ansi.AUTO))
             .execute(args);
 

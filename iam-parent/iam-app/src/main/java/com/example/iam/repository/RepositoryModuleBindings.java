@@ -9,7 +9,7 @@ import dagger.multibindings.IntoSet;
 interface RepositoryModuleBindings {
 
   @Binds
-  UserRepository create(RedisDB redisDB);
+  UserRepository redisDB(RedisDB redisDB);
 
   @Binds
   @IntoSet

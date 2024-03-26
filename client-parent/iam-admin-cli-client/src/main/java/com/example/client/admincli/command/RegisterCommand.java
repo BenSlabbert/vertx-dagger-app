@@ -6,6 +6,10 @@ import com.example.client.admincli.util.DisplayErrorUtil;
 import com.example.commons.future.FutureUtil;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
 import com.example.iam.auth.api.dto.RegisterResponseDto;
+import com.example.iam.auth.api.perms.Access;
+import com.example.iam.auth.api.perms.AdminAccessProvider;
+import com.example.iam.auth.api.perms.DeliveryTruckAccessProvider;
+import com.example.iam.auth.api.perms.UserAccessProvider;
 import com.example.starter.iam.auth.client.IamAuthClient;
 import io.vertx.core.Future;
 import java.io.PrintStream;
@@ -42,14 +46,37 @@ public class RegisterCommand implements Callable<Integer> {
       description = "new user's password")
   private String password;
 
+  enum Role {
+    ADMIN,
+    DELIVERY_TRUCK,
+    UI_USER
+  }
+
+  @Option(
+      required = true,
+      names = {"-r", "--role"},
+      description = {"Specify role for new user (case in-sensitive) (${COMPLETION-CANDIDATES})"})
+  Role role;
+
   @Override
   public Integer call() {
     out.println("execute register");
 
+    Access access =
+        switch (role) {
+          case ADMIN -> AdminAccessProvider.createAccess();
+          case DELIVERY_TRUCK -> DeliveryTruckAccessProvider.createAccess();
+          case UI_USER -> UserAccessProvider.createAccess();
+        };
+
     Future<RegisterResponseDto> resp =
         FutureUtil.runFutureSync(
             iamAuthClient.register(
-                RegisterRequestDto.builder().username(username).password(password).build()));
+                RegisterRequestDto.builder()
+                    .username(username)
+                    .password(password)
+                    .access(access)
+                    .build()));
 
     if (resp.failed()) {
       return DisplayErrorUtil.handleFailure(out, resp);

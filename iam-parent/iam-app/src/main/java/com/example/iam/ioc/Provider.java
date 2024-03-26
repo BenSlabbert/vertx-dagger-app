@@ -2,12 +2,12 @@
 package com.example.iam.ioc;
 
 import com.example.commons.closer.CloserModule;
-import com.example.commons.closer.ClosingService;
 import com.example.commons.config.Config;
 import com.example.iam.repository.RepositoryModule;
+import com.example.iam.repository.UserRepository;
 import com.example.iam.service.ServiceModule;
+import com.example.iam.service.TokenService;
 import com.example.iam.verticle.ApiVerticle;
-import com.example.iam.web.route.handler.UserHandler;
 import com.example.starter.redis.RedisModule;
 import dagger.BindsInstance;
 import dagger.Component;
@@ -34,13 +34,11 @@ public interface Provider {
 
   Config config();
 
-  RedisAPI redisAPI();
-
-  ClosingService closingService();
-
-  UserHandler userHandler();
-
   ApiVerticle apiVerticle();
+
+  UserRepository userRepository();
+
+  TokenService tokenService();
 
   @Component.Builder
   interface Builder {

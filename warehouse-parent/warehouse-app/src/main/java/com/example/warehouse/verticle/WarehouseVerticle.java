@@ -95,6 +95,10 @@ public class WarehouseVerticle extends AbstractVerticle {
               final ContextInternal vertxContext = (ContextInternal) vertx.getOrCreateContext();
               User user = (User) interceptorContext.get("user");
 
+              JsonObject principal = user.principal();
+              JsonObject attributes = user.attributes();
+              log.info("principal: " + principal);
+              log.info("attributes: " + attributes);
               // jwt auth only does PermissionBasedAuthorization
               // we will need to add roles if we want to use them
               user.authorizations()
