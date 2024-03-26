@@ -1605,9 +1605,9 @@ __metadata:
     svelte-eslint-parser: ^0.33.1
     tslib: ^2.6.2
     typescript: ^5.4.3
-    vite: ^5.2.4
+    vite: ^5.2.6
     vitest: ^1.4.0
-    winston: ^3.12.0
+    winston: ^3.13.0
     zod: ^3.22.4
     zod-form-data: ^2.0.2
   languageName: unknown
@@ -5245,9 +5245,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.2.4":
-  version: 5.2.4
-  resolution: "vite@npm:5.2.4"
+"vite@npm:^5.2.6":
+  version: 5.2.6
+  resolution: "vite@npm:5.2.6"
   dependencies:
     esbuild: ^0.20.1
     fsevents: ~2.3.3
@@ -5281,7 +5281,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 23291ea513c41fb3e54e66d6ef0db4fea89c08ce7dde92955971c93d5e26bd6359971d2977e0605c50579effc89854eb32d0b12438a0fef74b3c2193bd54d384
+  checksum: 7dc8f5a06601a0183b53a389469e7d898c1f187a567b5af2543a02e08fe5778f87da6e26b71b5096462c81e922f04c593b447307bcd38ee7fe250c0bb18fe88f
   languageName: node
   linkType: hard
 
@@ -5399,22 +5399,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.12.0":
-  version: 3.12.0
-  resolution: "winston@npm:3.12.0"
+"winston@npm:^3.13.0":
+  version: 3.13.0
+  resolution: "winston@npm:3.13.0"
   dependencies:
-    "@colors/colors": "npm:^1.6.0"
-    "@dabh/diagnostics": "npm:^2.0.2"
-    async: "npm:^3.2.3"
-    is-stream: "npm:^2.0.0"
-    logform: "npm:^2.4.0"
-    one-time: "npm:^1.0.0"
-    readable-stream: "npm:^3.4.0"
-    safe-stable-stringify: "npm:^2.3.1"
-    stack-trace: "npm:0.0.x"
-    triple-beam: "npm:^1.3.0"
-    winston-transport: "npm:^4.7.0"
-  checksum: 7549e90d471312f3678c86fc51c86da05717be0390ecc0dc1a312a57f4ab3eb22e4fae1829291a05334376db8caa5f118d1de019d8c67e5f031ed70678363703
+    "@colors/colors": ^1.6.0
+    "@dabh/diagnostics": ^2.0.2
+    async: ^3.2.3
+    is-stream: ^2.0.0
+    logform: ^2.4.0
+    one-time: ^1.0.0
+    readable-stream: ^3.4.0
+    safe-stable-stringify: ^2.3.1
+    stack-trace: 0.0.x
+    triple-beam: ^1.3.0
+    winston-transport: ^4.7.0
+  checksum: 66f9fbbadb58e1632701e9c89391f217310c9455462148e163e060dcd25aed21351b0413bdbbf90e5c5fe9bc945fc5de6f53875ac7c7ef3061133a354fc678c0
   languageName: node
   linkType: hard
 

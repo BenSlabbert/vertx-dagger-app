@@ -1049,7 +1049,7 @@ __metadata:
     svelte: ^5.0.0-next.80
     svelte-check: ^3.6.8
     typescript: ^5.4.3
-    vite: ^5.2.4
+    vite: ^5.2.6
     vitest: ^1.4.0
   languageName: unknown
   linkType: soft
@@ -3864,9 +3864,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.2.4":
-  version: 5.2.4
-  resolution: "vite@npm:5.2.4"
+"vite@npm:^5.2.6":
+  version: 5.2.6
+  resolution: "vite@npm:5.2.6"
   dependencies:
     esbuild: ^0.20.1
     fsevents: ~2.3.3
@@ -3900,7 +3900,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 23291ea513c41fb3e54e66d6ef0db4fea89c08ce7dde92955971c93d5e26bd6359971d2977e0605c50579effc89854eb32d0b12438a0fef74b3c2193bd54d384
+  checksum: 7dc8f5a06601a0183b53a389469e7d898c1f187a567b5af2543a02e08fe5778f87da6e26b71b5096462c81e922f04c593b447307bcd38ee7fe250c0bb18fe88f
   languageName: node
   linkType: hard
 
