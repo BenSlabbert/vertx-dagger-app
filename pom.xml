@@ -65,7 +65,7 @@
     <google-auto-value.version>1.10.4</google-auto-value.version>
     <jte.version>3.1.9</jte.version>
     <hazelcast.version>5.3.6</hazelcast.version>
-    <guava.version>33.0.0-jre</guava.version>
+    <guava.version>33.1.0-jre</guava.version>
 
     <!--plugins-->
     <exec-maven-plugin.version>3.2.0</exec-maven-plugin.version>
