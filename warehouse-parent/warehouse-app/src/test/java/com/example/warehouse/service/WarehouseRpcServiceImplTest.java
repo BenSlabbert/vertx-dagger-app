@@ -11,6 +11,8 @@ import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobResponseDto;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.ReplyException;
+import io.vertx.core.eventbus.ReplyFailure;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.UUID;
@@ -21,12 +23,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 class WarehouseRpcServiceImplTest extends PersistenceTest {
 
   @Test
-  void anotherTest(Vertx vertx, VertxTestContext testContext) {
+  void authTest_success(Vertx vertx, VertxTestContext testContext) {
     WarehouseRpcServiceVertxEBProxy service =
         new WarehouseRpcServiceVertxEBProxy(
             vertx,
             WarehouseRpcService.ADDRESS,
-            new DeliveryOptions().addHeader("auth-token", jwtToken));
+            new DeliveryOptions().addHeader("auth-token", validJwtToken));
 
     Future<GetNextDeliveryJobResponseDto> nextDeliveryJob =
         service.getNextDeliveryJob(
@@ -37,6 +39,31 @@ class WarehouseRpcServiceImplTest extends PersistenceTest {
             response -> {
               assertThat(response).isNotNull();
               assertThat(response.getDeliveryId()).isNull();
+              testContext.completeNow();
+            }));
+  }
+
+  @Test
+  void authTest_failure(Vertx vertx, VertxTestContext testContext) {
+    WarehouseRpcServiceVertxEBProxy service =
+        new WarehouseRpcServiceVertxEBProxy(
+            vertx,
+            WarehouseRpcService.ADDRESS,
+            new DeliveryOptions().addHeader("auth-token", invalidJwtToken));
+
+    Future<GetNextDeliveryJobResponseDto> nextDeliveryJob =
+        service.getNextDeliveryJob(
+            GetNextDeliveryJobRequestDto.builder().truckId(UUID.randomUUID().toString()).build());
+
+    nextDeliveryJob.onComplete(
+        testContext.failing(
+            err -> {
+              assertThat(err).isNotNull();
+              assertThat(err).isInstanceOf(ReplyException.class);
+              ReplyException replyException = (ReplyException) err;
+              assertThat(replyException.failureCode()).isEqualTo(403);
+              assertThat(replyException.failureType()).isEqualTo(ReplyFailure.RECIPIENT_FAILURE);
+              assertThat(replyException.getMessage()).isEqualTo("Forbidden");
               testContext.completeNow();
             }));
   }

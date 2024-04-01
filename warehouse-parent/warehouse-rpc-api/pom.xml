@@ -16,6 +16,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.example.code-gen</groupId>
+      <artifactId>code-gen-annotation</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
       <groupId>com.example.commons</groupId>
       <artifactId>commons</artifactId>
       <version>${revision}</version>
@@ -47,6 +52,12 @@
       <artifactId>vertx-service-proxy</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.example.code-gen</groupId>
+      <artifactId>code-gen-generator</artifactId>
+      <version>${revision}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <scope>provided</scope>
@@ -74,6 +85,11 @@
             <arg>-Adagger.fastInit=enabled</arg>
           </compilerArgs>
           <annotationProcessorPaths>
+            <path>
+              <groupId>org.example.code-gen</groupId>
+              <artifactId>code-gen-generator</artifactId>
+              <version>${revision}</version>
+            </path>
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>

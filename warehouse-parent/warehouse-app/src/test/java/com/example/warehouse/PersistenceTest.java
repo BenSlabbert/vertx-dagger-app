@@ -6,6 +6,7 @@ import static com.example.commons.FreePortUtility.getPort;
 import com.example.commons.ConfigEncoder;
 import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
+import com.example.commons.security.rpc.ACL;
 import com.example.migration.FlywayProvider;
 import com.example.warehouse.ioc.DaggerTestProvider;
 import com.example.warehouse.ioc.TestProvider;
@@ -13,7 +14,6 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.JWTOptions;
 import io.vertx.ext.auth.PubSecKeyOptions;
@@ -42,7 +42,8 @@ public abstract class PersistenceTest {
   private static final Network network = Network.newNetwork();
 
   protected TestProvider provider;
-  protected String jwtToken;
+  protected String validJwtToken;
+  protected String invalidJwtToken;
 
   protected static final GenericContainer<?> postgres =
       new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
@@ -109,11 +110,35 @@ public abstract class PersistenceTest {
                         .setId("authKey1")
                         .setAlgorithm("HS256")
                         .setBuffer("password")));
-    jwtToken =
+
+    validJwtToken =
         jwtAuth.generateToken(
             // this is the root claim
             new JsonObject()
-                .put("permissions", new JsonArray().add("truck-client").add("eventbus")),
+                .put(
+                    "acl",
+                    ACL.builder()
+                        .group("warehouse")
+                        .role("worker")
+                        .addPermission("read")
+                        .build()
+                        .toJson()),
+            new JWTOptions()
+                .setExpiresInSeconds(Integer.MAX_VALUE)
+                .setIssuer("iam")
+                .setSubject("sneaky"));
+    invalidJwtToken =
+        jwtAuth.generateToken(
+            // this is the root claim
+            new JsonObject()
+                .put(
+                    "acl",
+                    ACL.builder()
+                        .group("ui")
+                        .role("customer")
+                        .addPermission("read")
+                        .build()
+                        .toJson()),
             new JWTOptions()
                 .setExpiresInSeconds(Integer.MAX_VALUE)
                 .setIssuer("iam")
