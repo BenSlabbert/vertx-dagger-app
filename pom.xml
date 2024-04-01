@@ -49,7 +49,7 @@
     <rest-assured.version>5.4.0</rest-assured.version>
     <commons-codec.version>1.16.1</commons-codec.version>
     <testcontainers.version>1.19.7</testcontainers.version>
-    <dagger.version>2.51</dagger.version>
+    <dagger.version>2.51.1</dagger.version>
     <errorprone.version>2.26.1</errorprone.version>
     <commons-lang3.version>3.14.0</commons-lang3.version>
     <flyway.version>9.22.3</flyway.version>
