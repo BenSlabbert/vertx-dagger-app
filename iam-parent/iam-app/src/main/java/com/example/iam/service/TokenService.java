@@ -9,6 +9,8 @@ public interface TokenService {
 
   Future<User> isValidRefresh(String token);
 
+  Future<User> authenticate(String token);
+
   String authToken(String username, ACL acl);
 
   String refreshToken(String username);

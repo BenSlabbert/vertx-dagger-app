@@ -73,7 +73,6 @@ class JwtServiceTest extends UnitTestBase {
                     .permissions(Set.of("p-1", "p-2"))
                     .build());
 
-    System.err.println("token = " + token);
     assertThat(token).isNotNull();
 
     jwtAuth.authenticate(

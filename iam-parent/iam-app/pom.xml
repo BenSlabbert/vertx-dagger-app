@@ -66,6 +66,11 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
+      <artifactId>vertx-codegen</artifactId>
+      <classifier>processor</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
     </dependency>
     <dependency>
@@ -87,6 +92,10 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-redis-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-service-proxy</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -204,8 +213,8 @@
             <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
             <arg>-Adagger.fastInit=enabled</arg>
             <!--required by ErrorProne-->
-            <arg>-XDcompilePolicy=simple</arg>
-            <arg>-Xplugin:ErrorProne</arg>
+            <!--            <arg>-XDcompilePolicy=simple</arg>-->
+            <!--            <arg>-Xplugin:ErrorProne</arg>-->
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
@@ -219,10 +228,22 @@
               <version>${lombok.version}</version>
             </path>
             <path>
-              <groupId>com.google.errorprone</groupId>
-              <artifactId>error_prone_core</artifactId>
-              <version>${errorprone.version}</version>
+              <groupId>io.vertx</groupId>
+              <artifactId>vertx-codegen</artifactId>
+              <version>${vertx.version}</version>
+              <classifier>processor</classifier>
             </path>
+            <path>
+              <groupId>io.vertx</groupId>
+              <artifactId>vertx-service-proxy</artifactId>
+              <version>${vertx.version}</version>
+            </path>
+            <!--            disable while vert.x service code generator has a bug-->
+            <!--            <path>-->
+            <!--              <groupId>com.google.errorprone</groupId>-->
+            <!--              <artifactId>error_prone_core</artifactId>-->
+            <!--              <version>${errorprone.version}</version>-->
+            <!--            </path>-->
             <path>
               <groupId>com.google.dagger</groupId>
               <artifactId>dagger-compiler</artifactId>

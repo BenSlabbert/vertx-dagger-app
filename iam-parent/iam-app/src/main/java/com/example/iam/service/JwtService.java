@@ -59,6 +59,11 @@ class JwtService implements TokenService {
   }
 
   @Override
+  public Future<User> authenticate(String token) {
+    return jwtAuth.authenticate(new TokenCredentials(token));
+  }
+
+  @Override
   public String authToken(String username, ACL acl) {
     return generateToken(
         jwtAuth, username, Duration.ofSeconds(30L), json -> json.put("acl", acl.toJson()));
@@ -90,7 +95,6 @@ class JwtService implements TokenService {
         new JWTOptions()
             .setExpiresInSeconds(lifetimeSeconds)
             .setIssuer("iam")
-            .setSubject("access-token")
             .setAudience(List.of("vertx-dagger-app"))
             .setSubject(username));
   }
