@@ -1601,7 +1601,7 @@ __metadata:
     prettier: ^3.2.5
     prettier-plugin-svelte: ^3.2.2
     svelte: ^4.2.12
-    svelte-check: ^3.6.8
+    svelte-check: ^3.6.9
     svelte-eslint-parser: ^0.33.1
     tslib: ^2.6.2
     typescript: ^5.4.3
@@ -4820,9 +4820,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^3.6.8":
-  version: 3.6.8
-  resolution: "svelte-check@npm:3.6.8"
+"svelte-check@npm:^3.6.9":
+  version: 3.6.9
+  resolution: "svelte-check@npm:3.6.9"
   dependencies:
     "@jridgewell/trace-mapping": ^0.3.17
     chokidar: ^3.4.1
@@ -4836,7 +4836,7 @@ __metadata:
     svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0
   bin:
     svelte-check: bin/svelte-check
-  checksum: ac3a33c0fa37784b7e3f3c418c6d6761fafc224e50a219dabdb542a1e1a9e1ad056d5fbe90acf2c903689dc2c139a363e6e55e5eb213e9e7136c876d380a9412
+  checksum: 426e80b44a7625ad365c706f37978e6ca91ae1a8a5c6ad2d19a207f12dc3902105dd9061103fb79d2d0a1b7f1893af43345c8fdfbd378e2ad3164ee184c0aec6
   languageName: node
   linkType: hard
 
@@ -5124,17 +5124,17 @@ __metadata:
 
 "typescript@patch:typescript@^5.0.3#~builtin<compat/typescript>":
   version: 5.0.4
-  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=1f5320"
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 6a1fe9a77bb9c5176ead919cc4a1499ee63e46b4e05bf667079f11bf3a8f7887f135aa72460a4c3b016e6e6bb65a822cb8689a6d86cbfe92d22cc9f501f09213
+  checksum: d26b6ba97b6d163c55dbdffd9bbb4c211667ebebc743accfeb2c8c0154aace7afd097b51165a72a5bad2cf65a4612259344ff60f8e642362aa1695c760d303ac
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^5.4.3#~builtin<compat/typescript>":
   version: 5.4.3
-  resolution: "typescript@patch:typescript@npm%3A5.4.3#~builtin<compat/typescript>::version=5.4.3&hash=1f5320"
+  resolution: "typescript@patch:typescript@npm%3A5.4.3#~builtin<compat/typescript>::version=5.4.3&hash=e012d7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
