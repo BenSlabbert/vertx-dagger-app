@@ -19,11 +19,12 @@ public record RegisterRequestDto(String username, String password, Access access
   public static String PASSWORD_FIELD = "password";
   public static String ACCESS_FIELD = "access";
 
-  private static final JsonSchema SCHEMA =
+  public static final JsonSchema SCHEMA =
       JsonSchema.of(
           objectSchema()
               .requiredProperty(USERNAME_FIELD, stringSchema().with(minLength(1)))
               .requiredProperty(PASSWORD_FIELD, stringSchema().with(minLength(1)))
+              .requiredProperty(ACCESS_FIELD, objectSchema())
               .toJson());
 
   public RegisterRequestDto(JsonObject jsonObject) {
@@ -45,10 +46,6 @@ public record RegisterRequestDto(String username, String password, Access access
         .put(USERNAME_FIELD, username)
         .put(PASSWORD_FIELD, password)
         .put(ACCESS_FIELD, access.toJson());
-  }
-
-  public static JsonSchema getSchema() {
-    return SCHEMA;
   }
 
   public static Builder builder() {

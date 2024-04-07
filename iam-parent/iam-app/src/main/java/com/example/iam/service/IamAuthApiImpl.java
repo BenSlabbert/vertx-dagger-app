@@ -8,13 +8,13 @@ import com.example.iam.auth.api.dto.RefreshRequestDto;
 import com.example.iam.auth.api.dto.RefreshResponseDto;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
 import com.example.iam.auth.api.dto.RegisterResponseDto;
-import com.example.iam.auth.api.perms.Permission;
+import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
+import com.example.iam.auth.api.dto.UpdatePermissionsResponseDto;
 import com.example.iam.entity.ACL;
 import com.example.iam.entity.User;
 import com.example.iam.repository.UserRepository;
 import io.vertx.core.Future;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -74,10 +74,9 @@ class IamAuthApiImpl implements IamAuthApi {
   @Override
   public Future<RegisterResponseDto> register(RegisterRequestDto dto) {
     var access = dto.access();
-    var group = access.group().name();
-    var role = access.role().name();
-    Set<String> permissions =
-        access.permissions().stream().map(Permission::name).collect(Collectors.toSet());
+    var group = access.group();
+    var role = access.role();
+    Set<String> permissions = access.permissions();
 
     String token =
         tokenService.authToken(
@@ -87,5 +86,20 @@ class IamAuthApiImpl implements IamAuthApi {
     return userRepository
         .register(dto.username(), dto.password(), token, refreshToken, group, role, permissions)
         .map(ignore -> RegisterResponseDto.builder().build());
+  }
+
+  @Override
+  public Future<UpdatePermissionsResponseDto> updatePermissions(UpdatePermissionsRequestDto req) {
+    return userRepository
+        .findByUsername(req.username())
+        .map(
+            ignore ->
+                ACL.builder()
+                    .group(req.access().group())
+                    .role(req.access().role())
+                    .permissions(req.access().permissions())
+                    .build())
+        .compose(acl -> userRepository.updatePermissions(req.username(), acl))
+        .map(ignore -> UpdatePermissionsResponseDto.builder().build());
   }
 }

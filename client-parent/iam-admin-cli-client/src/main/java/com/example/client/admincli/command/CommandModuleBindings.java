@@ -11,6 +11,11 @@ interface CommandModuleBindings {
 
   @Binds
   @IntoMap
+  @ClassKey(UpdatePermissionsCommand.class)
+  Object updatePermissionsCommand(UpdatePermissionsCommand updatePermissionsCommand);
+
+  @Binds
+  @IntoMap
   @ClassKey(RefreshCommand.class)
   Object refreshCommand(RefreshCommand refreshCommand);
 

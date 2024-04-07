@@ -4,6 +4,7 @@ package com.example.client.admincli;
 import com.example.client.admincli.command.LoginCommand;
 import com.example.client.admincli.command.RefreshCommand;
 import com.example.client.admincli.command.RegisterCommand;
+import com.example.client.admincli.command.UpdatePermissionsCommand;
 import com.example.client.admincli.config.IamConfig;
 import com.example.client.admincli.ioc.DaggerProvider;
 import com.example.client.admincli.ioc.Provider;
@@ -23,9 +24,14 @@ import picocli.CommandLine.Option;
 @Command(
     name = "greet",
     mixinStandardHelpOptions = true,
-    version = "checksum 4.0",
+    version = "1.0.0",
     description = "default command",
-    subcommands = {RegisterCommand.class, LoginCommand.class, RefreshCommand.class})
+    subcommands = {
+      RegisterCommand.class,
+      LoginCommand.class,
+      RefreshCommand.class,
+      UpdatePermissionsCommand.class
+    })
 public class Main {
 
   @Option(

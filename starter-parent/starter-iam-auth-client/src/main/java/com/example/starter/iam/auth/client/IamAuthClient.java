@@ -11,6 +11,8 @@ import com.example.iam.auth.api.dto.RefreshRequestDto;
 import com.example.iam.auth.api.dto.RefreshResponseDto;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
 import com.example.iam.auth.api.dto.RegisterResponseDto;
+import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
+import com.example.iam.auth.api.dto.UpdatePermissionsResponseDto;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -61,6 +63,11 @@ public final class IamAuthClient implements IamAuthApi {
         .putHeader(CONTENT_TYPE.toString(), APPLICATION_JSON.toString())
         .sendJson(req.toJson())
         .compose(resp -> handleResponse(resp, RegisterResponseDto::new));
+  }
+
+  @Override
+  public Future<UpdatePermissionsResponseDto> updatePermissions(UpdatePermissionsRequestDto req) {
+    return Future.failedFuture(new UnsupportedOperationException("Not implemented"));
   }
 
   private <T> Future<T> handleResponse(

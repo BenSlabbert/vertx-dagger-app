@@ -11,7 +11,7 @@ import com.example.iam.auth.api.dto.LoginResponseDto;
 import com.example.iam.auth.api.dto.RefreshRequestDto;
 import com.example.iam.auth.api.dto.RefreshResponseDto;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
-import com.example.iam.auth.api.perms.AdminAccessProvider;
+import com.example.iam.auth.api.perms.Access;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -75,10 +75,11 @@ class ApiVerticleTest extends VerticleTestBase {
   }
 
   static Stream<Arguments> registerInvalidRequestSource() {
+    Access access = Access.builder().group("g").role("r").addPermission("p1").build();
     return Stream.of(
-        Arguments.of(new RegisterRequestDto("", "", AdminAccessProvider.createAccess())),
-        Arguments.of(new RegisterRequestDto("1", "", AdminAccessProvider.createAccess())),
-        Arguments.of(new RegisterRequestDto("", "1", AdminAccessProvider.createAccess())));
+        Arguments.of(new RegisterRequestDto("", "", access)),
+        Arguments.of(new RegisterRequestDto("1", "", access)),
+        Arguments.of(new RegisterRequestDto("", "1", access)));
   }
 
   @ParameterizedTest
@@ -101,7 +102,8 @@ class ApiVerticleTest extends VerticleTestBase {
   @Test
   void fullHappyPath() {
     String register =
-        new RegisterRequestDto("name", "pswd", AdminAccessProvider.createAccess())
+        new RegisterRequestDto(
+                "name", "pswd", Access.builder().group("g").role("r").addPermission("p1").build())
             .toJson()
             .encode();
     String login = new LoginRequestDto("name", "pswd").toJson().encode();

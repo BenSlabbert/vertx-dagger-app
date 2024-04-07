@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.repository;
 
+import com.example.iam.entity.ACL;
 import com.example.iam.entity.User;
 import io.vertx.core.Future;
 import java.util.Set;
@@ -22,4 +23,6 @@ public interface UserRepository {
       String group,
       String role,
       Set<String> permissions);
+
+  Future<Void> updatePermissions(String username, ACL acl);
 }

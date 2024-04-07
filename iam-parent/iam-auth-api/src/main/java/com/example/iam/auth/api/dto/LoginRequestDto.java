@@ -16,7 +16,7 @@ public record LoginRequestDto(String username, String password) implements JsonW
   public static String USERNAME_FIELD = "username";
   public static String PASSWORD_FIELD = "password";
 
-  private static final JsonSchema SCHEMA =
+  public static final JsonSchema SCHEMA =
       JsonSchema.of(
           objectSchema()
               .requiredProperty(USERNAME_FIELD, stringSchema().with(minLength(1)))
@@ -35,10 +35,6 @@ public record LoginRequestDto(String username, String password) implements JsonW
   @Override
   public JsonObject toJson() {
     return new JsonObject().put(USERNAME_FIELD, username).put(PASSWORD_FIELD, password);
-  }
-
-  public static JsonSchema getSchema() {
-    return SCHEMA;
   }
 
   public static Builder builder() {

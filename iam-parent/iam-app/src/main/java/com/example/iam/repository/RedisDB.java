@@ -160,6 +160,33 @@ class RedisDB implements UserRepository, AutoCloseable {
         .onSuccess(resp -> log.info("user registered"));
   }
 
+  @Override
+  public Future<Void> updatePermissions(String username, ACL acl) {
+    return redisAPI
+        .jsonSet(
+            List.of(
+                prefixId(username),
+                "$." + User.ACl_FIELD,
+                acl.toJson().encode(),
+                RedisConstants.SET_IF_EXIST))
+        .map(
+            resp -> {
+              if (null == resp) {
+                throw new HttpException(HttpResponseStatus.NOT_FOUND.code());
+              }
+
+              if (ResponseType.SIMPLE != resp.type()) {
+                throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+              }
+
+              if ("OK".equals(resp.toString())) {
+                return null;
+              }
+
+              throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+            });
+  }
+
   private Future<Void> updateRefreshToken(String username, String newRefreshToken) {
     return redisAPI
         .jsonSet(
@@ -169,7 +196,11 @@ class RedisDB implements UserRepository, AutoCloseable {
                 // must quote values back to redis
                 "\"" + newRefreshToken + "\"",
                 RedisConstants.SET_IF_EXIST))
-        .mapEmpty();
+        .map(
+            resp -> {
+              System.err.println("resp: " + resp);
+              return null;
+            });
   }
 
   private static String prefixId(String username) {

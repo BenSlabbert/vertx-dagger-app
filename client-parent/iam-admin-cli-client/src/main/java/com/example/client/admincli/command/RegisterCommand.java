@@ -7,9 +7,6 @@ import com.example.commons.future.FutureUtil;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
 import com.example.iam.auth.api.dto.RegisterResponseDto;
 import com.example.iam.auth.api.perms.Access;
-import com.example.iam.auth.api.perms.AdminAccessProvider;
-import com.example.iam.auth.api.perms.DeliveryTruckAccessProvider;
-import com.example.iam.auth.api.perms.UserAccessProvider;
 import com.example.starter.iam.auth.client.IamAuthClient;
 import io.vertx.core.Future;
 import java.io.PrintStream;
@@ -64,9 +61,21 @@ public class RegisterCommand implements Callable<Integer> {
 
     Access access =
         switch (role) {
-          case ADMIN -> AdminAccessProvider.createAccess();
-          case DELIVERY_TRUCK -> DeliveryTruckAccessProvider.createAccess();
-          case UI_USER -> UserAccessProvider.createAccess();
+          case ADMIN -> Access.builder().group("root").role("admin").build();
+          case DELIVERY_TRUCK ->
+              Access.builder()
+                  .group("system")
+                  .role("delivery-truck-api")
+                  .addPermission("delivery-truck-api:r")
+                  .addPermission("delivery-truck-api:w")
+                  .build();
+          case UI_USER ->
+              Access.builder()
+                  .group("user")
+                  .role("ui-user")
+                  .addPermission("ui-user:r")
+                  .addPermission("ui-user:w")
+                  .build();
         };
 
     Future<RegisterResponseDto> resp =

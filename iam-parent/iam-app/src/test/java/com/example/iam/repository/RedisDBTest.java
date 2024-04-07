@@ -6,26 +6,56 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.iam.IntegrationTestBase;
 import com.example.iam.entity.ACL;
 import com.example.iam.entity.User;
-import io.vertx.core.Future;
 import io.vertx.junit5.Checkpoint;
 import io.vertx.junit5.VertxTestContext;
 import java.util.Set;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 class RedisDBTest extends IntegrationTestBase {
 
   @Test
-  void test(VertxTestContext testContext) {
+  void updatePermissions(VertxTestContext testContext) {
     Checkpoint checkpoint = testContext.checkpoint(2);
     UserRepository userRepository = provider.userRepository();
 
-    Future<Void> register =
-        userRepository.register(
-            "name", "password", "token", "refreshToken", "group", "role", Set.of("p-1", "p-2"));
+    String name = UUID.randomUUID().toString();
 
-    register
+    userRepository
+        .register(name, "password", "token", "refreshToken", "group", "role", Set.of("p-1", "p-2"))
         .onComplete(testContext.succeeding(ignore -> testContext.verify(checkpoint::flag)))
-        .compose(ignore -> userRepository.findByUsername("name"))
+        .compose(
+            ignore ->
+                userRepository.updatePermissions(
+                    name, ACL.builder().group("g").role("r").permissions(Set.of("p")).build()))
+        .compose(ignore -> userRepository.findByUsername(name))
+        .onComplete(
+            testContext.succeeding(
+                user ->
+                    testContext.verify(
+                        () -> {
+                          assertThat(user.acl())
+                              .usingRecursiveComparison()
+                              .isEqualTo(
+                                  ACL.builder()
+                                      .group("g")
+                                      .role("r")
+                                      .permissions(Set.of("p"))
+                                      .build());
+                          checkpoint.flag();
+                        })));
+  }
+
+  @Test
+  void register(VertxTestContext testContext) {
+    Checkpoint checkpoint = testContext.checkpoint(2);
+    UserRepository userRepository = provider.userRepository();
+
+    String name = UUID.randomUUID().toString();
+    userRepository
+        .register(name, "password", "token", "refreshToken", "group", "role", Set.of("p-1", "p-2"))
+        .onComplete(testContext.succeeding(ignore -> testContext.verify(checkpoint::flag)))
+        .compose(ignore -> userRepository.findByUsername(name))
         .onComplete(
             ar ->
                 testContext.verify(
@@ -36,7 +66,7 @@ class RedisDBTest extends IntegrationTestBase {
                               user -> {
                                 User expected =
                                     new User(
-                                        "name",
+                                        name,
                                         "password",
                                         "refreshToken",
                                         new ACL("group", "role", Set.of("p-1", "p-2")));

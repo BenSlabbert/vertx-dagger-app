@@ -12,6 +12,7 @@ import com.example.iam.auth.api.IamAuthApi;
 import com.example.iam.auth.api.dto.LoginRequestDto;
 import com.example.iam.auth.api.dto.RefreshRequestDto;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
+import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
 import com.example.iam.web.SchemaValidatorDelegator;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -37,6 +38,7 @@ public class UserHandler {
     router.post(UserHandler_Login_ParamParser.PATH).handler(this::login);
     router.post(UserHandler_Refresh_ParamParser.PATH).handler(this::refresh);
     router.post(UserHandler_Register_ParamParser.PATH).handler(this::register);
+    router.post(UserHandler_UpdatePermissions_ParamParser.PATH).handler(this::updatePermissions);
 
     log.info("Configured routes for UserHandler");
     log.info("-------------------------");
@@ -108,6 +110,27 @@ public class UserHandler {
         .onFailure(
             err -> {
               log.log(SEVERE, "failed to register user", err);
+              ResponseWriter.writeInternalError(ctx);
+            })
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto, NO_CONTENT));
+  }
+
+  @RestHandler(path = "/update-permissions")
+  void updatePermissions(RoutingContext ctx) {
+    JsonObject body = ctx.body().asJsonObject();
+    Boolean valid = schemaValidatorDelegator.validate(UpdatePermissionsRequestDto.class, body);
+
+    if (Boolean.FALSE.equals(valid)) {
+      log.log(SEVERE, "invalid register request params");
+      ctx.response().setStatusCode(BAD_REQUEST.code()).end();
+      return;
+    }
+
+    iamAuthApi
+        .updatePermissions(new UpdatePermissionsRequestDto(body))
+        .onFailure(
+            err -> {
+              log.log(SEVERE, "failed to update user permissions", err);
               ResponseWriter.writeInternalError(ctx);
             })
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, NO_CONTENT));

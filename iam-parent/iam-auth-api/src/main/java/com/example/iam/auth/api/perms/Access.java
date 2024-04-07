@@ -1,6 +1,11 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.auth.api.perms;
 
+import static io.vertx.json.schema.common.dsl.Keywords.minLength;
+import static io.vertx.json.schema.common.dsl.Schemas.arraySchema;
+import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
+import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
+
 import com.example.commons.web.serialization.JsonWriter;
 import com.google.auto.value.AutoValue;
 import com.google.auto.value.extension.memoized.Memoized;
@@ -8,16 +13,28 @@ import com.google.auto.value.extension.toprettystring.ToPrettyString;
 import com.google.common.collect.ImmutableSet;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.json.schema.common.dsl.ObjectSchemaBuilder;
 import java.util.Set;
 
 @AutoValue
 public abstract class Access implements JsonWriter {
 
-  public abstract Group group();
+  private static final String GROUP_FIELD = "group";
+  private static final String ROLE_FIELD = "role";
+  private static final String PERMISSIONS_FIELD = "permissions";
 
-  public abstract Role role();
+  public static final ObjectSchemaBuilder SCHEMA =
+      objectSchema()
+          .requiredProperty(GROUP_FIELD, stringSchema().with(minLength(1)))
+          .requiredProperty(ROLE_FIELD, stringSchema().with(minLength(1)))
+          .requiredProperty(
+              PERMISSIONS_FIELD, arraySchema().items(stringSchema().with(minLength(1))));
 
-  public abstract Set<Permission> permissions();
+  public abstract String group();
+
+  public abstract String role();
+
+  public abstract Set<String> permissions();
 
   @Override
   @Memoized
@@ -34,12 +51,12 @@ public abstract class Access implements JsonWriter {
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
 
-    json.put("group", group().name());
-    json.put("role", role().name());
+    json.put(GROUP_FIELD, group());
+    json.put(ROLE_FIELD, role());
 
     JsonArray array = new JsonArray();
-    permissions().stream().map(Permission::name).forEach(array::add);
-    json.put("permissions", array);
+    permissions().forEach(array::add);
+    json.put(PERMISSIONS_FIELD, array);
 
     return json;
   }
@@ -51,15 +68,15 @@ public abstract class Access implements JsonWriter {
   public static Access fromJson(JsonObject jsonObject) {
     Builder builder = builder();
 
-    String group = jsonObject.getString("group");
-    builder.group(Group.groupForName().get(group));
+    String group = jsonObject.getString(GROUP_FIELD);
+    builder.group(group);
 
-    String role = jsonObject.getString("role");
-    builder.role(Role.roleForName().get(role));
+    String role = jsonObject.getString(ROLE_FIELD);
+    builder.role(role);
 
-    jsonObject.getJsonArray("permissions").stream()
+    jsonObject.getJsonArray(PERMISSIONS_FIELD).stream()
         .map(Object::toString)
-        .forEach(p -> builder.addPermission(Permission.permissionForName().get(p)));
+        .forEach(builder::addPermission);
 
     return builder.build();
   }
@@ -67,14 +84,19 @@ public abstract class Access implements JsonWriter {
   @AutoValue.Builder
   public abstract static class Builder {
 
-    public abstract Builder group(Group group);
+    public abstract Builder group(String group);
 
-    public abstract Builder role(Role role);
+    public abstract Builder role(String role);
 
-    abstract ImmutableSet.Builder<Permission> permissionsBuilder();
+    abstract ImmutableSet.Builder<String> permissionsBuilder();
 
-    public final Builder addPermission(Permission permission) {
+    public final Builder addPermission(String permission) {
       permissionsBuilder().add(permission);
+      return this;
+    }
+
+    public final Builder addPermissions(String... permissions) {
+      permissionsBuilder().add(permissions);
       return this;
     }
 

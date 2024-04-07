@@ -6,6 +6,7 @@ import com.example.commons.web.SchemaValidator;
 import com.example.iam.auth.api.dto.LoginRequestDto;
 import com.example.iam.auth.api.dto.RefreshRequestDto;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
+import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.JsonSchema;
 import java.util.Map;
@@ -30,8 +31,9 @@ public class SchemaValidatorDelegator {
 
   private Map<Class<?>, JsonSchema> getRegistry() {
     return Map.ofEntries(
-        Map.entry(LoginRequestDto.class, LoginRequestDto.getSchema()),
-        Map.entry(RefreshRequestDto.class, RefreshRequestDto.getSchema()),
-        Map.entry(RegisterRequestDto.class, RegisterRequestDto.getSchema()));
+        Map.entry(LoginRequestDto.class, LoginRequestDto.SCHEMA),
+        Map.entry(RefreshRequestDto.class, RefreshRequestDto.SCHEMA),
+        Map.entry(RegisterRequestDto.class, RegisterRequestDto.SCHEMA),
+        Map.entry(UpdatePermissionsRequestDto.class, UpdatePermissionsRequestDto.SCHEMA));
   }
 }
