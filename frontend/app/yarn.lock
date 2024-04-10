@@ -1600,7 +1600,7 @@ __metadata:
     eslint-plugin-svelte: ^2.35.1
     prettier: ^3.2.5
     prettier-plugin-svelte: ^3.2.2
-    svelte: ^4.2.12
+    svelte: ^4.2.13
     svelte-check: ^3.6.9
     svelte-eslint-parser: ^0.33.1
     tslib: ^2.6.2
@@ -4931,25 +4931,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^4.2.12":
-  version: 4.2.12
-  resolution: "svelte@npm:4.2.12"
+"svelte@npm:^4.2.13":
+  version: 4.2.13
+  resolution: "svelte@npm:4.2.13"
   dependencies:
-    "@ampproject/remapping": "npm:^2.2.1"
-    "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-    "@jridgewell/trace-mapping": "npm:^0.3.18"
-    "@types/estree": "npm:^1.0.1"
-    acorn: "npm:^8.9.0"
-    aria-query: "npm:^5.3.0"
-    axobject-query: "npm:^4.0.0"
-    code-red: "npm:^1.0.3"
-    css-tree: "npm:^2.3.1"
-    estree-walker: "npm:^3.0.3"
-    is-reference: "npm:^3.0.1"
-    locate-character: "npm:^3.0.0"
-    magic-string: "npm:^0.30.4"
-    periscopic: "npm:^3.1.0"
-  checksum: 0238fc66927843332540ea17b46a4897899d24111b3d90e51ad1809050c706593bcc0e804b2e075994d0720533e0aa6efa6a0faf92e573787fc4dac756200040
+    "@ampproject/remapping": ^2.2.1
+    "@jridgewell/sourcemap-codec": ^1.4.15
+    "@jridgewell/trace-mapping": ^0.3.18
+    "@types/estree": ^1.0.1
+    acorn: ^8.9.0
+    aria-query: ^5.3.0
+    axobject-query: ^4.0.0
+    code-red: ^1.0.3
+    css-tree: ^2.3.1
+    estree-walker: ^3.0.3
+    is-reference: ^3.0.1
+    locate-character: ^3.0.0
+    magic-string: ^0.30.4
+    periscopic: ^3.1.0
+  checksum: 03f4a53dd50ef70e3888dea5f74d684fd69bab9917a2280ba95df1c76b85ef21f83dfb5d9a546a47e457635721676acd92f5cf763834721b75f43b8d9b0344ce
   languageName: node
   linkType: hard
 
@@ -5124,17 +5124,17 @@ __metadata:
 
 "typescript@patch:typescript@^5.0.3#~builtin<compat/typescript>":
   version: 5.0.4
-  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=1f5320"
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 6a1fe9a77bb9c5176ead919cc4a1499ee63e46b4e05bf667079f11bf3a8f7887f135aa72460a4c3b016e6e6bb65a822cb8689a6d86cbfe92d22cc9f501f09213
+  checksum: d26b6ba97b6d163c55dbdffd9bbb4c211667ebebc743accfeb2c8c0154aace7afd097b51165a72a5bad2cf65a4612259344ff60f8e642362aa1695c760d303ac
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^5.4.4#~builtin<compat/typescript>":
   version: 5.4.4
-  resolution: "typescript@patch:typescript@npm%3A5.4.4#~builtin<compat/typescript>::version=5.4.4&hash=1f5320"
+  resolution: "typescript@patch:typescript@npm%3A5.4.4#~builtin<compat/typescript>::version=5.4.4&hash=e012d7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
