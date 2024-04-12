@@ -72,7 +72,8 @@ class RedisDB implements UserRepository, AutoCloseable {
   @Override
   public Future<Void> login(String username, String password, String token, String refreshToken) {
     return redisAPI
-        .jsonGet(List.of(prefixId(username), "$." + User.PASSWORD_FIELD))
+        .jsonGet(
+            List.of(prefixId(username), RedisConstants.DOCUMENT_ROOT_PREFIX + User.PASSWORD_FIELD))
         .compose(
             resp -> {
               if (null == resp) {
@@ -102,7 +103,9 @@ class RedisDB implements UserRepository, AutoCloseable {
       String username, String oldRefreshToken, String newToken, String newRefreshToken) {
 
     return redisAPI
-        .jsonGet(List.of(prefixId(username), "$." + User.REFRESH_TOKEN_FIELD))
+        .jsonGet(
+            List.of(
+                prefixId(username), RedisConstants.DOCUMENT_ROOT_PREFIX + User.REFRESH_TOKEN_FIELD))
         .compose(
             resp -> {
               if (null == resp) {
@@ -166,7 +169,7 @@ class RedisDB implements UserRepository, AutoCloseable {
         .jsonSet(
             List.of(
                 prefixId(username),
-                "$." + User.ACl_FIELD,
+                RedisConstants.DOCUMENT_ROOT_PREFIX + User.ACl_FIELD,
                 acl.toJson().encode(),
                 RedisConstants.SET_IF_EXIST))
         .map(
@@ -179,7 +182,7 @@ class RedisDB implements UserRepository, AutoCloseable {
                 throw new HttpException(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
               }
 
-              if ("OK".equals(resp.toString())) {
+              if (RedisConstants.OK.equals(resp.toString())) {
                 return null;
               }
 
@@ -192,7 +195,7 @@ class RedisDB implements UserRepository, AutoCloseable {
         .jsonSet(
             List.of(
                 prefixId(username),
-                "$." + User.REFRESH_TOKEN_FIELD,
+                RedisConstants.DOCUMENT_ROOT_PREFIX + User.REFRESH_TOKEN_FIELD,
                 // must quote values back to redis
                 "\"" + newRefreshToken + "\"",
                 RedisConstants.SET_IF_EXIST))

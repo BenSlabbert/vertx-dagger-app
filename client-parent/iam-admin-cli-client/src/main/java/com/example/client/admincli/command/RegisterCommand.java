@@ -43,7 +43,7 @@ public class RegisterCommand implements Callable<Integer> {
       description = "new user's password")
   private String password;
 
-  enum Role {
+  private enum Role {
     ADMIN,
     DELIVERY_TRUCK,
     UI_USER
@@ -53,7 +53,7 @@ public class RegisterCommand implements Callable<Integer> {
       required = true,
       names = {"-r", "--role"},
       description = {"Specify role for new user (case in-sensitive) (${COMPLETION-CANDIDATES})"})
-  Role role;
+  private Role role;
 
   @Override
   public Integer call() {
@@ -61,7 +61,7 @@ public class RegisterCommand implements Callable<Integer> {
 
     Access access =
         switch (role) {
-          case ADMIN -> Access.builder().group("root").role("admin").build();
+          case ADMIN -> Access.builder().group("root").role("admin").addPermission("*").build();
           case DELIVERY_TRUCK ->
               Access.builder()
                   .group("system")

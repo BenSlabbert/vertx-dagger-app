@@ -67,7 +67,11 @@ public final class IamAuthClient implements IamAuthApi {
 
   @Override
   public Future<UpdatePermissionsResponseDto> updatePermissions(UpdatePermissionsRequestDto req) {
-    return Future.failedFuture(new UnsupportedOperationException("Not implemented"));
+    return webClient
+        .post("/api/update-permissions")
+        .putHeader(CONTENT_TYPE.toString(), APPLICATION_JSON.toString())
+        .sendJson(req.toJson())
+        .compose(resp -> handleResponse(resp, UpdatePermissionsResponseDto::new));
   }
 
   private <T> Future<T> handleResponse(
