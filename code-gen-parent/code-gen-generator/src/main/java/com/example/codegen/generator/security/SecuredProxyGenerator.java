@@ -6,6 +6,8 @@ import com.example.codegen.generator.commons.GenerationException;
 import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -82,8 +84,13 @@ public class SecuredProxyGenerator extends AbstractProcessor {
       out.println();
       out.println("import java.util.List;");
       out.println("import java.util.Map;");
+      out.println("import javax.annotation.processing.Generated;");
       out.println();
 
+      out.printf(
+          "@Generated(value = \"%s\", date = \"%s\")%n",
+          getClass().getCanonicalName(),
+          LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
       out.printf("public final class %s {%n", generatedClassName);
       out.println();
 
