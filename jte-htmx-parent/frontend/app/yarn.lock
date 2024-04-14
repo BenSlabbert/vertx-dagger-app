@@ -539,14 +539,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.43.0":
-  version: 1.43.0
-  resolution: "@playwright/test@npm:1.43.0"
+"@playwright/test@npm:^1.43.1":
+  version: 1.43.1
+  resolution: "@playwright/test@npm:1.43.1"
   dependencies:
-    playwright: 1.43.0
+    playwright: 1.43.1
   bin:
     playwright: cli.js
-  checksum: c7c0c6e8fde4e9dceea22d48384642b78c3d539fb0512edeaa581dc4dc07cedfd166dba92c5e9e69a378b7fd63362b142450dbdd5c9b65d76c4def162a5c470d
+  checksum: f9db387b488a03125e5dc22dd7ffed9c661d1f2428188912a35a2235b3bd9d826b390e7600d04998639994f5a96695b9dc9034ca9cb59e261d2fdee93a60df3f
   languageName: node
   linkType: hard
 
@@ -1024,7 +1024,7 @@ __metadata:
   resolution: "app@workspace:."
   dependencies:
     "@picocss/pico": ^2.0.6
-    "@playwright/test": ^1.43.0
+    "@playwright/test": ^1.43.1
     "@sveltejs/adapter-node": ^5.0.1
     "@sveltejs/kit": ^2.5.5
     "@sveltejs/vite-plugin-svelte": ^3.1.0
@@ -1034,7 +1034,7 @@ __metadata:
     eslint-plugin-svelte: ^2.37.0
     prettier: ^3.2.5
     prettier-plugin-svelte: ^3.2.3
-    svelte: ^5.0.0-next.100
+    svelte: ^5.0.0-next.102
     svelte-check: ^3.6.9
     typescript: ^5.4.5
     vite: ^5.2.8
@@ -2953,27 +2953,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.43.0":
-  version: 1.43.0
-  resolution: "playwright-core@npm:1.43.0"
+"playwright-core@npm:1.43.1":
+  version: 1.43.1
+  resolution: "playwright-core@npm:1.43.1"
   bin:
     playwright-core: cli.js
-  checksum: b35265d356d87eb4114997e6af985ee3cb5a473f15a465d6e02834288a55f0cae4233a18178658389ff443f92405e020815fc165274d2262c3ca1c2b5be948cf
+  checksum: 7c96b3a4a4bce2ee22c3cd680c9b0bb9e4bf07ee4b51d1e9a7f47a6489c7b0b960d4b550e530b8f41d1ffeadd26c7c6bb626ae8689dfd90dce1cb8e35ae78ff7
   languageName: node
   linkType: hard
 
-"playwright@npm:1.43.0":
-  version: 1.43.0
-  resolution: "playwright@npm:1.43.0"
+"playwright@npm:1.43.1":
+  version: 1.43.1
+  resolution: "playwright@npm:1.43.1"
   dependencies:
     fsevents: 2.3.2
-    playwright-core: 1.43.0
+    playwright-core: 1.43.1
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: edd4ef9644398c197d20e957cf2a5e5a95d7e0144f3c971923e709247f5b48551bf6168c74b34909f263ab96fac6e49466b65a9cd1349ad400dabd4b8b364acf
+  checksum: de9db021f93018a18275bbb5af09ebf1804aa0534f47578b35b440064abc774509740205802824afc94a99fc84dd55ffe9e215718ad3ecc691b251ab3882b096
   languageName: node
   linkType: hard
 
@@ -3615,9 +3615,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.0.0-next.100":
-  version: 5.0.0-next.100
-  resolution: "svelte@npm:5.0.0-next.100"
+"svelte@npm:^5.0.0-next.102":
+  version: 5.0.0-next.102
+  resolution: "svelte@npm:5.0.0-next.102"
   dependencies:
     "@ampproject/remapping": ^2.2.1
     "@jridgewell/sourcemap-codec": ^1.4.15
@@ -3632,7 +3632,7 @@ __metadata:
     locate-character: ^3.0.0
     magic-string: ^0.30.5
     zimmerframe: ^1.1.2
-  checksum: a86c6ddbb8a72ef12d0402d3e78deb07c9471c50f16df0b83d5d9dc493b07b36974d5fffaf6186eb45f309b46dcc4ee8c1a5b1d640c34ebaf9c41aa502aa5dd3
+  checksum: b245d418b1f34e4ad48839dcc6774326bbc63375c2aae262fb68618fa630bf87fae9f9202046bd3c7b6e866f7b8d8187c04e3fa8a0437907bd8f7924deec53e7
   languageName: node
   linkType: hard
 
