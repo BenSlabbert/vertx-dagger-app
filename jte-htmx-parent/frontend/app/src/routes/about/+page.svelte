@@ -12,6 +12,6 @@
 	>
 		Register!
 	</button>
-	<div id="serious-errors" />
-	<div id="not-found" />
+	<div id="serious-errors"></div>
+	<div id="not-found"></div>
 </div>
