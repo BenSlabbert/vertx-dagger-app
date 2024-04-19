@@ -38,7 +38,7 @@
 		"@picocss/pico": "^2.0.6",
 		"@yarnpkg/plugin-interactive-tools": "^4.0.0",
 		"winston": "^3.13.0",
-		"zod": "^3.22.4",
+		"zod": "^3.22.5",
 		"zod-form-data": "^2.0.2"
 	}
 }
