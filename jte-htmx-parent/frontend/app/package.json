@@ -34,6 +34,5 @@
 	"type": "module",
 	"dependencies": {
 		"@picocss/pico": "^2.0.6"
-	},
-	"packageManager": "yarn@4.1.1"
+	}
 }

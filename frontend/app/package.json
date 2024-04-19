@@ -40,6 +40,5 @@
 		"winston": "^3.13.0",
 		"zod": "^3.22.4",
 		"zod-form-data": "^2.0.2"
-	},
-	"packageManager": "yarn@4.1.1"
+	}
 }
