@@ -56,8 +56,7 @@ public class JteHtmxLauncher extends Launcher {
 
     if (!config.isEmpty()) return;
 
-    try (var input =
-        JteHtmxLauncher.class.getClassLoader().getResourceAsStream("application.json")) {
+    try (var input = getClass().getClassLoader().getResourceAsStream("application.json")) {
       if (null == input) {
         throw new NoStackTraceException("application.json not found");
       }

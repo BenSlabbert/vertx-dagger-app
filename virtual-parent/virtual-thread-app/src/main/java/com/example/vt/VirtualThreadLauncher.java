@@ -1,11 +1,6 @@
 /* Licensed under Apache-2.0 2024. */
-package com.example.client.truck;
+package com.example.vt;
 
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
-import io.opentelemetry.context.propagation.ContextPropagators;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Launcher;
 import io.vertx.core.Vertx;
@@ -14,16 +9,16 @@ import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
-import io.vertx.tracing.opentelemetry.OpenTelemetryOptions;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
-public class TruckClientLauncher extends Launcher {
+public class VirtualThreadLauncher extends Launcher {
 
-  private static final Logger log = LoggerFactory.getLogger(TruckClientLauncher.class);
+  private static final Logger log = LoggerFactory.getLogger(VirtualThreadLauncher.class);
 
   public static void main(String[] args) {
     // breaks on native image
@@ -34,7 +29,7 @@ public class TruckClientLauncher extends Launcher {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
     log.info("parse: " + parse);
 
-    new TruckClientLauncher().dispatch(args);
+    new VirtualThreadLauncher().dispatch(args);
   }
 
   @Override
@@ -47,7 +42,7 @@ public class TruckClientLauncher extends Launcher {
   @Override
   public void beforeDeployingVerticle(DeploymentOptions deploymentOptions) {
     log.info("afterStartingVertx");
-    log.info("ThreadingModel: " + deploymentOptions.getThreadingModel());
+    log.warn("threading model: " + deploymentOptions.getThreadingModel());
   }
 
   @Override
@@ -74,15 +69,14 @@ public class TruckClientLauncher extends Launcher {
   @Override
   public void beforeStartingVertx(VertxOptions options) {
     log.info("beforeStartingVertx");
-
-    // setup tracing
-    SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder().build();
-    OpenTelemetry openTelemetry =
-        OpenTelemetrySdk.builder()
-            .setTracerProvider(sdkTracerProvider)
-            .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
-            .buildAndRegisterGlobal();
-    options.setTracingOptions(new OpenTelemetryOptions(openTelemetry));
+    options.setMaxWorkerExecuteTime(2L);
+    options.setMaxWorkerExecuteTimeUnit(TimeUnit.SECONDS);
+    options.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 64);
+    options.setBlockedThreadCheckInterval(500L);
+    options.setBlockedThreadCheckIntervalUnit(TimeUnit.MILLISECONDS);
+    options.setWarningExceptionTime(500L);
+    options.setMaxWorkerExecuteTimeUnit(TimeUnit.MILLISECONDS);
+    options.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors());
 
     // use native transport
     options.setPreferNativeTransport(true);

@@ -57,8 +57,7 @@ public class IamAppLauncher extends Launcher {
 
     if (!config.isEmpty()) return;
 
-    try (var input =
-        IamAppLauncher.class.getClassLoader().getResourceAsStream("application.json")) {
+    try (var input = getClass().getClassLoader().getResourceAsStream("application.json")) {
       if (null == input) {
         throw new NoStackTraceException("application.json not found");
       }

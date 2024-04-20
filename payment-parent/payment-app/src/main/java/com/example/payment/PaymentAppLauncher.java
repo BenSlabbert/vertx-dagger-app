@@ -65,8 +65,7 @@ public class PaymentAppLauncher extends Launcher {
 
     if (!config.isEmpty()) return;
 
-    try (var input =
-        PaymentAppLauncher.class.getClassLoader().getResourceAsStream("application.json")) {
+    try (var input = getClass().getClassLoader().getResourceAsStream("application.json")) {
       if (null == input) {
         throw new NoStackTraceException("application.json not found");
       }

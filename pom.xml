@@ -21,6 +21,7 @@
     <module>warehouse-parent</module>
     <module>plugin-parent</module>
     <module>jte-htmx-parent</module>
+    <module>virtual-parent</module>
   </modules>
 
   <properties>

@@ -59,8 +59,7 @@ public class ReactiveTestLauncher extends Launcher {
 
     if (!config.isEmpty()) return;
 
-    try (var input =
-        ReactiveTestLauncher.class.getClassLoader().getResourceAsStream("application.json")) {
+    try (var input = getClass().getClassLoader().getResourceAsStream("application.json")) {
       if (null == input) {
         throw new NoStackTraceException("application.json not found");
       }
