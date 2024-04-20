@@ -11,7 +11,7 @@
 
   <properties>
     <finalName>virtual-thread</finalName>
-    <launcher.class>com.example.vt.VirtualThreadLauncher</launcher.class>
+    <launcher.class>com.example.commons.launcher.CustomLauncher</launcher.class>
     <main.verticle>com.example.vt.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 

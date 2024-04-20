@@ -15,8 +15,6 @@ public class DefaultVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(DefaultVerticle.class);
 
-  private final RequestHandler requestHandler = new RequestHandler();
-
   @Override
   public void start(Promise<Void> startPromise) {
     Router router = Router.router(vertx);

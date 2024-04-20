@@ -42,6 +42,10 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
+      <artifactId>vertx-opentelemetry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
       <artifactId>vertx-pg-client</artifactId>
     </dependency>
     <dependency>

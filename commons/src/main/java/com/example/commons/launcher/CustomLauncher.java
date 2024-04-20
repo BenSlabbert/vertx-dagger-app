@@ -1,6 +1,11 @@
 /* Licensed under Apache-2.0 2024. */
-package com.example.vt;
+package com.example.commons.launcher;
 
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Launcher;
 import io.vertx.core.Vertx;
@@ -9,6 +14,7 @@ import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
+import io.vertx.tracing.opentelemetry.OpenTelemetryOptions;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -16,9 +22,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class VirtualThreadLauncher extends Launcher {
+public class CustomLauncher extends Launcher {
 
-  private static final Logger log = LoggerFactory.getLogger(VirtualThreadLauncher.class);
+  private static final Logger log = LoggerFactory.getLogger(CustomLauncher.class);
+
+  static {
+    System.setProperty("org.jooq.no-tips", "true");
+    System.setProperty("org.jooq.no-logo", "true");
+  }
 
   public static void main(String[] args) {
     // breaks on native image
@@ -29,7 +40,7 @@ public class VirtualThreadLauncher extends Launcher {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
     log.info("parse: " + parse);
 
-    new VirtualThreadLauncher().dispatch(args);
+    new CustomLauncher().dispatch(args);
   }
 
   @Override
@@ -42,7 +53,11 @@ public class VirtualThreadLauncher extends Launcher {
   @Override
   public void beforeDeployingVerticle(DeploymentOptions deploymentOptions) {
     log.info("afterStartingVertx");
-    log.warn("threading model: " + deploymentOptions.getThreadingModel());
+    deploymentOptions.setWorkerPoolName("worker-pool");
+    deploymentOptions.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 2);
+    deploymentOptions.setMaxWorkerExecuteTime(5L);
+    deploymentOptions.setMaxWorkerExecuteTimeUnit(TimeUnit.MINUTES);
+    log.info("ThreadingModel: " + deploymentOptions.getThreadingModel());
   }
 
   @Override
@@ -69,6 +84,8 @@ public class VirtualThreadLauncher extends Launcher {
   @Override
   public void beforeStartingVertx(VertxOptions options) {
     log.info("beforeStartingVertx");
+
+    // worker options
     options.setMaxWorkerExecuteTime(2L);
     options.setMaxWorkerExecuteTimeUnit(TimeUnit.SECONDS);
     options.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 64);
@@ -77,6 +94,15 @@ public class VirtualThreadLauncher extends Launcher {
     options.setWarningExceptionTime(500L);
     options.setMaxWorkerExecuteTimeUnit(TimeUnit.MILLISECONDS);
     options.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors());
+
+    // setup tracing
+    SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder().build();
+    OpenTelemetry openTelemetry =
+        OpenTelemetrySdk.builder()
+            .setTracerProvider(sdkTracerProvider)
+            .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+            .buildAndRegisterGlobal();
+    options.setTracingOptions(new OpenTelemetryOptions(openTelemetry));
 
     // use native transport
     options.setPreferNativeTransport(true);
