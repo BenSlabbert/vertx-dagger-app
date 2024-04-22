@@ -10,9 +10,9 @@ import static org.mockito.Mockito.when;
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
 import com.example.commons.ConfigEncoder;
-import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.RedisConfig;
+import com.example.commons.docker.DockerContainers;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;
@@ -41,10 +41,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.lifecycle.Startables;
-import org.testcontainers.utility.DockerImageName;
 
 @ExtendWith(VertxExtension.class)
 public abstract class PersistenceTest {
@@ -56,29 +53,11 @@ public abstract class PersistenceTest {
   protected TestPersistenceProvider provider;
 
   private static final AtomicInteger counter = new AtomicInteger(0);
-  private static final Network network = Network.newNetwork();
 
   private MessageConsumer<JsonObject> register;
 
-  protected static final GenericContainer<?> redis =
-      new GenericContainer<>(DockerImageName.parse("redis/redis-stack-server:latest"))
-          .withExposedPorts(6379)
-          .withNetwork(network)
-          .withNetworkAliases("redis")
-          .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
-          .withLogConsumer(new TestcontainerLogConsumer("redis"));
-
-  protected static final GenericContainer<?> postgres =
-      new GenericContainer<>(DockerImageName.parse("postgres:15-alpine"))
-          .withExposedPorts(5432)
-          .withNetwork(network)
-          .withNetworkAliases("postgres")
-          .withEnv("POSTGRES_USER", "postgres")
-          .withEnv("POSTGRES_PASSWORD", "postgres")
-          .withEnv("POSTGRES_DB", "postgres")
-          // must wait twice as the init process also prints this message
-          .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*", 2))
-          .withLogConsumer(new TestcontainerLogConsumer("postgres"));
+  protected static final GenericContainer<?> redis = DockerContainers.REDIS;
+  protected static final GenericContainer<?> postgres = DockerContainers.POSTGRES;
 
   // https://testcontainers.com/guides/testcontainers-container-lifecycle/#_using_singleton_containers
   static {

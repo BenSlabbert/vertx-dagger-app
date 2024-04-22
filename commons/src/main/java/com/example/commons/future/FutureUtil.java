@@ -17,7 +17,7 @@ public final class FutureUtil {
 
   private FutureUtil() {}
 
-  private static final ExecutorService EXECUTOR =
+  public static final ExecutorService EXECUTOR =
       Executors.newThreadPerTaskExecutor(VirtualThreadFactory.THREAD_FACTORY);
 
   public static <T> Future<T> run(Supplier<T> task) {

@@ -4,10 +4,10 @@ package com.example.iam;
 import static com.example.commons.FreePortUtility.getPort;
 
 import com.example.commons.ConfigEncoder;
-import com.example.commons.TestcontainerLogConsumer;
 import com.example.commons.config.Config;
 import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.RedisConfig;
+import com.example.commons.docker.DockerContainers;
 import com.example.iam.ioc.DaggerProvider;
 import com.example.iam.ioc.Provider;
 import io.restassured.RestAssured;
@@ -21,9 +21,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
-import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.utility.DockerImageName;
 
 @ExtendWith(VertxExtension.class)
 public abstract class VerticleTestBase {
@@ -32,15 +29,7 @@ public abstract class VerticleTestBase {
 
   protected Provider provider;
 
-  private static final Network network = Network.newNetwork();
-
-  protected static final GenericContainer<?> redis =
-      new GenericContainer<>(DockerImageName.parse("redis/redis-stack-server:latest"))
-          .withExposedPorts(6379)
-          .withNetwork(network)
-          .withNetworkAliases("redis")
-          .waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1))
-          .withLogConsumer(new TestcontainerLogConsumer("redis"));
+  protected static final GenericContainer<?> redis = DockerContainers.REDIS;
 
   static {
     redis.start();

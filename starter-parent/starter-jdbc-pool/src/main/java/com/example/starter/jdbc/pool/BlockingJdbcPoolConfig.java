@@ -57,7 +57,7 @@ final class BlockingJdbcPoolConfig implements AutoCloseable {
             .formatted(postgres.host(), postgres.port(), postgres.database()));
     cfg.setThreadFactory(THREAD_FACTORY);
     cfg.setConnectionTestQuery("select 1");
-    cfg.setPoolName("payment-pool");
+    cfg.setPoolName("hikari-pool");
     cfg.setMaximumPoolSize(2);
     cfg.setAutoCommit(false);
     cfg.setConnectionTimeout(Duration.ofSeconds(5L).toMillis());
