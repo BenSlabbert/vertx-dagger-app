@@ -19,9 +19,9 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
-@Log
+@Slf4j
 @Singleton
 public class UserHandler {
 

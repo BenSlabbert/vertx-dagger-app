@@ -14,9 +14,9 @@ import io.vertx.sqlclient.Pool;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
-@Log
+@Slf4j
 @Singleton
 public class PersonService extends TransactionBoundary {
 

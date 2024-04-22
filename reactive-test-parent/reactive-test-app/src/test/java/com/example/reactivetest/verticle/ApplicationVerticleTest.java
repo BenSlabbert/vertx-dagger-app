@@ -17,14 +17,14 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.concurrent.atomic.AtomicInteger;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 
-@Log
+@Slf4j
 @ExtendWith(VertxExtension.class)
 class ApplicationVerticleTest {
 

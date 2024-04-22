@@ -14,7 +14,7 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
@@ -26,7 +26,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.lifecycle.Startables;
 
-@Log
+@Slf4j
 @ExtendWith(VertxExtension.class)
 public abstract class PersistenceTest {
 
