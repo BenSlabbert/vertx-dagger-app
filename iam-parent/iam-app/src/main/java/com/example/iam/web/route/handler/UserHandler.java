@@ -58,7 +58,7 @@ public class UserHandler {
     Boolean valid = schemaValidatorDelegator.validate(LoginRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
-      log.log(SEVERE, "invalid login request params");
+      log.error("invalid login request params");
       ResponseWriter.writeBadRequest(ctx);
       return;
     }
@@ -67,7 +67,7 @@ public class UserHandler {
         .login(new LoginRequestDto(body))
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to login user", err);
+              log.error("failed to login user", err);
               ResponseWriter.writeInternalError(ctx);
             })
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
@@ -79,7 +79,7 @@ public class UserHandler {
     Boolean valid = schemaValidatorDelegator.validate(RefreshRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
-      log.log(SEVERE, "invalid refresh request params");
+      log.error("invalid refresh request params");
       ctx.response().setStatusCode(BAD_REQUEST.code()).end();
       return;
     }
@@ -88,7 +88,7 @@ public class UserHandler {
         .refresh(new RefreshRequestDto(body))
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to refresh user", err);
+              log.error("failed to refresh user", err);
               ResponseWriter.writeInternalError(ctx);
             })
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
@@ -100,7 +100,7 @@ public class UserHandler {
     Boolean valid = schemaValidatorDelegator.validate(RegisterRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
-      log.log(SEVERE, "invalid register request params");
+      log.error("invalid register request params");
       ctx.response().setStatusCode(BAD_REQUEST.code()).end();
       return;
     }
@@ -109,7 +109,7 @@ public class UserHandler {
         .register(new RegisterRequestDto(body))
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to register user", err);
+              log.error("failed to register user", err);
               ResponseWriter.writeInternalError(ctx);
             })
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, NO_CONTENT));
@@ -121,7 +121,7 @@ public class UserHandler {
     Boolean valid = schemaValidatorDelegator.validate(UpdatePermissionsRequestDto.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
-      log.log(SEVERE, "invalid register request params");
+      log.error("invalid register request params");
       ctx.response().setStatusCode(BAD_REQUEST.code()).end();
       return;
     }
@@ -130,7 +130,7 @@ public class UserHandler {
         .updatePermissions(new UpdatePermissionsRequestDto(body))
         .onFailure(
             err -> {
-              log.log(SEVERE, "failed to update user permissions", err);
+              log.error("failed to update user permissions", err);
               ResponseWriter.writeInternalError(ctx);
             })
         .onSuccess(dto -> ResponseWriter.write(ctx, dto, NO_CONTENT));

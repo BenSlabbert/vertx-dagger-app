@@ -85,7 +85,7 @@ class JwtService implements TokenService {
     if (duration.toSeconds() <= Integer.MAX_VALUE) {
       lifetimeSeconds = (int) duration.toSeconds();
     } else {
-      log.warning("given token duration exceeds: Integer.MAX_VALUE, using default");
+      log.warn("given token duration exceeds: Integer.MAX_VALUE, using default");
     }
 
     JsonObject rootClaim = new JsonObject().put("additional-props", "new-prop");

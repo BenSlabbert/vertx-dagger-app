@@ -95,7 +95,7 @@ public abstract class PersistenceTest {
       try {
         closeable.close();
       } catch (Exception e) {
-        log.warning("failed to close " + closeable);
+        log.warn("failed to close " + closeable);
       }
     }
   }

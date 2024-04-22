@@ -39,12 +39,12 @@ public class PersonService extends TransactionBoundary {
                   .eventBus()
                   .publish(Events.PERSON_CREATED, person, new DeliveryOptions().setLocalOnly(true));
             })
-        .onFailure(err -> log.log(SEVERE, "person create Transaction failed", err));
+        .onFailure(err -> log.error("person create Transaction failed", err));
   }
 
   public Future<List<PersonProjection>> findAll() {
     return doInTransaction(personRepository::findAll)
         .onSuccess(values -> log.info("values: " + values))
-        .onFailure(err -> log.log(SEVERE, "Transaction failed", err));
+        .onFailure(err -> log.error("Transaction failed", err));
   }
 }

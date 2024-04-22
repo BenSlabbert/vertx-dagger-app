@@ -77,7 +77,7 @@ class PersonHandlerImpl implements PersonHandler, AutoCloseable {
     Boolean valid = schemaValidatorDelegator.validate(CreatePersonRequest.class, body);
 
     if (Boolean.FALSE.equals(valid)) {
-      log.log(SEVERE, "invalid create item request params");
+      log.error("invalid create item request params");
       ctx.response().setStatusCode(BAD_REQUEST.code()).end();
       return;
     }
@@ -165,7 +165,7 @@ class PersonHandlerImpl implements PersonHandler, AutoCloseable {
               response.write(buffer);
               response.write("\n");
             })
-        .exceptionHandler(err -> log.log(SEVERE, "event consumer failed", err));
+        .exceptionHandler(err -> log.error("event consumer failed", err));
   }
 
   @Override
