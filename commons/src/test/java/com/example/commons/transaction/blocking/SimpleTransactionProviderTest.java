@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.fail;
 import com.example.commons.config.Config;
 import com.example.commons.docker.DockerContainers;
 import com.example.commons.future.FutureUtil;
+import com.example.commons.thread.VirtualThreadFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.vertx.core.Future;
@@ -18,6 +19,7 @@ import java.sql.Statement;
 import java.time.Clock;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -121,7 +123,8 @@ class SimpleTransactionProviderTest {
             .set((TransactionProvider) transactionProvider)
             .set((ConnectionProvider) transactionProvider)
             .set(Clock.systemUTC())
-            .set(FutureUtil.EXECUTOR)
+            // must have its own
+            .set(Executors.newThreadPerTaskExecutor(VirtualThreadFactory.THREAD_FACTORY))
             .set(new Settings().withFetchSize(5));
 
     return DSL.using(configuration);
