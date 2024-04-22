@@ -1,8 +1,5 @@
 .DS_Store
 node_modules
-.yarn/
-.yarnrc.yml
-!.yarn/plugins
 /build
 /.svelte-kit
 /package
@@ -11,8 +8,17 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-.pnp.*
 /test-results/
 /playwright-report/
 /playwright/.cache/
-iam-spa_latest.tar.gz
+*.tar.gz
+
+# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+# If you're not using Zero-Installs:
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
