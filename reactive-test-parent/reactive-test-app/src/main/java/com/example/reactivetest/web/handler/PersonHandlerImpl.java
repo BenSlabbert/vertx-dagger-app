@@ -8,7 +8,6 @@ import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
-import static java.util.logging.Level.SEVERE;
 
 import com.example.codegen.annotation.url.RestHandler;
 import com.example.reactivetest.config.Events;

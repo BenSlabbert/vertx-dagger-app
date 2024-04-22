@@ -1,8 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.service;
 
-import static java.util.logging.Level.SEVERE;
-
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.reactivetest.config.Events;
 import com.example.reactivetest.repository.sql.PersonRepository;

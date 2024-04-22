@@ -4,7 +4,6 @@ package com.example.iam.web.route.handler;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
-import static java.util.logging.Level.SEVERE;
 
 import com.example.codegen.annotation.url.RestHandler;
 import com.example.commons.web.ResponseWriter;

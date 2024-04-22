@@ -1,8 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.repository;
 
-import static java.util.logging.Level.SEVERE;
-
 import com.example.commons.redis.RedisConstants;
 import com.example.iam.entity.ACL;
 import com.example.iam.entity.User;
