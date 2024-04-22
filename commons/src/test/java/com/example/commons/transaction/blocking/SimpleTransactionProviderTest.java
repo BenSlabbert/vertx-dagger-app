@@ -7,8 +7,6 @@ import static org.assertj.core.api.Assertions.fail;
 
 import com.example.commons.config.Config;
 import com.example.commons.docker.DockerContainers;
-import com.example.commons.future.FutureUtil;
-import com.example.commons.thread.VirtualThreadFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.vertx.core.Future;
@@ -19,6 +17,8 @@ import java.sql.Statement;
 import java.time.Clock;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.Semaphore;
@@ -38,12 +38,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
 
 @ExtendWith(VertxExtension.class)
 class SimpleTransactionProviderTest {
 
-  private static final Network network = Network.newNetwork();
+  private static final ExecutorService EXECUTOR_SERVICE =
+      Executors.newThreadPerTaskExecutor(THREAD_FACTORY);
+
+  // do not use FuturUtil as the executor is shutdown during tests
+  private static Future<Void> run(Runnable runnable) {
+    CompletableFuture<Void> completableFuture =
+        CompletableFuture.runAsync(runnable, EXECUTOR_SERVICE);
+    return Future.fromCompletionStage(completableFuture);
+  }
 
   protected static final GenericContainer<?> postgres = DockerContainers.POSTGRES;
 
@@ -124,7 +131,7 @@ class SimpleTransactionProviderTest {
             .set((ConnectionProvider) transactionProvider)
             .set(Clock.systemUTC())
             // must have its own
-            .set(Executors.newThreadPerTaskExecutor(VirtualThreadFactory.THREAD_FACTORY))
+            .set(EXECUTOR_SERVICE)
             .set(new Settings().withFetchSize(5));
 
     return DSL.using(configuration);
@@ -181,8 +188,8 @@ class SimpleTransactionProviderTest {
     Checkpoint checkpoint = testContext.checkpoint(3);
     Semaphore semaphore = new Semaphore(1, true);
 
-    Future<Void> f1 = FutureUtil.run(() -> run(1, dslContext, semaphore, checkpoint));
-    Future<Void> f2 = FutureUtil.run(() -> run(2, dslContext, semaphore, checkpoint));
+    Future<Void> f1 = run(() -> run(1, dslContext, semaphore, checkpoint));
+    Future<Void> f2 = run(() -> run(2, dslContext, semaphore, checkpoint));
 
     Future.all(f1, f2)
         .onComplete(
@@ -260,7 +267,7 @@ class SimpleTransactionProviderTest {
   }
 
   private static Future<Void> getRun(DSLContext dslContext) {
-    return FutureUtil.run(
+    return run(
         () ->
             dslContext.transaction(
                 tx -> {
