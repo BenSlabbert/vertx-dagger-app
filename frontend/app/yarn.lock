@@ -1597,7 +1597,7 @@ __metadata:
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^2.37.0"
+    eslint-plugin-svelte: "npm:^2.38.0"
     prettier: "npm:^3.2.5"
     prettier-plugin-svelte: "npm:^3.2.3"
     svelte: "npm:^4.2.15"
@@ -2394,9 +2394,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.37.0":
-  version: 2.37.0
-  resolution: "eslint-plugin-svelte@npm:2.37.0"
+"eslint-plugin-svelte@npm:^2.38.0":
+  version: 2.38.0
+  resolution: "eslint-plugin-svelte@npm:2.38.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -2409,14 +2409,14 @@ __metadata:
     postcss-safe-parser: "npm:^6.0.0"
     postcss-selector-parser: "npm:^6.0.16"
     semver: "npm:^7.6.0"
-    svelte-eslint-parser: "npm:>=0.34.0 <1.0.0"
+    svelte-eslint-parser: "npm:>=0.35.0 <1.0.0"
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0-0 || ^9.0.0-0
-    svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.95
+    svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.112
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/f09302ea5299b271072edc5799680a4c48eb21e58bac93d8e4c3c4d513a97ed093265adac0f527cfd83d1192f7ff493a3e26b78b4abac2a4784a83a14477fc6d
+  checksum: 10/a6c33aae48ac8d324887cadde11a3b188fcb5ea5c24710d0efa8cf5414be5e9d4f4d29e87a02f8b48917c22af03cc0d57c6e6158895e986a172c5902c2da21c8
   languageName: node
   linkType: hard
 
@@ -4812,7 +4812,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-eslint-parser@npm:>=0.34.0 <1.0.0, svelte-eslint-parser@npm:^0.34.1":
+"svelte-eslint-parser@npm:>=0.35.0 <1.0.0":
+  version: 0.35.0
+  resolution: "svelte-eslint-parser@npm:0.35.0"
+  dependencies:
+    eslint-scope: "npm:^7.2.2"
+    eslint-visitor-keys: "npm:^3.4.3"
+    espree: "npm:^9.6.1"
+    postcss: "npm:^8.4.38"
+    postcss-scss: "npm:^4.0.9"
+  peerDependencies:
+    svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.112
+  peerDependenciesMeta:
+    svelte:
+      optional: true
+  checksum: 10/8afde02418abaae5072ec9f95f197dced0e20aa5f1c6526559a73737974b5a509fe397a666cf93bedced42899e348783bb0462ec0204f2e8fc4978bca4b132a2
+  languageName: node
+  linkType: hard
+
+"svelte-eslint-parser@npm:^0.34.1":
   version: 0.34.1
   resolution: "svelte-eslint-parser@npm:0.34.1"
   dependencies:
