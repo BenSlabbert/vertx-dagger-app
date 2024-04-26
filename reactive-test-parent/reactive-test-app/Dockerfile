@@ -1,6 +1,6 @@
 ARG JAVA_MINIMAL=/opt/jre
 
-FROM azul/zulu-openjdk-alpine:21-latest AS CUSTOM_JRE
+FROM azul/zulu-openjdk-alpine:22-latest AS CUSTOM_JRE
 
 RUN apk --no-cache add curl ca-certificates binutils
 

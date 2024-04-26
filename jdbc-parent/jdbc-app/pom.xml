@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>com.example.parent</groupId>
-    <artifactId>iam-parent</artifactId>
+    <artifactId>jdbc-parent</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <groupId>com.example.iam</groupId>
-  <artifactId>iam-app</artifactId>
+  <groupId>com.example.jdbc.app</groupId>
+  <artifactId>jdbc-app</artifactId>
 
   <properties>
-    <finalName>iam</finalName>
-    <launcher.class>com.example.iam.IamAppLauncher</launcher.class>
-    <main.verticle>com.example.iam.verticle.DefaultVerticle</main.verticle>
+    <finalName>jdbc-app</finalName>
+    <launcher.class>com.example.commons.launcher.CustomLauncher</launcher.class>
+    <main.verticle>com.example.jdbc.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
     <!--or native-->
@@ -23,9 +22,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.example.code-gen</groupId>
-      <artifactId>code-gen-annotation</artifactId>
-      <version>${revision}</version>
+      <groupId>com.ongres.scram</groupId>
+      <artifactId>client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.ongres.scram</groupId>
+      <artifactId>common</artifactId>
     </dependency>
     <dependency>
       <groupId>com.example.commons</groupId>
@@ -46,9 +48,19 @@
       <artifactId>hazelcast</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.iam.auth.api</groupId>
-      <artifactId>iam-auth-api</artifactId>
+      <groupId>com.example.jdbc.entity</groupId>
+      <artifactId>jdbc-entity</artifactId>
       <version>${revision}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.example.jdbc.generator</groupId>
+          <artifactId>jdbc-generator</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jooq</groupId>
+      <artifactId>jooq</artifactId>
     </dependency>
     <dependency>
       <groupId>io.netty</groupId>
@@ -56,18 +68,18 @@
       <classifier>linux-x86_64</classifier>
     </dependency>
     <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.example.starter</groupId>
-      <artifactId>starter-redis</artifactId>
+      <artifactId>starter-jdbc-pool</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-auth-jwt</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-codegen</artifactId>
-      <classifier>processor</classifier>
+      <artifactId>vertx-auth-common</artifactId>
+      <version>${vertx.version}</version>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -83,19 +95,7 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-json-schema</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
       <artifactId>vertx-opentelemetry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-redis-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-service-proxy</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -104,17 +104,6 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web-validation</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.example.code-gen</groupId>
-      <artifactId>code-gen-generator</artifactId>
-      <version>${revision}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -146,6 +135,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.example.jdbc.migration</groupId>
+      <artifactId>jdbc-migration</artifactId>
+      <version>${revision}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
@@ -169,17 +164,6 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-codec</groupId>
-          <artifactId>commons-codec</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
@@ -209,13 +193,12 @@
           <compilerArgs>
             <arg>-parameters</arg>
             <arg>-Adagger.formatGeneratedSource=enabled</arg>
-            <arg>-Adagger.formatGeneratedSource=enabled</arg>
             <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
             <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
             <arg>-Adagger.fastInit=enabled</arg>
             <!--required by ErrorProne-->
-            <!--            <arg>-XDcompilePolicy=simple</arg>-->
-            <!--            <arg>-Xplugin:ErrorProne</arg>-->
+            <arg>-XDcompilePolicy=simple</arg>
+            <arg>-Xplugin:ErrorProne</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
@@ -229,22 +212,10 @@
               <version>${lombok.version}</version>
             </path>
             <path>
-              <groupId>io.vertx</groupId>
-              <artifactId>vertx-codegen</artifactId>
-              <version>${vertx.version}</version>
-              <classifier>processor</classifier>
+              <groupId>com.google.errorprone</groupId>
+              <artifactId>error_prone_core</artifactId>
+              <version>${errorprone.version}</version>
             </path>
-            <path>
-              <groupId>io.vertx</groupId>
-              <artifactId>vertx-service-proxy</artifactId>
-              <version>${vertx.version}</version>
-            </path>
-            <!--            disable while vert.x service code generator has a bug-->
-            <!--            <path>-->
-            <!--              <groupId>com.google.errorprone</groupId>-->
-            <!--              <artifactId>error_prone_core</artifactId>-->
-            <!--              <version>${errorprone.version}</version>-->
-            <!--            </path>-->
             <path>
               <groupId>com.google.dagger</groupId>
               <artifactId>dagger-compiler</artifactId>
