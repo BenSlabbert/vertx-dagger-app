@@ -51,7 +51,7 @@
     <commons-codec.version>1.16.1</commons-codec.version>
     <testcontainers.version>1.19.7</testcontainers.version>
     <dagger.version>2.51.1</dagger.version>
-    <errorprone.version>2.26.1</errorprone.version>
+    <errorprone.version>2.27.0</errorprone.version>
     <commons-lang3.version>3.14.0</commons-lang3.version>
     <flyway.version>9.22.3</flyway.version>
     <postgresql.version>42.7.3</postgresql.version>
