@@ -22,6 +22,7 @@
     <module>plugin-parent</module>
     <module>jte-htmx-parent</module>
     <module>virtual-parent</module>
+    <module>jdbc-parent</module>
   </modules>
 
   <properties>

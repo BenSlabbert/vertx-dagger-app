@@ -236,6 +236,7 @@
             </goals>
             <phase>package</phase>
             <configuration>
+              <skip>${copyJarDeps.skip}</skip>
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
             </configuration>
           </execution>

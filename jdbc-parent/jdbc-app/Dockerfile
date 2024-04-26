@@ -6,7 +6,7 @@ RUN apk --no-cache add curl ca-certificates binutils
 
 ARG JAVA_MINIMAL
 
-COPY target/warehouse.jar app.jar
+COPY target/jdbc-app.jar app.jar
 
 # https://slinkydeveloper.com/Vert-x-Container-images-with-jlink/
 RUN MODS=$(jdeps -q --print-module-deps --ignore-missing-deps app.jar) && \
@@ -34,7 +34,7 @@ COPY --from=CUSTOM_JRE "$JAVA_MINIMAL" "$JAVA_MINIMAL"
 
 WORKDIR /app
 
-COPY target/warehouse.jar app.jar
+COPY target/jdbc-app.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar", "-XX:+UseZGC", "-XX:+ZGenerational", "-Xlog:gc*", "-Xmx32M", "-Xms32M", "-Djava.net.preferIPv4Stack=true"]
 
