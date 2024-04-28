@@ -2,7 +2,9 @@
 package com.example.jdbc.ioc;
 
 import com.example.commons.config.Config;
+import com.example.commons.jooq.PreparedStatementDslContextModule;
 import com.example.commons.jooq.StaticSqlDslContextModule;
+import com.example.jdbc.service.JdbcService;
 import com.example.jdbc.service.ServiceModule;
 import com.example.jdbc.verticle.JdbcVerticle;
 import com.example.starter.jdbc.pool.JdbcPoolModule;
@@ -13,6 +15,7 @@ import dagger.Provides;
 import io.vertx.core.Vertx;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
 import org.jooq.DSLContext;
@@ -21,6 +24,7 @@ import org.jooq.DSLContext;
 @Component(
     modules = {
       ServiceModule.class,
+      PreparedStatementDslContextModule.class,
       StaticSqlDslContextModule.class,
       JdbcPoolModule.class,
       Provider.EagerModule.class
@@ -31,6 +35,8 @@ public interface Provider {
 
   JdbcVerticle jdbcVerticle();
 
+  JdbcService jdbcService();
+
   @Component.Builder
   interface Builder {
 
@@ -39,6 +45,9 @@ public interface Provider {
 
     @BindsInstance
     Builder config(Config config);
+
+    @BindsInstance
+    Builder postgresConfig(Config.PostgresConfig postgresConfig);
 
     Provider build();
   }
@@ -50,7 +59,10 @@ public interface Provider {
     EagerModule() {}
 
     @Provides
-    @Nullable static Void provideEager(DataSource dataSource, DSLContext dslContext) {
+    @Nullable static Void provideEager(
+        DataSource dataSource,
+        @Named("prepared") DSLContext preparedDslContext,
+        @Named("static") DSLContext staticDslContext) {
       // this eagerly builds any parameters specified and returns nothing
       return null;
     }

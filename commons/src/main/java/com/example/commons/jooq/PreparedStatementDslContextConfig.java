@@ -12,15 +12,15 @@ import org.jooq.conf.StatementType;
 import org.jooq.impl.DSL;
 
 @Module
-final class StaticSqlDslContextConfig {
+final class PreparedStatementDslContextConfig {
 
-  private StaticSqlDslContextConfig() {}
+  private PreparedStatementDslContextConfig() {}
 
   @Provides
   @Singleton
-  @Named("static")
+  @Named("prepared")
   static DSLContext dslContext() {
-    Settings settings = new Settings().withStatementType(StatementType.STATIC_STATEMENT);
+    Settings settings = new Settings().withStatementType(StatementType.PREPARED_STATEMENT);
     return DSL.using(SQLDialect.POSTGRES, settings);
   }
 }

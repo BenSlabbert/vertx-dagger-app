@@ -5,8 +5,8 @@ import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import java.sql.Connection;
 import javax.sql.DataSource;
+import org.apache.commons.dbutils.DbUtils;
 import org.jooq.ConnectionProvider;
-import org.jooq.Transaction;
 import org.jooq.TransactionContext;
 import org.jooq.TransactionProvider;
 import org.jooq.exception.DataAccessException;
@@ -40,7 +40,6 @@ public class SimpleTransactionProvider implements TransactionProvider, Connectio
     }
 
     txActiveThreadLocal.set(true);
-    transactionContext.transaction(new Transaction() {});
   }
 
   @Override
@@ -112,7 +111,7 @@ public class SimpleTransactionProvider implements TransactionProvider, Connectio
     }
 
     try {
-      connection.close();
+      DbUtils.close(connection);
     } catch (Exception e) {
       throw new DataAccessException("exception while releasing connection", e);
     } finally {

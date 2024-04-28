@@ -67,6 +67,8 @@ final class BlockingJdbcPoolConfig implements AutoCloseable {
     executor.setRemoveOnCancelPolicy(true);
     cfg.setScheduledExecutor(executor);
 
+    cfg.addDataSourceProperty("defaultRowFetchSize", 10);
+    cfg.addDataSourceProperty("fetchSize", 10);
     return cfg;
   }
 
