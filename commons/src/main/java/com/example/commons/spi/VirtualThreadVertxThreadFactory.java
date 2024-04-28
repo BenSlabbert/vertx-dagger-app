@@ -32,7 +32,7 @@ public class VirtualThreadVertxThreadFactory implements VertxThreadFactory {
       Runnable target, String name, boolean worker, long maxExecTime, TimeUnit maxExecTimeUnit) {
 
     if (worker) {
-      return new MyVertxThread(target, name + "_virt", worker, maxExecTime, maxExecTimeUnit);
+      return new MyVertxThread(target, name + "-virt", worker, maxExecTime, maxExecTimeUnit);
     }
 
     // use normal implementation

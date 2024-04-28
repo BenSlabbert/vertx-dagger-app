@@ -69,6 +69,7 @@
     <hazelcast.version>5.4.0</hazelcast.version>
     <guava.version>33.1.0-jre</guava.version>
     <snakeyaml.version>2.2</snakeyaml.version>
+    <commons-dbutils.version>1.8.1</commons-dbutils.version>
 
     <!--plugins-->
     <maven.version>3.9.6</maven.version>
@@ -113,6 +114,11 @@
         <groupId>com.ongres.scram</groupId>
         <artifactId>common</artifactId>
         <version>${scram.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-dbutils</groupId>
+        <artifactId>commons-dbutils</artifactId>
+        <version>${commons-dbutils.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
