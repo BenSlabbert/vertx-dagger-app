@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import org.jooq.AttachableQueryPart;
 import org.jooq.DSLContext;
@@ -22,7 +23,7 @@ public class DeliveryProjectionFactory {
   private final DSLContext dsl;
 
   @Inject
-  DeliveryProjectionFactory(DSLContext dsl) {
+  DeliveryProjectionFactory(@Named("static") DSLContext dsl) {
     this.dsl = dsl;
   }
 

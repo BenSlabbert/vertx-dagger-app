@@ -12,16 +12,20 @@ import io.vertx.sqlclient.RowSet;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 import org.jooq.AttachableQueryPart;
 import org.jooq.DSLContext;
 
 @Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ItemProjectionFactory {
 
   private final DSLContext dsl;
+
+  @Inject
+  ItemProjectionFactory(@Named("static") DSLContext dsl) {
+    this.dsl = dsl;
+  }
 
   public InsertItemProjection createInsertItemProjection(String name, long priceInCents) {
     return new InsertItemProjection(name, priceInCents);

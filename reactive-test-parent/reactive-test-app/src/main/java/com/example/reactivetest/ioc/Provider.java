@@ -18,6 +18,7 @@ import io.vertx.core.Vertx;
 import io.vertx.sqlclient.Pool;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import org.jooq.DSLContext;
 
@@ -62,7 +63,7 @@ public interface Provider {
     EagerModule() {}
 
     @Provides
-    @Nullable static Void provideEager(Pool pool, DSLContext dslContext) {
+    @Nullable static Void provideEager(Pool pool, @Named("static") DSLContext dslContext) {
       // this eagerly builds any parameters specified and returns nothing
       return null;
     }
