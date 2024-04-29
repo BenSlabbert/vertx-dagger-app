@@ -4,4 +4,4 @@ package com.example.commons.jooq;
 import dagger.Module;
 
 @Module(includes = {PreparedStatementDslContextConfig.class})
-public class PreparedStatementDslContextModule {}
+public interface PreparedStatementDslContextModule {}

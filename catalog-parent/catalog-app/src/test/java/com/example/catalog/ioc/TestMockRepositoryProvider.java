@@ -14,6 +14,7 @@ import dagger.Component;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.sqlclient.Pool;
 import java.util.Set;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import org.jooq.DSLContext;
 
@@ -50,7 +51,7 @@ public interface TestMockRepositoryProvider extends Provider {
     Builder closeables(Set<AutoCloseable> closeables);
 
     @BindsInstance
-    Builder dslContext(DSLContext dslContext);
+    Builder dslContext(@Named("static") DSLContext dslContext);
 
     TestMockRepositoryProvider build();
   }

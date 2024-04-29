@@ -11,6 +11,7 @@ import io.vertx.sqlclient.RowSet;
 import java.util.List;
 import java.util.stream.StreamSupport;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import org.jooq.AttachableQueryPart;
 import org.jooq.DSLContext;
@@ -21,7 +22,7 @@ public class UserProjectionFactory {
   private final DSLContext dsl;
 
   @Inject
-  public UserProjectionFactory(DSLContext dsl) {
+  public UserProjectionFactory(@Named("static") DSLContext dsl) {
     this.dsl = dsl;
   }
 
