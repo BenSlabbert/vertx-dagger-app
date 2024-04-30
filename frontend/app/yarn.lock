@@ -1629,7 +1629,7 @@ __metadata:
     vite: "npm:^5.2.10"
     vitest: "npm:^1.5.2"
     winston: "npm:^3.13.0"
-    zod: "npm:^3.23.4"
+    zod: "npm:^3.23.5"
     zod-form-data: "npm:^2.0.2"
   languageName: unknown
   linkType: soft
@@ -5481,9 +5481,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.23.4":
-  version: 3.23.4
-  resolution: "zod@npm:3.23.4"
-  checksum: 10/29117ce59f16af155d9a3aab024d18e858e55b4b51c1f848772516ec6f019e617a0cdaf4c6e20f15154360a9f4c160056aba34502ec68072c8f0af31dfd653d6
+"zod@npm:^3.23.5":
+  version: 3.23.5
+  resolution: "zod@npm:3.23.5"
+  checksum: 10/e9169bc3d477f48cfcf193a755926dc2cbed20b59b51256a772de02ad6f7b016b121087209fcd2e5bbd62ad625e8c0583dff16c24cfee0bfeaa95f23155a38af
   languageName: node
   linkType: hard
