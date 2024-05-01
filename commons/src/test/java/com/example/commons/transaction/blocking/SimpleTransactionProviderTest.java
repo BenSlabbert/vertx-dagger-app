@@ -68,7 +68,7 @@ class SimpleTransactionProviderTest {
     }
   }
 
-  private SimpleTransactionProvider transactionProvider;
+  private SimpleTransactionManager transactionProvider;
   private HikariDataSource dataSource;
   private HikariConfig hikariConfig;
   private DSLContext dslContext;
@@ -87,7 +87,7 @@ class SimpleTransactionProviderTest {
 
     hikariConfig = getHikariConfig(psqlCfg);
     dataSource = new HikariDataSource(hikariConfig);
-    transactionProvider = new SimpleTransactionProvider(dataSource);
+    transactionProvider = new SimpleTransactionManager(dataSource);
     dslContext = getDslContext();
 
     try (var conn = dataSource.getConnection()) {

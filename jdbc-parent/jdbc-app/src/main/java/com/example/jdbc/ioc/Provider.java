@@ -4,6 +4,7 @@ package com.example.jdbc.ioc;
 import com.example.commons.config.Config;
 import com.example.commons.jooq.PreparedStatementDslContextModule;
 import com.example.commons.jooq.StaticSqlDslContextModule;
+import com.example.commons.transaction.blocking.TransactionManagerModule;
 import com.example.jdbc.service.JdbcService;
 import com.example.jdbc.service.ServiceModule;
 import com.example.jdbc.verticle.JdbcVerticle;
@@ -24,6 +25,7 @@ import org.jooq.DSLContext;
 @Component(
     modules = {
       ServiceModule.class,
+      TransactionManagerModule.class,
       PreparedStatementDslContextModule.class,
       StaticSqlDslContextModule.class,
       JdbcPoolModule.class,

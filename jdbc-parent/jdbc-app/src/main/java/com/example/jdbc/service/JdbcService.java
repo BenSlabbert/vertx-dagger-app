@@ -4,7 +4,7 @@ package com.example.jdbc.service;
 import static com.example.jdbc.generator.entity.generated.jooq.Sequences.PERSON_ID_SEQ;
 import static com.example.jdbc.generator.entity.generated.jooq.tables.Person.PERSON;
 
-import com.example.commons.transaction.blocking.SimpleTransactionProvider;
+import com.example.commons.transaction.blocking.SimpleTransactionManager;
 import com.example.jdbc.generator.entity.generated.jooq.tables.records.PersonRecord;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
@@ -13,11 +13,10 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.LongConsumer;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.sql.DataSource;
-import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.StatementConfiguration;
 import org.jooq.DSLContext;
@@ -45,18 +44,34 @@ public class JdbcService {
 
   private static final Logger log = LoggerFactory.getLogger(JdbcService.class);
 
-  private final SimpleTransactionProvider transactionProvider;
+  private final SimpleTransactionManager transactionProvider;
   private final DSLContext preparedDslContext;
   private final DSLContext staticDslContext;
 
   @Inject
   JdbcService(
-      DataSource dataSource,
+      SimpleTransactionManager transactionProvider,
       @Named("prepared") DSLContext preparedDslContext,
       @Named("static") DSLContext staticDslContext) {
-    this.transactionProvider = new SimpleTransactionProvider(dataSource);
+    this.transactionProvider = transactionProvider;
     this.preparedDslContext = preparedDslContext;
     this.staticDslContext = staticDslContext;
+  }
+
+  public void forEach(LongConsumer consumer) {
+    useConnection(
+        conn -> {
+          new QueryRunner()
+              .query(
+                  conn,
+                  staticDslContext.select(PERSON.ID).from(PERSON).getSQL(ParamType.INLINED),
+                  rs -> {
+                    while (rs.next()) {
+                      consumer.accept(rs.getLong(1));
+                    }
+                    return null;
+                  });
+        });
   }
 
   public void runInsert(int numberOfItems) {
@@ -136,7 +151,6 @@ public class JdbcService {
       throw new QueryException(e);
     } finally {
       transactionProvider.release(conn);
-      DbUtils.closeQuietly(conn);
     }
   }
 
@@ -152,7 +166,6 @@ public class JdbcService {
       throw new QueryException(e);
     } finally {
       transactionProvider.release(conn);
-      DbUtils.closeQuietly(conn);
     }
   }
 }

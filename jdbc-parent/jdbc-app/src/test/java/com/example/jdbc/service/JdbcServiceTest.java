@@ -78,5 +78,6 @@ class JdbcServiceTest {
 
     jdbcService.runInsert(100);
     jdbcService.runSelect();
+    jdbcService.forEach(System.err::println);
   }
 }
