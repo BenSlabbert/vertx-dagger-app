@@ -18,8 +18,5 @@ jobs:
         java-version: "21"
         java-package: "jdk"
         cache: "maven"
-    - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m8/maven-mvnd-1.0-m8-m40-linux-amd64.zip\
-        \ -o maven-mvnd-1.0-m8-m40-linux-amd64.zip && unzip maven-mvnd-1.0-m8-m40-linux-amd64.zip\
-        \ && mv maven-mvnd-1.0-m8-m40-linux-amd64 /tmp/mvnd"
-    - run: "make M='/tmp/mvnd/bin/mvnd -DskipTests=true --fail-at-end' package"
-    - run: "make M='/tmp/mvnd/bin/mvnd' native"
+    - run: "make package"
+    - run: "make native"
