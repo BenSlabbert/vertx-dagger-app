@@ -67,7 +67,7 @@
     <google-auto-value.version>1.10.4</google-auto-value.version>
     <jte.version>3.1.10</jte.version>
     <hazelcast.version>5.4.0</hazelcast.version>
-    <guava.version>33.1.0-jre</guava.version>
+    <guava.version>33.2.0-jre</guava.version>
     <snakeyaml.version>2.2</snakeyaml.version>
     <commons-dbutils.version>1.8.1</commons-dbutils.version>
 
