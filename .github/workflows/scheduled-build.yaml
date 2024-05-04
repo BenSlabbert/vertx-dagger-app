@@ -6,6 +6,8 @@ name: "Scheduled Java + Maven + Docker"
 jobs:
   build-backend-native-docker:
     runs-on: "ubuntu-latest"
+    env:
+      GH_TOKEN: "${{ secrets.GH_TOKEN }}"
     steps:
     - name: "Check if schedule"
       if: "${{ github.event_name != 'schedule' }}"
