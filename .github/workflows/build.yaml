@@ -23,7 +23,7 @@ jobs:
         cache: "maven"
         github-token: "${{ secrets.GH_TOKEN }}"
     - run: "mvn -s settings.xml install -e -DskipTests=true -Ddocker.skip=true -Pnative\
-        \ -DtestImageTag=native --fail-at-end"
+        \ -DtestImageTag=native"
     - run: "echo $UPX_VERSION"
     - run: "curl -L https://github.com/upx/upx/releases/download/v$UPX_VERSION/upx-$UPX_VERSION-amd64_linux.tar.xz\
         \ -o upx-$UPX_VERSION-amd64_linux.tar.xz"
@@ -73,8 +73,7 @@ jobs:
         \ -o maven-mvnd-1.0-m8-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m8-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m8-m39-linux-amd64 /tmp/mvnd"
     - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml' fmtCheck"
-    - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml --fail-at-end'"
-    - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml -P test-plugin -pl plugin-parent/plugin-consumer'"
+    - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml'"
   build-frontend:
     runs-on: "ubuntu-latest"
     steps:

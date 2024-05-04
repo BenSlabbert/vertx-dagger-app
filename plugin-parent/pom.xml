@@ -12,7 +12,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>openapi-handler-generator</module>
+    <module>openapi-handler-generator-maven-plugin</module>
     <module>plugin-consumer</module>
   </modules>
 
