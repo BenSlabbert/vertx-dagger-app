@@ -18,5 +18,5 @@ jobs:
         java-version: "21"
         java-package: "jdk"
         cache: "maven"
-    - run: "make package"
-    - run: "make native"
+    - run: "make 'M=mvn -s settings.xml' package"
+    - run: "make 'M=mvn -s settings.xml' native"
