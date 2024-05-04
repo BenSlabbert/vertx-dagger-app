@@ -12,6 +12,7 @@ jobs:
     runs-on: "ubuntu-latest"
     env:
       UPX_VERSION: "4.2.2"
+      GH_TOKEN: "${{ secrets.GH_TOKEN }}"
     steps:
     - uses: "actions/checkout@v4"
     - uses: "graalvm/setup-graalvm@v1"
