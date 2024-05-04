@@ -65,9 +65,9 @@ jobs:
         java-version: "21"
         java-package: "jdk"
         cache: "maven"
-    - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m8/maven-mvnd-1.0-m8-m40-linux-amd64.zip\
-        \ -o maven-mvnd-1.0-m8-m40-linux-amd64.zip && unzip maven-mvnd-1.0-m8-m40-linux-amd64.zip\
-        \ && mv maven-mvnd-1.0-m8-m40-linux-amd64 /tmp/mvnd"
+    - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m8/maven-mvnd-1.0-m8-m39-linux-amd64.zip\
+        \ -o maven-mvnd-1.0-m8-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m8-m39-linux-amd64.zip\
+        \ && mv maven-mvnd-1.0-m8-m39-linux-amd64 /tmp/mvnd"
     - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml' fmtCheck"
     - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml --fail-at-end'"
     - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml -P test-plugin -pl plugin-parent/plugin-consumer'"
