@@ -20,8 +20,8 @@ jobs:
         distribution: "graalvm-community"
         native-image-musl: "true"
         cache: "maven"
-    - run: "mvn install -s settings.xml -e -DskipTests=true -Ddocker.skip=true -Pnative -DtestImageTag=native\
-        \ --fail-at-end"
+    - run: "mvn install -s settings.xml -e -DskipTests=true -Ddocker.skip=true -Pnative\
+        \ -DtestImageTag=native --fail-at-end"
     - run: "echo $UPX_VERSION"
     - run: "curl -L https://github.com/upx/upx/releases/download/v$UPX_VERSION/upx-$UPX_VERSION-amd64_linux.tar.xz\
         \ -o upx-$UPX_VERSION-amd64_linux.tar.xz"
