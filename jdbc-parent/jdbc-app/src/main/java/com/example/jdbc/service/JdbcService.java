@@ -86,7 +86,6 @@ public class JdbcService {
   }
 
   public Stream<Long> stream() {
-
     try {
       Connection connection = transactionProvider.acquire();
       PreparedStatement statement =
@@ -144,7 +143,7 @@ public class JdbcService {
         });
   }
 
-  public void runInsert(int numberOfItems) {
+  public void runBatchInsert(int numberOfItems) {
     var ids =
         useConnection(
             conn -> {

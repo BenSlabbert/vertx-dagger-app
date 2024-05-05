@@ -76,7 +76,7 @@ class JdbcServiceTest {
     JdbcService jdbcService = provider.jdbcService();
     assertThat(jdbcService).isNotNull();
 
-    jdbcService.runInsert(4);
+    jdbcService.runBatchInsert(4);
     jdbcService.runSelect();
     jdbcService.forEach(System.err::println);
 
