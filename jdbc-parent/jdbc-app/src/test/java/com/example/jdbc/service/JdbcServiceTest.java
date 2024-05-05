@@ -76,8 +76,19 @@ class JdbcServiceTest {
     JdbcService jdbcService = provider.jdbcService();
     assertThat(jdbcService).isNotNull();
 
-    jdbcService.runInsert(100);
+    jdbcService.runInsert(4);
     jdbcService.runSelect();
     jdbcService.forEach(System.err::println);
+
+    try (var s = jdbcService.stream()) {
+      assertThat(s.toList())
+          .satisfiesExactly(
+              id -> assertThat(id).isEqualTo(1L),
+              id -> assertThat(id).isEqualTo(2L),
+              id -> assertThat(id).isEqualTo(3L),
+              id -> assertThat(id).isEqualTo(4L));
+    }
+
+    jdbcService.commit();
   }
 }
