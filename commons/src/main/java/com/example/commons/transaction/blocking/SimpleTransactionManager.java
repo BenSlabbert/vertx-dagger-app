@@ -52,7 +52,7 @@ public class SimpleTransactionManager implements TransactionProvider, Connection
         throw new DataAccessException("no connection found");
       }
 
-      connection.commit();
+      DbUtils.commitAndClose(connection);
     } catch (Exception e) {
       throw new DataAccessException("exception while committing transaction", e);
     } finally {

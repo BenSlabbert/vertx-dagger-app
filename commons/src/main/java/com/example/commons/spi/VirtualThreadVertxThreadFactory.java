@@ -80,12 +80,6 @@ public class VirtualThreadVertxThreadFactory implements VertxThreadFactory {
 
     // delegate thread methods to virtual thread
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-      log.info("clone");
-      return super.clone();
-    }
-
-    @Override
     public void start() {
       log.info("start");
       thread.start();
@@ -110,12 +104,6 @@ public class VirtualThreadVertxThreadFactory implements VertxThreadFactory {
     }
 
     @Override
-    public int countStackFrames() {
-      log.info("countStackFrames");
-      return thread.countStackFrames();
-    }
-
-    @Override
     public String toString() {
       log.info("toString");
       return thread.toString();
@@ -137,18 +125,6 @@ public class VirtualThreadVertxThreadFactory implements VertxThreadFactory {
     public StackTraceElement[] getStackTrace() {
       log.info("getStackTrace");
       return thread.getStackTrace();
-    }
-
-    @Override
-    public long getId() {
-      log.info("getId");
-      return thread.getId();
-    }
-
-    @Override
-    public State getState() {
-      log.info("getState");
-      return thread.getState();
     }
 
     @Override
