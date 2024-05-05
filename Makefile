@@ -41,7 +41,7 @@ wrapper:
 .PHONY: native
 native: wrapper
 	# todo bind to a local dir for m2 repositories for faster builds
-	docker buildx build --progress plain -f Dockerfile.native-parent . -t native-parent-builder:latest
+	docker buildx build --progress plain -f Dockerfile.native-parent . -t native-parent-builder:latest --build-arg GH_TOKEN_ARG=$GH_TOKEN
 	docker buildx build --progress plain -f Dockerfile.native . -t iam:native-latest --build-arg MODULE=iam-parent/iam-app --build-arg BINARY=iam
 	docker buildx build --progress plain -f Dockerfile.native . -t iam-rpc:native-latest --build-arg MODULE=iam-parent/iam-rpc --build-arg BINARY=iam-rpc
 	docker buildx build --progress plain -f Dockerfile.native . -t catalog:native-latest --build-arg MODULE=catalog-parent/catalog-app --build-arg BINARY=catalog
