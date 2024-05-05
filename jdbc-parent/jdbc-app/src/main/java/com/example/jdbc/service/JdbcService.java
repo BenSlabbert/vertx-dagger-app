@@ -9,14 +9,19 @@ import com.example.jdbc.generator.entity.generated.jooq.tables.records.PersonRec
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.LongConsumer;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.StatementConfiguration;
 import org.jooq.DSLContext;
@@ -56,6 +61,71 @@ public class JdbcService {
     this.transactionProvider = transactionProvider;
     this.preparedDslContext = preparedDslContext;
     this.staticDslContext = staticDslContext;
+  }
+
+  private static class Wrapper {
+    PreparedStatement statement = null;
+    ResultSet resultSet = null;
+
+    private void wrap(PreparedStatement statement) {
+      this.statement = statement;
+    }
+
+    private void wrap(ResultSet resultSet) {
+      this.resultSet = resultSet;
+    }
+
+    private void close() {
+      DbUtils.closeQuietly(resultSet);
+      DbUtils.closeQuietly(statement);
+    }
+  }
+
+  public void commit() {
+    transactionProvider.commit(null);
+  }
+
+  public Stream<Long> stream() {
+
+    try {
+      Connection connection = transactionProvider.acquire();
+      PreparedStatement statement =
+          connection.prepareStatement(
+              staticDslContext
+                  .select(PERSON.ID)
+                  .from(PERSON)
+                  .orderBy(PERSON.ID)
+                  .getSQL(ParamType.INLINED));
+      statement.setFetchSize(2);
+
+      Wrapper wrapper = new Wrapper();
+      wrapper.wrap(statement);
+
+      ResultSet rs = statement.executeQuery();
+      wrapper.wrap(rs);
+
+      return Stream.generate(
+              () -> {
+                try {
+                  if (rs.isClosed()) {
+                    return null;
+                  }
+
+                  if (rs.next()) {
+                    return rs.getLong(1);
+                  }
+
+                  return null;
+                } catch (SQLException e) {
+                  throw new QueryException(e);
+                }
+              })
+          .takeWhile(Objects::nonNull)
+          .onClose(wrapper::close);
+    } catch (Exception e) {
+      transactionProvider.rollback(null);
+      throw new QueryException(e);
+    }
   }
 
   public void forEach(LongConsumer consumer) {
