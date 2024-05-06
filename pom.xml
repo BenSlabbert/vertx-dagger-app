@@ -89,7 +89,7 @@
     <native-maven-plugin.version>0.10.1</native-maven-plugin.version>
     <spotless.version>2.43.0</spotless.version>
     <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
-    <spotbugs-maven-plugin.version>4.8.4.0</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.8.5.0</spotbugs-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
