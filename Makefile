@@ -18,10 +18,6 @@ test: fmt
 package: fmt
 	${M} package
 
-.PHONY: check
-check:
-	${M} spotbugs:check
-
 .PHONY: verify
 verify: fmt
 	${M} verify
