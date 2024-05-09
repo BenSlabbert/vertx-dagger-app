@@ -50,7 +50,7 @@
     <picocli.version>4.7.5</picocli.version>
     <rest-assured.version>5.4.0</rest-assured.version>
     <commons-codec.version>1.17.0</commons-codec.version>
-    <testcontainers.version>1.19.7</testcontainers.version>
+    <testcontainers.version>1.19.8</testcontainers.version>
     <dagger.version>2.51.1</dagger.version>
     <errorprone.version>2.27.1</errorprone.version>
     <commons-lang3.version>3.14.0</commons-lang3.version>
