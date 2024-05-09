@@ -1623,7 +1623,7 @@ __metadata:
     prettier-plugin-svelte: "npm:^3.2.3"
     svelte: "npm:^4.2.16"
     svelte-check: "npm:^3.7.1"
-    svelte-eslint-parser: "npm:^0.35.0"
+    svelte-eslint-parser: "npm:^0.36.0"
     tslib: "npm:^2.6.2"
     typescript: "npm:^5.4.5"
     vite: "npm:^5.2.11"
@@ -4842,7 +4842,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-eslint-parser@npm:>=0.35.0 <1.0.0, svelte-eslint-parser@npm:^0.35.0":
+"svelte-eslint-parser@npm:>=0.35.0 <1.0.0":
   version: 0.35.0
   resolution: "svelte-eslint-parser@npm:0.35.0"
   dependencies:
@@ -4857,6 +4857,24 @@ __metadata:
     svelte:
       optional: true
   checksum: 10/8afde02418abaae5072ec9f95f197dced0e20aa5f1c6526559a73737974b5a509fe397a666cf93bedced42899e348783bb0462ec0204f2e8fc4978bca4b132a2
+  languageName: node
+  linkType: hard
+
+"svelte-eslint-parser@npm:^0.36.0":
+  version: 0.36.0
+  resolution: "svelte-eslint-parser@npm:0.36.0"
+  dependencies:
+    eslint-scope: "npm:^7.2.2"
+    eslint-visitor-keys: "npm:^3.4.3"
+    espree: "npm:^9.6.1"
+    postcss: "npm:^8.4.38"
+    postcss-scss: "npm:^4.0.9"
+  peerDependencies:
+    svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.115
+  peerDependenciesMeta:
+    svelte:
+      optional: true
+  checksum: 10/a2c09ba27dccfae71acd0080668f07146c5fc85ddf047a88921054c25bd1ba32cbf71b768c94a819a88ba20d94b3fa248bdf92a04b2863dc8fb2d539100a842c
   languageName: node
   linkType: hard
 
