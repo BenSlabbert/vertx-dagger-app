@@ -17,6 +17,10 @@
     <main.verticle>com.example.catalog.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
+    <!--vertx plugin-->
+    <vertx.launcher>${launcher.class}</vertx.launcher>
+    <vertx.verticle>${main.verticle}</vertx.verticle>
+
     <!--or native-->
     <testImageTag>jvm</testImageTag>
   </properties>
@@ -222,6 +226,28 @@
   <build>
     <finalName>${finalName}</finalName>
     <plugins>
+      <plugin>
+        <groupId>io.reactiverse</groupId>
+        <artifactId>vertx-maven-plugin</artifactId>
+        <configuration>
+          <redeploy>true</redeploy>
+          <jvmArgs>
+            <jvmArg>-Xms16m</jvmArg>
+            <jvmArg>-Xmx32m</jvmArg>
+            <jvmArg>-XX:MaxMetaspaceSize=32M</jvmArg>
+            <jvmArg>-Djava.net.preferIPv4Stack=true</jvmArg>
+          </jvmArgs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>vertx-maven-plugin</id>
+            <goals>
+              <goal>initialize</goal>
+              <goal>package</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
