@@ -194,10 +194,6 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <compilerArgs>
             <arg>-parameters</arg>
-            <arg>-Adagger.formatGeneratedSource=enabled</arg>
-            <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
-            <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
-            <arg>-Adagger.fastInit=enabled</arg>
             <!--required by ErrorProne-->
             <arg>-XDcompilePolicy=simple</arg>
             <arg>-Xplugin:ErrorProne</arg>
@@ -373,6 +369,35 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>dev</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.reactiverse</groupId>
+            <artifactId>vertx-maven-plugin</artifactId>
+            <configuration>
+              <redeploy>true</redeploy>
+              <jvmArgs>
+                <jvmArg>-Xms16m</jvmArg>
+                <jvmArg>-Xmx32m</jvmArg>
+                <jvmArg>-XX:MaxMetaspaceSize=32M</jvmArg>
+                <jvmArg>-Djava.net.preferIPv4Stack=true</jvmArg>
+              </jvmArgs>
+            </configuration>
+            <executions>
+              <execution>
+                <id>vertx-maven-plugin</id>
+                <goals>
+                  <goal>initialize</goal>
+                  <goal>package</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>native</id>
       <build>

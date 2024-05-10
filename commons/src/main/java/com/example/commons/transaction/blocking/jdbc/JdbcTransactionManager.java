@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.commons.transaction.blocking.jdbc;
 
+import github.benslabbert.txmanager.TransactionManager;
 import java.sql.Connection;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -8,7 +9,7 @@ import javax.sql.DataSource;
 import org.apache.commons.dbutils.DbUtils;
 
 @Singleton
-public class JdbcTransactionManager {
+public class JdbcTransactionManager implements TransactionManager {
 
   private static final ThreadLocal<Connection> connThreadLocal = new ThreadLocal<>();
 
@@ -27,6 +28,7 @@ public class JdbcTransactionManager {
     return connection;
   }
 
+  @Override
   public void begin() {
     if (null != connThreadLocal.get()) {
       throw new IllegalStateException("transaction already started");
@@ -40,6 +42,7 @@ public class JdbcTransactionManager {
     }
   }
 
+  @Override
   public void commit() {
     Connection connection = connThreadLocal.get();
     if (null == connection) {
@@ -55,6 +58,7 @@ public class JdbcTransactionManager {
     }
   }
 
+  @Override
   public void rollback() {
     Connection connection = connThreadLocal.get();
     if (null == connection) {

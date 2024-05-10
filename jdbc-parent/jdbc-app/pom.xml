@@ -26,6 +26,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>github.benslabbert.txmanager</groupId>
+      <artifactId>annotation</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.ongres.scram</groupId>
       <artifactId>client</artifactId>
     </dependency>
@@ -71,6 +75,14 @@
       <artifactId>jooq</artifactId>
     </dependency>
     <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-transport-native-epoll</artifactId>
       <classifier>linux-x86_64</classifier>
@@ -80,9 +92,17 @@
       <artifactId>postgresql</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.example.starter</groupId>
       <artifactId>starter-jdbc-pool</artifactId>
       <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>github.benslabbert.txmanager</groupId>
+      <artifactId>txmanager</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -112,11 +132,6 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web-validation</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -189,23 +204,21 @@
     <finalName>${finalName}</finalName>
     <plugins>
       <plugin>
-        <groupId>io.reactiverse</groupId>
-        <artifactId>vertx-maven-plugin</artifactId>
+        <groupId>net.bytebuddy</groupId>
+        <artifactId>byte-buddy-maven-plugin</artifactId>
         <configuration>
-          <redeploy>true</redeploy>
-          <jvmArgs>
-            <jvmArg>-Xms16m</jvmArg>
-            <jvmArg>-Xmx32m</jvmArg>
-            <jvmArg>-XX:MaxMetaspaceSize=32M</jvmArg>
-            <jvmArg>-Djava.net.preferIPv4Stack=true</jvmArg>
-          </jvmArgs>
+          <transformations>
+            <transformation>
+              <groupId>github.benslabbert.txmanager</groupId>
+              <artifactId>plugin</artifactId>
+              <plugin>github.benslabbert.txmanager.plugin.TransactionalAdvicePlugin</plugin>
+            </transformation>
+          </transformations>
         </configuration>
         <executions>
           <execution>
-            <id>vertx-maven-plugin</id>
             <goals>
-              <goal>initialize</goal>
-              <goal>package</goal>
+              <goal>transform</goal>
             </goals>
           </execution>
         </executions>
@@ -222,10 +235,6 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <compilerArgs>
             <arg>-parameters</arg>
-            <arg>-Adagger.formatGeneratedSource=enabled</arg>
-            <arg>-Adagger.fullBindingGraphValidation=ERROR</arg>
-            <arg>-Adagger.ignoreProvisionKeyWildcards=ENABLED</arg>
-            <arg>-Adagger.fastInit=enabled</arg>
             <!--required by ErrorProne-->
             <arg>-XDcompilePolicy=simple</arg>
             <arg>-Xplugin:ErrorProne</arg>
@@ -362,6 +371,35 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>dev</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.reactiverse</groupId>
+            <artifactId>vertx-maven-plugin</artifactId>
+            <configuration>
+              <redeploy>true</redeploy>
+              <jvmArgs>
+                <jvmArg>-Xms16m</jvmArg>
+                <jvmArg>-Xmx32m</jvmArg>
+                <jvmArg>-XX:MaxMetaspaceSize=32M</jvmArg>
+                <jvmArg>-Djava.net.preferIPv4Stack=true</jvmArg>
+              </jvmArgs>
+            </configuration>
+            <executions>
+              <execution>
+                <id>vertx-maven-plugin</id>
+                <goals>
+                  <goal>initialize</goal>
+                  <goal>package</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>native</id>
       <build>
