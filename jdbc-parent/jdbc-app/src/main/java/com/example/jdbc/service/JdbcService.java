@@ -6,8 +6,6 @@ import static com.example.jdbc.generator.entity.generated.jooq.tables.Person.PER
 
 import com.example.commons.transaction.blocking.SimpleTransactionManager;
 import com.example.jdbc.generator.entity.generated.jooq.tables.records.PersonRecord;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +25,8 @@ import org.apache.commons.dbutils.StatementConfiguration;
 import org.jooq.DSLContext;
 import org.jooq.InsertResultStep;
 import org.jooq.conf.ParamType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class JdbcService {

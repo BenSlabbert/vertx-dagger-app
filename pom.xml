@@ -63,6 +63,7 @@
     <auto-service.version>1.1.1</auto-service.version>
     <compile-testing.version>0.21.0</compile-testing.version>
     <slf4j-simple.version>2.0.13</slf4j-simple.version>
+    <logback.version>1.5.6</logback.version>
     <hikari-cp.version>5.1.0</hikari-cp.version>
     <google-auto-value.version>1.10.4</google-auto-value.version>
     <jte.version>3.1.10</jte.version>
@@ -70,6 +71,7 @@
     <guava.version>33.2.0-jre</guava.version>
     <snakeyaml.version>2.2</snakeyaml.version>
     <commons-dbutils.version>1.8.1</commons-dbutils.version>
+    <txmanager.version>1.0-SNAPSHOT</txmanager.version>
 
     <!--plugins-->
     <maven.version>3.9.6</maven.version>
@@ -90,6 +92,7 @@
     <native-maven-plugin.version>0.10.1</native-maven-plugin.version>
     <spotless.version>2.43.0</spotless.version>
     <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
+    <byte-buddy.version>1.14.14</byte-buddy.version>
   </properties>
 
   <dependencyManagement>
@@ -100,6 +103,11 @@
         <version>${vertx.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.txmanager</groupId>
+        <artifactId>annotation</artifactId>
+        <version>${txmanager.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.auto.service</groupId>
@@ -188,6 +196,16 @@
         <version>${jte.version}</version>
       </dependency>
       <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>${logback.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.mapstruct</groupId>
         <artifactId>mapstruct</artifactId>
         <version>${org.mapstruct.version}</version>
@@ -204,6 +222,11 @@
         <artifactId>picocli</artifactId>
         <version>${picocli.version}</version>
       </dependency>
+      <dependency>
+        <groupId>github.benslabbert.txmanager</groupId>
+        <artifactId>plugin</artifactId>
+        <version>${txmanager.version}</version>
+      </dependency>
       <!--no good-->
       <dependency>
         <groupId>org.testcontainers</groupId>
@@ -214,6 +237,11 @@
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
         <version>${postgresql.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j-simple.version}</version>
       </dependency>
       <!--also no good-->
       <dependency>
@@ -226,6 +254,11 @@
             <artifactId>hamcrest-core</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.txmanager</groupId>
+        <artifactId>txmanager</artifactId>
+        <version>${txmanager.version}</version>
       </dependency>
       <dependency>
         <groupId>io.vertx</groupId>
@@ -443,6 +476,11 @@
           <groupId>io.reactiverse</groupId>
           <artifactId>vertx-maven-plugin</artifactId>
           <version>${vertx-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>net.bytebuddy</groupId>
+          <artifactId>byte-buddy-maven-plugin</artifactId>
+          <version>${byte-buddy.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

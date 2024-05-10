@@ -37,18 +37,6 @@ public class JdbcUtils {
     T apply(Connection conn) throws SQLException;
   }
 
-  public void begin() {
-    jdbcTransactionManager.begin();
-  }
-
-  public void commit() {
-    jdbcTransactionManager.commit();
-  }
-
-  public void rollback() {
-    jdbcTransactionManager.rollback();
-  }
-
   private static class Wrapper {
     PreparedStatement statement = null;
     ResultSet resultSet = null;
@@ -67,6 +55,7 @@ public class JdbcUtils {
     }
   }
 
+  /** Stream the results of a query in a dedicated transaction. */
   public <T> Stream<T> streamInTransaction(String sql, Function<ResultSet, T> mapper) {
     try {
       jdbcTransactionManager.begin();
@@ -77,6 +66,7 @@ public class JdbcUtils {
     }
   }
 
+  /** Stream the results of a query in an existing transaction. */
   public <T> Stream<T> stream(String sql, Function<ResultSet, T> mapper) {
     Wrapper wrapper = new Wrapper();
     try {
@@ -112,7 +102,8 @@ public class JdbcUtils {
     }
   }
 
-  private <T> T useTransaction(UseTransaction<T> function) {
+  /** use an existing transaction */
+  public <T> T useTransaction(UseTransaction<T> function) {
     try {
       Connection conn = jdbcTransactionManager.getConnection();
       return function.apply(conn);
@@ -122,7 +113,8 @@ public class JdbcUtils {
     }
   }
 
-  private <T> T doInTransaction(DoInTransaction<T> function) {
+  /** execute in dedicated transaction */
+  public <T> T doInTransaction(DoInTransaction<T> function) {
     try {
       jdbcTransactionManager.begin();
       Connection conn = jdbcTransactionManager.getConnection();
@@ -135,7 +127,8 @@ public class JdbcUtils {
     }
   }
 
-  private void runInTransaction(RunInTransaction function) {
+  /** execute in dedicated transaction */
+  public void runInTransaction(RunInTransaction function) {
     try {
       jdbcTransactionManager.begin();
       Connection conn = jdbcTransactionManager.getConnection();
