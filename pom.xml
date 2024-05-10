@@ -73,6 +73,7 @@
 
     <!--plugins-->
     <maven.version>3.9.6</maven.version>
+    <vertx-maven-plugin.version>1.0.28</vertx-maven-plugin.version>
     <maven-plugin-plugin.version>3.13.0</maven-plugin-plugin.version>
     <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
     <exec-maven-plugin.version>3.2.0</exec-maven-plugin.version>
@@ -437,6 +438,11 @@
           <groupId>gg.jte</groupId>
           <artifactId>jte-maven-plugin</artifactId>
           <version>${jte.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>io.reactiverse</groupId>
+          <artifactId>vertx-maven-plugin</artifactId>
+          <version>${vertx-maven-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

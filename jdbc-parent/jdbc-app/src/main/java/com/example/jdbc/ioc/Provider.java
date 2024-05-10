@@ -33,6 +33,29 @@ import org.jooq.DSLContext;
     })
 public interface Provider {
 
+  final class DI {
+
+    private DI() {}
+
+    private static Provider dagger;
+    private static volatile boolean initialized;
+
+    public static Provider get() {
+      if (!initialized) {
+        throw new IllegalStateException("Component not initialized");
+      }
+      return dagger;
+    }
+
+    public static void set(Provider instance) {
+      if (initialized) {
+        throw new IllegalStateException("Component already initialized");
+      }
+      initialized = true;
+      dagger = instance;
+    }
+  }
+
   @Nullable Void init();
 
   JdbcVerticle jdbcVerticle();
@@ -62,10 +85,12 @@ public interface Provider {
 
     @Provides
     @Nullable static Void provideEager(
+        Provider provider,
         DataSource dataSource,
         @Named("prepared") DSLContext preparedDslContext,
         @Named("static") DSLContext staticDslContext) {
       // this eagerly builds any parameters specified and returns nothing
+      DI.set(provider);
       return null;
     }
   }
