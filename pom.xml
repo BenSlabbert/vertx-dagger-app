@@ -62,7 +62,7 @@
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     <auto-service.version>1.1.1</auto-service.version>
     <compile-testing.version>0.21.0</compile-testing.version>
-    <slf4j-simple.version>2.0.13</slf4j-simple.version>
+    <slf4j-api.version>2.0.13</slf4j-api.version>
     <logback.version>1.5.6</logback.version>
     <hikari-cp.version>5.1.0</hikari-cp.version>
     <google-auto-value.version>1.10.4</google-auto-value.version>
@@ -241,7 +241,7 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>${slf4j-simple.version}</version>
+        <version>${slf4j-api.version}</version>
       </dependency>
       <!--also no good-->
       <dependency>
@@ -313,12 +313,6 @@
         <artifactId>picocli-codegen</artifactId>
         <version>${picocli.version}</version>
         <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>${slf4j-simple.version}</version>
-        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.assertj</groupId>
