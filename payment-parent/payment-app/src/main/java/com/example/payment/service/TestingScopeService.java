@@ -4,11 +4,11 @@ package com.example.payment.service;
 import com.example.payment.scope.TransactionComponent;
 import com.example.payment.scope.TransactionManager;
 import com.example.payment.scope.repo.Repo;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class TestingScopeService {

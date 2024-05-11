@@ -12,14 +12,14 @@ import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JteHtmxVerticle extends AbstractVerticle {
 

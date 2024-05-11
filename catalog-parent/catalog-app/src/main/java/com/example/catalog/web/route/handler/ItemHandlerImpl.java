@@ -11,14 +11,14 @@ import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.codegen.annotation.url.RestHandler;
 import com.example.commons.web.ResponseWriter;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)

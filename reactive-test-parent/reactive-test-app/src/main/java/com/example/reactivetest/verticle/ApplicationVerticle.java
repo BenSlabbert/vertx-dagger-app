@@ -12,8 +12,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
@@ -24,6 +22,8 @@ import io.vertx.ext.web.handler.BodyHandler;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ApplicationVerticle extends AbstractVerticle {
 

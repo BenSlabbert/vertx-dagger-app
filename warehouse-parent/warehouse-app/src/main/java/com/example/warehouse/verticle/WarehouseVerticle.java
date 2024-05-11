@@ -18,8 +18,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
@@ -36,6 +34,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WarehouseVerticle extends AbstractVerticle {
 

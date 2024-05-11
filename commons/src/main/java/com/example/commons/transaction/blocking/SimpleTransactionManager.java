@@ -1,8 +1,6 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.commons.transaction.blocking;
 
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import java.sql.Connection;
 import javax.sql.DataSource;
 import org.apache.commons.dbutils.DbUtils;
@@ -10,6 +8,8 @@ import org.jooq.ConnectionProvider;
 import org.jooq.TransactionContext;
 import org.jooq.TransactionProvider;
 import org.jooq.exception.DataAccessException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple transaction provider that uses a single connection per transaction. <br>

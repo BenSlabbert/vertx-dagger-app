@@ -11,8 +11,6 @@ import io.vertx.core.Launcher;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.impl.NoStackTraceException;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.tracing.opentelemetry.OpenTelemetryOptions;
 import java.io.IOException;
@@ -21,6 +19,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CustomLauncher extends Launcher {
 

@@ -11,8 +11,6 @@ import com.example.iam.web.route.handler.UserHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
@@ -24,6 +22,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ApiVerticle extends AbstractVerticle {
 

@@ -2,8 +2,6 @@
 package com.example.payment.scope;
 
 import io.vertx.core.impl.NoStackTraceException;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import java.sql.Connection;
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -11,6 +9,8 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @TransactionScope
 public class TransactionManager implements DslProvider, AutoCloseable {

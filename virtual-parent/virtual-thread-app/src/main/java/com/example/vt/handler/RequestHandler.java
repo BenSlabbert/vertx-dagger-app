@@ -3,10 +3,10 @@ package com.example.vt.handler;
 
 import com.example.codegen.annotation.url.RestHandler;
 import com.example.commons.annotation.RunOnVirtualThread;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RunOnVirtualThread
 public class RequestHandler {

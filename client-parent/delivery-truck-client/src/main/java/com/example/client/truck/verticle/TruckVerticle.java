@@ -4,9 +4,9 @@ package com.example.client.truck.verticle;
 import com.example.client.truck.service.JobService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TruckVerticle extends AbstractVerticle {
 

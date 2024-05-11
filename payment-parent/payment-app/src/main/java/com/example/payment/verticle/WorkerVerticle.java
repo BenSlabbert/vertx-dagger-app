@@ -9,12 +9,12 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.ThreadingModel;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WorkerVerticle extends AbstractVerticle {
 

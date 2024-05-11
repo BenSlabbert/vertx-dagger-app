@@ -13,13 +13,13 @@ import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.sqlclient.Pool;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class ItemService extends TransactionBoundary {

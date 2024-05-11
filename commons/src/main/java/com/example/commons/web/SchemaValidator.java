@@ -2,8 +2,6 @@
 package com.example.commons.web;
 
 import com.example.commons.config.Config;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.Draft;
 import io.vertx.json.schema.JsonSchema;
@@ -11,6 +9,8 @@ import io.vertx.json.schema.JsonSchemaOptions;
 import io.vertx.json.schema.OutputUnit;
 import io.vertx.json.schema.SchemaRepository;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SchemaValidator {
 

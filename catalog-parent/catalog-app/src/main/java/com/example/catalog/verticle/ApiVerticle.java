@@ -15,8 +15,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
@@ -29,6 +27,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ApiVerticle extends AbstractVerticle {

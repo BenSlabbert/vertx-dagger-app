@@ -9,10 +9,10 @@ import io.vertx.core.Future;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import java.time.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @AutoValue
 abstract class SagaStage {

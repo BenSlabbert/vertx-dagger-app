@@ -9,14 +9,14 @@ import com.zaxxer.hikari.HikariDataSource;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.impl.NoStackTraceException;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Module
 final class BlockingJdbcPoolConfig implements AutoCloseable {

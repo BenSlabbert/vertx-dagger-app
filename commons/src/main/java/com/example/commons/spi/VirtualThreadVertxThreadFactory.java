@@ -3,10 +3,10 @@ package com.example.commons.spi;
 
 import io.vertx.core.impl.VertxBuilder;
 import io.vertx.core.impl.VertxThread;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.spi.VertxThreadFactory;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VirtualThreadVertxThreadFactory implements VertxThreadFactory {
 
