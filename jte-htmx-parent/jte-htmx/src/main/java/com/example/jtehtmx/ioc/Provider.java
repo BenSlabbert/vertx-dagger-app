@@ -10,11 +10,11 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 @Component(modules = {JteConfig.class, Provider.EagerModule.class})

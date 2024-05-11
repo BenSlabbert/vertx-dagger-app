@@ -9,14 +9,14 @@ import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobRequestDto;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobResponseDto;
 import io.vertx.core.Future;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.sqlclient.Pool;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 class WarehouseRpcServiceImpl extends TransactionBoundary implements WarehouseRpcService {

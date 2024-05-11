@@ -5,11 +5,11 @@ import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
 import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import io.vertx.core.Future;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)

@@ -19,13 +19,13 @@ import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.vertx.core.Future;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxTestContext;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class ApiVerticlePersistenceTest extends PersistenceTest {
 

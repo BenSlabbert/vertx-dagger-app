@@ -16,13 +16,13 @@ import gg.jte.output.Utf8ByteOutput;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import java.nio.charset.StandardCharsets;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class ExampleHandler {
@@ -95,15 +95,11 @@ public class ExampleHandler {
   private void test() {
     switch (config.profile()) {
       case DEV -> {
-        TemplateOutput strOutput =
-            switch (config.profile()) {
-              case DEV -> new StringOutput();
-              case PROD -> new Utf8ByteOutput();
-            };
+        TemplateOutput strOutput = new StringOutput();
         ExampleDto exampleDto =
             ExampleDto.builder().title("title").description("description").build();
         templateEngine.render("Example.jte", exampleDto, strOutput);
-        log.info(strOutput);
+        log.info("{}", strOutput);
       }
       case PROD -> {
         Utf8ByteOutput output = new Utf8ByteOutput();
@@ -111,7 +107,7 @@ public class ExampleHandler {
 
         int contentLength = output.getContentLength();
         String string = new String(output.toByteArray(), StandardCharsets.UTF_8);
-        log.info(contentLength);
+        log.info("contentLength: {}", contentLength);
         log.info(string);
       }
     }

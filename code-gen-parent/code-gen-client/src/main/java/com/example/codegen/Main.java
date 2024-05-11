@@ -3,8 +3,8 @@ package com.example.codegen;
 
 import com.example.codegen.ioc.DaggerProvider;
 import com.example.codegen.ioc.Provider;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
 

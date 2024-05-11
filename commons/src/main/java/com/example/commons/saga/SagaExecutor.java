@@ -6,10 +6,10 @@ import static java.lang.Boolean.TRUE;
 
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import java.util.List;
 import java.util.ListIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SagaExecutor {
 

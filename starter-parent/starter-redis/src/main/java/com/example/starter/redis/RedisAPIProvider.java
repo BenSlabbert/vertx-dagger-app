@@ -5,13 +5,13 @@ import com.example.commons.config.Config;
 import dagger.Module;
 import dagger.Provides;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Module
 final class RedisAPIProvider implements AutoCloseable {
