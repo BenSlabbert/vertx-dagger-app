@@ -71,7 +71,7 @@
     <guava.version>33.2.0-jre</guava.version>
     <snakeyaml.version>2.2</snakeyaml.version>
     <commons-dbutils.version>1.8.1</commons-dbutils.version>
-    <txmanager.version>1.0-SNAPSHOT</txmanager.version>
+    <txmanager.version>1.0.1</txmanager.version>
 
     <!--plugins-->
     <maven.version>3.9.6</maven.version>
