@@ -9,6 +9,7 @@ import com.example.commons.transaction.blocking.jdbc.JdbcTransactionManager;
 import com.example.commons.transaction.blocking.jdbc.JdbcTransactionManagerModule;
 import com.example.jdbc.service.JdbcService;
 import com.example.jdbc.service.ServiceModule;
+import com.example.jdbc.service.TransactionService;
 import com.example.jdbc.verticle.JdbcVerticle;
 import com.example.starter.jdbc.pool.JdbcPoolModule;
 import dagger.BindsInstance;
@@ -63,6 +64,8 @@ public interface Provider {
   JdbcVerticle jdbcVerticle();
 
   JdbcService jdbcService();
+
+  TransactionService transactionService();
 
   @Component.Builder
   interface Builder {

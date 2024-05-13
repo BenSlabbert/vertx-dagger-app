@@ -2,7 +2,7 @@
 package com.example.commons.transaction.blocking.jdbc;
 
 public class QueryException extends RuntimeException {
-  QueryException(Throwable cause) {
+  public QueryException(Throwable cause) {
     super(cause);
   }
 }
