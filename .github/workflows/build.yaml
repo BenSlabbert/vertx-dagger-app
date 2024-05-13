@@ -8,54 +8,6 @@ name: "Java + Maven + Docker"
     branches:
     - "main"
 jobs:
-  build-backend-native-graalvm:
-    runs-on: "ubuntu-latest"
-    env:
-      UPX_VERSION: "4.2.2"
-      GH_TOKEN: "${{ secrets.GH_TOKEN }}"
-    steps:
-    - uses: "actions/checkout@v4"
-    - uses: "graalvm/setup-graalvm@v1"
-      with:
-        java-version: "21"
-        distribution: "graalvm-community"
-        native-image-musl: "true"
-        cache: "maven"
-        github-token: "${{ secrets.GH_TOKEN }}"
-    - run: "mvn -s settings.xml install -e -DskipTests=true -Ddocker.skip=true -Pnative\
-        \ -DtestImageTag=native -ff"
-    - run: "echo $UPX_VERSION"
-    - run: "curl -L https://github.com/upx/upx/releases/download/v$UPX_VERSION/upx-$UPX_VERSION-amd64_linux.tar.xz\
-        \ -o upx-$UPX_VERSION-amd64_linux.tar.xz"
-    - run: "tar -xf upx-$UPX_VERSION-amd64_linux.tar.xz"
-    - run: "mv upx-$UPX_VERSION-amd64_linux /tmp/upx"
-    - run: "/tmp/upx/upx --version"
-    - run: "/tmp/upx/upx -q -o iam.upx iam-parent/iam-app/target/iam"
-    - run: "/tmp/upx/upx -q -o catalog.upx catalog-parent/catalog-app/target/catalog"
-    - uses: "actions/upload-artifact@v4"
-      if: "always()"
-      with:
-        name: "graalvm iam binary"
-        path: "iam-parent/iam-app/target/iam"
-        retention-days: 30
-    - uses: "actions/upload-artifact@v4"
-      if: "always()"
-      with:
-        name: "graalvm catalog binary"
-        path: "catalog-parent/catalog-app/target/catalog"
-        retention-days: 30
-    - uses: "actions/upload-artifact@v4"
-      if: "always()"
-      with:
-        name: "graalvm iam binary upx"
-        path: "iam.upx"
-        retention-days: 30
-    - uses: "actions/upload-artifact@v4"
-      if: "always()"
-      with:
-        name: "graalvm catalog binary upx"
-        path: "catalog.upx"
-        retention-days: 30
   build-backend-jvm:
     runs-on: "ubuntu-latest"
     env:

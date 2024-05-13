@@ -39,7 +39,6 @@
     <shade.skip>${quickBuild}</shade.skip>
     <copyJarDeps.skip>${quickBuild}</copyJarDeps.skip>
     <skipJooqGeneration>false</skipJooqGeneration>
-    <nativeImageOptimizationLevel>b</nativeImageOptimizationLevel>
 
     <!--deps-->
     <vertx.version>4.5.7</vertx.version>
@@ -89,7 +88,6 @@
     <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
     <maven-resource-plugin.version>3.3.1</maven-resource-plugin.version>
     <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
-    <native-maven-plugin.version>0.10.1</native-maven-plugin.version>
     <spotless.version>2.43.0</spotless.version>
     <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
     <byte-buddy.version>1.14.14</byte-buddy.version>
@@ -535,11 +533,6 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>flatten-maven-plugin</artifactId>
           <version>${flatten-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.graalvm.buildtools</groupId>
-          <artifactId>native-maven-plugin</artifactId>
-          <version>${native-maven-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
