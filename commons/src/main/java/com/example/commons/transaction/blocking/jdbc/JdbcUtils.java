@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -37,6 +36,11 @@ public class JdbcUtils {
     T apply(Connection conn) throws SQLException;
   }
 
+  @FunctionalInterface
+  public interface ResultSetMapper<T> {
+    T apply(ResultSet rs) throws SQLException;
+  }
+
   private static class Wrapper {
     PreparedStatement statement = null;
     ResultSet resultSet = null;
@@ -56,7 +60,7 @@ public class JdbcUtils {
   }
 
   /** Stream the results of a query in a dedicated transaction. */
-  public <T> Stream<T> streamInTransaction(String sql, Function<ResultSet, T> mapper) {
+  public <T> Stream<T> streamInTransaction(String sql, ResultSetMapper<T> mapper) {
     try {
       jdbcTransactionManager.begin();
       return stream(sql, mapper).onClose(jdbcTransactionManager::commit);
@@ -67,7 +71,7 @@ public class JdbcUtils {
   }
 
   /** Stream the results of a query in an existing transaction. */
-  public <T> Stream<T> stream(String sql, Function<ResultSet, T> mapper) {
+  public <T> Stream<T> stream(String sql, ResultSetMapper<T> mapper) {
     Wrapper wrapper = new Wrapper();
     try {
       Connection connection = jdbcTransactionManager.getConnection();
@@ -89,7 +93,7 @@ public class JdbcUtils {
                   }
 
                   return null;
-                } catch (SQLException e) {
+                } catch (Exception e) {
                   throw new QueryException(e);
                 }
               })
