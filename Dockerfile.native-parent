@@ -1,8 +1,0 @@
-FROM container-registry.oracle.com/graalvm/native-image:22-muslib
-
-ARG GH_TOKEN_ARG
-ENV GH_TOKEN=$GH_TOKEN_ARG
-
-COPY . .
-
-RUN ./mvnw -s settings.xml package -DskipTests=true -Ddocker.skip=true -DskipJooqGeneration=true -Pnative
