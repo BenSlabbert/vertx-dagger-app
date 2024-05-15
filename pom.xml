@@ -90,7 +90,7 @@
     <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
     <spotless.version>2.43.0</spotless.version>
     <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
-    <byte-buddy.version>1.14.14</byte-buddy.version>
+    <byte-buddy.version>1.14.15</byte-buddy.version>
   </properties>
 
   <dependencyManagement>
