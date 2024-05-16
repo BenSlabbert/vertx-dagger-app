@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse.rpc.api;
 
-import com.example.codegen.annotation.security.SecuredProxy;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobRequestDto;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobResponseDto;
+import github.benslabbert.vertxdaggercodegen.annotation.security.SecuredProxy;
 import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.Future;

@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.vt.handler;
 
-import com.example.codegen.annotation.url.RestHandler;
 import com.example.commons.annotation.RunOnVirtualThread;
+import github.benslabbert.vertxdaggercodegen.annotation.url.RestHandler;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;

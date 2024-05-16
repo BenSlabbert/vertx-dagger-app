@@ -20,7 +20,6 @@
     <module>commons</module>
     <module>migration</module>
     <module>entity-generator</module>
-    <module>code-gen-parent</module>
     <module>payment-parent</module>
     <module>starter-parent</module>
     <module>client-parent</module>
@@ -38,7 +37,30 @@
     <shade.skip>${quickBuild}</shade.skip>
     <copyJarDeps.skip>${quickBuild}</copyJarDeps.skip>
     <skipJooqGeneration>false</skipJooqGeneration>
+
+    <!--deps-->
+    <vertx-dagger-codegen.version>1.0.4</vertx-dagger-codegen.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+        <artifactId>annotation</artifactId>
+        <version>${vertx-dagger-codegen.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+        <artifactId>commons</artifactId>
+        <version>${vertx-dagger-codegen.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+        <artifactId>processor</artifactId>
+        <version>${vertx-dagger-codegen.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>

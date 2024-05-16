@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.proxyservice;
 
-import com.example.codegen.annotation.security.SecuredProxy;
+import github.benslabbert.vertxdaggercodegen.annotation.security.SecuredProxy;
 import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.Future;

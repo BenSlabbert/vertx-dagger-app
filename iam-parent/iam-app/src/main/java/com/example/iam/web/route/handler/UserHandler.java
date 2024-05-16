@@ -5,7 +5,6 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 
-import com.example.codegen.annotation.url.RestHandler;
 import com.example.commons.web.ResponseWriter;
 import com.example.iam.auth.api.IamAuthApi;
 import com.example.iam.auth.api.dto.LoginRequestDto;
@@ -13,6 +12,7 @@ import com.example.iam.auth.api.dto.RefreshRequestDto;
 import com.example.iam.auth.api.dto.RegisterRequestDto;
 import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
 import com.example.iam.web.SchemaValidatorDelegator;
+import github.benslabbert.vertxdaggercodegen.annotation.url.RestHandler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;

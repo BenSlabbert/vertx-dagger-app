@@ -12,6 +12,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+      <artifactId>commons</artifactId>
+    </dependency>
+    <dependency>
       <groupId>commons-dbutils</groupId>
       <artifactId>commons-dbutils</artifactId>
     </dependency>
