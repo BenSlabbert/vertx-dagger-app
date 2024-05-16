@@ -9,7 +9,6 @@ import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
-import com.example.codegen.annotation.url.RestHandler;
 import com.example.reactivetest.config.Events;
 import com.example.reactivetest.repository.sql.projection.PersonProjectionFactory.PersonProjection;
 import com.example.reactivetest.service.PersonService;
@@ -18,6 +17,7 @@ import com.example.reactivetest.web.dto.CreatePersonRequest;
 import com.example.reactivetest.web.dto.GetPersonResponse;
 import com.example.reactivetest.web.dto.GetPersonsResponse;
 import com.example.reactivetest.web.dto.SseResponse;
+import github.benslabbert.vertxdaggercodegen.annotation.url.RestHandler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;

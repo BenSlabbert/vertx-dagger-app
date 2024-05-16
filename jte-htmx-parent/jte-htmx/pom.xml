@@ -19,9 +19,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.example.code-gen</groupId>
-      <artifactId>code-gen-annotation</artifactId>
-      <version>${revision}</version>
+      <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+      <artifactId>annotation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+      <artifactId>commons</artifactId>
     </dependency>
     <dependency>
       <groupId>com.example.commons</groupId>
@@ -77,9 +80,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.example.code-gen</groupId>
-      <artifactId>code-gen-generator</artifactId>
-      <version>${revision}</version>
+      <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+      <artifactId>processor</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -192,9 +194,9 @@
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
-              <groupId>org.example.code-gen</groupId>
-              <artifactId>code-gen-generator</artifactId>
-              <version>${revision}</version>
+              <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+              <artifactId>processor</artifactId>
+              <version>${vertx-dagger-codegen.version}</version>
             </path>
             <path>
               <groupId>com.google.auto.value</groupId>

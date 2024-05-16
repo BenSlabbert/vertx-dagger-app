@@ -2,6 +2,7 @@
 package com.example.commons.security.rpc;
 
 import com.google.common.collect.ImmutableSet;
+import github.benslabbert.vertxdaggercodegen.commons.security.rpc.SecuredAction;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;

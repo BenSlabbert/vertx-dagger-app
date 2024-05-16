@@ -2,6 +2,6 @@
   <extension>
     <groupId>github.benslabbert</groupId>
     <artifactId>git-version-extension</artifactId>
-    <version>1.0.20</version>
+    <version>1.0.24</version>
   </extension>
 </extensions>
