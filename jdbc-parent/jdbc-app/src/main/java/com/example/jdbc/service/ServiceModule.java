@@ -7,4 +7,8 @@ import dagger.Module;
 public interface ServiceModule {
 
   JdbcService jdbcService();
+
+  TransactionService transactionService();
+
+  NestedTransactionService nestedTransactionService();
 }

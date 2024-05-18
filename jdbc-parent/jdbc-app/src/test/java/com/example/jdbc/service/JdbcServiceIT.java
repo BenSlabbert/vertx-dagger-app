@@ -3,10 +3,10 @@ package com.example.jdbc.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.jdbc.TestBase;
+import com.example.jdbc.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
-class JdbcServiceTest extends TestBase {
+class JdbcServiceIT extends IntegrationTestBase {
 
   @Test
   void test() {

@@ -8,5 +8,9 @@
     "username": "postgres",
     "password": "postgres",
     "database": "postgres"
+  },
+  "jdbcConfig": {
+    "fetchSize": 10,
+    "queryTimeout": "5"
   }
 }

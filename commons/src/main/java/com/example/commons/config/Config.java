@@ -3,13 +3,15 @@ package com.example.commons.config;
 
 import com.google.auto.value.AutoBuilder;
 import io.vertx.core.json.JsonObject;
+import java.time.Duration;
 import javax.annotation.Nullable;
 
 public record Config(
     Profile profile,
     @Nullable HttpConfig httpConfig,
     @Nullable RedisConfig redisConfig,
-    @Nullable PostgresConfig postgresConfig) {
+    @Nullable PostgresConfig postgresConfig,
+    @Nullable JdbcConfig jdbcConfig) {
 
   public static Builder builder() {
     return new AutoBuilder_Config_Builder().profile(Profile.PROD);
@@ -25,6 +27,8 @@ public record Config(
 
     Builder postgresConfig(@Nullable PostgresConfig postgresConfig);
 
+    Builder jdbcConfig(@Nullable JdbcConfig jdbcConfig);
+
     Config build();
   }
 
@@ -35,6 +39,7 @@ public record Config(
     addHttpConfig(jsonObject, builder);
     addRedisConfig(jsonObject, builder);
     addPostgresConfig(jsonObject, builder);
+    addJdbcConfig(jsonObject, builder);
 
     return builder.build();
   }
@@ -84,6 +89,20 @@ public record Config(
             .database(config.getString("database"))
             .password(config.getString("password"))
             .username(config.getString("username"))
+            .build());
+  }
+
+  private static void addJdbcConfig(JsonObject jsonObject, Builder builder) {
+    JsonObject config = jsonObject.getJsonObject("jdbcConfig", new JsonObject());
+
+    if (isNullOrEmpty(config)) {
+      return;
+    }
+
+    builder.jdbcConfig(
+        JdbcConfig.builder()
+            .fetchSize(config.getInteger("fetchSize"))
+            .queryTimeout(Duration.ofSeconds(config.getInteger("queryTimeout")))
             .build());
   }
 
@@ -161,6 +180,22 @@ public record Config(
       Builder database(String database);
 
       PostgresConfig build();
+    }
+  }
+
+  public record JdbcConfig(int fetchSize, Duration queryTimeout) {
+
+    public static Builder builder() {
+      return new AutoBuilder_Config_JdbcConfig_Builder();
+    }
+
+    @AutoBuilder
+    public interface Builder {
+      Builder fetchSize(int fetchSize);
+
+      Builder queryTimeout(Duration queryTimeout);
+
+      JdbcConfig build();
     }
   }
 }
