@@ -3,7 +3,7 @@ package com.example.commons.transaction.blocking.jdbc;
 
 import dagger.Module;
 
-@Module
+@Module(includes = ModuleBindings.class)
 public interface JdbcTransactionManagerModule {
 
   JdbcTransactionManager jdbcTransactionManager();

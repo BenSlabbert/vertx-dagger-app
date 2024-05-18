@@ -5,7 +5,7 @@
   <parent>
     <groupId>github.benslabbert</groupId>
     <artifactId>vertx-dagger-bom</artifactId>
-    <version>1.0.6</version>
+    <version>1.1.0</version>
   </parent>
 
   <groupId>com.example.parent</groupId>
@@ -40,10 +40,16 @@
 
     <!--deps-->
     <vertx-dagger-codegen.version>1.0.4</vertx-dagger-codegen.version>
+    <tx-manager.version>1.0.7</tx-manager.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>github.benslabbert.txmanager</groupId>
+        <artifactId>annotation</artifactId>
+        <version>${tx-manager.version}</version>
+      </dependency>
       <dependency>
         <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
         <artifactId>annotation</artifactId>
@@ -59,10 +65,24 @@
         <artifactId>processor</artifactId>
         <version>${vertx-dagger-codegen.version}</version>
       </dependency>
+      <dependency>
+        <groupId>github.benslabbert.txmanager</groupId>
+        <artifactId>txmanager</artifactId>
+        <version>${tx-manager.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>github.benslabbert.txmanager</groupId>
+          <artifactId>plugin</artifactId>
+          <version>${tx-manager.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>

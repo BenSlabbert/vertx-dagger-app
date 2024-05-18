@@ -1,11 +1,13 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.commons.transaction.blocking.jdbc;
 
+import java.time.Duration;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.StatementConfiguration;
 
 @Singleton
 public class JdbcQueryRunner {
@@ -44,6 +46,15 @@ public class JdbcQueryRunner {
   }
 
   public <T> List<T> execute(String sql, ResultSetHandler<T> rsh, Object... params) {
+    StatementConfiguration statementConfiguration =
+        new StatementConfiguration.Builder()
+            .fetchSize(1)
+            .queryTimeout(Duration.ofSeconds(5L))
+            .fetchDirection(1)
+            .maxFieldSize(1)
+            .maxRows(1)
+            .build();
+    new QueryRunner(statementConfiguration);
     try {
       return queryRunner.execute(jdbcTransactionManager.getConnection(), sql, rsh, params);
     } catch (Exception e) {

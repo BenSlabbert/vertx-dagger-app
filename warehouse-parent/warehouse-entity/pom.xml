@@ -19,6 +19,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.jooq</groupId>
+      <artifactId>jooq</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.example.warehouse.generator</groupId>
       <artifactId>warehouse-generator</artifactId>
       <version>${revision}</version>

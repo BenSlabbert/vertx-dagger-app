@@ -5,7 +5,6 @@ import static com.example.jdbc.generator.entity.generated.jooq.tables.Person.PER
 
 import com.example.commons.transaction.blocking.jdbc.JdbcUtils;
 import github.benslabbert.txmanager.annotation.Transactional;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -29,19 +28,33 @@ public class TransactionService {
     this.staticDslContext = staticDslContext;
   }
 
+  public void runInTransaction() {
+    log.info("in runInTransaction");
+
+    try (var s =
+        jdbcUtils.streamInTransaction(
+            staticDslContext
+                .select(PERSON.ID)
+                .from(PERSON)
+                .orderBy(PERSON.ID)
+                .getSQL(ParamType.INLINED),
+            rs -> rs.getLong(1))) {
+      s.forEach(id -> log.info("id: {}", id));
+    }
+  }
+
   @Transactional
-  public void test() {
-    log.info("in test");
-    Stream<Long> stream =
+  public void useCreatedTransaction() {
+    log.info("in useCreatedTransaction");
+
+    try (var s =
         jdbcUtils.stream(
             staticDslContext
                 .select(PERSON.ID)
                 .from(PERSON)
                 .orderBy(PERSON.ID)
                 .getSQL(ParamType.INLINED),
-            rs -> rs.getLong(1));
-
-    try (var s = stream) {
+            rs -> rs.getLong(1))) {
       s.forEach(id -> log.info("id: {}", id));
     }
   }

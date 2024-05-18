@@ -3,16 +3,23 @@ package com.example.commons.transaction.blocking.jdbc;
 
 import github.benslabbert.txmanager.TransactionManager;
 import java.sql.Connection;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
 import org.apache.commons.dbutils.DbUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class JdbcTransactionManager implements TransactionManager {
 
-  private static final ThreadLocal<Connection> connThreadLocal = new ThreadLocal<>();
+  private static final Logger log = LoggerFactory.getLogger(JdbcTransactionManager.class);
+  private static final ThreadLocal<Deque<Connection>> threadLocalDeque = new ThreadLocal<>();
 
+  private final AtomicBoolean closing = new AtomicBoolean(false);
   private final DataSource dataSource;
 
   @Inject
@@ -21,30 +28,57 @@ public class JdbcTransactionManager implements TransactionManager {
   }
 
   public Connection getConnection() {
-    Connection connection = connThreadLocal.get();
+    Deque<Connection> deque = threadLocalDeque.get();
+    if (null == deque) {
+      throw new IllegalStateException("cannot get connection: no transaction started");
+    }
+
+    Connection connection = deque.peek();
     if (null == connection) {
       throw new IllegalStateException("cannot get connection: no transaction in progress");
     }
+
     return connection;
   }
 
   @Override
   public void begin() {
-    if (null != connThreadLocal.get()) {
-      throw new IllegalStateException("transaction already started");
+    if (closing.get()) {
+      throw new IllegalStateException("cannot begin transaction: transaction manager is closing");
+    }
+
+    Deque<Connection> deque = threadLocalDeque.get();
+    if (null == deque) {
+      threadLocalDeque.set(new ArrayDeque<>(2));
+      deque = threadLocalDeque.get();
     }
 
     try {
       Connection connection = dataSource.getConnection();
-      connThreadLocal.set(connection);
+      log.debug("pushing connection to thread local deque");
+      deque.push(connection);
     } catch (Exception e) {
       throw new JdbcTransactionException(e);
     }
   }
 
   @Override
+  public void ensureActive() {
+    Deque<Connection> deque = threadLocalDeque.get();
+    if (null == deque || deque.isEmpty()) {
+      throw new IllegalStateException("no transaction in progress");
+    }
+  }
+
+  @Override
   public void commit() {
-    Connection connection = connThreadLocal.get();
+    Deque<Connection> deque = threadLocalDeque.get();
+    if (null == deque || deque.isEmpty()) {
+      throw new IllegalStateException("cannot commit: no transaction started");
+    }
+
+    log.debug("commit: poll connection from thread local deque");
+    Connection connection = deque.poll();
     if (null == connection) {
       throw new IllegalStateException("cannot commit: no transaction in progress");
     }
@@ -54,13 +88,22 @@ public class JdbcTransactionManager implements TransactionManager {
     } catch (Exception e) {
       throw new JdbcTransactionException(e);
     } finally {
-      connThreadLocal.remove();
+      if (deque.isEmpty()) {
+        log.debug("commit: clearing thread local deque");
+        threadLocalDeque.remove();
+      }
     }
   }
 
   @Override
   public void rollback() {
-    Connection connection = connThreadLocal.get();
+    Deque<Connection> deque = threadLocalDeque.get();
+    if (null == deque || deque.isEmpty()) {
+      throw new IllegalStateException("cannot rollback: no transaction started");
+    }
+
+    log.debug("rollback: poll connection from thread local deque");
+    Connection connection = deque.poll();
     if (null == connection) {
       throw new IllegalStateException("cannot rollback: no transaction in progress");
     }
@@ -70,7 +113,16 @@ public class JdbcTransactionManager implements TransactionManager {
     } catch (Exception e) {
       throw new JdbcTransactionException(e);
     } finally {
-      connThreadLocal.remove();
+      if (deque.isEmpty()) {
+        log.debug("rollback: clearing thread local deque");
+        threadLocalDeque.remove();
+      }
     }
+  }
+
+  @Override
+  public void close() {
+    log.debug("closing transaction manager");
+    closing.set(true);
   }
 }

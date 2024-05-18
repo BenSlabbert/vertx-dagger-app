@@ -11,6 +11,16 @@ registries:
     url: "https://maven.pkg.github.com/BenSlabbert/git-version-extension"
     username: "BenSlabbert"
     password: "${{ secrets.GH_TOKEN }}"
+  vertx-dagger-codegen:
+    type: "maven-repository"
+    url: "https://maven.pkg.github.com/BenSlabbert/vertx-dagger-codegen"
+    username: "BenSlabbert"
+    password: "${{ secrets.GH_TOKEN }}"
+  tx-manager:
+    type: "maven-repository"
+    url: "https://maven.pkg.github.com/BenSlabbert/tx-manager"
+    username: "BenSlabbert"
+    password: "${{ secrets.GH_TOKEN }}"
 updates:
 - package-ecosystem: "maven"
   directory: "/"
@@ -20,6 +30,8 @@ updates:
   registries:
   - "vertx-dagger-bom"
   - "git-version-extension"
+  - "vertx-dagger-codegen"
+  - "tx-manager"
   labels:
   - "dependencies"
 - package-ecosystem: "npm"
