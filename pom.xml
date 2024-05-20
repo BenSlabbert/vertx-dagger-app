@@ -39,7 +39,7 @@
     <skipJooqGeneration>false</skipJooqGeneration>
 
     <!--deps-->
-    <vertx-dagger-codegen.version>1.0.4</vertx-dagger-codegen.version>
+    <vertx-dagger-codegen.version>1.2.0</vertx-dagger-codegen.version>
   </properties>
 
   <dependencyManagement>
