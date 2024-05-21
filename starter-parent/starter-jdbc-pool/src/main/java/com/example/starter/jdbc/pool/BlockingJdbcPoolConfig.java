@@ -38,7 +38,7 @@ final class BlockingJdbcPoolConfig implements AutoCloseable {
 
     try (var c = dataSource.getConnection()) {
       String s = c.nativeSQL("select 1");
-      log.info("test connection: %s".formatted(s));
+      log.info("test connection: {}", s);
     } catch (Exception e) {
       log.error("failed to get connection", e);
       throw new NoStackTraceException(e);

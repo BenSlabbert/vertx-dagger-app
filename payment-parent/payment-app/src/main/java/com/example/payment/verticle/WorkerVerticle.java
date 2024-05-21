@@ -36,14 +36,16 @@ public class WorkerVerticle extends AbstractVerticle {
     vertx.exceptionHandler(err -> log.error("unhandled exception", err));
 
     log.info("starting WorkerVerticle");
-    log.info("starting WorkerVerticle on thread: %s".formatted(Thread.currentThread().getName()));
+    log.info("starting WorkerVerticle on thread: {}", Thread.currentThread().getName());
 
     ThreadingModel threadingModel = vertx.getOrCreateContext().threadingModel();
     boolean workerContext = vertx.getOrCreateContext().isWorkerContext();
     boolean eventLoopContext = vertx.getOrCreateContext().isEventLoopContext();
     log.info(
-        "threadingModel: %s, workerContext: %b, eventLoopContext: %b"
-            .formatted(threadingModel, workerContext, eventLoopContext));
+        "threadingModel: {}, workerContext: {}, eventLoopContext: {}",
+        threadingModel,
+        workerContext,
+        eventLoopContext);
 
     checkDbConnection(startPromise);
     consumers.forEach(Consumer::register);

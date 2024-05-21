@@ -13,7 +13,7 @@ public class VirtualThreadVertxThreadFactory implements VertxThreadFactory {
   private static final Logger log = LoggerFactory.getLogger(VirtualThreadVertxThreadFactory.class);
 
   public VirtualThreadVertxThreadFactory() {
-    log.info("loading %s SPI".formatted(getClass().getCanonicalName()));
+    log.info("loading {} SPI", getClass().getCanonicalName());
   }
 
   @Override
@@ -50,8 +50,11 @@ public class VirtualThreadVertxThreadFactory implements VertxThreadFactory {
       this.thread = Thread.ofVirtual().unstarted(target);
       thread.setName(name);
       log.info(
-          "created virtual thread name: %s worker? %b maxExecTime %d maxExecTimeUnit %s"
-              .formatted(name, worker, maxExecTime, maxExecTimeUnit));
+          "created virtual thread name: {} worker? {} maxExecTime {} maxExecTimeUnit {}",
+          name,
+          worker,
+          maxExecTime,
+          maxExecTimeUnit);
     }
 
     @Override

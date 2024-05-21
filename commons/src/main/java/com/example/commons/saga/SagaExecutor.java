@@ -24,7 +24,7 @@ public class SagaExecutor {
   }
 
   public Future<String> execute() {
-    log.info("%s: starting saga".formatted(sagaId));
+    log.info("{}: starting saga", sagaId);
     return next().map(ignore -> sagaId);
   }
 
@@ -46,12 +46,12 @@ public class SagaExecutor {
         .compose(msg -> stage.handleResult(sagaId, msg))
         .recover(
             throwable -> {
-              log.error("%s failed to execute saga".formatted(sagaId), throwable);
+              log.error("{} failed to execute saga", sagaId, throwable);
               return previous().map(ignore -> FALSE);
             })
         .compose(
             success -> {
-              log.info("got result: " + success);
+              log.info("got result: {}", success);
               return TRUE.equals(success) ? next() : previous();
             });
   }
@@ -81,7 +81,7 @@ public class SagaExecutor {
               }
 
               // sendRollbackCommand failed, log the error and keep unwinding
-              log.error("%s failed to execute saga rollback".formatted(sagaId), throwable);
+              log.error("{} failed to execute saga rollback", sagaId, throwable);
               return previous();
             });
   }

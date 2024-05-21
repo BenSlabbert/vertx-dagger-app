@@ -50,7 +50,7 @@ public class ItemService extends TransactionBoundary {
         .createPurchaseOrderSaga()
         .execute()
         .onFailure(err -> log.error("failed to execute saga", err))
-        .onSuccess(sagaId -> log.info("%s: saga completed".formatted(sagaId)));
+        .onSuccess(sagaId -> log.info("{}: saga completed", sagaId));
   }
 
   public Future<PaginatedResponseDto> nextPage(long fromId, int size) {

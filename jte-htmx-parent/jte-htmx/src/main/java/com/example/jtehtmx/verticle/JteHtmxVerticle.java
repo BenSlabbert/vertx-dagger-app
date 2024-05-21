@@ -58,9 +58,9 @@ public class JteHtmxVerticle extends AbstractVerticle {
               String query = ctx.request().query();
 
               if (null == query) {
-                log.info("[%s] %s".formatted(method, path));
+                log.info("[{}] {}", method, path);
               } else {
-                log.info("[%s] %s?%s".formatted(method, path, query));
+                log.info("[{}] {}?{}", method, path, query);
               }
 
               MultiMap parsedHeaderValues = ctx.request().headers();
