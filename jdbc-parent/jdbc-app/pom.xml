@@ -119,6 +119,11 @@
       <artifactId>vertx-web-validation</artifactId>
     </dependency>
     <dependency>
+      <groupId>github.benslabbert.txmanager</groupId>
+      <artifactId>plugin</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
@@ -197,6 +202,7 @@
               <groupId>github.benslabbert.txmanager</groupId>
               <artifactId>plugin</artifactId>
               <plugin>github.benslabbert.txmanager.plugin.TransactionalAdvicePlugin</plugin>
+              <version>${tx-manager.version}</version>
             </transformation>
           </transformations>
         </configuration>

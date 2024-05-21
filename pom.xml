@@ -81,6 +81,12 @@
         <artifactId>txmanager</artifactId>
         <version>${tx-manager.version}</version>
       </dependency>
+      <dependency>
+        <groupId>github.benslabbert.txmanager</groupId>
+        <artifactId>plugin</artifactId>
+        <version>${tx-manager.version}</version>
+        <scope>provided</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
