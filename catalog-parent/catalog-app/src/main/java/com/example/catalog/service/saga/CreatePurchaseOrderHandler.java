@@ -9,14 +9,11 @@ import com.example.commons.saga.SagaStageHandler;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
-import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class CreatePurchaseOrderHandler implements SagaStageHandler {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePurchaseOrderHandler.class);

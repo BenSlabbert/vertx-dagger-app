@@ -1,6 +1,7 @@
 <script lang="ts">
-	import type { GetOneItemResponse } from '$lib/api/catalog';
-	export let data: GetOneItemResponse;
+  import type {GetOneItemResponse} from '$lib/api/catalog';
+
+  export let data: GetOneItemResponse;
 </script>
 
 <svelte:head>

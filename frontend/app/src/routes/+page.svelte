@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { browser } from '$app/environment';
-	import routes from '$lib/routes';
+  import {page} from '$app/stores';
+  import {browser} from '$app/environment';
+  import routes from '$lib/routes';
 
-	function redirectToLogin() {
+  function redirectToLogin() {
 		if (browser) {
 			window.location.href = routes.login;
 		}

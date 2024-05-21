@@ -16,18 +16,22 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 class ItemHandlerImpl implements ItemHandler {
 
   private static final Logger log = LoggerFactory.getLogger(ItemHandlerImpl.class);
 
   private final ItemService itemService;
   private final SchemaValidatorDelegator schemaValidatorDelegator;
+
+  @Inject
+  ItemHandlerImpl(ItemService itemService, SchemaValidatorDelegator schemaValidatorDelegator) {
+    this.itemService = itemService;
+    this.schemaValidatorDelegator = schemaValidatorDelegator;
+  }
 
   @Override
   public void configureRoutes(Router router) {

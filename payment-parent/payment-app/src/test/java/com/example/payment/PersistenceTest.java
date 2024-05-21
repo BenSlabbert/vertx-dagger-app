@@ -14,22 +14,23 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.lifecycle.Startables;
 
-@Slf4j
 @ExtendWith(VertxExtension.class)
 public abstract class PersistenceTest {
 
+  private static final Logger log = LoggerFactory.getLogger(PersistenceTest.class);
   protected static final int HTTP_PORT = getPort();
 
   protected TestPersistenceProvider provider;

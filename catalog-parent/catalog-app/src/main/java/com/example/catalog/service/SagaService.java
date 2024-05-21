@@ -9,15 +9,23 @@ import com.example.commons.saga.SagaBuilder;
 import com.example.commons.saga.SagaExecutor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 
 @Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 class SagaService {
 
   private final CreatePurchaseOrderHandler createPurchaseOrderHandler;
   private final CreatePaymentHandler createPaymentHandler;
   private final SagaBuilder sagaBuilder;
+
+  @Inject
+  SagaService(
+      CreatePurchaseOrderHandler createPurchaseOrderHandler,
+      CreatePaymentHandler createPaymentHandler,
+      SagaBuilder sagaBuilder) {
+    this.createPurchaseOrderHandler = createPurchaseOrderHandler;
+    this.createPaymentHandler = createPaymentHandler;
+    this.sagaBuilder = sagaBuilder;
+  }
 
   public SagaExecutor createPurchaseOrderSaga() {
     return sagaBuilder

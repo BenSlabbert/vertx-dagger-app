@@ -1,6 +1,6 @@
-import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { factory } from '$lib/api/catalog';
+import {json} from '@sveltejs/kit';
+import type {RequestHandler} from './$types';
+import {factory} from '$lib/api/catalog';
 
 export const GET = (async ({ url, fetch, locals }) => {
 	const s = url.searchParams.get('s');

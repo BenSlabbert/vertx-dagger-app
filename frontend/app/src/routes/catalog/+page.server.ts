@@ -1,6 +1,7 @@
-import type { PageServerLoad } from './$types';
+import type {PageServerLoad} from './$types';
 import loggerFactory from '$lib/logger';
-import { factory, Direction } from '$lib/api/catalog';
+import {Direction, factory} from '$lib/api/catalog';
+
 const logger = loggerFactory(import.meta.url);
 
 export const load: PageServerLoad = async ({ fetch, locals, url }) => {

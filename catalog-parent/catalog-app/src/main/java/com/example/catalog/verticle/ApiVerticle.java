@@ -26,11 +26,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class ApiVerticle extends AbstractVerticle {
 
   private static final Logger log = LoggerFactory.getLogger(ApiVerticle.class);
@@ -42,6 +40,24 @@ public class ApiVerticle extends AbstractVerticle {
   private final RedisAPI redisAPI;
   private final Config config;
   private final Pool pool;
+
+  @Inject
+  ApiVerticle(
+      ClosingService closingService,
+      Set<Consumer> consumers,
+      ItemHandler itemHandler,
+      AuthHandler authHandler,
+      RedisAPI redisAPI,
+      Config config,
+      Pool pool) {
+    this.closingService = closingService;
+    this.consumers = consumers;
+    this.itemHandler = itemHandler;
+    this.authHandler = authHandler;
+    this.redisAPI = redisAPI;
+    this.config = config;
+    this.pool = pool;
+  }
 
   @Override
   public void start(Promise<Void> startPromise) {

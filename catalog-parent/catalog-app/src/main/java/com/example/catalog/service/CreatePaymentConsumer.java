@@ -17,11 +17,9 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import javax.inject.Inject;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 class CreatePaymentConsumer implements Consumer {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentConsumer.class);
@@ -30,6 +28,11 @@ class CreatePaymentConsumer implements Consumer {
   private final Vertx vertx;
 
   private MessageConsumer<JsonObject> consumer;
+
+  @Inject
+  CreatePaymentConsumer(Vertx vertx) {
+    this.vertx = vertx;
+  }
 
   private void handle(Message<JsonObject> message) {
     log.info("handle message: %s".formatted(CMD_ADDRESS));
