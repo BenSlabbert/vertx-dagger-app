@@ -1,31 +1,30 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse.rpc.api.dto;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class GetNextDeliveryJobRequestDto {
+@JsonWriter
+public record GetNextDeliveryJobRequestDto(String truckId) {
 
-  private String truckId;
+  public static Builder builder() {
+    return new AutoBuilder_GetNextDeliveryJobRequestDto_Builder();
+  }
 
-  public GetNextDeliveryJobRequestDto(JsonObject jsonObject) {
-    GetNextDeliveryJobRequestDtoConverter.fromJson(jsonObject, this);
+  public static GetNextDeliveryJobRequestDto fromJson(JsonObject json) {
+    return GetNextDeliveryJobRequestDto_JsonWriter.fromJson(json);
   }
 
   public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    GetNextDeliveryJobRequestDtoConverter.toJson(this, json);
-    return json;
+    return GetNextDeliveryJobRequestDto_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder truckId(String truckId);
+
+    GetNextDeliveryJobRequestDto build();
   }
 }

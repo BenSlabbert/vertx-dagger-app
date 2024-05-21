@@ -48,14 +48,14 @@ class IamRpcServiceAuthenticationProvider implements AuthenticationProvider {
         .check(CheckTokenRequestDto.builder().token(jwtToken).build())
         .compose(
             resp -> {
-              if (!resp.isValid()) {
+              if (!resp.valid()) {
                 AsyncResult<User> ar =
                     ServiceException.fail(UNAUTHORIZED.code(), "invalid credentials");
                 return Future.failedFuture(ar.cause());
               }
 
-              JsonObject principal = new JsonObject(resp.getUserPrincipal());
-              JsonObject attributes = new JsonObject(resp.getUserAttributes());
+              JsonObject principal = new JsonObject(resp.userPrincipal());
+              JsonObject attributes = new JsonObject(resp.userAttributes());
               return Future.succeededFuture(User.create(principal, attributes));
             });
   }

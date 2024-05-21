@@ -1,39 +1,39 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.entity;
 
-import static java.util.Objects.requireNonNull;
-
-import com.example.commons.web.serialization.JsonWriter;
-import io.vertx.core.json.JsonArray;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import java.util.Set;
-import java.util.stream.Collectors;
-import lombok.Builder;
 
-@Builder
-public record ACL(String group, String role, Set<String> permissions) implements JsonWriter {
+@JsonWriter
+public record ACL(String group, String role, Set<String> permissions) {
 
   public static final String GROUP_FIELD = "group";
   public static final String ROLE_FIELD = "role";
   public static final String PERMISSIONS_FIELD = "permissions";
 
-  public ACL(JsonObject jsonObject) {
-    this(
-        requireNonNull(jsonObject.getString(GROUP_FIELD)),
-        requireNonNull(jsonObject.getString(ROLE_FIELD)),
-        requireNonNull(
-            jsonObject.getJsonArray(PERMISSIONS_FIELD).stream()
-                .map(Object::toString)
-                .collect(Collectors.toSet())));
+  public static Builder builder() {
+    return new AutoBuilder_ACL_Builder();
   }
 
-  @Override
+  public static ACL fromJson(JsonObject json) {
+    return ACL_JsonWriter.fromJson(json);
+  }
+
   public JsonObject toJson() {
-    JsonArray array = new JsonArray();
-    permissions.forEach(array::add);
-    return new JsonObject()
-        .put(GROUP_FIELD, group)
-        .put(ROLE_FIELD, role)
-        .put(PERMISSIONS_FIELD, array);
+    return ACL_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder group(String group);
+
+    Builder role(String role);
+
+    Builder permissions(Set<String> permissions);
+
+    ACL build();
   }
 }

@@ -34,9 +34,9 @@ class WarehouseRpcServiceImpl extends TransactionBoundary implements WarehouseRp
   @Override
   public Future<GetNextDeliveryJobResponseDto> getNextDeliveryJob(
       GetNextDeliveryJobRequestDto request) {
-    log.info("get next delivery: " + request.getTruckId());
+    log.info("get next delivery: " + request.truckId());
 
-    UUID uuid = UUID.fromString(request.getTruckId());
+    UUID uuid = UUID.fromString(request.truckId());
 
     Future<List<NextDeliveryJobProjection>> deliveries =
         doInTransaction(conn -> deliveryRepository.findNextDeliveryJob(conn, uuid));

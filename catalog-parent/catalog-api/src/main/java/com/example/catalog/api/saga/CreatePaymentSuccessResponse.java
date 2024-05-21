@@ -1,31 +1,30 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.catalog.api.saga;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class CreatePaymentSuccessResponse {
+@JsonWriter
+public record CreatePaymentSuccessResponse(String sagaId) {
 
-  private String sagaId;
+  public static Builder builder() {
+    return new AutoBuilder_CreatePaymentSuccessResponse_Builder();
+  }
 
-  public CreatePaymentSuccessResponse(JsonObject jsonObject) {
-    CreatePaymentSuccessResponseConverter.fromJson(jsonObject, this);
+  public static CreatePaymentSuccessResponse fromJson(JsonObject json) {
+    return CreatePaymentSuccessResponse_JsonWriter.fromJson(json);
   }
 
   public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    CreatePaymentSuccessResponseConverter.toJson(this, json);
-    return json;
+    return CreatePaymentSuccessResponse_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder sagaId(String sagaId);
+
+    CreatePaymentSuccessResponse build();
   }
 }

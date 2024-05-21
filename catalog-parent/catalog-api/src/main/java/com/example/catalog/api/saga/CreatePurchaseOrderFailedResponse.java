@@ -1,31 +1,30 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.catalog.api.saga;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class CreatePurchaseOrderFailedResponse {
+@JsonWriter
+public record CreatePurchaseOrderFailedResponse(String sagaId) {
 
-  private String sagaId;
+  public static Builder builder() {
+    return new AutoBuilder_CreatePurchaseOrderFailedResponse_Builder();
+  }
 
-  public CreatePurchaseOrderFailedResponse(JsonObject jsonObject) {
-    CreatePurchaseOrderFailedResponseConverter.fromJson(jsonObject, this);
+  public static CreatePurchaseOrderFailedResponse fromJson(JsonObject json) {
+    return CreatePurchaseOrderFailedResponse_JsonWriter.fromJson(json);
   }
 
   public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    CreatePurchaseOrderFailedResponseConverter.toJson(this, json);
-    return json;
+    return CreatePurchaseOrderFailedResponse_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder sagaId(String sagaId);
+
+    CreatePurchaseOrderFailedResponse build();
   }
 }

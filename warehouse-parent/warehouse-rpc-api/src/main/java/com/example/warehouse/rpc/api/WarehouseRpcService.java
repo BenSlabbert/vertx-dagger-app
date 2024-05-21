@@ -4,13 +4,11 @@ package com.example.warehouse.rpc.api;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobRequestDto;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobResponseDto;
 import github.benslabbert.vertxdaggercodegen.annotation.security.SecuredProxy;
-import io.vertx.codegen.annotations.ProxyGen;
-import io.vertx.codegen.annotations.VertxGen;
+import github.benslabbert.vertxdaggercodegen.annotation.serviceproxy.GenerateProxies;
 import io.vertx.core.Future;
 
 @SecuredProxy
-@ProxyGen // Generate service proxies
-@VertxGen // Generate the handler
+@GenerateProxies
 public interface WarehouseRpcService {
 
   String ADDRESS = "RPC.WAREHOUSE.JOBS";

@@ -1,41 +1,50 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.catalog.api.saga;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import javax.annotation.Nullable;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class CreatePurchaseOrderResponse {
+@JsonWriter
+public record CreatePurchaseOrderResponse(
+    String sagaId,
+    @Nullable CreatePurchaseOrderFailedResponse failedResponse,
+    @Nullable CreatePurchaseOrderSuccessResponse successResponse) {
+
+  public static Builder builder() {
+    return new AutoBuilder_CreatePurchaseOrderResponse_Builder();
+  }
+
+  public static CreatePurchaseOrderResponse fromJson(JsonObject json) {
+    return CreatePurchaseOrderResponse_JsonWriter.fromJson(json);
+  }
+
+  public JsonObject toJson() {
+    return CreatePurchaseOrderResponse_JsonWriter.toJson(this);
+  }
+
+  public CreatePurchaseOrderResponse {
+    if (failedResponse == null && successResponse == null) {
+      throw new IllegalStateException("Either failedResponse or successResponse must be set");
+    }
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder sagaId(String sagaId);
+
+    Builder failedResponse(@Nullable CreatePurchaseOrderFailedResponse failedResponse);
+
+    Builder successResponse(@Nullable CreatePurchaseOrderSuccessResponse successResponse);
+
+    CreatePurchaseOrderResponse build();
+  }
 
   public enum ResponseCase {
     SUCCESS,
     FAILURE
-  }
-
-  private String sagaId;
-
-  private CreatePurchaseOrderFailedResponse failedResponse;
-
-  private CreatePurchaseOrderSuccessResponse successResponse;
-
-  public CreatePurchaseOrderResponse(JsonObject jsonObject) {
-    CreatePurchaseOrderResponseConverter.fromJson(jsonObject, this);
-  }
-
-  public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    CreatePurchaseOrderResponseConverter.toJson(this, json);
-    return json;
   }
 
   public ResponseCase getResponseCase() {

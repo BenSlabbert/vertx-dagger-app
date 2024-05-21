@@ -18,11 +18,13 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 @Singleton
 public class UserHandler {
+
+  private static final Logger log = LoggerFactory.getLogger(UserHandler.class);
 
   private final IamAuthApi iamAuthApi;
   private final SchemaValidatorDelegator schemaValidatorDelegator;

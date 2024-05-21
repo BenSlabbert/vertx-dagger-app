@@ -1,35 +1,34 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.rpc.api.dto;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class CheckTokenResponseDto {
+@JsonWriter
+public record CheckTokenResponseDto(boolean valid, String userPrincipal, String userAttributes) {
 
-  private boolean valid;
+  public static Builder builder() {
+    return new AutoBuilder_CheckTokenResponseDto_Builder();
+  }
 
-  private String userPrincipal;
-
-  private String userAttributes;
-
-  public CheckTokenResponseDto(JsonObject jsonObject) {
-    CheckTokenResponseDtoConverter.fromJson(jsonObject, this);
+  public static CheckTokenResponseDto fromJson(JsonObject json) {
+    return CheckTokenResponseDto_JsonWriter.fromJson(json);
   }
 
   public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    CheckTokenResponseDtoConverter.toJson(this, json);
-    return json;
+    return CheckTokenResponseDto_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder valid(boolean valid);
+
+    Builder userPrincipal(String userPrincipal);
+
+    Builder userAttributes(String userAttributes);
+
+    CheckTokenResponseDto build();
   }
 }

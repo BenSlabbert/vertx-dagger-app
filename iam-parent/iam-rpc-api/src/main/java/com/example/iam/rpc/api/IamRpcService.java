@@ -3,12 +3,10 @@ package com.example.iam.rpc.api;
 
 import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
 import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
-import io.vertx.codegen.annotations.ProxyGen;
-import io.vertx.codegen.annotations.VertxGen;
+import github.benslabbert.vertxdaggercodegen.annotation.serviceproxy.GenerateProxies;
 import io.vertx.core.Future;
 
-@ProxyGen // Generate service proxies
-@VertxGen // Generate the handler
+@GenerateProxies
 public interface IamRpcService {
 
   String ADDRESS = "RPC.IAM.TOKEN_CHECK";

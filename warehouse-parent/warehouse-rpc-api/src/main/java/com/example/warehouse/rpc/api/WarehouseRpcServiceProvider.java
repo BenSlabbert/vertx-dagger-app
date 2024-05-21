@@ -18,6 +18,7 @@ public class WarehouseRpcServiceProvider {
   }
 
   public WarehouseRpcService get() {
-    return new WarehouseRpcServiceVertxEBProxy(vertx, WarehouseRpcService.ADDRESS, deliveryOptions);
+    return new WarehouseRpcServiceVertxEBClientProxy(
+        vertx, WarehouseRpcService.ADDRESS, deliveryOptions);
   }
 }

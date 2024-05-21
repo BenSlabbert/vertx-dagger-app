@@ -17,21 +17,21 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-codegen</artifactId>
-      <classifier>processor</classifier>
+      <groupId>github.benslabbert.jsonwriter</groupId>
+      <artifactId>annotation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.dagger</groupId>
+      <artifactId>dagger-compiler</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-service-proxy</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
+      <groupId>com.google.auto.value</groupId>
+      <artifactId>auto-value-annotations</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -54,20 +54,14 @@
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>${lombok.version}</version>
+              <groupId>com.google.auto.value</groupId>
+              <artifactId>auto-value</artifactId>
+              <version>${google-auto-value.version}</version>
             </path>
             <path>
-              <groupId>io.vertx</groupId>
-              <artifactId>vertx-codegen</artifactId>
-              <version>${vertx.version}</version>
-              <classifier>processor</classifier>
-            </path>
-            <path>
-              <groupId>io.vertx</groupId>
-              <artifactId>vertx-service-proxy</artifactId>
-              <version>${vertx.version}</version>
+              <groupId>github.benslabbert.jsonwriter</groupId>
+              <artifactId>processor</artifactId>
+              <version>${jsonwriter.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>

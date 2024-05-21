@@ -12,11 +12,13 @@ import io.vertx.json.schema.JsonSchema;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 @Singleton
 public class SchemaValidatorDelegator {
+
+  private static final Logger log = LoggerFactory.getLogger(SchemaValidatorDelegator.class);
 
   private final SchemaValidator schemaValidator;
 

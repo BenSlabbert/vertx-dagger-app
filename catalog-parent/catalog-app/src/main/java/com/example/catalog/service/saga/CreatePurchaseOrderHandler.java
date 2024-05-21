@@ -32,15 +32,16 @@ public class CreatePurchaseOrderHandler implements SagaStageHandler {
   public Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
     log.info("%s: handle result".formatted(sagaId));
 
-    CreatePaymentResponse response = new CreatePaymentResponse(result.body());
+    CreatePaymentResponse response = CreatePaymentResponse.fromJson(result.body());
+    ;
 
     if (response.getResponseCase() == CreatePaymentResponse.ResponseCase.SUCCESS) {
-      CreatePaymentSuccessResponse success = response.getSuccessResponse();
+      CreatePaymentSuccessResponse success = response.successResponse();
       log.info("success: " + success);
       return Future.succeededFuture(true);
     }
 
-    CreatePaymentFailedResponse failed = response.getFailedResponse();
+    CreatePaymentFailedResponse failed = response.failedResponse();
     log.info("failure: " + failed);
     return Future.succeededFuture(false);
   }
