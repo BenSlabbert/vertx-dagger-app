@@ -1,8 +1,8 @@
 <script lang="ts">
-  import {enhance, type SubmitFunction} from '$app/forms';
-  import type {ActionData} from './$types';
+	import { enhance, type SubmitFunction } from '$app/forms';
+	import type { ActionData } from './$types';
 
-  export let form: ActionData;
+	export let form: ActionData;
 	let loading = false;
 
 	const processLogin: SubmitFunction = (input) => {

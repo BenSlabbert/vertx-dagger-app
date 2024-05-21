@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {page} from '$app/stores';
-  import routes, {catalogDelete, catalogEdit} from '$lib/routes';
-  import {Direction, type ItemsResponse} from '$lib/api/catalog';
+	import { page } from '$app/stores';
+	import routes, { catalogDelete, catalogEdit } from '$lib/routes';
+	import { Direction, type ItemsResponse } from '$lib/api/catalog';
 
-  export let data: ItemsResponse;
+	export let data: ItemsResponse;
 
 	let loading = false;
 	let suggestions: string[] = [];

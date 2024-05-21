@@ -1,6 +1,6 @@
-import type {PageServerLoad} from './$types';
+import type { PageServerLoad } from './$types';
 import loggerFactory from '$lib/logger';
-import {Direction, factory} from '$lib/api/catalog';
+import { Direction, factory } from '$lib/api/catalog';
 
 const logger = loggerFactory(import.meta.url);
 

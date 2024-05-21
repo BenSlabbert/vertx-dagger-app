@@ -1,5 +1,5 @@
-import {redirect} from '@sveltejs/kit';
-import type {Actions, PageServerLoad} from './$types';
+import { redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
 import cookieUtils from '$lib/cookie_utils';

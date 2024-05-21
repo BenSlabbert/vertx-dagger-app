@@ -1,5 +1,5 @@
-import type {Cookies} from '@sveltejs/kit';
-import {COOKIE_ID} from '$lib/constants';
+import type { Cookies } from '@sveltejs/kit';
+import { COOKIE_ID } from '$lib/constants';
 import routes from '$lib/routes';
 
 async function set(cookies: Cookies, appUser: App.User) {

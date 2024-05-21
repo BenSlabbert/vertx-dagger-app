@@ -1104,15 +1104,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.5.9":
-  version: 2.5.9
-  resolution: "@sveltejs/kit@npm:2.5.9"
+"@sveltejs/kit@npm:^2.5.10":
+  version: 2.5.10
+  resolution: "@sveltejs/kit@npm:2.5.10"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
     devalue: "npm:^5.0.0"
     esm-env: "npm:^1.0.0"
-    import-meta-resolve: "npm:^4.0.0"
+    import-meta-resolve: "npm:^4.1.0"
     kleur: "npm:^4.1.5"
     magic-string: "npm:^0.30.5"
     mrmime: "npm:^2.0.0"
@@ -1126,7 +1126,7 @@ __metadata:
     vite: ^5.0.3
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/2eb1630b317d39ace7e0e0352de6c00aa80d890d6297f58fab997f645f6159060a34bae8c89fd116abf7f1cbc4bc19fd5e9e45e37f8f8005cbd9fa88c0e8a4c3
+  checksum: 10/aef9a0ea170b3436699a668c1000f0d7b653fc18080db4230d0c12a5a35f39771d38239584a32c4469e097e7f93b92d87e0aec1d36bc5d17affedf2d963b0282
   languageName: node
   linkType: hard
 
@@ -1611,7 +1611,7 @@ __metadata:
     "@picocss/pico": "npm:^2.0.6"
     "@playwright/test": "npm:^1.44.0"
     "@sveltejs/adapter-node": "npm:^4.0.1"
-    "@sveltejs/kit": "npm:^2.5.9"
+    "@sveltejs/kit": "npm:^2.5.10"
     "@sveltejs/vite-plugin-svelte": "npm:^3.1.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
     "@typescript-eslint/parser": "npm:^6.21.0"
@@ -3003,10 +3003,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"import-meta-resolve@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "import-meta-resolve@npm:4.0.0"
-  checksum: 10/73f0f1d68f7280cb4415e3a212a6e5d57fbfe61ab6f467df3dad5361529fbd89ac7d8ea2b694412b74985a4226d218ad3fb22fd8f06f5429beda521dc9f0229c
+"import-meta-resolve@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "import-meta-resolve@npm:4.1.0"
+  checksum: 10/40162f67eb406c8d5d49266206ef12ff07b54f5fad8cfd806db9efe3a055958e9969be51d6efaf82e34b8bea6758113dcc17bb79ff148292a4badcabc3472f22
   languageName: node
   linkType: hard
 
