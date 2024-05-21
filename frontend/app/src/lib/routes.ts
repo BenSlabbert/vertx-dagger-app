@@ -1,4 +1,4 @@
-import {base} from '$app/paths';
+import { base } from '$app/paths';
 
 const routes = {
 	home: base ? base : '/',

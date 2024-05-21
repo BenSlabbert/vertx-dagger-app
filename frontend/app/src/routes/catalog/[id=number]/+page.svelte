@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {enhance, type SubmitFunction} from '$app/forms';
-  import type {ActionData} from './$types';
-  import type {GetOneItemResponse} from '$lib/api/catalog';
+	import { enhance, type SubmitFunction } from '$app/forms';
+	import type { ActionData } from './$types';
+	import type { GetOneItemResponse } from '$lib/api/catalog';
 
-  export let data: GetOneItemResponse;
+	export let data: GetOneItemResponse;
 	export let form: ActionData;
 	let loading = false;
 

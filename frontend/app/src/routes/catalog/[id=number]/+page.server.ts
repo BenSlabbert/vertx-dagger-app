@@ -1,9 +1,9 @@
-import {type Actions, fail, redirect} from '@sveltejs/kit';
+import { type Actions, fail, redirect } from '@sveltejs/kit';
 import routes from '$lib/routes';
-import type {PageServerLoad} from './$types';
-import {zfd} from 'zod-form-data';
+import type { PageServerLoad } from './$types';
+import { zfd } from 'zod-form-data';
 import loggerFactory from '$lib/logger';
-import {factory} from '$lib/api/catalog';
+import { factory } from '$lib/api/catalog';
 
 const logger = loggerFactory(import.meta.url);
 

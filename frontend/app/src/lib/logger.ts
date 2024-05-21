@@ -1,8 +1,8 @@
 // https://stackoverflow.com/a/70394675
 
 import winston from 'winston';
-import {resolve} from 'path';
-import {fileURLToPath} from 'url';
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 
 const { format, transports, createLogger } = winston;
 const { combine, timestamp, printf } = format;
