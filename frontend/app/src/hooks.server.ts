@@ -1,9 +1,10 @@
-import type { Handle, HandleFetch } from '@sveltejs/kit';
+import type {Handle, HandleFetch} from '@sveltejs/kit';
 import routes from '$lib/routes';
 import loggerFactory from '$lib/logger';
-import { Buffer } from 'buffer';
-import { factory } from '$lib/api/iam';
+import {Buffer} from 'buffer';
+import {factory} from '$lib/api/iam';
 import cookieUtils from '$lib/cookie_utils';
+
 const logger = loggerFactory(import.meta.url);
 
 type tokenPayload = {

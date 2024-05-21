@@ -14,12 +14,10 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.HttpException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class AuthHandler implements Handler<RoutingContext> {
 
   public static final RoleBasedAuthorization ROLE = RoleBasedAuthorization.create("my-role");
@@ -28,6 +26,11 @@ public class AuthHandler implements Handler<RoutingContext> {
   private static final String BEARER = "Bearer ";
 
   private final IamRpcService iamRpcService;
+
+  @Inject
+  AuthHandler(IamRpcService iamRpcService) {
+    this.iamRpcService = iamRpcService;
+  }
 
   @Override
   public void handle(RoutingContext ctx) {

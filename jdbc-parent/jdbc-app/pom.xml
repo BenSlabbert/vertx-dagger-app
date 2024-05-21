@@ -226,11 +226,6 @@
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>${lombok.version}</version>
-            </path>
-            <path>
               <groupId>com.google.errorprone</groupId>
               <artifactId>error_prone_core</artifactId>
               <version>${errorprone.version}</version>

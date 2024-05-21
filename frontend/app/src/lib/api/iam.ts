@@ -1,4 +1,5 @@
 import loggerFactory from '$lib/logger';
+
 const logger = loggerFactory(import.meta.url);
 
 type LoginRequest = {

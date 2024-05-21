@@ -20,12 +20,10 @@ import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 public class CreatePaymentHandler implements Consumer {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentHandler.class);
@@ -33,6 +31,12 @@ public class CreatePaymentHandler implements Consumer {
 
   private final PaymentService paymentService;
   private final Vertx vertx;
+
+  @Inject
+  CreatePaymentHandler(Vertx vertx, PaymentService paymentService) {
+    this.vertx = vertx;
+    this.paymentService = paymentService;
+  }
 
   private MessageConsumer<JsonObject> consumer;
 

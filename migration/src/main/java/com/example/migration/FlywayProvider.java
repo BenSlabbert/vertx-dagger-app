@@ -2,7 +2,6 @@
 package com.example.migration;
 
 import java.util.Properties;
-import lombok.SneakyThrows;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
@@ -23,12 +22,13 @@ public class FlywayProvider {
         .load();
   }
 
-  @SneakyThrows
   private static Properties readFlywayProps() {
     try (var stream = FlywayProvider.class.getResourceAsStream("/flyway/flyway.conf")) {
       var props = new Properties();
       props.load(stream);
       return props;
+    } catch (Exception e) {
+      throw new MigrationException(e);
     }
   }
 }

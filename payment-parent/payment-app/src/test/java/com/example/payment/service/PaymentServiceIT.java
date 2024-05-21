@@ -4,10 +4,8 @@ package com.example.payment.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.payment.PersistenceTest;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-@Slf4j
 class PaymentServiceIT extends PersistenceTest {
 
   @Test
