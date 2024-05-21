@@ -43,7 +43,7 @@ class JobServiceImpl implements JobService {
 
   @Override
   public void handle(Long timerId) {
-    log.info("[timerId:%d] Checking for jobs".formatted(timerId));
+    log.info("[timerId:{}] Checking for jobs", timerId);
 
     checkAuthenticated()
         .compose(ignore -> checkTokenValid())
@@ -57,7 +57,7 @@ class JobServiceImpl implements JobService {
       return;
     }
 
-    log.info("Job found: %s".formatted(resp.deliveryId()));
+    log.info("Job found: {}", resp.deliveryId());
   }
 
   private Future<GetNextDeliveryJobResponseDto> getNetDelivery() {

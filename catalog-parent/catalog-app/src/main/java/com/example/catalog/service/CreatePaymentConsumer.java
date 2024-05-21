@@ -35,13 +35,13 @@ class CreatePaymentConsumer implements Consumer {
   }
 
   private void handle(Message<JsonObject> message) {
-    log.info("handle message: %s".formatted(CMD_ADDRESS));
+    log.info("handle message: {}", CMD_ADDRESS);
 
     MultiMap headers = message.headers();
     String sagaId = Objects.requireNonNull(headers.get(SAGA_ID_HEADER));
 
     if (null != headers.get(SAGA_ROLLBACK_HEADER)) {
-      log.info("%s: received rollback".formatted(sagaId));
+      log.info("{}: received rollback", sagaId);
       // clean up db
       return;
     }

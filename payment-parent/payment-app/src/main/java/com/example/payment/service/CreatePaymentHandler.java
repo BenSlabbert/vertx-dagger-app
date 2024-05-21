@@ -41,31 +41,33 @@ public class CreatePaymentHandler implements Consumer {
   private MessageConsumer<JsonObject> consumer;
 
   public void handle(Message<JsonObject> message) {
-    log.info("handle message: %s".formatted(CMD_ADDRESS));
-    log.info("handle message on thread: %s".formatted(Thread.currentThread().getName()));
+    log.info("handle message: {}", CMD_ADDRESS);
+    log.info("handle message on thread: {}", Thread.currentThread().getName());
 
     ThreadingModel threadingModel = vertx.getOrCreateContext().threadingModel();
     boolean workerContext = vertx.getOrCreateContext().isWorkerContext();
     boolean eventLoopContext = vertx.getOrCreateContext().isEventLoopContext();
     log.info(
-        "threadingModel: %s, workerContext: %b, eventLoopContext: %b"
-            .formatted(threadingModel, workerContext, eventLoopContext));
+        "threadingModel: {}, workerContext: {}, eventLoopContext: {}",
+        threadingModel,
+        workerContext,
+        eventLoopContext);
 
     MultiMap headers = message.headers();
     String sagaId = Objects.requireNonNull(headers.get(SAGA_ID_HEADER));
 
     if (null != headers.get(SAGA_ROLLBACK_HEADER)) {
-      log.info("%s: received rollback".formatted(sagaId));
+      log.info("{}: received rollback", sagaId);
       // clean up db
       return;
     }
 
     try {
       Long newId = paymentService.save("name");
-      log.info("%s: created new payment: %d".formatted(sagaId, newId));
+      log.info("{}: created new payment: {}", sagaId, newId);
       sendSuccess(sagaId, message);
     } catch (Exception e) {
-      log.error("failed to handle message for saga: %s".formatted(sagaId), e);
+      log.error("failed to handle message for saga: {}", sagaId, e);
       sendFailure(sagaId, message);
     }
   }

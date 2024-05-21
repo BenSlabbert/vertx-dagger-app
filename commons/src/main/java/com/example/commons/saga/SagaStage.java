@@ -28,7 +28,7 @@ abstract class SagaStage {
   abstract EventBus eventBus();
 
   Future<Message<JsonObject>> sendCommand(String sagaId) {
-    log.info("%s: sending command to: %s".formatted(sagaId, commandAddress()));
+    log.info("{}: sending command to: {}", sagaId, commandAddress());
 
     return handler()
         .getCommand(sagaId)
@@ -44,7 +44,7 @@ abstract class SagaStage {
   }
 
   Future<Message<Void>> sendRollbackCommand(String sagaId) {
-    log.info("%s: sending rollback command to: %s".formatted(sagaId, commandAddress()));
+    log.info("{}: sending rollback command to: {}", sagaId, commandAddress());
 
     return handler()
         .onRollBack(sagaId)
@@ -60,7 +60,7 @@ abstract class SagaStage {
   }
 
   Future<Boolean> handleResult(String sagaId, Message<JsonObject> result) {
-    log.info("%s: handle result".formatted(sagaId));
+    log.info("{}: handle result", sagaId);
     return handler().handleResult(sagaId, result);
   }
 
