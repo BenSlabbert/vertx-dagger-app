@@ -14,6 +14,6 @@ final class IamRpcServiceProvider {
   @Provides
   @Singleton
   static IamRpcService provideIamRpcService(Vertx vertx) {
-    return new IamRpcServiceVertxEBProxy(vertx, IamRpcService.ADDRESS);
+    return new IamRpcServiceVertxEBClientProxy(vertx, IamRpcService.ADDRESS);
   }
 }

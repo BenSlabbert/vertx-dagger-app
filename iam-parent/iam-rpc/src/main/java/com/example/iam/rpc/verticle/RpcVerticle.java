@@ -6,7 +6,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
 import com.example.commons.config.Config;
 import com.example.iam.rpc.api.IamRpcService;
-import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;
+import com.example.iam.rpc.api.IamRpcServiceVertxEBProxyHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -55,7 +55,7 @@ public class RpcVerticle extends AbstractVerticle {
             });
 
     this.consumer =
-        new IamRpcServiceVertxProxyHandler(vertx, iamRpcService)
+        new IamRpcServiceVertxEBProxyHandler(vertx, iamRpcService)
             .register(vertx.eventBus(), IamRpcService.ADDRESS)
             .setMaxBufferedMessages(100)
             .fetch(10)
@@ -79,7 +79,7 @@ public class RpcVerticle extends AbstractVerticle {
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
     Config.HttpConfig httpConfig = config.httpConfig();
-    log.info("starting on port: " + httpConfig.port());
+    log.info("starting on port: {}", httpConfig.port());
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
         .requestHandler(mainRouter)

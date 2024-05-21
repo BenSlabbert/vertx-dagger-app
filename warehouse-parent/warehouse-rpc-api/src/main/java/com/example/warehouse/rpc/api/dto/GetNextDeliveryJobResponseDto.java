@@ -1,31 +1,31 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse.rpc.api.dto;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import javax.annotation.Nullable;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class GetNextDeliveryJobResponseDto {
+@JsonWriter
+public record GetNextDeliveryJobResponseDto(@Nullable Long deliveryId) {
 
-  private Long deliveryId;
+  public static Builder builder() {
+    return new AutoBuilder_GetNextDeliveryJobResponseDto_Builder();
+  }
 
-  public GetNextDeliveryJobResponseDto(JsonObject jsonObject) {
-    GetNextDeliveryJobResponseDtoConverter.fromJson(jsonObject, this);
+  public static GetNextDeliveryJobResponseDto fromJson(JsonObject json) {
+    return GetNextDeliveryJobResponseDto_JsonWriter.fromJson(json);
   }
 
   public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    GetNextDeliveryJobResponseDtoConverter.toJson(this, json);
-    return json;
+    return GetNextDeliveryJobResponseDto_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder deliveryId(@Nullable Long deliveryId);
+
+    GetNextDeliveryJobResponseDto build();
   }
 }

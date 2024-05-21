@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.warehouse.PersistenceTest;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
-import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxEBProxy;
+import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxEBClientProxy;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobRequestDto;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobResponseDto;
 import io.vertx.core.Future;
@@ -24,8 +24,8 @@ class WarehouseRpcServiceImplTest extends PersistenceTest {
 
   @Test
   void authTest_success(Vertx vertx, VertxTestContext testContext) {
-    WarehouseRpcServiceVertxEBProxy service =
-        new WarehouseRpcServiceVertxEBProxy(
+    WarehouseRpcServiceVertxEBClientProxy service =
+        new WarehouseRpcServiceVertxEBClientProxy(
             vertx,
             WarehouseRpcService.ADDRESS,
             new DeliveryOptions().addHeader("auth-token", validJwtToken));
@@ -37,16 +37,17 @@ class WarehouseRpcServiceImplTest extends PersistenceTest {
     nextDeliveryJob.onComplete(
         testContext.succeeding(
             response -> {
+              System.err.println("response = " + response);
               assertThat(response).isNotNull();
-              assertThat(response.getDeliveryId()).isNull();
+              assertThat(response.deliveryId()).isNull();
               testContext.completeNow();
             }));
   }
 
   @Test
   void authTest_failure(Vertx vertx, VertxTestContext testContext) {
-    WarehouseRpcServiceVertxEBProxy service =
-        new WarehouseRpcServiceVertxEBProxy(
+    WarehouseRpcServiceVertxEBClientProxy service =
+        new WarehouseRpcServiceVertxEBClientProxy(
             vertx,
             WarehouseRpcService.ADDRESS,
             new DeliveryOptions().addHeader("auth-token", invalidJwtToken));
@@ -82,7 +83,7 @@ class WarehouseRpcServiceImplTest extends PersistenceTest {
         testContext.succeeding(
             response -> {
               assertThat(response).isNotNull();
-              assertThat(response.getDeliveryId()).isNull();
+              assertThat(response.deliveryId()).isNull();
               testContext.completeNow();
             }));
   }

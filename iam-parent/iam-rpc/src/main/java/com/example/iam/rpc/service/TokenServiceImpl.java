@@ -10,14 +10,17 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 
 @Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 final class TokenServiceImpl implements TokenService {
 
   private final Vertx vertx;
   private JWTAuth jwtAuth;
+
+  @Inject
+  TokenServiceImpl(Vertx vertx) {
+    this.vertx = vertx;
+  }
 
   @Inject
   void init() {

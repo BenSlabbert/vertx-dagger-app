@@ -59,14 +59,14 @@ public class AuthHandler implements Handler<RoutingContext> {
             })
         .onSuccess(
             resp -> {
-              log.info("token valid? " + resp.isValid());
-              if (!resp.isValid()) {
+              log.info("token valid? " + resp.valid());
+              if (!resp.valid()) {
                 ctx.fail(new HttpException(UNAUTHORIZED.code()));
                 return;
               }
 
-              JsonObject principal = new JsonObject(resp.getUserPrincipal());
-              JsonObject attributes = new JsonObject(resp.getUserAttributes());
+              JsonObject principal = new JsonObject(resp.userPrincipal());
+              JsonObject attributes = new JsonObject(resp.userAttributes());
 
               // principal:
               // {"access_token":"eyJ0.eyJh.zM","additional-props":"new-prop","iss":"iam","sub":"test"}

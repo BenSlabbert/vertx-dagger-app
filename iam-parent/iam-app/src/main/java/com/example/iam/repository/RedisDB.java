@@ -16,11 +16,13 @@ import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 @Singleton
 class RedisDB implements UserRepository, AutoCloseable {
+
+  private static final Logger log = LoggerFactory.getLogger(RedisDB.class);
 
   private final RedisAPI redisAPI;
 
@@ -63,7 +65,7 @@ class RedisDB implements UserRepository, AutoCloseable {
               }
 
               JsonObject o = (JsonObject) array.iterator().next();
-              return new User(o);
+              return User.fromJson(o);
             });
   }
 

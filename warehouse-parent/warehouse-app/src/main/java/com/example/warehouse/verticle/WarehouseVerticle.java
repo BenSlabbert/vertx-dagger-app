@@ -12,7 +12,7 @@ import com.example.commons.rpc.UserAccessLoggerInterceptor;
 import com.example.commons.security.rpc.RpcServiceProxySecurityInterceptor;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
-import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxProxyHandler;
+import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxEBProxyHandler;
 import com.example.warehouse.rpc.api.WarehouseRpcService_SecuredActions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
@@ -93,7 +93,7 @@ public class WarehouseVerticle extends AbstractVerticle {
     InterceptorHolder interceptorHolder = new InterceptorHolder(serviceInterceptor);
 
     this.consumer =
-        new WarehouseRpcServiceVertxProxyHandler(vertx, warehouseRpcService)
+        new WarehouseRpcServiceVertxEBProxyHandler(vertx, warehouseRpcService)
             .register(
                 vertx,
                 WarehouseRpcService.ADDRESS,

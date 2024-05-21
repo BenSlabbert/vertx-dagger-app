@@ -15,7 +15,7 @@ import com.example.commons.config.Config.RedisConfig;
 import com.example.commons.docker.DockerContainers;
 import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.iam.rpc.api.IamRpcService;
-import com.example.iam.rpc.api.IamRpcServiceVertxProxyHandler;
+import com.example.iam.rpc.api.IamRpcServiceVertxEBProxyHandler;
 import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import com.example.migration.FlywayProvider;
 import io.restassured.RestAssured;
@@ -137,7 +137,7 @@ public abstract class PersistenceTest {
     provider.init();
 
     register =
-        new IamRpcServiceVertxProxyHandler(
+        new IamRpcServiceVertxEBProxyHandler(
                 vertx,
                 request ->
                     Future.succeededFuture(

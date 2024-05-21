@@ -1,35 +1,41 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.entity;
 
-import static java.util.Objects.requireNonNull;
-
-import com.example.commons.web.serialization.JsonWriter;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.Builder;
 
-@Builder
-public record User(String username, String password, String refreshToken, ACL acl)
-    implements JsonWriter {
+@JsonWriter
+public record User(String username, String password, String refreshToken, ACL acl) {
 
   public static final String USERNAME_FIELD = "username";
   public static final String PASSWORD_FIELD = "password";
   public static final String REFRESH_TOKEN_FIELD = "refreshToken";
   public static final String ACl_FIELD = "acl";
 
-  public User(JsonObject jsonObject) {
-    this(
-        requireNonNull(jsonObject.getString(USERNAME_FIELD)),
-        requireNonNull(jsonObject.getString(PASSWORD_FIELD)),
-        requireNonNull(jsonObject.getString(REFRESH_TOKEN_FIELD)),
-        new ACL(requireNonNull(jsonObject.getJsonObject(ACl_FIELD))));
+  public static Builder builder() {
+    return new AutoBuilder_User_Builder();
   }
 
-  @Override
+  public static User fromJson(JsonObject json) {
+    return User_JsonWriter.fromJson(json);
+  }
+
   public JsonObject toJson() {
-    return new JsonObject()
-        .put(USERNAME_FIELD, username)
-        .put(PASSWORD_FIELD, password)
-        .put(REFRESH_TOKEN_FIELD, refreshToken)
-        .put(ACl_FIELD, acl.toJson());
+    return User_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder username(String username);
+
+    Builder password(String password);
+
+    Builder refreshToken(String refreshToken);
+
+    Builder acl(ACL acl);
+
+    User build();
   }
 }

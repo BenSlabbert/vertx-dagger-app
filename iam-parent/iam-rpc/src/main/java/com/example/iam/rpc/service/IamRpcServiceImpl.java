@@ -7,24 +7,27 @@ import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import io.vertx.core.Future;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject), access = lombok.AccessLevel.PROTECTED)
 class IamRpcServiceImpl implements IamRpcService {
 
   private static final Logger log = LoggerFactory.getLogger(IamRpcServiceImpl.class);
 
   private final TokenService tokenService;
 
+  @Inject
+  IamRpcServiceImpl(TokenService tokenService) {
+    this.tokenService = tokenService;
+  }
+
   @Override
   public Future<CheckTokenResponseDto> check(CheckTokenRequestDto request) {
     log.info("check token is valid");
 
     return tokenService
-        .isValidToken(request.getToken())
+        .isValidToken(request.token())
         .map(
             user ->
                 CheckTokenResponseDto.builder()

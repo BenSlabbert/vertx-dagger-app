@@ -1,31 +1,30 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.rpc.api.dto;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class CheckTokenRequestDto {
+@JsonWriter
+public record CheckTokenRequestDto(String token) {
 
-  private String token;
+  public static Builder builder() {
+    return new AutoBuilder_CheckTokenRequestDto_Builder();
+  }
 
-  public CheckTokenRequestDto(JsonObject jsonObject) {
-    CheckTokenRequestDtoConverter.fromJson(jsonObject, this);
+  public static CheckTokenRequestDto fromJson(JsonObject json) {
+    return CheckTokenRequestDto_JsonWriter.fromJson(json);
   }
 
   public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    CheckTokenRequestDtoConverter.toJson(this, json);
-    return json;
+    return CheckTokenRequestDto_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder token(String token);
+
+    CheckTokenRequestDto build();
   }
 }

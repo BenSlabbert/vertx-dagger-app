@@ -1,41 +1,50 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.catalog.api.saga;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import javax.annotation.Nullable;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class CreatePaymentResponse {
+@JsonWriter
+public record CreatePaymentResponse(
+    String sagaId,
+    @Nullable CreatePaymentFailedResponse failedResponse,
+    @Nullable CreatePaymentSuccessResponse successResponse) {
+
+  public static Builder builder() {
+    return new AutoBuilder_CreatePaymentResponse_Builder();
+  }
+
+  public static CreatePaymentResponse fromJson(JsonObject json) {
+    return CreatePaymentResponse_JsonWriter.fromJson(json);
+  }
+
+  public JsonObject toJson() {
+    return CreatePaymentResponse_JsonWriter.toJson(this);
+  }
+
+  public CreatePaymentResponse {
+    if (failedResponse == null && successResponse == null) {
+      throw new IllegalStateException("Either failedResponse or successResponse must be set");
+    }
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder sagaId(String sagaId);
+
+    Builder failedResponse(@Nullable CreatePaymentFailedResponse failedResponse);
+
+    Builder successResponse(@Nullable CreatePaymentSuccessResponse successResponse);
+
+    CreatePaymentResponse build();
+  }
 
   public enum ResponseCase {
     SUCCESS,
     FAILURE
-  }
-
-  private String sagaId;
-
-  private CreatePaymentFailedResponse failedResponse;
-
-  private CreatePaymentSuccessResponse successResponse;
-
-  public CreatePaymentResponse(JsonObject jsonObject) {
-    CreatePaymentResponseConverter.fromJson(jsonObject, this);
-  }
-
-  public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    CreatePaymentResponseConverter.toJson(this, json);
-    return json;
   }
 
   public ResponseCase getResponseCase() {

@@ -1,33 +1,32 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.catalog.api.saga;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.jsonwriter.annotation.JsonWriter;
 import io.vertx.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 
-// vertx codegen annotations
-@JsonGen
-@DataObject
-// lombok annotations
-@Data
-@Builder
-@AllArgsConstructor
-public class CreatePurchaseOrderRequest {
+@JsonWriter
+public record CreatePurchaseOrderRequest(String sagaId) {
 
   public static final String CREATE_PURCHASE_ORDER_TOPIC = "Saga.Catalog.CreatePurchaseOrder";
 
-  private String sagaId;
+  public static Builder builder() {
+    return new AutoBuilder_CreatePurchaseOrderRequest_Builder();
+  }
 
-  public CreatePurchaseOrderRequest(JsonObject jsonObject) {
-    CreatePurchaseOrderRequestConverter.fromJson(jsonObject, this);
+  public static CreatePurchaseOrderRequest fromJson(JsonObject json) {
+    return CreatePurchaseOrderRequest_JsonWriter.fromJson(json);
   }
 
   public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    CreatePurchaseOrderRequestConverter.toJson(this, json);
-    return json;
+    return CreatePurchaseOrderRequest_JsonWriter.toJson(this);
+  }
+
+  @AutoBuilder
+  public interface Builder {
+
+    Builder sagaId(String sagaId);
+
+    CreatePurchaseOrderRequest build();
   }
 }
