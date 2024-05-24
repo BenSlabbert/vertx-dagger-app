@@ -5,7 +5,7 @@
   <parent>
     <groupId>github.benslabbert</groupId>
     <artifactId>vertx-dagger-bom</artifactId>
-    <version>1.6.0</version>
+    <version>1.8.0</version>
   </parent>
 
   <groupId>com.example.parent</groupId>
@@ -28,7 +28,6 @@
   </modules>
 
   <properties>
-    <revision>dev-SNAPSHOT</revision>
     <!--config-->
     <quickBuild>false</quickBuild>
     <docker.skip>${quickBuild}</docker.skip>
@@ -38,7 +37,7 @@
 
     <!--deps-->
     <jsonwriter.version>1.6.0</jsonwriter.version>
-    <vertx-dagger-commons.version>1.0.3</vertx-dagger-commons.version>
+    <vertx-dagger-commons.version>1.1.0</vertx-dagger-commons.version>
     <vertx-dagger-codegen.version>1.6.0</vertx-dagger-codegen.version>
     <tx-manager.version>1.0.7</tx-manager.version>
   </properties>
