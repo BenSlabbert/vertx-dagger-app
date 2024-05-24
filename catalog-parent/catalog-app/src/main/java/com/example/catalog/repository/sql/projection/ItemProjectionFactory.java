@@ -4,7 +4,7 @@ package com.example.catalog.repository.sql.projection;
 import static com.example.catalog.generator.entity.generated.jooq.tables.Item.ITEM;
 
 import com.example.catalog.projection.item.ItemProjection;
-import com.example.commons.sql.Projection;
+import github.benslabbert.vertxdaggercommons.sql.Projection;
 import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowIterator;

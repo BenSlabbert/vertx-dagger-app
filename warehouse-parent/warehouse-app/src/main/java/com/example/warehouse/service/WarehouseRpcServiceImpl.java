@@ -1,13 +1,13 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse.service;
 
-import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.warehouse.generator.entity.generated.jooq.enums.DeliveryStatus;
 import com.example.warehouse.repository.DeliveryProjectionFactory.FindNextDeliveryJobProjection.NextDeliveryJobProjection;
 import com.example.warehouse.repository.DeliveryRepository;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobRequestDto;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobResponseDto;
+import github.benslabbert.vertxdaggercommons.transaction.reactive.TransactionBoundary;
 import io.vertx.core.Future;
 import io.vertx.sqlclient.Pool;
 import java.util.List;

@@ -1,16 +1,16 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.reactivetest.verticle;
 
-import static com.example.commons.FreePortUtility.getPort;
+import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 
-import com.example.commons.ConfigEncoder;
-import com.example.commons.config.Config;
 import com.example.commons.config.Config.HttpConfig;
 import com.example.commons.config.Config.PostgresConfig;
 import com.example.commons.docker.DockerContainers;
 import com.example.migration.FlywayProvider;
 import com.example.reactivetest.ioc.DaggerProvider;
 import com.example.reactivetest.ioc.Provider;
+import github.benslabbert.vertxdaggercommons.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;

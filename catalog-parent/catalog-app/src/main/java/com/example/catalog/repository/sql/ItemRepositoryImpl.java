@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.repository.sql;
 
-import static com.example.commons.sql.ProjectionExecutor.execute;
+import static github.benslabbert.vertxdaggercommons.sql.ProjectionExecutor.execute;
 
 import com.example.catalog.projection.item.ItemProjection;
 import com.example.catalog.repository.ItemRepository;

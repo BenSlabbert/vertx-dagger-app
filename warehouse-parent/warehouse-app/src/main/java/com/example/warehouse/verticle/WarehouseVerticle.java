@@ -3,17 +3,17 @@ package com.example.warehouse.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
-import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
-import com.example.commons.closer.ClosingService;
-import com.example.commons.config.Config;
-import com.example.commons.future.FutureUtil;
-import com.example.commons.future.MultiCompletePromise;
-import com.example.commons.rpc.UserAccessLoggerInterceptor;
-import com.example.commons.security.rpc.RpcServiceProxySecurityInterceptor;
-import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxEBProxyHandler;
 import com.example.warehouse.rpc.api.WarehouseRpcService_SecuredActions;
+import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
+import github.benslabbert.vertxdaggercommons.closer.ClosingService;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.future.FutureUtil;
+import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
+import github.benslabbert.vertxdaggercommons.rpc.UserAccessLoggerInterceptor;
+import github.benslabbert.vertxdaggercommons.security.rpc.RpcServiceProxySecurityInterceptor;
+import github.benslabbert.vertxdaggercommons.transaction.reactive.TransactionBoundary;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;

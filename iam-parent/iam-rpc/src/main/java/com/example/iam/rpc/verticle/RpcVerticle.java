@@ -3,10 +3,10 @@ package com.example.iam.rpc.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
-import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
-import com.example.commons.config.Config;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.IamRpcServiceVertxEBProxyHandler;
+import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;

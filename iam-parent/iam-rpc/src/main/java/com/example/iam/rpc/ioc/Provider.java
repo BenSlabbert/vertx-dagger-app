@@ -1,7 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.rpc.ioc;
 
-import com.example.commons.config.Config;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.service.ServiceModule;
 import com.example.iam.rpc.verticle.RpcVerticle;
@@ -9,6 +8,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.Vertx;
 import javax.annotation.Nullable;
 import javax.inject.Inject;

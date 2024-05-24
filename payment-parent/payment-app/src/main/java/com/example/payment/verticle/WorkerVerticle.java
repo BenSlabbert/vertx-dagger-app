@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.verticle;
 
-import com.example.commons.closer.ClosingService;
-import com.example.commons.future.FutureUtil;
-import com.example.commons.future.MultiCompletePromise;
-import com.example.commons.mesage.Consumer;
+import github.benslabbert.vertxdaggercommons.closer.ClosingService;
+import github.benslabbert.vertxdaggercommons.future.FutureUtil;
+import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
+import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;

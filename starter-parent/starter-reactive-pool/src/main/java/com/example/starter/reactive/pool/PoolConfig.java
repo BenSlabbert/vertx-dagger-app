@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.starter.reactive.pool;
 
-import com.example.commons.config.Config;
-import com.example.commons.future.FutureUtil;
 import dagger.Module;
 import dagger.Provides;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.future.FutureUtil;
 import io.vertx.core.Vertx;
 import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;

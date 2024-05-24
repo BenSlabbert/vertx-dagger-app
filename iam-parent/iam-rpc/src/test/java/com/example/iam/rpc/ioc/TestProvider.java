@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.rpc.ioc;
 
-import com.example.commons.config.Config;
 import com.example.iam.rpc.service.ServiceModule;
 import dagger.BindsInstance;
 import dagger.Component;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.Vertx;
 import javax.inject.Singleton;
 

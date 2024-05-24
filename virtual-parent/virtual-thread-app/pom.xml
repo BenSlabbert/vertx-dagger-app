@@ -11,7 +11,7 @@
 
   <properties>
     <finalName>virtual-thread</finalName>
-    <launcher.class>com.example.commons.launcher.CustomLauncher</launcher.class>
+    <launcher.class>github.benslabbert.vertxdaggercommons.launcher.CustomLauncher</launcher.class>
     <main.verticle>com.example.vt.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
@@ -30,9 +30,8 @@
       <artifactId>commons</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.commons</groupId>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>io.netty</groupId>

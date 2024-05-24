@@ -12,7 +12,7 @@
 
   <properties>
     <finalName>jdbc-app</finalName>
-    <launcher.class>com.example.commons.launcher.CustomLauncher</launcher.class>
+    <launcher.class>github.benslabbert.vertxdaggercommons.launcher.CustomLauncher</launcher.class>
     <main.verticle>com.example.jdbc.verticle.DefaultVerticle</main.verticle>
     <exec.mainClass>${launcher.class}</exec.mainClass>
 
@@ -35,9 +35,8 @@
       <artifactId>common</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.commons</groupId>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>commons-dbutils</groupId>
@@ -129,9 +128,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.example.commons</groupId>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>${revision}</version>
       <classifier>tests</classifier>
       <type>test-jar</type>
       <scope>test</scope>

@@ -24,9 +24,8 @@
       <artifactId>common</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.commons</groupId>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>com.google.dagger</groupId>

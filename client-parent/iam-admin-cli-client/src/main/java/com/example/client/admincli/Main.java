@@ -8,7 +8,7 @@ import com.example.client.admincli.command.UpdatePermissionsCommand;
 import com.example.client.admincli.config.IamConfig;
 import com.example.client.admincli.ioc.DaggerProvider;
 import com.example.client.admincli.ioc.Provider;
-import com.example.commons.future.FutureUtil;
+import github.benslabbert.vertxdaggercommons.future.FutureUtil;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.buffer.Buffer;

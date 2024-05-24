@@ -5,8 +5,8 @@ import com.example.catalog.api.saga.CreatePaymentRequest;
 import com.example.catalog.api.saga.CreatePurchaseOrderRequest;
 import com.example.catalog.service.saga.CreatePaymentHandler;
 import com.example.catalog.service.saga.CreatePurchaseOrderHandler;
-import com.example.commons.saga.SagaBuilder;
-import com.example.commons.saga.SagaExecutor;
+import github.benslabbert.vertxdaggercommons.saga.SagaBuilder;
+import github.benslabbert.vertxdaggercommons.saga.SagaExecutor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

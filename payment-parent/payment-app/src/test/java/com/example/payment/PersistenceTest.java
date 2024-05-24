@@ -1,15 +1,15 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment;
 
-import static com.example.commons.FreePortUtility.getPort;
+import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.fail;
 
-import com.example.commons.config.Config;
 import com.example.commons.docker.DockerContainers;
 import com.example.commons.transaction.blocking.TransactionBoundary;
 import com.example.migration.FlywayProvider;
 import com.example.payment.ioc.DaggerTestPersistenceProvider;
 import com.example.payment.ioc.TestPersistenceProvider;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import java.util.concurrent.atomic.AtomicInteger;

@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.repository;
 
-import static com.example.commons.redis.RedisConstants.FUZZY;
-import static com.example.commons.redis.RedisConstants.MAX;
+import static github.benslabbert.vertxdaggercommons.redis.RedisConstants.FUZZY;
+import static github.benslabbert.vertxdaggercommons.redis.RedisConstants.MAX;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;

@@ -3,7 +3,7 @@ package com.example.catalog.verticle;
 
 import com.example.catalog.ioc.DaggerProvider;
 import com.example.catalog.ioc.Provider;
-import com.example.commons.config.Config;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;

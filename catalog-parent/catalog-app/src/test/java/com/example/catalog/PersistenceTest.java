@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog;
 
-import static com.example.commons.FreePortUtility.getPort;
+import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -9,15 +9,15 @@ import static org.mockito.Mockito.when;
 
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
-import com.example.commons.ConfigEncoder;
-import com.example.commons.config.Config;
-import com.example.commons.config.Config.RedisConfig;
-import com.example.commons.docker.DockerContainers;
-import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.iam.rpc.api.IamRpcService;
 import com.example.iam.rpc.api.IamRpcServiceVertxEBProxyHandler;
 import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
 import com.example.migration.FlywayProvider;
+import github.benslabbert.vertxdaggercommons.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.config.Config.RedisConfig;
+import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
+import github.benslabbert.vertxdaggercommons.transaction.reactive.TransactionBoundary;
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
