@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jdbc.verticle;
 
-import com.example.commons.config.Config;
 import com.example.jdbc.ioc.DaggerProvider;
 import com.example.jdbc.ioc.Provider;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;

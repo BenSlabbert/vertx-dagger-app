@@ -1,14 +1,6 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jdbc.ioc;
 
-import com.example.commons.closer.CloserModule;
-import com.example.commons.closer.ClosingService;
-import com.example.commons.config.Config;
-import com.example.commons.jooq.PreparedStatementDslContextModule;
-import com.example.commons.jooq.StaticSqlDslContextModule;
-import com.example.commons.transaction.blocking.TransactionManagerModule;
-import com.example.commons.transaction.blocking.jdbc.JdbcTransactionManager;
-import com.example.commons.transaction.blocking.jdbc.JdbcTransactionManagerModule;
 import com.example.jdbc.service.JdbcService;
 import com.example.jdbc.service.NestedTransactionService;
 import com.example.jdbc.service.ServiceModule;
@@ -20,6 +12,14 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import github.benslabbert.txmanager.PlatformTransactionManager;
+import github.benslabbert.vertxdaggercommons.closer.CloserModule;
+import github.benslabbert.vertxdaggercommons.closer.ClosingService;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.jooq.PreparedStatementDslContextModule;
+import github.benslabbert.vertxdaggercommons.jooq.StaticSqlDslContextModule;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.TransactionManagerModule;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcTransactionManager;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcTransactionManagerModule;
 import io.vertx.core.Vertx;
 import javax.annotation.Nullable;
 import javax.inject.Inject;

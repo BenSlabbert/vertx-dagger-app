@@ -1,17 +1,17 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment;
 
-import static com.example.commons.FreePortUtility.getPort;
+import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.example.commons.config.Config;
-import com.example.commons.config.Config.HttpConfig;
-import com.example.commons.config.Config.PostgresConfig;
 import com.example.payment.ioc.DaggerTestMockPersistenceProvider;
 import com.example.payment.ioc.TestMockPersistenceProvider;
 import com.example.payment.repository.PaymentRepository;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.config.Config.HttpConfig;
+import github.benslabbert.vertxdaggercommons.config.Config.PostgresConfig;
 import io.restassured.RestAssured;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;

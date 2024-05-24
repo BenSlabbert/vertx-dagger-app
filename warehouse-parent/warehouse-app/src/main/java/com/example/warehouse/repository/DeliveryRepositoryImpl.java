@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse.repository;
 
-import static com.example.commons.sql.ProjectionExecutor.execute;
+import static github.benslabbert.vertxdaggercommons.sql.ProjectionExecutor.execute;
 
 import com.example.warehouse.repository.DeliveryProjectionFactory.FindNextDeliveryJobProjection.NextDeliveryJobProjection;
 import io.vertx.core.Future;

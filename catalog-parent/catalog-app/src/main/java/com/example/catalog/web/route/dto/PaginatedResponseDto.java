@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web.route.dto;
 
-import com.example.commons.web.serialization.JsonWriter;
+import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import java.util.List;

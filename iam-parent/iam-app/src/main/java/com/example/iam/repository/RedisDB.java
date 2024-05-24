@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.repository;
 
-import com.example.commons.redis.RedisConstants;
 import com.example.iam.entity.ACL;
 import com.example.iam.entity.User;
+import github.benslabbert.vertxdaggercommons.redis.RedisConstants;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;

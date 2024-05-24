@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.service;
 
-import com.example.commons.transaction.reactive.TransactionBoundary;
 import com.example.reactivetest.projections.UserDataObject;
 import com.example.reactivetest.repository.sql.UserRepository;
+import github.benslabbert.vertxdaggercommons.transaction.reactive.TransactionBoundary;
 import io.vertx.core.Future;
 import io.vertx.sqlclient.Pool;
 import java.util.List;

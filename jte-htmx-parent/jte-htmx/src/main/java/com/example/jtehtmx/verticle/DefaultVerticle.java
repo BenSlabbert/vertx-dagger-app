@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jtehtmx.verticle;
 
-import com.example.commons.config.Config;
 import com.example.jtehtmx.ioc.DaggerProvider;
 import com.example.jtehtmx.ioc.Provider;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;

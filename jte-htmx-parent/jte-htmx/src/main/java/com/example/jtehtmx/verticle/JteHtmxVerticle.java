@@ -3,10 +3,10 @@ package com.example.jtehtmx.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 
-import com.example.commons.auth.NoAuthRequiredAuthenticationProvider;
-import com.example.commons.config.Config;
-import com.example.commons.future.FutureUtil;
 import com.example.jtehtmx.web.handler.ExampleHandler;
+import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.future.FutureUtil;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;

@@ -79,15 +79,15 @@ class OpenApiGenerator implements Generator {
       List<ParameterSchema> parameters) {
     writer.println("package " + objectSchemaPackage + ";");
     writer.println();
-    writer.println("import com.example.commons.web.IntegerParser;");
-    writer.println("import com.example.commons.web.LongParser;");
-    writer.println("import com.example.commons.web.RequestParser;");
-    writer.println("import com.example.commons.web.StringParser;");
-    writer.println("import com.example.commons.web.BooleanParser;");
-    writer.println("import com.example.commons.web.FloatParser;");
-    writer.println("import com.example.commons.web.DoubleParser;");
-    writer.println("import com.example.commons.web.InstantParser;");
-    writer.println("import com.example.commons.web.RequestParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.IntegerParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.LongParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.RequestParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.StringParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.BooleanParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.FloatParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.DoubleParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.InstantParser;");
+    writer.println("import github.benslabbert.vertxdaggercommons.web.RequestParser;");
     writer.println("import io.vertx.ext.web.RoutingContext;");
     writer.println("import java.time.Instant;");
     writer.println("import javax.annotation.processing.Generated;");

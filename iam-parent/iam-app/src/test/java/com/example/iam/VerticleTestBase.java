@@ -1,15 +1,15 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam;
 
-import static com.example.commons.FreePortUtility.getPort;
+import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 
-import com.example.commons.ConfigEncoder;
-import com.example.commons.config.Config;
-import com.example.commons.config.Config.HttpConfig;
-import com.example.commons.config.Config.RedisConfig;
-import com.example.commons.docker.DockerContainers;
 import com.example.iam.ioc.DaggerProvider;
 import com.example.iam.ioc.Provider;
+import github.benslabbert.vertxdaggercommons.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.config.Config.HttpConfig;
+import github.benslabbert.vertxdaggercommons.config.Config.RedisConfig;
+import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;

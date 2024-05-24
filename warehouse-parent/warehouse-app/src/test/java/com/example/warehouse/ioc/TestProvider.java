@@ -1,14 +1,14 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse.ioc;
 
-import com.example.commons.closer.CloserModule;
-import com.example.commons.config.Config;
-import com.example.commons.jooq.StaticSqlDslContextModule;
 import com.example.starter.reactive.pool.PoolModule;
 import com.example.warehouse.repository.RepositoryModule;
 import com.example.warehouse.service.ServiceModule;
 import dagger.BindsInstance;
 import dagger.Component;
+import github.benslabbert.vertxdaggercommons.closer.CloserModule;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.jooq.StaticSqlDslContextModule;
 import io.vertx.core.Vertx;
 import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import javax.inject.Singleton;

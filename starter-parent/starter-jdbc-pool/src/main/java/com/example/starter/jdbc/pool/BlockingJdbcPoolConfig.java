@@ -1,13 +1,13 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.starter.jdbc.pool;
 
-import static com.example.commons.thread.VirtualThreadFactory.THREAD_FACTORY;
+import static github.benslabbert.vertxdaggercommons.thread.VirtualThreadFactory.THREAD_FACTORY;
 
-import com.example.commons.config.Config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dagger.Module;
 import dagger.Provides;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.impl.NoStackTraceException;
 import java.time.Duration;
 import java.util.Objects;

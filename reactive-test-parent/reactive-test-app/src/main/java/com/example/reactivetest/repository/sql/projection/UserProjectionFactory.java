@@ -3,9 +3,9 @@ package com.example.reactivetest.repository.sql.projection;
 
 import static com.example.reactivetest.generator.entity.generated.jooq.tables.UserData.USER_DATA;
 
-import com.example.commons.sql.Projection;
 import com.example.reactivetest.projections.UserDataObject;
 import com.example.reactivetest.projections.UserDataObjectRowMapper;
+import github.benslabbert.vertxdaggercommons.sql.Projection;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import java.util.List;

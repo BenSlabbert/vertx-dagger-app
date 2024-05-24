@@ -3,14 +3,14 @@ package com.example.reactivetest.verticle;
 
 import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 
-import com.example.commons.config.Config.HttpConfig;
-import com.example.commons.config.Config.PostgresConfig;
-import com.example.commons.docker.DockerContainers;
-import com.example.migration.FlywayProvider;
 import com.example.reactivetest.ioc.DaggerProvider;
 import com.example.reactivetest.ioc.Provider;
 import github.benslabbert.vertxdaggercommons.ConfigEncoder;
 import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.config.Config.HttpConfig;
+import github.benslabbert.vertxdaggercommons.config.Config.PostgresConfig;
+import github.benslabbert.vertxdaggercommons.dbmigration.FlywayProvider;
+import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
