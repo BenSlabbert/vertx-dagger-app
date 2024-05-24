@@ -37,7 +37,7 @@
     <skipJooqGeneration>false</skipJooqGeneration>
 
     <!--deps-->
-    <jsonwriter.version>1.5.0</jsonwriter.version>
+    <jsonwriter.version>1.6.0</jsonwriter.version>
     <vertx-dagger-commons.version>1.0.3</vertx-dagger-commons.version>
     <vertx-dagger-codegen.version>1.6.0</vertx-dagger-codegen.version>
     <tx-manager.version>1.0.7</tx-manager.version>
