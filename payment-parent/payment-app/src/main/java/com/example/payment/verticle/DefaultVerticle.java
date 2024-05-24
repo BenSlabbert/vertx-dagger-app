@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.payment.verticle;
 
-import com.example.commons.config.Config;
 import com.example.payment.ioc.DaggerProvider;
 import com.example.payment.ioc.Provider;
 import com.example.payment.service.TestingScopeService;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Context;
 import io.vertx.core.Promise;

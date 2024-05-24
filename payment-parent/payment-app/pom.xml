@@ -28,9 +28,8 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
-      <groupId>com.example.commons</groupId>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>com.google.dagger</groupId>
@@ -116,9 +115,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.example.commons</groupId>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>commons</artifactId>
-      <version>${revision}</version>
       <classifier>tests</classifier>
       <type>test-jar</type>
       <scope>test</scope>

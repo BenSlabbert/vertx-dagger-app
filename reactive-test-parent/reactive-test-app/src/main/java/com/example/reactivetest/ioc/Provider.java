@@ -1,10 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.ioc;
 
-import com.example.commons.closer.CloserModule;
-import com.example.commons.closer.ClosingService;
-import com.example.commons.config.Config;
-import com.example.commons.jooq.StaticSqlDslContextModule;
 import com.example.reactivetest.service.ServiceModule;
 import com.example.reactivetest.verticle.ApplicationVerticle;
 import com.example.reactivetest.web.handler.HandlerModule;
@@ -14,6 +10,10 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
+import github.benslabbert.vertxdaggercommons.closer.CloserModule;
+import github.benslabbert.vertxdaggercommons.closer.ClosingService;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.jooq.StaticSqlDslContextModule;
 import io.vertx.core.Vertx;
 import io.vertx.sqlclient.Pool;
 import javax.annotation.Nullable;

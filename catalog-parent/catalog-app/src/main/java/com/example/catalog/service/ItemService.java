@@ -10,7 +10,7 @@ import com.example.catalog.web.route.dto.FindOneResponseDto;
 import com.example.catalog.web.route.dto.PaginatedResponseDto;
 import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
-import com.example.commons.transaction.reactive.TransactionBoundary;
+import github.benslabbert.vertxdaggercommons.transaction.reactive.TransactionBoundary;
 import io.vertx.core.Future;
 import io.vertx.core.impl.NoStackTraceException;
 import io.vertx.sqlclient.Pool;

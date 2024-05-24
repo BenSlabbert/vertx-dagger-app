@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.ioc;
 
-import com.example.commons.config.Config;
 import dagger.BindsInstance;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.Vertx;
 
 public interface BaseBuilder<

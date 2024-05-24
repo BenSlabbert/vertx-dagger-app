@@ -1,13 +1,13 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.rpc;
 
-import static com.example.commons.FreePortUtility.getPort;
+import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 
-import com.example.commons.ConfigEncoder;
-import com.example.commons.config.Config;
-import com.example.commons.config.Config.HttpConfig;
 import com.example.iam.rpc.ioc.DaggerTestProvider;
 import com.example.iam.rpc.ioc.TestProvider;
+import github.benslabbert.vertxdaggercommons.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.config.Config.HttpConfig;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;

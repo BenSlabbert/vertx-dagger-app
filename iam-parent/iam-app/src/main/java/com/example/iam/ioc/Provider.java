@@ -1,8 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.ioc;
 
-import com.example.commons.closer.CloserModule;
-import com.example.commons.config.Config;
 import com.example.iam.repository.RepositoryModule;
 import com.example.iam.repository.UserRepository;
 import com.example.iam.service.ServiceModule;
@@ -13,6 +11,8 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
+import github.benslabbert.vertxdaggercommons.closer.CloserModule;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.Vertx;
 import io.vertx.redis.client.RedisAPI;
 import javax.annotation.Nullable;
