@@ -6,11 +6,11 @@ import static io.vertx.json.schema.common.dsl.Schemas.arraySchema;
 import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 
-import com.example.commons.web.serialization.JsonWriter;
 import com.google.auto.value.AutoValue;
 import com.google.auto.value.extension.memoized.Memoized;
 import com.google.auto.value.extension.toprettystring.ToPrettyString;
 import com.google.common.collect.ImmutableSet;
+import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.common.dsl.ObjectSchemaBuilder;

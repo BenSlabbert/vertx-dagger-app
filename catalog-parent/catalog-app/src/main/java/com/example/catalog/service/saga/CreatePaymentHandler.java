@@ -5,7 +5,7 @@ import com.example.catalog.api.saga.CreatePurchaseOrderFailedResponse;
 import com.example.catalog.api.saga.CreatePurchaseOrderRequest;
 import com.example.catalog.api.saga.CreatePurchaseOrderResponse;
 import com.example.catalog.api.saga.CreatePurchaseOrderSuccessResponse;
-import com.example.commons.saga.SagaStageHandler;
+import github.benslabbert.vertxdaggercommons.saga.SagaStageHandler;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;

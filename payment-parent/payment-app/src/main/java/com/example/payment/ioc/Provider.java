@@ -1,8 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.ioc;
 
-import com.example.commons.jooq.DataSourceDslContextModule;
-import com.example.commons.mesage.Consumer;
 import com.example.payment.repository.RepositoryModule;
 import com.example.payment.scope.TransactionModule;
 import com.example.payment.service.ServiceModule;
@@ -16,6 +14,8 @@ import dagger.Provides;
 import github.benslabbert.vertxdaggercommons.closer.CloserModule;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.jooq.DataSourceDslContextModule;
+import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import io.vertx.core.Vertx;
 import java.util.Set;
 import javax.annotation.Nullable;

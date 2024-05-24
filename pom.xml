@@ -28,6 +28,7 @@
   </modules>
 
   <properties>
+    <revision>dev-SNAPSHOT</revision>
     <!--config-->
     <quickBuild>false</quickBuild>
     <docker.skip>${quickBuild}</docker.skip>

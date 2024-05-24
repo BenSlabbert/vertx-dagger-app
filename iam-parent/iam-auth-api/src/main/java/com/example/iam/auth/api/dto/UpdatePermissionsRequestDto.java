@@ -5,9 +5,9 @@ import static io.vertx.json.schema.common.dsl.Keywords.minLength;
 import static io.vertx.json.schema.common.dsl.Schemas.objectSchema;
 import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 
-import com.example.commons.web.serialization.JsonWriter;
 import com.example.iam.auth.api.perms.Access;
 import com.google.auto.value.AutoBuilder;
+import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.JsonSchema;
 

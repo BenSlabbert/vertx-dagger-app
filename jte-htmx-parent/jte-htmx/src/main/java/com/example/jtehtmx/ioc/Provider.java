@@ -1,7 +1,6 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jtehtmx.ioc;
 
-import com.example.commons.config.Config;
 import com.example.jtehtmx.config.JteConfig;
 import com.example.jtehtmx.verticle.JteHtmxVerticle;
 import com.example.jtehtmx.web.handler.ExampleHandler;
@@ -9,6 +8,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.Vertx;
 import javax.annotation.Nullable;
 import javax.inject.Inject;

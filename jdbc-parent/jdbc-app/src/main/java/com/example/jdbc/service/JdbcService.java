@@ -4,11 +4,11 @@ package com.example.jdbc.service;
 import static com.example.jdbc.generator.entity.generated.jooq.Sequences.PERSON_ID_SEQ;
 import static com.example.jdbc.generator.entity.generated.jooq.tables.Person.PERSON;
 
-import com.example.commons.transaction.blocking.jdbc.JdbcQueryRunner;
-import com.example.commons.transaction.blocking.jdbc.JdbcTransactionManager;
-import com.example.commons.transaction.blocking.jdbc.JdbcUtils;
-import com.example.commons.transaction.blocking.jdbc.QueryException;
 import com.example.jdbc.generator.entity.generated.jooq.tables.records.PersonRecord;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcQueryRunner;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcTransactionManager;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcUtils;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.QueryException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.LongConsumer;

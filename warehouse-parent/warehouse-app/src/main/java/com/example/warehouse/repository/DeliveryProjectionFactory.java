@@ -4,8 +4,8 @@ package com.example.warehouse.repository;
 import static com.example.warehouse.generator.entity.generated.jooq.tables.Delivery.DELIVERY;
 import static com.example.warehouse.generator.entity.generated.jooq.tables.Truck.TRUCK;
 
-import com.example.commons.sql.Projection;
 import com.example.warehouse.generator.entity.generated.jooq.enums.DeliveryStatus;
+import github.benslabbert.vertxdaggercommons.sql.Projection;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import java.util.List;

@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.web.dto;
 
-import com.example.commons.web.serialization.JsonWriter;
+import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 
 public record GetPersonResponse(long id, String name) implements JsonWriter {

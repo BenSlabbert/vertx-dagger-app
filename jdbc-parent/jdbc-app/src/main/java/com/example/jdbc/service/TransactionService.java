@@ -3,8 +3,8 @@ package com.example.jdbc.service;
 
 import static com.example.jdbc.generator.entity.generated.jooq.tables.Person.PERSON;
 
-import com.example.commons.transaction.blocking.jdbc.JdbcUtils;
 import github.benslabbert.txmanager.annotation.Transactional;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcUtils;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;

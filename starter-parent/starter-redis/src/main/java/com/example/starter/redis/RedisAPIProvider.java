@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.starter.redis;
 
-import com.example.commons.config.Config;
 import dagger.Module;
 import dagger.Provides;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.Vertx;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;

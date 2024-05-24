@@ -6,13 +6,13 @@ import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
-import com.example.commons.config.Config;
 import com.example.jtehtmx.template.ExampleDto;
 import gg.jte.TemplateEngine;
 import gg.jte.TemplateOutput;
 import gg.jte.output.StringOutput;
 import gg.jte.output.Utf8ByteOutput;
 import github.benslabbert.vertxdaggercodegen.annotation.url.RestHandler;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerResponse;

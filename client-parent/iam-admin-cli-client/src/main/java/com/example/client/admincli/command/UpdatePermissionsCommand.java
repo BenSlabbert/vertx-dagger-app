@@ -3,11 +3,11 @@ package com.example.client.admincli.command;
 
 import com.example.client.admincli.auth.AuthClientFactory;
 import com.example.client.admincli.util.DisplayErrorUtil;
-import com.example.commons.future.FutureUtil;
 import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
 import com.example.iam.auth.api.dto.UpdatePermissionsResponseDto;
 import com.example.iam.auth.api.perms.Access;
 import com.example.starter.iam.auth.client.IamAuthClient;
+import github.benslabbert.vertxdaggercommons.future.FutureUtil;
 import io.vertx.core.Future;
 import java.io.PrintStream;
 import java.util.concurrent.Callable;

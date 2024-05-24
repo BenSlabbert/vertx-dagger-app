@@ -1,13 +1,13 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jtehtmx.config;
 
-import com.example.commons.config.Config;
 import dagger.Module;
 import dagger.Provides;
 import gg.jte.CodeResolver;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.DirectoryCodeResolver;
+import github.benslabbert.vertxdaggercommons.config.Config;
 import java.nio.file.Path;
 import javax.inject.Singleton;
 

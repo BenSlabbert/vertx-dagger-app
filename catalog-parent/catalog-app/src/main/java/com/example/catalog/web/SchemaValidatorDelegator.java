@@ -8,8 +8,8 @@ import static io.vertx.json.schema.common.dsl.Schemas.stringSchema;
 
 import com.example.catalog.web.route.dto.CreateItemRequestDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
-import com.example.commons.config.Config;
-import com.example.commons.web.SchemaValidator;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.web.SchemaValidator;
 import io.vertx.core.json.JsonObject;
 import io.vertx.json.schema.JsonSchema;
 import java.util.HashMap;

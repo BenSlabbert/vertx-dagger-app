@@ -5,12 +5,12 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.ItemHandler;
-import com.example.commons.closer.ClosingService;
-import com.example.commons.config.Config;
-import com.example.commons.future.FutureUtil;
-import com.example.commons.future.MultiCompletePromise;
-import com.example.commons.mesage.Consumer;
-import com.example.commons.security.SecurityHandler;
+import github.benslabbert.vertxdaggercommons.closer.ClosingService;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.future.FutureUtil;
+import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
+import github.benslabbert.vertxdaggercommons.mesage.Consumer;
+import github.benslabbert.vertxdaggercommons.security.SecurityHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;

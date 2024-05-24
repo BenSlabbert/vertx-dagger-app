@@ -4,7 +4,7 @@ package com.example.reactivetest.repository.sql.projection;
 import static com.example.reactivetest.generator.entity.generated.jooq.Sequences.PERSON_ID_SEQ;
 import static com.example.reactivetest.generator.entity.generated.jooq.tables.Person.PERSON;
 
-import com.example.commons.sql.Projection;
+import github.benslabbert.vertxdaggercommons.sql.Projection;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import java.util.List;

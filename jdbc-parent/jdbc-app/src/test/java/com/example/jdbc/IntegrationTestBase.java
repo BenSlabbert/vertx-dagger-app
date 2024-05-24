@@ -1,14 +1,14 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jdbc;
 
-import static com.example.commons.FreePortUtility.getPort;
+import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 
-import com.example.commons.ConfigEncoder;
-import com.example.commons.config.Config;
-import com.example.commons.docker.DockerContainers;
 import com.example.jdbc.ioc.DaggerProvider;
 import com.example.jdbc.ioc.Provider;
-import com.example.migration.FlywayProvider;
+import github.benslabbert.vertxdaggercommons.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.dbmigration.FlywayProvider;
+import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;

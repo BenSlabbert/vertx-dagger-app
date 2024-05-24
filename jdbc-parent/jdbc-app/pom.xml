@@ -52,6 +52,10 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
+      <artifactId>db-migration</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.hazelcast</groupId>
       <artifactId>hazelcast</artifactId>
     </dependency>

@@ -4,12 +4,12 @@ package com.example.payment;
 import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.fail;
 
-import com.example.commons.docker.DockerContainers;
-import com.example.commons.transaction.blocking.TransactionBoundary;
-import com.example.migration.FlywayProvider;
 import com.example.payment.ioc.DaggerTestPersistenceProvider;
 import com.example.payment.ioc.TestPersistenceProvider;
 import github.benslabbert.vertxdaggercommons.config.Config;
+import github.benslabbert.vertxdaggercommons.dbmigration.FlywayProvider;
+import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.TransactionBoundary;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import java.util.concurrent.atomic.AtomicInteger;
