@@ -74,6 +74,10 @@
       <artifactId>postgresql</artifactId>
     </dependency>
     <dependency>
+      <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+      <artifactId>reactive-db-pool-starter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.example.reactive-test.entity</groupId>
       <artifactId>reactive-test-entity</artifactId>
       <version>${revision}</version>
@@ -87,11 +91,6 @@
     <dependency>
       <groupId>com.example.reactive-test.projections</groupId>
       <artifactId>reactive-test-projections</artifactId>
-      <version>${revision}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.example.starter</groupId>
-      <artifactId>starter-reactive-pool</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>

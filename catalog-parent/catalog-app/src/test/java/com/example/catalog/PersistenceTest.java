@@ -9,9 +9,9 @@ import static org.mockito.Mockito.when;
 
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
-import com.example.iam.rpc.api.IamRpcService;
-import com.example.iam.rpc.api.IamRpcServiceVertxEBProxyHandler;
-import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcService;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcServiceVertxEBProxyHandler;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.dto.CheckTokenResponseDto;
 import github.benslabbert.vertxdaggercommons.ConfigEncoder;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.config.Config.RedisConfig;

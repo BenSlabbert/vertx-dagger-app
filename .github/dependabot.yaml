@@ -26,6 +26,16 @@ registries:
     url: "https://maven.pkg.github.com/BenSlabbert/tx-manager"
     username: "BenSlabbert"
     password: "${{ secrets.GH_TOKEN }}"
+  vertx-dagger-app-api:
+    type: "maven-repository"
+    url: "https://maven.pkg.github.com/BenSlabbert/vertx-dagger-app-api"
+    username: "BenSlabbert"
+    password: "${{ secrets.GH_TOKEN }}"
+  vertx-dagger-starter:
+    type: "maven-repository"
+    url: "https://maven.pkg.github.com/BenSlabbert/vertx-dagger-starter"
+    username: "BenSlabbert"
+    password: "${{ secrets.GH_TOKEN }}"
 updates:
 - package-ecosystem: "maven"
   directory: "/"
@@ -37,6 +47,8 @@ updates:
   - "git-version-extension"
   - "vertx-dagger-codegen"
   - "vertx-dagger-commons"
+  - "vertx-dagger-starter"
+  - "vertx-dagger-app-api"
   - "tx-manager"
   labels:
   - "dependencies"

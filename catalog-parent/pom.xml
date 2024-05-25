@@ -17,7 +17,6 @@
     <module>catalog-generator</module>
     <module>catalog-migration</module>
     <module>catalog-projection</module>
-    <module>catalog-api</module>
   </modules>
 
 </project>

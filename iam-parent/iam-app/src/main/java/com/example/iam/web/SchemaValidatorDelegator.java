@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.web;
 
-import com.example.iam.auth.api.dto.LoginRequestDto;
-import com.example.iam.auth.api.dto.RefreshRequestDto;
-import com.example.iam.auth.api.dto.RegisterRequestDto;
-import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.LoginRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RefreshRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RegisterRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.UpdatePermissionsRequestDto;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.web.SchemaValidator;
 import io.vertx.core.json.JsonObject;

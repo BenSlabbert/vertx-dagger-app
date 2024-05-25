@@ -71,6 +71,10 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+      <artifactId>jdbc-pool-starter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.jooq</groupId>
       <artifactId>jooq</artifactId>
     </dependency>
@@ -82,11 +86,6 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.example.starter</groupId>
-      <artifactId>starter-jdbc-pool</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>github.benslabbert.txmanager</groupId>

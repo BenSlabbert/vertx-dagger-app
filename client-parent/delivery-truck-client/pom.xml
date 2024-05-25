@@ -37,14 +37,13 @@
       <artifactId>hazelcast</artifactId>
     </dependency>
     <dependency>
+      <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+      <artifactId>iam-auth-client-starter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-transport-native-epoll</artifactId>
       <classifier>linux-x86_64</classifier>
-    </dependency>
-    <dependency>
-      <groupId>com.example.starter</groupId>
-      <artifactId>starter-iam-auth-client</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>

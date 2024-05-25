@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.iam.rpc.service;
 
-import com.example.iam.rpc.api.IamRpcService;
-import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
-import com.example.iam.rpc.api.dto.CheckTokenResponseDto;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcService;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.dto.CheckTokenRequestDto;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.dto.CheckTokenResponseDto;
 import io.vertx.core.Future;
 import javax.inject.Inject;
 import javax.inject.Singleton;

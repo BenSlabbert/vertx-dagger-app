@@ -86,9 +86,8 @@
       <artifactId>hazelcast</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.iam.rpc.api</groupId>
+      <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
       <artifactId>iam-rpc-api</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>org.jooq</groupId>
@@ -104,14 +103,12 @@
       <classifier>linux-x86_64</classifier>
     </dependency>
     <dependency>
-      <groupId>com.example.starter</groupId>
-      <artifactId>starter-reactive-pool</artifactId>
-      <version>${revision}</version>
+      <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+      <artifactId>reactive-db-pool-starter</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.starter</groupId>
-      <artifactId>starter-redis</artifactId>
-      <version>${revision}</version>
+      <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+      <artifactId>redis-starter</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
