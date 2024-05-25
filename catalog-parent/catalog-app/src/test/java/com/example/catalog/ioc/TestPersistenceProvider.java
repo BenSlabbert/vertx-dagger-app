@@ -7,11 +7,11 @@ import com.example.catalog.repository.RepositoryModule;
 import com.example.catalog.service.ServiceModule;
 import com.example.catalog.web.WebModule;
 import com.example.catalog.web.route.handler.HandlerModule;
-import com.example.starter.reactive.pool.PoolModule;
-import com.example.starter.redis.RedisModule;
 import dagger.Component;
 import github.benslabbert.vertxdaggercommons.jooq.StaticSqlDslContextModule;
 import github.benslabbert.vertxdaggercommons.saga.SagaModule;
+import github.benslabbert.vertxdaggerstarter.reactivedbpool.PoolModule;
+import github.benslabbert.vertxdaggerstarter.redis.RedisModule;
 import java.util.Set;
 import javax.inject.Singleton;
 

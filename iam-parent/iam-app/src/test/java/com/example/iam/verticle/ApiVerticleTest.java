@@ -6,12 +6,12 @@ import static io.vertx.core.http.HttpMethod.POST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.iam.VerticleTestBase;
-import com.example.iam.auth.api.dto.LoginRequestDto;
-import com.example.iam.auth.api.dto.LoginResponseDto;
-import com.example.iam.auth.api.dto.RefreshRequestDto;
-import com.example.iam.auth.api.dto.RefreshResponseDto;
-import com.example.iam.auth.api.dto.RegisterRequestDto;
-import com.example.iam.auth.api.perms.Access;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.Access;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.LoginRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.LoginResponseDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RefreshRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RefreshResponseDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RegisterRequestDto;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -127,7 +127,7 @@ class ApiVerticleTest extends VerticleTestBase {
             .extract()
             .asString();
 
-    var loginResponseDto = new LoginResponseDto(new JsonObject(stringJsonResponse));
+    var loginResponseDto = LoginResponseDto.fromJson(new JsonObject(stringJsonResponse));
     assertThat(loginResponseDto.token()).isNotNull();
     assertThat(loginResponseDto.refreshToken()).isNotNull();
 
@@ -145,7 +145,7 @@ class ApiVerticleTest extends VerticleTestBase {
             .extract()
             .asString();
 
-    var refreshResponseDto = new RefreshResponseDto(new JsonObject(stringJsonResponse));
+    var refreshResponseDto = RefreshResponseDto.fromJson(new JsonObject(stringJsonResponse));
     assertThat(refreshResponseDto.token()).isNotNull();
     assertThat(refreshResponseDto.refreshToken()).isNotNull();
   }

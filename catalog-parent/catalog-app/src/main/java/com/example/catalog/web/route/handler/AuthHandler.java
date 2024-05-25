@@ -3,8 +3,8 @@ package com.example.catalog.web.route.handler;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.UNAUTHORIZED;
 
-import com.example.iam.rpc.api.IamRpcService;
-import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcService;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.dto.CheckTokenRequestDto;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonObject;

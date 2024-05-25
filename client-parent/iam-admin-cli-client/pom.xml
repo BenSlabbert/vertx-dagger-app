@@ -31,13 +31,12 @@
       <artifactId>hazelcast</artifactId>
     </dependency>
     <dependency>
-      <groupId>info.picocli</groupId>
-      <artifactId>picocli</artifactId>
+      <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+      <artifactId>iam-auth-client-starter</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.starter</groupId>
-      <artifactId>starter-iam-auth-client</artifactId>
-      <version>${revision}</version>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>

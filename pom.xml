@@ -18,7 +18,6 @@
     <module>catalog-parent</module>
     <module>reactive-test-parent</module>
     <module>payment-parent</module>
-    <module>starter-parent</module>
     <module>client-parent</module>
     <module>warehouse-parent</module>
     <module>plugin-parent</module>
@@ -40,6 +39,8 @@
     <jsonwriter.version>1.6.0</jsonwriter.version>
     <vertx-dagger-commons.version>1.4.0</vertx-dagger-commons.version>
     <vertx-dagger-codegen.version>1.6.0</vertx-dagger-codegen.version>
+    <vertx-dagger-starter.version>1.2.0</vertx-dagger-starter.version>
+    <vertx-dagger-app-api.version>1.3.0</vertx-dagger-app-api.version>
     <tx-manager.version>1.0.7</tx-manager.version>
   </properties>
 
@@ -59,6 +60,11 @@
         <groupId>github.benslabbert.jsonwriter</groupId>
         <artifactId>annotation</artifactId>
         <version>${jsonwriter.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+        <artifactId>catalog-saga-api</artifactId>
+        <version>${vertx-dagger-app-api.version}</version>
       </dependency>
       <dependency>
         <groupId>github.benslabbert.vertx-dagger-commons</groupId>
@@ -81,6 +87,26 @@
         <version>${vertx-dagger-commons.version}</version>
       </dependency>
       <dependency>
+        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+        <artifactId>iam-auth-api</artifactId>
+        <version>${vertx-dagger-app-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+        <artifactId>iam-auth-client-starter</artifactId>
+        <version>${vertx-dagger-starter.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+        <artifactId>iam-rpc-api</artifactId>
+        <version>${vertx-dagger-app-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+        <artifactId>jdbc-pool-starter</artifactId>
+        <version>${vertx-dagger-starter.version}</version>
+      </dependency>
+      <dependency>
         <groupId>github.benslabbert.jsonwriter</groupId>
         <artifactId>processor</artifactId>
         <version>${jsonwriter.version}</version>
@@ -91,9 +117,24 @@
         <version>${vertx-dagger-codegen.version}</version>
       </dependency>
       <dependency>
+        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+        <artifactId>reactive-db-pool-starter</artifactId>
+        <version>${vertx-dagger-starter.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+        <artifactId>redis-starter</artifactId>
+        <version>${vertx-dagger-starter.version}</version>
+      </dependency>
+      <dependency>
         <groupId>github.benslabbert.txmanager</groupId>
         <artifactId>txmanager</artifactId>
         <version>${tx-manager.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+        <artifactId>warehouse-rpc-api</artifactId>
+        <version>${vertx-dagger-app-api.version}</version>
       </dependency>
       <dependency>
         <groupId>github.benslabbert.txmanager</groupId>

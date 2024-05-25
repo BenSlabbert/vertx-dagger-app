@@ -4,8 +4,8 @@ package com.example.iam.rpc.verticle;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.iam.rpc.TestBase;
-import com.example.iam.rpc.api.IamRpcService;
-import com.example.iam.rpc.api.dto.CheckTokenRequestDto;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcService;
+import github.benslabbert.vertxdaggerapp.api.rpc.iam.dto.CheckTokenRequestDto;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 

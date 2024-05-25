@@ -5,12 +5,12 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 
-import com.example.iam.auth.api.IamAuthApi;
-import com.example.iam.auth.api.dto.LoginRequestDto;
-import com.example.iam.auth.api.dto.RefreshRequestDto;
-import com.example.iam.auth.api.dto.RegisterRequestDto;
-import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
 import com.example.iam.web.SchemaValidatorDelegator;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.IamAuthApi;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.LoginRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RefreshRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RegisterRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.UpdatePermissionsRequestDto;
 import github.benslabbert.vertxdaggercodegen.annotation.url.RestHandler;
 import github.benslabbert.vertxdaggercommons.web.ResponseWriter;
 import io.vertx.core.json.JsonObject;
@@ -47,8 +47,8 @@ public class UserHandler {
         .getRoutes()
         .forEach(
             route -> {
-              log.info("Path: " + route.getPath());
-              log.info("Methods: " + route.methods());
+              log.info("Path: {}", route.getPath());
+              log.info("Methods: {}", route.methods());
               log.info("-------------------------");
             });
   }
@@ -65,13 +65,13 @@ public class UserHandler {
     }
 
     iamAuthApi
-        .login(new LoginRequestDto(body))
+        .login(LoginRequestDto.fromJson(body))
         .onFailure(
             err -> {
               log.error("failed to login user", err);
               ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto.toJson(), CREATED));
   }
 
   @RestHandler(path = "/refresh")
@@ -86,13 +86,13 @@ public class UserHandler {
     }
 
     iamAuthApi
-        .refresh(new RefreshRequestDto(body))
+        .refresh(RefreshRequestDto.fromJson(body))
         .onFailure(
             err -> {
               log.error("failed to refresh user", err);
               ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto.toJson(), CREATED));
   }
 
   @RestHandler(path = "/register")
@@ -107,13 +107,13 @@ public class UserHandler {
     }
 
     iamAuthApi
-        .register(new RegisterRequestDto(body))
+        .register(RegisterRequestDto.fromJson(body))
         .onFailure(
             err -> {
               log.error("failed to register user", err);
               ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(dto -> ResponseWriter.write(ctx, dto, NO_CONTENT));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto.toJson(), NO_CONTENT));
   }
 
   @RestHandler(path = "/update-permissions")
@@ -128,12 +128,12 @@ public class UserHandler {
     }
 
     iamAuthApi
-        .updatePermissions(new UpdatePermissionsRequestDto(body))
+        .updatePermissions(UpdatePermissionsRequestDto.fromJson(body))
         .onFailure(
             err -> {
               log.error("failed to update user permissions", err);
               ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(dto -> ResponseWriter.write(ctx, dto, NO_CONTENT));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto.toJson(), NO_CONTENT));
   }
 }

@@ -2,8 +2,8 @@
 package com.example.client.admincli.auth;
 
 import com.example.client.admincli.config.IamConfig;
-import com.example.starter.iam.auth.client.IamAuthClient;
-import com.example.starter.iam.auth.client.IamAuthClientFactory;
+import github.benslabbert.vertxdaggerstarter.iamauthclient.IamAuthClient;
+import github.benslabbert.vertxdaggerstarter.iamauthclient.IamAuthClientFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

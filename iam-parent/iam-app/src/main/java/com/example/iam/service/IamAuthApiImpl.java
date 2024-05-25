@@ -1,18 +1,18 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.iam.service;
 
-import com.example.iam.auth.api.IamAuthApi;
-import com.example.iam.auth.api.dto.LoginRequestDto;
-import com.example.iam.auth.api.dto.LoginResponseDto;
-import com.example.iam.auth.api.dto.RefreshRequestDto;
-import com.example.iam.auth.api.dto.RefreshResponseDto;
-import com.example.iam.auth.api.dto.RegisterRequestDto;
-import com.example.iam.auth.api.dto.RegisterResponseDto;
-import com.example.iam.auth.api.dto.UpdatePermissionsRequestDto;
-import com.example.iam.auth.api.dto.UpdatePermissionsResponseDto;
 import com.example.iam.entity.ACL;
 import com.example.iam.entity.User;
 import com.example.iam.repository.UserRepository;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.IamAuthApi;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.LoginRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.LoginResponseDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RefreshRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RefreshResponseDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RegisterRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RegisterResponseDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.UpdatePermissionsRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.UpdatePermissionsResponseDto;
 import io.vertx.core.Future;
 import java.util.Set;
 import javax.inject.Inject;

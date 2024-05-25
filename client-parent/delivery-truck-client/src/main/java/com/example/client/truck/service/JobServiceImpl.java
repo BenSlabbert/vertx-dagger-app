@@ -2,13 +2,13 @@
 package com.example.client.truck.service;
 
 import com.example.client.truck.config.IamConfig;
-import com.example.iam.auth.api.dto.LoginRequestDto;
-import com.example.iam.auth.api.dto.RefreshRequestDto;
-import com.example.starter.iam.auth.client.IamAuthClient;
-import com.example.starter.iam.auth.client.IamAuthClientFactory;
 import com.example.warehouse.rpc.api.WarehouseRpcServiceProviderFactory;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobRequestDto;
 import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobResponseDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.LoginRequestDto;
+import github.benslabbert.vertxdaggerapp.api.iam.auth.dto.RefreshRequestDto;
+import github.benslabbert.vertxdaggerstarter.iamauthclient.IamAuthClient;
+import github.benslabbert.vertxdaggerstarter.iamauthclient.IamAuthClientFactory;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.json.JsonObject;
