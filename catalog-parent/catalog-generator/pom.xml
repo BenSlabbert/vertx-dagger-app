@@ -22,6 +22,10 @@
       <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>entity-generator</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
