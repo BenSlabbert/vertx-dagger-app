@@ -34,6 +34,7 @@
     <shade.skip>${quickBuild}</shade.skip>
     <copyJarDeps.skip>${quickBuild}</copyJarDeps.skip>
     <skipJooqGeneration>false</skipJooqGeneration>
+    <dockerImageNameBase>ghcr.io/benslabbert/vertx-dagger-app</dockerImageNameBase>
 
     <!--deps-->
     <jsonwriter.version>1.6.0</jsonwriter.version>
