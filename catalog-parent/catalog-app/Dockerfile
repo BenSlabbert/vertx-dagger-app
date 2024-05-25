@@ -39,3 +39,5 @@ COPY target/catalog.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar", "-XX:+UseZGC", "-XX:+ZGenerational", "-Xlog:gc*", "-Xmx32M", "-Xms32M", "-Djava.net.preferIPv4Stack=true"]
 
 EXPOSE 8080
+
+LABEL org.opencontainers.image.source="https://github.com/BenSlabbert/vertx-dagger-app"
