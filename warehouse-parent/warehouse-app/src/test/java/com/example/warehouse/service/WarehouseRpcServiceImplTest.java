@@ -4,10 +4,10 @@ package com.example.warehouse.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.warehouse.PersistenceTest;
-import com.example.warehouse.rpc.api.WarehouseRpcService;
-import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxEBClientProxy;
-import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobRequestDto;
-import com.example.warehouse.rpc.api.dto.GetNextDeliveryJobResponseDto;
+import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcService;
+import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcServiceVertxEBClientProxy;
+import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.dto.GetNextDeliveryJobRequestDto;
+import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.dto.GetNextDeliveryJobResponseDto;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;

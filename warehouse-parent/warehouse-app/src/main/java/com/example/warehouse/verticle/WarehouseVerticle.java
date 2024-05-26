@@ -3,9 +3,9 @@ package com.example.warehouse.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
-import com.example.warehouse.rpc.api.WarehouseRpcService;
-import com.example.warehouse.rpc.api.WarehouseRpcServiceVertxEBProxyHandler;
-import com.example.warehouse.rpc.api.WarehouseRpcService_SecuredActions;
+import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcService;
+import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcServiceVertxEBProxyHandler;
+import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcService_SecuredActions;
 import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;

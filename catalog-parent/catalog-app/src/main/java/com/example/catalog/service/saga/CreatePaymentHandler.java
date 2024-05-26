@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.service.saga;
 
-import com.example.catalog.api.saga.CreatePurchaseOrderFailedResponse;
-import com.example.catalog.api.saga.CreatePurchaseOrderRequest;
-import com.example.catalog.api.saga.CreatePurchaseOrderResponse;
-import com.example.catalog.api.saga.CreatePurchaseOrderSuccessResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderFailedResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderRequest;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderSuccessResponse;
 import github.benslabbert.vertxdaggercommons.saga.SagaStageHandler;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;

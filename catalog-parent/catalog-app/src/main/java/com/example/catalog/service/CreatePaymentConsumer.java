@@ -4,9 +4,9 @@ package com.example.catalog.service;
 import static github.benslabbert.vertxdaggercommons.mesage.Headers.SAGA_ID_HEADER;
 import static github.benslabbert.vertxdaggercommons.mesage.Headers.SAGA_ROLLBACK_HEADER;
 
-import com.example.catalog.api.saga.CreatePurchaseOrderRequest;
-import com.example.catalog.api.saga.CreatePurchaseOrderResponse;
-import com.example.catalog.api.saga.CreatePurchaseOrderSuccessResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderRequest;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderSuccessResponse;
 import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
