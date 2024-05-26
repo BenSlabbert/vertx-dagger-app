@@ -68,7 +68,7 @@ public class ApiVerticle extends AbstractVerticle {
         .onSuccess(
             ignore -> {
               Config.HttpConfig httpConfig = config.httpConfig();
-              log.info("starting api verticle on port: " + httpConfig.port());
+              log.info("starting api verticle on port: {}", httpConfig.port());
 
               vertx
                   .createHttpServer(

@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.service.saga;
 
-import com.example.catalog.api.saga.CreatePaymentFailedResponse;
-import com.example.catalog.api.saga.CreatePaymentRequest;
-import com.example.catalog.api.saga.CreatePaymentResponse;
-import com.example.catalog.api.saga.CreatePaymentSuccessResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentFailedResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentRequest;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentSuccessResponse;
 import github.benslabbert.vertxdaggercommons.saga.SagaStageHandler;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;

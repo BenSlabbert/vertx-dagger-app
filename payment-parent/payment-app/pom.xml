@@ -23,9 +23,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.example.catalog.api</groupId>
-      <artifactId>catalog-api</artifactId>
-      <version>${revision}</version>
+      <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+      <artifactId>catalog-saga-api</artifactId>
     </dependency>
     <dependency>
       <groupId>github.benslabbert.vertx-dagger-commons</groupId>

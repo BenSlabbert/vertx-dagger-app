@@ -82,9 +82,8 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
-      <groupId>com.example.warehouse.rpc.api</groupId>
+      <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
       <artifactId>warehouse-rpc-api</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>

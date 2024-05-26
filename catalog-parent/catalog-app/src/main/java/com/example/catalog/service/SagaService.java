@@ -1,10 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.service;
 
-import com.example.catalog.api.saga.CreatePaymentRequest;
-import com.example.catalog.api.saga.CreatePurchaseOrderRequest;
 import com.example.catalog.service.saga.CreatePaymentHandler;
 import com.example.catalog.service.saga.CreatePurchaseOrderHandler;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentRequest;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderRequest;
 import github.benslabbert.vertxdaggercommons.saga.SagaBuilder;
 import github.benslabbert.vertxdaggercommons.saga.SagaExecutor;
 import javax.inject.Inject;

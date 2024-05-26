@@ -28,11 +28,6 @@
       <artifactId>annotation</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.example.catalog.api</groupId>
-      <artifactId>catalog-api</artifactId>
-      <version>${revision}</version>
-    </dependency>
-    <dependency>
       <groupId>com.example.catalog.entity</groupId>
       <artifactId>catalog-entity</artifactId>
       <version>${revision}</version>
@@ -47,6 +42,10 @@
       <groupId>com.example.catalog.projection</groupId>
       <artifactId>catalog-projection</artifactId>
       <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+      <artifactId>catalog-saga-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.ongres.scram</groupId>

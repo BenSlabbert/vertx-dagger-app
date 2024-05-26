@@ -4,10 +4,10 @@ package com.example.payment.service;
 import static github.benslabbert.vertxdaggercommons.mesage.Headers.SAGA_ID_HEADER;
 import static github.benslabbert.vertxdaggercommons.mesage.Headers.SAGA_ROLLBACK_HEADER;
 
-import com.example.catalog.api.saga.CreatePaymentFailedResponse;
-import com.example.catalog.api.saga.CreatePaymentRequest;
-import com.example.catalog.api.saga.CreatePaymentResponse;
-import com.example.catalog.api.saga.CreatePaymentSuccessResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentFailedResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentRequest;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentResponse;
+import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentSuccessResponse;
 import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;

@@ -2,7 +2,6 @@
 package com.example.warehouse.ioc;
 
 import com.example.warehouse.repository.RepositoryModule;
-import com.example.warehouse.rpc.api.WarehouseRpcService;
 import com.example.warehouse.service.ServiceModule;
 import com.example.warehouse.verticle.WarehouseVerticle;
 import dagger.BindsInstance;
@@ -10,6 +9,7 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcApiModule;
+import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcService;
 import github.benslabbert.vertxdaggercommons.closer.CloserModule;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
