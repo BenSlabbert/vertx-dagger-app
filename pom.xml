@@ -20,7 +20,6 @@
     <module>payment-parent</module>
     <module>client-parent</module>
     <module>warehouse-parent</module>
-    <module>plugin-parent</module>
     <module>jte-htmx-parent</module>
     <module>virtual-parent</module>
     <module>jdbc-parent</module>
@@ -174,6 +173,9 @@
               <include>**/*.yaml</include>
               <include>**/*.yml</include>
             </includes>
+            <excludes>
+              <exclude>**/helm/**</exclude>
+            </excludes>
             <jackson />
           </yaml>
           <sql>

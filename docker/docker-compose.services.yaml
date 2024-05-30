@@ -8,7 +8,7 @@ services:
       timeout: "1s"
       retries: 3
       start_period: "5s"
-    image: "iam:jvm-latest"
+    image: "ghcr.io/benslabbert/vertx-dagger-app/iam:0.0.0-snapshot"
     ports:
     - "8080:8080"
     volumes:
@@ -26,7 +26,7 @@ services:
       redis:
         condition: "service_healthy"
   iam-rpc:
-    image: "iam-rpc:jvm-latest"
+    image: "ghcr.io/benslabbert/vertx-dagger-app/iam-rpc:0.0.0-snapshot"
     volumes:
     - "./config/iam-rpc-config.json:/config.json"
     - "./config/cluster.xml:/cluster.xml"
@@ -37,7 +37,7 @@ services:
     - "-Dvertx.hazelcast.config=/cluster.xml"
     - "-cluster"
   catalog:
-    image: "catalog:jvm-latest"
+    image: "ghcr.io/benslabbert/vertx-dagger-app/catalog:0.0.0-snapshot"
     ports:
     - "8081:8080"
     volumes:
@@ -57,7 +57,7 @@ services:
       catalog-migrator:
         condition: "service_completed_successfully"
   payment:
-    image: "payment:jvm-latest"
+    image: "ghcr.io/benslabbert/vertx-dagger-app/payment:0.0.0-snapshot"
     ports:
     - "8082:8080"
     volumes:
