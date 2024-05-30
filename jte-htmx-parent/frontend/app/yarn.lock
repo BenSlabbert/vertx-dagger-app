@@ -763,34 +763,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte-inspector@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@sveltejs/vite-plugin-svelte-inspector@npm:2.0.0"
+"@sveltejs/vite-plugin-svelte-inspector@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@sveltejs/vite-plugin-svelte-inspector@npm:2.1.0"
   dependencies:
     debug: "npm:^4.3.4"
   peerDependencies:
     "@sveltejs/vite-plugin-svelte": ^3.0.0
     svelte: ^4.0.0 || ^5.0.0-next.0
     vite: ^5.0.0
-  checksum: 10/065750f9048693396125f4d0cce5e8dcfca8f52785a0cb64a9f52041643eaf20ba65237ae6e56b5ff8e089a304a8b10ca655857b6dbdbfdc87ff09d7ee744cfc
+  checksum: 10/6abadb6b973d0951bfb15394b42f842a509985fbfcca070364774886bc7153113b932a89b745c3bab240a9e1cfcf2d2b97cb3529f550632901fbe37b4c88c386
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@sveltejs/vite-plugin-svelte@npm:3.1.0"
+"@sveltejs/vite-plugin-svelte@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@sveltejs/vite-plugin-svelte@npm:3.1.1"
   dependencies:
-    "@sveltejs/vite-plugin-svelte-inspector": "npm:^2.0.0"
+    "@sveltejs/vite-plugin-svelte-inspector": "npm:^2.1.0"
     debug: "npm:^4.3.4"
     deepmerge: "npm:^4.3.1"
     kleur: "npm:^4.1.5"
-    magic-string: "npm:^0.30.9"
+    magic-string: "npm:^0.30.10"
     svelte-hmr: "npm:^0.16.0"
     vitefu: "npm:^0.2.5"
   peerDependencies:
     svelte: ^4.0.0 || ^5.0.0-next.0
     vite: ^5.0.0
-  checksum: 10/b7fcbb90a6eef9aabc9431268096f3bfeba0872e7c6a5a42dd462f69dcd13f6e3cf817aaacf32d2f0bb744b599d1965a1e09f91b96cb35c39488c93ebfa6b046
+  checksum: 10/2fb4893f92249b3312d983670c632c5b96edc5d6f9e19c3b015bbf21479d54b9ebd9e9bdbccfa222c0345b7983df95fa592dca584ac8d64943e8f81a7c9eaf78
   languageName: node
   linkType: hard
 
@@ -1027,7 +1027,7 @@ __metadata:
     "@playwright/test": "npm:^1.44.1"
     "@sveltejs/adapter-node": "npm:^5.0.1"
     "@sveltejs/kit": "npm:^2.5.10"
-    "@sveltejs/vite-plugin-svelte": "npm:^3.1.0"
+    "@sveltejs/vite-plugin-svelte": "npm:^3.1.1"
     "@types/eslint": "npm:^8.56.10"
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.1.0"
@@ -2476,21 +2476,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"magic-string@npm:^0.30.10":
+  version: 0.30.10
+  resolution: "magic-string@npm:0.30.10"
+  dependencies:
+    "@jridgewell/sourcemap-codec": "npm:^1.4.15"
+  checksum: 10/9f8bf6363a14c98a9d9f32ef833b194702a5c98fb931b05ac511b76f0b06fd30ed92beda6ca3261d2d52d21e39e891ef1136fbd032023f6cbb02d0b7d5767201
+  languageName: node
+  linkType: hard
+
 "magic-string@npm:^0.30.3, magic-string@npm:^0.30.5":
   version: 0.30.8
   resolution: "magic-string@npm:0.30.8"
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
   checksum: 10/72ab63817af600e92c19dc8489c1aa4a9599da00cfd59b2319709bd48fb0cf533fdf354bf140ac86e598dbd63e6b2cc83647fe8448f864a3eb6061c62c94e784
-  languageName: node
-  linkType: hard
-
-"magic-string@npm:^0.30.9":
-  version: 0.30.9
-  resolution: "magic-string@npm:0.30.9"
-  dependencies:
-    "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-  checksum: 10/a49b7f848e36914c2794e443d4da6579abebb3e57a5e98b1603958f4672d1435dc15261f70c2793e9b6d6c891191c83b9608322b48d0d76a9be32e73e039cc8a
   languageName: node
   linkType: hard
 
