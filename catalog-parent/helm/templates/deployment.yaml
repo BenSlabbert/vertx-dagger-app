@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    name: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.name }}
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config.json
+              subPath: config.json
+          startupProbe:
+            {{- toYaml .Values.probes.startupProbe | nindent 12 }}
+          livenessProbe:
+            {{- toYaml .Values.probes.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.probes.readinessProbe | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: config

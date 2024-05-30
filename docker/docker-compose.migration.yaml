@@ -2,14 +2,14 @@
 version: "3.8"
 services:
   catalog-migrator:
-    image: "catalog-migration:jvm-latest"
+    image: "ghcr.io/benslabbert/vertx-dagger-app/catalog-migration:0.0.0-snapshot"
     depends_on:
       postgres:
         condition: "service_healthy"
     command: "java -Xmx32M -Xms32M -Djava.net.preferIPv4Stack=true -XX:+UnlockExperimentalVMOptions\
       \ -XX:+UseEpsilonGC -jar app.jar postgres 5432 postgres postgres catalog"
   payment-migrator:
-    image: "payment-migration:jvm-latest"
+    image: "ghcr.io/benslabbert/vertx-dagger-app/payment-migration:0.0.0-snapshot"
     depends_on:
       postgres:
         condition: "service_healthy"
