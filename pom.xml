@@ -40,7 +40,7 @@
     <vertx-dagger-commons.version>1.13.0</vertx-dagger-commons.version>
     <vertx-dagger-codegen.version>1.11.0</vertx-dagger-codegen.version>
     <vertx-dagger-starter.version>1.9.0</vertx-dagger-starter.version>
-    <vertx-dagger-app-api.version>1.6.0</vertx-dagger-app-api.version>
+    <vertx-dagger-app-api.version>1.13.0</vertx-dagger-app-api.version>
     <tx-manager.version>1.6.0</tx-manager.version>
   </properties>
 
