@@ -12,17 +12,16 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-codegen</artifactId>
-      <classifier>processor</classifier>
+      <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+      <artifactId>annotation</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-sql-client-templates</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
+      <groupId>com.google.auto.value</groupId>
+      <artifactId>auto-value-annotations</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -70,20 +69,14 @@
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>${lombok.version}</version>
+              <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+              <artifactId>processor</artifactId>
+              <version>${vertx-dagger-codegen.version}</version>
             </path>
             <path>
-              <groupId>io.vertx</groupId>
-              <artifactId>vertx-codegen</artifactId>
-              <version>${vertx.version}</version>
-              <classifier>processor</classifier>
-            </path>
-            <path>
-              <groupId>io.vertx</groupId>
-              <artifactId>vertx-sql-client-templates</artifactId>
-              <version>${vertx.version}</version>
+              <groupId>com.google.auto.value</groupId>
+              <artifactId>auto-value</artifactId>
+              <version>${google-auto-value.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
