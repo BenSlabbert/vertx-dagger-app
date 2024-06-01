@@ -1,24 +1,41 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.projections;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
-import io.vertx.sqlclient.templates.annotations.Column;
-import io.vertx.sqlclient.templates.annotations.RowMapped;
-import lombok.Data;
+import com.google.auto.value.AutoBuilder;
+import github.benslabbert.vertxdaggercodegen.annotation.projection.Column;
+import github.benslabbert.vertxdaggercodegen.annotation.projection.ReactiveProjection;
+import io.vertx.sqlclient.Row;
+import io.vertx.sqlclient.RowSet;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
-@Data
-@JsonGen
-@RowMapped
-@DataObject
-public class UserDataObject {
+@ReactiveProjection
+public record UserDataObject(
+    @Column(name = "id") long id,
+    @Column(name = "first_name") String firstName,
+    @Column(name = "last_name") String lastName) {
 
-  @Column(name = "id")
-  private long id;
+  public static UserDataObject map(Row row) {
+    return UserDataObject_ReactiveRowMapper.INSTANCE.map(row);
+  }
 
-  @Column(name = "first_name")
-  private String firstName;
+  public static List<UserDataObject> map(RowSet<Row> rowSet) {
+    return StreamSupport.stream(rowSet.spliterator(), false)
+        .collect(UserDataObject_ReactiveRowMapper.COLLECTOR);
+  }
 
-  @Column(name = "last_name")
-  private String lastName;
+  public static Builder builder() {
+    return new AutoBuilder_UserDataObject_Builder();
+  }
+
+  @AutoBuilder
+  public interface Builder {
+    Builder id(long id);
+
+    Builder firstName(String firstName);
+
+    Builder lastName(String lastName);
+
+    UserDataObject build();
+  }
 }

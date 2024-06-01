@@ -97,7 +97,7 @@ public class ItemService extends TransactionBoundary {
 
   public Future<CreateItemResponseDto> create(CreateItemRequestDto dto) {
     return doInTransaction(conn -> itemRepository.create(conn, dto.name(), dto.priceInCents()))
-        .onSuccess(item -> suggestionService.create(dto.name()))
+        .onSuccess(ignore -> suggestionService.create(dto.name()))
         .map(
             item ->
                 new CreateItemResponseDto(
@@ -124,7 +124,7 @@ public class ItemService extends TransactionBoundary {
                               .update(conn, id, dto.name(), dto.priceInCents(), dto.version())
                               .map(ignore1 -> maybeItem.get());
                         }))
-        .onSuccess(oldItem -> suggestionService.update(oldItem.getName(), dto.name()))
+        .onSuccess(oldItem -> suggestionService.update(oldItem.name(), dto.name()))
         .map(ignore -> null);
   }
 
@@ -141,7 +141,7 @@ public class ItemService extends TransactionBoundary {
 
                           return itemRepository.delete(conn, id).map(ignore1 -> maybeItem.get());
                         }))
-        .onSuccess(item -> suggestionService.delete(item.getName()))
+        .onSuccess(item -> suggestionService.delete(item.name()))
         .map(ignore -> null);
   }
 }

@@ -4,12 +4,10 @@ package com.example.reactivetest.repository.sql.projection;
 import static com.example.reactivetest.generator.entity.generated.jooq.tables.UserData.USER_DATA;
 
 import com.example.reactivetest.projections.UserDataObject;
-import com.example.reactivetest.projections.UserDataObjectRowMapper;
 import github.benslabbert.vertxdaggercommons.sql.Projection;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import java.util.List;
-import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -41,8 +39,7 @@ public class UserProjectionFactory {
 
     @Override
     public List<UserDataObject> parse(RowSet<Row> rowSet) {
-      return StreamSupport.stream(rowSet.spliterator(), false)
-          .collect(UserDataObjectRowMapper.COLLECTOR);
+      return UserDataObject.map(rowSet);
     }
   }
 }
