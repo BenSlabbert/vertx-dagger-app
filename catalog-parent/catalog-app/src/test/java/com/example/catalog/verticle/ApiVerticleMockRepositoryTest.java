@@ -22,7 +22,12 @@ class ApiVerticleMockRepositoryTest extends MockRepositoryTest {
         .thenReturn(
             Future.succeededFuture(
                 Optional.of(
-                    ItemProjection.builder().id(1L).name("name").priceInCents(123L).build())));
+                    ItemProjection.builder()
+                        .id(1L)
+                        .name("name")
+                        .priceInCents(123L)
+                        .version(0)
+                        .build())));
 
     provider
         .itemService()
