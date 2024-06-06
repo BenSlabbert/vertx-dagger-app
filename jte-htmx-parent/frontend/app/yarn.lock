@@ -1033,7 +1033,7 @@ __metadata:
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-svelte: "npm:^2.39.0"
     prettier: "npm:^3.2.5"
-    prettier-plugin-svelte: "npm:^3.2.3"
+    prettier-plugin-svelte: "npm:^3.2.4"
     svelte: "npm:^5.0.0-next.148"
     svelte-check: "npm:^3.8.0"
     typescript: "npm:^5.4.5"
@@ -3052,13 +3052,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^3.2.3":
-  version: 3.2.3
-  resolution: "prettier-plugin-svelte@npm:3.2.3"
+"prettier-plugin-svelte@npm:^3.2.4":
+  version: 3.2.4
+  resolution: "prettier-plugin-svelte@npm:3.2.4"
   peerDependencies:
     prettier: ^3.0.0
     svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
-  checksum: 10/73cc11253602586c1bf21c07dea30bde22cd8ec2c2e7a4e0300a7b5ac4a82c03759feafdeeda5a4dce9d5c38c18ca89790880caf3d1e9fd71bb2232cceaf2ceb
+  checksum: 10/3daebb256138aa0f6487cb8e80a38945ba484284a6d48c551de5f08a5e48c4f3a642432363ddee9f4d4c058c2da3f443728585257c99c4301dd6576b9e088aee
   languageName: node
   linkType: hard
 
