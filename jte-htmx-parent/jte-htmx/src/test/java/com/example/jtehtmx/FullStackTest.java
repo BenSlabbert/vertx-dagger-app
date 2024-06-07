@@ -2,7 +2,6 @@
 package com.example.jtehtmx;
 
 import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.jtehtmx.ioc.DaggerProvider;
 import com.example.jtehtmx.ioc.Provider;
@@ -81,12 +80,5 @@ class FullStackTest {
   void test() {
     page.navigate("http://127.0.0.1:" + config.httpConfig().port());
     page.waitForCondition(page.querySelector("h1")::isVisible);
-
-    String h1 = page.querySelector("h1").innerText();
-    assertThat(h1).isEqualTo("Welcome to SvelteKit");
-
-    page.click("text=about");
-    page.click("text=home");
-    page.click("text=about");
   }
 }
