@@ -12,6 +12,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>jte-htmx</module>
+    <module>frontend</module>
   </modules>
 
 </project>

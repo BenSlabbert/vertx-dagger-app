@@ -49,7 +49,9 @@ showReport:
 
 .PHONY: clean
 clean:
-	rm -rf .yarn
+	rm -rf node_modules
+	rm -rf .yarn/cache
+	rm -rf .yarn/install-state.gz
 	rm -rf build
 	rm -rf playwright-report
 	rm -rf test-results

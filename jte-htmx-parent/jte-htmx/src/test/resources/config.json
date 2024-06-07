@@ -1,0 +1,6 @@
+{
+  "profile": "prod",
+  "httpConfig": {
+    "port": 8080
+  }
+}

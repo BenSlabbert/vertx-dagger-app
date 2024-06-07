@@ -36,6 +36,11 @@ registries:
     url: "https://maven.pkg.github.com/BenSlabbert/vertx-dagger-starter"
     username: "BenSlabbert"
     password: "${{ secrets.GH_TOKEN }}"
+  svelte-ui-lib:
+    type: "npm-registry"
+    url: "https://maven.pkg.github.com/BenSlabbert/vertx-dagger-ui-lib"
+    username: "BenSlabbert"
+    password: "${{ secrets.GH_TOKEN }}"
 updates:
 - package-ecosystem: "maven"
   directory: "/"
@@ -57,6 +62,8 @@ updates:
   schedule:
     interval: "daily"
   open-pull-requests-limit: 10
+  registries:
+  - "svelte-ui-lib"
   labels:
   - "dependencies"
 - package-ecosystem: "npm"
@@ -64,6 +71,8 @@ updates:
   schedule:
     interval: "daily"
   open-pull-requests-limit: 10
+  registries:
+  - "svelte-ui-lib"
   labels:
   - "dependencies"
 - package-ecosystem: "github-actions"

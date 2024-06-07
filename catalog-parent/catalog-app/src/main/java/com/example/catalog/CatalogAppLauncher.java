@@ -15,9 +15,6 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.tracing.opentelemetry.OpenTelemetryOptions;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,14 +28,6 @@ public class CatalogAppLauncher extends Launcher {
   }
 
   public static void main(String[] args) {
-    // breaks on native image
-    // https://github.com/oracle/graal/issues/5510
-    LocalDateTime parse =
-        LocalDateTime.parse(
-            "4714-11-24 00:00:00 BC",
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss G", Locale.ROOT));
-    log.info("parse: " + parse);
-
     new CatalogAppLauncher().dispatch(args);
   }
 

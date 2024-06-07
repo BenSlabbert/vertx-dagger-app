@@ -39,6 +39,10 @@ jobs:
         java-version: "22"
         java-package: "jdk"
         cache: "maven"
+    - run: "npm set \"//npm.pkg.github.com/:_authToken=$GH_TOKEN\""
+    - run: "node --version"
+    - run: "npm --version"
+    - run: "mvn --version"
     - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m8/maven-mvnd-1.0-m8-m39-linux-amd64.zip\
         \ -o maven-mvnd-1.0-m8-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m8-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m8-m39-linux-amd64 /tmp/mvnd"
@@ -49,6 +53,8 @@ jobs:
   analyze-js:
     name: "Analyze JavaScript"
     runs-on: "ubuntu-latest"
+    env:
+      GH_TOKEN: "${{ secrets.GH_TOKEN }}"
     timeout-minutes: 360
     permissions:
       actions: "read"
@@ -72,6 +78,10 @@ jobs:
         node-version: 20
         cache: "yarn"
         cache-dependency-path: "frontend/app/yarn.lock"
+    - run: "npm set \"//npm.pkg.github.com/:_authToken=$GH_TOKEN\""
+    - run: "node --version"
+    - run: "npm --version"
+    - run: "mvn --version"
     - run: "yarn --version"
     - run: "make -C frontend/app"
     - name: "Perform CodeQL Analysis"

@@ -40,7 +40,9 @@ public class ExampleHandler {
   }
 
   public void configureRoutes(Router router) {
-    router.post(ExampleHandler_HandleClicked_ParamParser.PATH).handler(this::handleClicked);
+    router
+        .post("/api" + ExampleHandler_HandleClicked_ParamParser.PATH)
+        .handler(this::handleClicked);
 
     log.info("Configured routes for: " + this.getClass().getName());
     log.info("-------------------------");

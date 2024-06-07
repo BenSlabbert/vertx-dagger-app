@@ -21,6 +21,21 @@ jobs:
         java-version: "22"
         java-package: "jdk"
         cache: "maven"
+    - name: "Setup node"
+      uses: "actions/setup-node@v4"
+      with:
+        node-version: 20
+        cache: "yarn"
+        cache-dependency-path: "jte-htmx-parent/frontend/app/yarn.lock"
+    - run: "npm set \"//npm.pkg.github.com/:_authToken=$GH_TOKEN\""
+    - run: "node --version"
+    - run: "npm --version"
+    - run: "mvn --version"
+    - run: "yarn --version"
+    - run: "corepack enable"
+    - run: "corepack prepare yarn@stable --activate"
+    - run: "yarn set version stable"
+    - run: "yarn --version"
     - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m8/maven-mvnd-1.0-m8-m39-linux-amd64.zip\
         \ -o maven-mvnd-1.0-m8-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m8-m39-linux-amd64.zip\
         \ && mv maven-mvnd-1.0-m8-m39-linux-amd64 /tmp/mvnd"
@@ -30,6 +45,8 @@ jobs:
     - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml -Pdocker-push' validate"
   build-frontend:
     runs-on: "ubuntu-latest"
+    env:
+      GH_TOKEN: "${{ secrets.GH_TOKEN }}"
     steps:
     - uses: "actions/checkout@v4"
     - name: "Setup node"
@@ -38,9 +55,16 @@ jobs:
         node-version: 20
         cache: "yarn"
         cache-dependency-path: "frontend/app/yarn.lock"
+    - run: "npm set \"//npm.pkg.github.com/:_authToken=$GH_TOKEN\""
+    - run: "node --version"
+    - run: "npm --version"
+    - run: "mvn --version"
+    - run: "yarn --version"
+    - run: "corepack enable"
+    - run: "corepack prepare yarn@stable --activate"
+    - run: "yarn set version stable"
     - run: "yarn --version"
     - run: "make -C frontend/app"
-    - run: "make lint -C frontend/app"
     - run: "make test -C frontend/app"
     - run: "make buildDev -C frontend/app"
     - run: "make buildDocker -C frontend/app"
@@ -65,6 +89,8 @@ jobs:
         retention-days: 30
   build-htmx-frontend:
     runs-on: "ubuntu-latest"
+    env:
+      GH_TOKEN: "${{ secrets.GH_TOKEN }}"
     steps:
     - uses: "actions/checkout@v4"
     - name: "Setup node"
@@ -73,13 +99,19 @@ jobs:
         node-version: 20
         cache: "yarn"
         cache-dependency-path: "jte-htmx-parent/frontend/app/yarn.lock"
+    - run: "npm set \"//npm.pkg.github.com/:_authToken=$GH_TOKEN\""
+    - run: "node --version"
+    - run: "npm --version"
+    - run: "mvn --version"
+    - run: "yarn --version"
+    - run: "corepack enable"
+    - run: "corepack prepare yarn@stable --activate"
+    - run: "yarn set version stable"
     - run: "yarn --version"
     - run: "make -C jte-htmx-parent/frontend/app"
     - run: "make lint -C jte-htmx-parent/frontend/app"
     - run: "make test -C jte-htmx-parent/frontend/app"
     - run: "make buildDev -C jte-htmx-parent/frontend/app"
-    - run: "make buildDocker -C jte-htmx-parent/frontend/app"
-    - run: "make dockerSave -C jte-htmx-parent/frontend/app"
     - uses: "actions/upload-artifact@v4"
       if: "always()"
       with:

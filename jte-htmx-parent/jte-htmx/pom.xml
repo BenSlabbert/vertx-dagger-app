@@ -132,6 +132,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.microsoft.playwright</groupId>
+      <artifactId>playwright</artifactId>
+      <version>1.44.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
@@ -217,16 +223,31 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <artifactItems>
+            <artifactItem>
+              <groupId>com.example.jte-htmx</groupId>
+              <artifactId>jte-htmx-frontend</artifactId>
+              <version>${revision}</version>
+              <type>jar</type>
+            </artifactItem>
+          </artifactItems>
+          <outputDirectory>${project.build.outputDirectory}/svelte</outputDirectory>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.example.jte-htmx</groupId>
+            <artifactId>jte-htmx-frontend</artifactId>
+            <version>${revision}</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
+            <id>copy-jooq-generator</id>
             <goals>
-              <goal>copy-dependencies</goal>
+              <goal>unpack</goal>
             </goals>
-            <phase>package</phase>
-            <configuration>
-              <skip>${copyJarDeps.skip}</skip>
-              <outputDirectory>${project.build.directory}/lib</outputDirectory>
-            </configuration>
+            <phase>generate-sources</phase>
           </execution>
         </executions>
       </plugin>

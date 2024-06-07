@@ -26,6 +26,5 @@ COPY ./build .
 ADD ./entry.js .
 
 ENTRYPOINT ["node", "entry.js"]
-CMD ["node", "index.js"]
 
 LABEL org.opencontainers.image.source="https://github.com/BenSlabbert/vertx-dagger-app"
