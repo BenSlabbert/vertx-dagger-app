@@ -17,6 +17,7 @@ import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,13 +51,14 @@ public class JteHtmxVerticle extends AbstractVerticle {
     mainRouter.get("/health*").handler(getHealthCheckHandler());
     mainRouter.get("/ping*").handler(getPingHandler());
     mainRouter
-        .route()
+        .route("/api/*")
         .handler(
             ctx -> {
               HttpMethod method = ctx.request().method();
               String path = ctx.request().path();
               String query = ctx.request().query();
 
+              log.info("handle api request");
               if (null == query) {
                 log.info("[{}] {}", method, path);
               } else {
@@ -75,10 +77,26 @@ public class JteHtmxVerticle extends AbstractVerticle {
               ctx.next();
             });
 
+    mainRouter
+        .route("/*")
+        .handler(
+            ctx -> {
+              // if the request if for js or css, send the requested file
+              String path = ctx.request().path();
+
+              if (path.startsWith("/api")
+                  || path.startsWith("/health")
+                  || path.startsWith("/ping")) {
+                ctx.next();
+                return;
+              }
+
+              StaticHandler.create("svelte").handle(ctx);
+            });
     exampleHandler.configureRoutes(mainRouter);
 
     Config.HttpConfig httpConfig = config.httpConfig();
-    log.info("starting api verticle on port: " + httpConfig.port());
+    log.info("starting api verticle on port: {}", httpConfig.port());
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
         .requestHandler(mainRouter)

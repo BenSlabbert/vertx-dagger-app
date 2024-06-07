@@ -10,13 +10,20 @@ import gg.jte.resolve.DirectoryCodeResolver;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import java.nio.file.Path;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Module
-public class JteConfig {
+public final class JteConfig {
+
+  private static final Logger log = LoggerFactory.getLogger(JteConfig.class);
+
+  private JteConfig() {}
 
   @Provides
   @Singleton
   static TemplateEngine provideTemplateEngine(Config config) {
+    log.info("config.profile(): {}", config.profile());
     return switch (config.profile()) {
       case DEV -> {
         String path =

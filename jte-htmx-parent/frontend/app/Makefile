@@ -1,8 +1,5 @@
 #!make
 
-IMAGE_NAME := app-sveltekit
-IMAGE_TAG := latest
-
 .PHONY: install
 install:
 	yarn
@@ -12,22 +9,13 @@ install:
 buildDev:
 	yarn run buildDev
 
-.PHONY: buildDocker
-buildDocker:
-	yarn run buildDocker
-	docker buildx build . -t ${IMAGE_NAME}:${IMAGE_TAG}
-
-.PHONY: dockerSave
-dockerSave:
-	docker save ${IMAGE_NAME}:${IMAGE_TAG} | gzip > ${IMAGE_NAME}_${IMAGE_TAG}.tar.gz
-
 .PHONY: check
 check:
 	yarn run check
 
 .PHONY: run
 run: fmt
-	BASE_URL="" BROWSER=firefox yarn run dev
+	BASE_URL="" yarn run dev
 
 .PHONY: lint
 lint:
@@ -49,8 +37,9 @@ showReport:
 
 .PHONY: clean
 clean:
-	rm -rf .yarn
+	rm -rf node_modules
+	rm -rf .yarn/cache
+	rm -rf .yarn/install-state.gz
 	rm -rf build
 	rm -rf playwright-report
 	rm -rf test-results
-	rm -f ${IMAGE_NAME}_${IMAGE_TAG}.tar.gz
