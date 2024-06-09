@@ -1057,7 +1057,7 @@ __metadata:
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
     eslint: "npm:^9.4.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^2.39.0"
+    eslint-plugin-svelte: "npm:^2.39.2"
     globals: "npm:^15.4.0"
     prettier: "npm:^3.3.1"
     prettier-plugin-svelte: "npm:^3.2.4"
@@ -1628,13 +1628,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.39.0":
-  version: 2.39.0
-  resolution: "eslint-plugin-svelte@npm:2.39.0"
+"eslint-plugin-svelte@npm:^2.39.2":
+  version: 2.39.2
+  resolution: "eslint-plugin-svelte@npm:2.39.2"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-    debug: "npm:^4.3.4"
     eslint-compat-utils: "npm:^0.5.0"
     esutils: "npm:^2.0.3"
     known-css-properties: "npm:^0.31.0"
@@ -1642,15 +1641,15 @@ __metadata:
     postcss-load-config: "npm:^3.1.4"
     postcss-safe-parser: "npm:^6.0.0"
     postcss-selector-parser: "npm:^6.0.16"
-    semver: "npm:^7.6.0"
-    svelte-eslint-parser: "npm:>=0.36.0 <1.0.0"
+    semver: "npm:^7.6.2"
+    svelte-eslint-parser: "npm:^0.36.0"
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0-0 || ^9.0.0-0
     svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.112
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/09d681abef78973b130e9733fd7726c8398b5f6977f174a87e1ef891baa866437b381dbec81697c766f35f5e92ceb0cd44377dd0106926ff0781f0b4acfee8a3
+  checksum: 10/f5500f66f68785a350eaa21f4d1c631f0652bc55b77498ad5b2d451666b7a43e54bbeffd23a19c95580312bfeb09875437c400d5733078d3ca10c37ca62b5a57
   languageName: node
   linkType: hard
 
@@ -3487,7 +3486,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.1.2, semver@npm:^7.3.5, semver@npm:^7.5.4, semver@npm:^7.6.0":
+"semver@npm:^7.1.2, semver@npm:^7.3.5, semver@npm:^7.5.4, semver@npm:^7.6.2":
   version: 7.6.2
   resolution: "semver@npm:7.6.2"
   bin:
@@ -3758,7 +3757,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-eslint-parser@npm:>=0.36.0 <1.0.0":
+"svelte-eslint-parser@npm:^0.36.0":
   version: 0.36.0
   resolution: "svelte-eslint-parser@npm:0.36.0"
   dependencies:
