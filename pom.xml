@@ -14,7 +14,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>iam-parent</module>
     <module>catalog-parent</module>
     <module>reactive-test-parent</module>
     <module>payment-parent</module>

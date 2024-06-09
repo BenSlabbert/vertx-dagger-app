@@ -41,6 +41,11 @@ registries:
     url: "https://maven.pkg.github.com/BenSlabbert/vertx-dagger-ui-lib"
     username: "BenSlabbert"
     password: "${{ secrets.GH_TOKEN }}"
+  vertx-json-writer:
+    type: "maven-repository"
+    url: "https://maven.pkg.github.com/BenSlabbert/vertx-json-writer"
+    username: "BenSlabbert"
+    password: "${{ secrets.GH_TOKEN }}"
 updates:
 - package-ecosystem: "maven"
   directory: "/"
@@ -55,6 +60,7 @@ updates:
   - "vertx-dagger-starter"
   - "vertx-dagger-app-api"
   - "tx-manager"
+  - "vertx-json-writer"
   labels:
   - "dependencies"
 - package-ecosystem: "npm"
