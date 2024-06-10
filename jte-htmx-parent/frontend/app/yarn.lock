@@ -1057,7 +1057,7 @@ __metadata:
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
     eslint: "npm:^9.4.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^2.39.2"
+    eslint-plugin-svelte: "npm:^2.39.3"
     globals: "npm:^15.4.0"
     prettier: "npm:^3.3.1"
     prettier-plugin-svelte: "npm:^3.2.4"
@@ -1628,9 +1628,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.39.2":
-  version: 2.39.2
-  resolution: "eslint-plugin-svelte@npm:2.39.2"
+"eslint-plugin-svelte@npm:^2.39.3":
+  version: 2.39.3
+  resolution: "eslint-plugin-svelte@npm:2.39.3"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -1642,14 +1642,14 @@ __metadata:
     postcss-safe-parser: "npm:^6.0.0"
     postcss-selector-parser: "npm:^6.0.16"
     semver: "npm:^7.6.2"
-    svelte-eslint-parser: "npm:^0.36.0"
+    svelte-eslint-parser: "npm:^0.37.0"
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0-0 || ^9.0.0-0
     svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.112
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/f5500f66f68785a350eaa21f4d1c631f0652bc55b77498ad5b2d451666b7a43e54bbeffd23a19c95580312bfeb09875437c400d5733078d3ca10c37ca62b5a57
+  checksum: 10/3a2025a33418154194b19152ded29c80c24627bed1ee7a383de4789b325181ea01cf23fb724511d411617a9355f3c86f0d7400d9b01379103de278dc83b5441e
   languageName: node
   linkType: hard
 
@@ -3757,9 +3757,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-eslint-parser@npm:^0.36.0":
-  version: 0.36.0
-  resolution: "svelte-eslint-parser@npm:0.36.0"
+"svelte-eslint-parser@npm:^0.37.0":
+  version: 0.37.0
+  resolution: "svelte-eslint-parser@npm:0.37.0"
   dependencies:
     eslint-scope: "npm:^7.2.2"
     eslint-visitor-keys: "npm:^3.4.3"
@@ -3771,7 +3771,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/a2c09ba27dccfae71acd0080668f07146c5fc85ddf047a88921054c25bd1ba32cbf71b768c94a819a88ba20d94b3fa248bdf92a04b2863dc8fb2d539100a842c
+  checksum: 10/8826c8d013736681a3500db39f21dee203e5e063b7ece981e99a99e8b4590a254d4ec738ed3eb5777c23368189648913b314b178b35a8e6f06a7029545721881
   languageName: node
   linkType: hard
 
