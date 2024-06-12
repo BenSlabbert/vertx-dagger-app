@@ -35,7 +35,7 @@
 
     <!--deps-->
     <jsonwriter.version>1.18.0</jsonwriter.version>
-    <vertx-dagger-commons.version>1.22.0</vertx-dagger-commons.version>
+    <vertx-dagger-commons.version>1.24.0</vertx-dagger-commons.version>
     <vertx-dagger-codegen.version>1.25.0</vertx-dagger-codegen.version>
     <vertx-dagger-starter.version>1.18.0</vertx-dagger-starter.version>
     <vertx-dagger-app-api.version>1.24.0</vertx-dagger-app-api.version>
