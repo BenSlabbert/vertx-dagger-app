@@ -41,8 +41,12 @@ jobs:
         \ && mv maven-mvnd-1.0-m8-m39-linux-amd64 /tmp/mvnd"
     - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml' fmtCheck"
     - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml'"
-    - run: "echo $GH_TOKEN | docker login ghcr.io -u USERNAME --password-stdin"
-    - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml -Pdocker-push' validate"
+    - name: "docker login"
+      if: "github.ref == 'refs/heads/main'"
+      run: "echo $GH_TOKEN | docker login ghcr.io -u USERNAME --password-stdin"
+    - name: "docker push"
+      if: "github.ref == 'refs/heads/main'"
+      run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml -Pdocker-push' validate"
   build-frontend:
     runs-on: "ubuntu-latest"
     env:
