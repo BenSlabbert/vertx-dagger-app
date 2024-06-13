@@ -63,6 +63,13 @@ updates:
   - "vertx-json-writer"
   labels:
   - "dependencies"
+  groups:
+    updates:
+      patterns:
+        - "*"
+      update-types:
+        - minor
+        - patch
 - package-ecosystem: "npm"
   directory: "/frontend/app"
   schedule:
@@ -72,6 +79,13 @@ updates:
   - "svelte-ui-lib"
   labels:
   - "dependencies"
+  groups:
+    updates:
+      patterns:
+        - "*"
+      update-types:
+        - minor
+        - patch
 - package-ecosystem: "npm"
   directory: "/jte-htmx-parent/frontend/app"
   schedule:
@@ -81,6 +95,13 @@ updates:
   - "svelte-ui-lib"
   labels:
   - "dependencies"
+  groups:
+    updates:
+      patterns:
+        - "*"
+      update-types:
+        - minor
+        - patch
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
@@ -88,3 +109,10 @@ updates:
   open-pull-requests-limit: 10
   labels:
   - "dependencies"
+  groups:
+    updates:
+      patterns:
+        - "*"
+      update-types:
+        - minor
+        - patch
