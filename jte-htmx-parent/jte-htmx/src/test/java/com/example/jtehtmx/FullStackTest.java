@@ -1,14 +1,14 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jtehtmx;
 
-import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
-
 import com.example.jtehtmx.ioc.DaggerProvider;
 import com.example.jtehtmx.ioc.Provider;
+import com.example.jtehtmx.verticle.JteHtmxVerticle;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.options.AriaRole;
 import github.benslabbert.vertxdaggercommons.ConfigEncoder;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import io.vertx.core.DeploymentOptions;
@@ -28,9 +28,8 @@ class FullStackTest {
 
   private static Playwright playwright;
   private static Browser browser;
-  private static final int HTTP_PORT = getPort();
 
-  private Config config;
+  private JteHtmxVerticle verticle;
 
   @BeforeAll
   static void launchBrowser() {
@@ -51,10 +50,10 @@ class FullStackTest {
   void createContextAndPage(Vertx vertx, VertxTestContext testContext) {
     context = browser.newContext();
     page = context.newPage();
-    config =
+    Config config =
         Config.builder()
             .profile(Config.Profile.PROD)
-            .httpConfig(Config.HttpConfig.builder().port(HTTP_PORT).build())
+            .httpConfig(Config.HttpConfig.builder().port(0).build())
             .build();
 
     Provider provider =
@@ -65,10 +64,9 @@ class FullStackTest {
             .build();
 
     JsonObject cfg = ConfigEncoder.encode(config);
+    verticle = provider.jteHtmxVerticle();
     vertx.deployVerticle(
-        provider.jteHtmxVerticle(),
-        new DeploymentOptions().setConfig(cfg),
-        testContext.succeedingThenComplete());
+        verticle, new DeploymentOptions().setConfig(cfg), testContext.succeedingThenComplete());
   }
 
   @AfterEach
@@ -78,7 +76,10 @@ class FullStackTest {
 
   @Test
   void test() {
-    page.navigate("http://127.0.0.1:" + config.httpConfig().port());
-    page.waitForCondition(page.querySelector("h1")::isVisible);
+    page.navigate("http://127.0.0.1:%d/".formatted(verticle.getPort()));
+    page.locator("h1").getByText("Welcome to SvelteKit").waitFor();
+    page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("about")).click();
+    page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("home")).click();
+    page.locator("h1").getByText("Welcome to SvelteKit").waitFor();
   }
 }

@@ -2,15 +2,19 @@
 package com.example.jtehtmx.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
+import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 import com.example.jtehtmx.web.handler.ExampleHandler;
 import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.future.FutureUtil;
+import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.Status;
@@ -28,6 +32,8 @@ public class JteHtmxVerticle extends AbstractVerticle {
 
   private final ExampleHandler exampleHandler;
   private final Config config;
+
+  private HttpServer server;
 
   @Inject
   JteHtmxVerticle(Config config, ExampleHandler exampleHandler) {
@@ -77,11 +83,12 @@ public class JteHtmxVerticle extends AbstractVerticle {
               ctx.next();
             });
 
+    StaticHandler staticHandler = StaticHandler.create("svelte");
+
     mainRouter
-        .route("/*")
+        .get()
         .handler(
             ctx -> {
-              // if the request if for js or css, send the requested file
               String path = ctx.request().path();
 
               if (path.startsWith("/api")
@@ -90,9 +97,25 @@ public class JteHtmxVerticle extends AbstractVerticle {
                 ctx.next();
                 return;
               }
+              if (path.equals("/") || path.endsWith(".js") || path.endsWith(".css")) {
+                staticHandler.handle(ctx);
+                return;
+              }
 
-              StaticHandler.create("svelte").handle(ctx);
+              vertx
+                  .fileSystem()
+                  .readFile(
+                      "svelte/index.html",
+                      ar -> {
+                        if (ar.failed()) {
+                          ctx.response().setStatusCode(NOT_FOUND.code()).end();
+                          return;
+                        }
+
+                        ctx.response().setStatusCode(OK.code()).end(ar.result());
+                      });
             });
+
     exampleHandler.configureRoutes(mainRouter);
 
     Config.HttpConfig httpConfig = config.httpConfig();
@@ -104,12 +127,17 @@ public class JteHtmxVerticle extends AbstractVerticle {
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");
+                server = res.result();
                 startPromise.complete();
               } else {
                 log.error("failed to start verticle", res.cause());
                 startPromise.fail(res.cause());
               }
             });
+  }
+
+  public int getPort() {
+    return server.actualPort();
   }
 
   private HealthCheckHandler getPingHandler() {
@@ -127,6 +155,14 @@ public class JteHtmxVerticle extends AbstractVerticle {
   public void stop(Promise<Void> stopPromise) {
     System.err.println("stopping");
     System.err.println("awaitTermination...start");
+
+    MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
+    if (null == server) {
+      multiCompletePromise.complete();
+    } else {
+      server.close(multiCompletePromise::complete);
+    }
+
     FutureUtil.awaitTermination()
         .onComplete(
             ar -> {
