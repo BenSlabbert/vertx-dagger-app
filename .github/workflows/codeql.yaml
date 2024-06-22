@@ -58,8 +58,8 @@ jobs:
     - run: "corepack prepare yarn@stable --activate"
     - run: "yarn set version stable"
     - run: "yarn --version"
-    - run: "make M='mvn -s settings.xml' fmtCheck"
-    - run: "make M='mvn -s settings.xml -DskipTests=true -Ddocker.skip=true'"
+    - run: "make M='mvn -s settings.xml -T 1C' fmtCheck"
+    - run: "make M='mvn -s settings.xml -T 1C -DskipTests=true -Ddocker.skip=true'"
     - name: "Perform CodeQL Analysis"
       uses: "github/codeql-action/analyze@v3"
   analyze-js:
