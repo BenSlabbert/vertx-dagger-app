@@ -26,7 +26,11 @@ jobs:
       with:
         node-version: 20
         cache: "yarn"
-        cache-dependency-path: "jte-htmx-parent/frontend/app/yarn.lock"
+        cache-dependency-path: "frontend/app/yarn.lock"
+    - name: "Set up Maven"
+      uses: "stCarolas/setup-maven@v5"
+      with:
+        maven-version: "3.9.6"
     - run: "npm set \"//npm.pkg.github.com/:_authToken=$GH_TOKEN\""
     - run: "node --version"
     - run: "npm --version"
@@ -36,17 +40,16 @@ jobs:
     - run: "corepack prepare yarn@stable --activate"
     - run: "yarn set version stable"
     - run: "yarn --version"
-    - run: "curl -L https://github.com/apache/maven-mvnd/releases/download/1.0-m8/maven-mvnd-1.0-m8-m39-linux-amd64.zip\
-        \ -o maven-mvnd-1.0-m8-m39-linux-amd64.zip && unzip maven-mvnd-1.0-m8-m39-linux-amd64.zip\
-        \ && mv maven-mvnd-1.0-m8-m39-linux-amd64 /tmp/mvnd"
-    - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml' fmtCheck"
-    - run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml'"
+    - run: "make -C frontend/app install test buildDev"
+    - run: "make -C jte-htmx-parent/frontend/app install test buildDev"
+    - run: "make M='mvn -s settings.xml -T 1C' fmtCheck"
+    - run: "make M='mvn -s settings.xml -T 1C'"
     - name: "docker login"
       if: "github.ref == 'refs/heads/main'"
       run: "echo $GH_TOKEN | docker login ghcr.io -u USERNAME --password-stdin"
     - name: "docker push"
       if: "github.ref == 'refs/heads/main'"
-      run: "make M='/tmp/mvnd/bin/mvnd -s settings.xml -Pdocker-push' validate"
+      run: "make M='mvn -s settings.xml -T 1C -Pdocker-push' validate"
   build-frontend:
     runs-on: "ubuntu-latest"
     env:
