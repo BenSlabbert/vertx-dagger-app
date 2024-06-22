@@ -174,6 +174,7 @@
             </includes>
             <excludes>
               <exclude>**/helm/**</exclude>
+              <exclude>**/node_modules/**</exclude>
             </excludes>
             <jackson />
           </yaml>
@@ -205,6 +206,9 @@
             <includes>
               <include>**/*.md</include>
             </includes>
+            <excludes>
+              <exclude>**/node_modules/**</exclude>
+            </excludes>
             <flexmark />
           </markdown>
           <java>
