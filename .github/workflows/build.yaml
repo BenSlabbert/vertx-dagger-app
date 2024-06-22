@@ -42,14 +42,14 @@ jobs:
     - run: "yarn --version"
     - run: "make -C frontend/app install test buildDev"
     - run: "make -C jte-htmx-parent/frontend/app install test buildDev"
-    - run: "make M='mvn -s settings.xml -T 1C' fmtCheck"
-    - run: "make M='mvn -s settings.xml -T 1C'"
+    - run: "make M='mvn -s settings.xml' fmtCheck"
+    - run: "make M='mvn -s settings.xml'"
     - name: "docker login"
       if: "github.ref == 'refs/heads/main'"
       run: "echo $GH_TOKEN | docker login ghcr.io -u USERNAME --password-stdin"
     - name: "docker push"
       if: "github.ref == 'refs/heads/main'"
-      run: "make M='mvn -s settings.xml -T 1C -Pdocker-push' validate"
+      run: "make M='mvn -s settings.xml -Pdocker-push' validate"
   build-frontend:
     runs-on: "ubuntu-latest"
     env:
