@@ -1,11 +1,11 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "image": "mcr.microsoft.com/devcontainers/java:1-22",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
       "version": "22",
       "jdkDistro": "tem",
       "installMaven": true,
-      "mavenVersion": "3.8.6"
+      "mavenVersion": "3.9.8"
     },
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
       "installDockerBuildx": true,
@@ -13,6 +13,10 @@
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20"
-    }
+    },
+    "ghcr.io/devcontainers-contrib/features/corepack:1": {
+      
+    },
+    "postCreateCommand": "mvn --version"
   }
 }
