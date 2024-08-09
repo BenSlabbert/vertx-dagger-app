@@ -1036,18 +1036,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-static@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@sveltejs/adapter-static@npm:3.0.2"
+"@sveltejs/adapter-static@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "@sveltejs/adapter-static@npm:3.0.3"
   peerDependencies:
     "@sveltejs/kit": ^2.0.0
-  checksum: 10/d7a90f7c3ec1c86e0d779dcdca3914e8fae92d0d5a037a3b4eb44b3b730385261d031cccf17c618ff9e148838db26b03f635874b0d00f5b1d8161f32e5fd7d33
+  checksum: 10/5f3823c80f167cb22031934b4ec2e5eb67cb089e1677ccfcb657d33cc531130faf52a40647c47c26e3b2431b3ceb6fa8620b0c139792083d1311a34d07e1a77c
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.5.20":
-  version: 2.5.20
-  resolution: "@sveltejs/kit@npm:2.5.20"
+"@sveltejs/kit@npm:^2.5.21":
+  version: 2.5.21
+  resolution: "@sveltejs/kit@npm:2.5.21"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -1067,13 +1067,13 @@ __metadata:
     vite: ^5.0.3
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/b57cef823d1c5fbd0a61cd0bd597f9cabf1f09b0b9d30fe0ddb00764eb1c135d9ca3d05221d259e8b7c344a0219d0a1d68db5cbb9517dcd841b1571b7df3274a
+  checksum: 10/c3765167f8973568d9c9547b7f020d506f657056cf218bb0cc6b6a15ef1e9044850c1393dac9e1dd4ae394465add1880a7b51a14de0cc295f2e49cd1975ae8b1
   languageName: node
   linkType: hard
 
-"@sveltejs/package@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "@sveltejs/package@npm:2.3.2"
+"@sveltejs/package@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "@sveltejs/package@npm:2.3.3"
   dependencies:
     chokidar: "npm:^3.6.0"
     kleur: "npm:^4.1.5"
@@ -1084,7 +1084,7 @@ __metadata:
     svelte: ^3.44.0 || ^4.0.0 || ^5.0.0-next.1
   bin:
     svelte-package: svelte-package.js
-  checksum: 10/521b13f0a99684d3d7dfe7c7de449a4857019eaad9ef9ac4206b1d62d06d8f90bb8b04d82e1ed0adea08249b5b2cf46e1c7fddc8fac61a8a4dc2f7d603c45b35
+  checksum: 10/71e823ec07af912ac5e09daedef1b7d6e600ca5591d70a6f6b3f95f0458ea1547f8ac784daf9907d479e48e9ab4391085278f75aa7703c5e81e66ab98be9947a
   languageName: node
   linkType: hard
 
@@ -1458,9 +1458,9 @@ __metadata:
     "@picocss/pico": "npm:^2.0.6"
     "@playwright/test": "npm:^1.46.0"
     "@sveltejs/adapter-node": "npm:^5.2.0"
-    "@sveltejs/adapter-static": "npm:^3.0.2"
-    "@sveltejs/kit": "npm:^2.5.20"
-    "@sveltejs/package": "npm:^2.3.2"
+    "@sveltejs/adapter-static": "npm:^3.0.3"
+    "@sveltejs/kit": "npm:^2.5.21"
+    "@sveltejs/package": "npm:^2.3.3"
     "@sveltejs/vite-plugin-svelte": "npm:^3.1.1"
     "@types/eslint": "npm:^8.56.11"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
@@ -1477,7 +1477,7 @@ __metadata:
     typescript: "npm:^5.5.4"
     vite: "npm:^5.4.0"
     vitest: "npm:^1.6.0"
-    winston: "npm:^3.14.0"
+    winston: "npm:^3.14.1"
     zod: "npm:^3.23.8"
     zod-form-data: "npm:^2.0.2"
   languageName: unknown
@@ -5280,9 +5280,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.14.0":
-  version: 3.14.0
-  resolution: "winston@npm:3.14.0"
+"winston@npm:^3.14.1":
+  version: 3.14.1
+  resolution: "winston@npm:3.14.1"
   dependencies:
     "@colors/colors": "npm:^1.6.0"
     "@dabh/diagnostics": "npm:^2.0.2"
@@ -5295,7 +5295,7 @@ __metadata:
     stack-trace: "npm:0.0.x"
     triple-beam: "npm:^1.3.0"
     winston-transport: "npm:^4.7.0"
-  checksum: 10/adcb2535482756a166ed75004d6b824d43151b22ce0779c6287e9c6354b00488acd55b96180aa27ab567531ff1de6ffdc6aaf980a807dc9cc6bb6cca59158a6e
+  checksum: 10/b9158dc0600a095b5326ec95a3918f63e5f1eb9fdc8f70b858d43ab4e2c3fca61e69aca4444ce918f86d8ded1d82f6e8e7504dfd4d4fa4d7974b5452c55f54c1
   languageName: node
   linkType: hard
 
