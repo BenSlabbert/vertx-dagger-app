@@ -1,6 +1,6 @@
 ARG JAVA_MINIMAL=/opt/jre
 
-FROM azul/zulu-openjdk-alpine:22-latest AS CUSTOM_JRE
+FROM azul/zulu-openjdk-alpine:22-latest AS customjre
 
 RUN apk --no-cache add curl ca-certificates binutils
 
@@ -30,7 +30,7 @@ ARG JAVA_MINIMAL
 
 ENV JAVA_MINIMAL=/opt/jre
 ENV PATH="$PATH:$JAVA_MINIMAL/bin"
-COPY --from=CUSTOM_JRE "$JAVA_MINIMAL" "$JAVA_MINIMAL"
+COPY --from=customjre "$JAVA_MINIMAL" "$JAVA_MINIMAL"
 
 WORKDIR /app
 
