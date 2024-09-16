@@ -1597,7 +1597,7 @@ __metadata:
     globals: "npm:^15.9.0"
     prettier: "npm:^3.3.3"
     prettier-plugin-svelte: "npm:^3.2.6"
-    publint: "npm:^0.2.10"
+    publint: "npm:^0.2.11"
     svelte: "npm:^5.0.0-next.246"
     svelte-check: "npm:^4.0.2"
     tslib: "npm:^2.7.0"
@@ -3872,6 +3872,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"picocolors@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "picocolors@npm:1.1.0"
+  checksum: 10/a2ad60d94d185c30f2a140b19c512547713fb89b920d32cc6cf658fa786d63a37ba7b8451872c3d9fc34883971fb6e5878e07a20b60506e0bb2554dce9169ccb
+  languageName: node
+  linkType: hard
+
 "picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.3.1":
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
@@ -4036,16 +4043,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"publint@npm:^0.2.10":
-  version: 0.2.10
-  resolution: "publint@npm:0.2.10"
+"publint@npm:^0.2.11":
+  version: 0.2.11
+  resolution: "publint@npm:0.2.11"
   dependencies:
     npm-packlist: "npm:^5.1.3"
-    picocolors: "npm:^1.0.1"
+    picocolors: "npm:^1.1.0"
     sade: "npm:^1.8.1"
   bin:
     publint: lib/cli.js
-  checksum: 10/356f936efece61aff67f21564cf3a9cbc55f97c87549a29a05afe092c3985807929ac7de11f89f3cfef391851e422be67be61f1ef018ae89cc149e3d2132166b
+  checksum: 10/8a01dc2568e76ed57b51d9fdd961a1fc10f7057679429dec185716fb6c320c922033522ce53e964c244d44387f691fde992a6d13db6c5498e42cd5f2243ad4d2
   languageName: node
   linkType: hard
 
