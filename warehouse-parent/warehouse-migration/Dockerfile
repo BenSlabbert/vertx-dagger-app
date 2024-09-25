@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:22-latest
+FROM azul/zulu-openjdk-alpine:23-latest
 
 WORKDIR /app
 

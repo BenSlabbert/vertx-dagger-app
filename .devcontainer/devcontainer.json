@@ -1,8 +1,8 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/java:1-22",
+  "image": "mcr.microsoft.com/devcontainers/java:1-23",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
-      "version": "22",
+      "version": "23",
       "jdkDistro": "tem",
       "installMaven": true,
       "mavenVersion": "3.9.9"
