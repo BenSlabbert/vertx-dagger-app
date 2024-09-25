@@ -5,7 +5,7 @@
       "version": "22",
       "jdkDistro": "tem",
       "installMaven": true,
-      "mavenVersion": "3.9.8"
+      "mavenVersion": "3.9.9"
     },
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
       "installDockerBuildx": true,
@@ -15,7 +15,7 @@
       "version": "20"
     },
     "ghcr.io/devcontainers-contrib/features/corepack:1": {
-      
+
     },
     "postCreateCommand": "mvn --version"
   }
