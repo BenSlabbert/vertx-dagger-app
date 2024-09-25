@@ -1141,9 +1141,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-node@npm:^5.2.2":
-  version: 5.2.2
-  resolution: "@sveltejs/adapter-node@npm:5.2.2"
+"@sveltejs/adapter-node@npm:^5.2.4":
+  version: 5.2.4
+  resolution: "@sveltejs/adapter-node@npm:5.2.4"
   dependencies:
     "@rollup/plugin-commonjs": "npm:^26.0.1"
     "@rollup/plugin-json": "npm:^6.1.0"
@@ -1151,7 +1151,7 @@ __metadata:
     rollup: "npm:^4.9.5"
   peerDependencies:
     "@sveltejs/kit": ^2.4.0
-  checksum: 10/4e9d1ee738f054dba1c6fb2068f81297906489489b5400050aeaf5b961f42e05caea925dcb5af8ac24127034d55a93bb1af6b712d2dbfbe29d9b4614c294d59f
+  checksum: 10/cc95d5c99e4e080a188b2e35d4f6cfe7b8db9d4d667fc1a22c6eb9ae5d0b491b9a4988db1d59b3ccdc517b069bee8c13f92b4ef8177634cf6af583ad2b0e9398
   languageName: node
   linkType: hard
 
@@ -1598,7 +1598,7 @@ __metadata:
     "@eslint/js": "npm:^9.11.1"
     "@picocss/pico": "npm:^2.0.6"
     "@playwright/test": "npm:^1.47.2"
-    "@sveltejs/adapter-node": "npm:^5.2.2"
+    "@sveltejs/adapter-node": "npm:^5.2.4"
     "@sveltejs/adapter-static": "npm:^3.0.5"
     "@sveltejs/kit": "npm:^2.5.28"
     "@sveltejs/package": "npm:^2.3.5"
@@ -1612,7 +1612,7 @@ __metadata:
     prettier: "npm:^3.3.3"
     prettier-plugin-svelte: "npm:^3.2.6"
     publint: "npm:^0.2.11"
-    svelte: "npm:^5.0.0-next.246"
+    svelte: "npm:^5.0.0-next.259"
     svelte-check: "npm:^4.0.2"
     tslib: "npm:^2.7.0"
     typescript: "npm:^5.6.2"
@@ -4756,9 +4756,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.0.0-next.246":
-  version: 5.0.0-next.246
-  resolution: "svelte@npm:5.0.0-next.246"
+"svelte@npm:^5.0.0-next.259":
+  version: 5.0.0-next.259
+  resolution: "svelte@npm:5.0.0-next.259"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4773,7 +4773,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/5ccb1ebd77f0cd6c9f099b4a7897fc68f3c8b80fb5ee852f4d4c735a893cc77b05bca04dbd8f4560ac4de713231197aa776cf3f3933070e383072e53c55f66b3
+  checksum: 10/a9452194cf7974806170a999edcb202c2f0d1818ad4201f8b550a8ca82eb7e3c1310f3301cd430a3bf7f566fc3707f078ecab687044e914be01ab044d0a2e460
   languageName: node
   linkType: hard
 
