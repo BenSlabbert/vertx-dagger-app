@@ -964,13 +964,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.5.28":
-  version: 2.5.28
-  resolution: "@sveltejs/kit@npm:2.5.28"
+"@sveltejs/kit@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "@sveltejs/kit@npm:2.6.0"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
-    devalue: "npm:^5.0.0"
+    devalue: "npm:^5.1.0"
     esm-env: "npm:^1.0.0"
     import-meta-resolve: "npm:^4.1.0"
     kleur: "npm:^4.1.5"
@@ -986,7 +986,7 @@ __metadata:
     vite: ^5.0.3
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/907042ac909695e2981ee5f82e2babc36d93902fd821bdedb78aa15d9828ba1a3a7edc97080ab68a1d5374a5675812c27c35d8ef1c42f10dd8f61b5412465196
+  checksum: 10/893786e3f733b68727314994dac4401e9fcf02506250313d9dcf992a908eba1fe6630f324807fe611f6a4167751f270ac21ed2a05d021d60222e74cd2dead9a6
   languageName: node
   linkType: hard
 
@@ -1351,14 +1351,14 @@ __metadata:
     "@picocss/pico": "npm:^2.0.6"
     "@playwright/test": "npm:^1.47.2"
     "@sveltejs/adapter-static": "npm:^3.0.5"
-    "@sveltejs/kit": "npm:^2.5.28"
+    "@sveltejs/kit": "npm:^2.6.0"
     "@sveltejs/package": "npm:^2.3.5"
     "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.7"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
     eslint: "npm:^9.11.1"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^2.44.0"
+    eslint-plugin-svelte: "npm:^2.44.1"
     globals: "npm:^15.9.0"
     prettier: "npm:^3.3.3"
     prettier-plugin-svelte: "npm:^3.2.7"
@@ -1698,10 +1698,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"devalue@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "devalue@npm:5.0.0"
-  checksum: 10/52c4e1b57c3c05dee64f8c64175f53812c4de4fa1a098b238acd74a38c0756b3631ca74081d0141248d27c00c2f18861b6f874298cd68a4fb2e0797b71de4970
+"devalue@npm:^5.1.0":
+  version: 5.1.1
+  resolution: "devalue@npm:5.1.1"
+  checksum: 10/ff36fe61af61636419eb16692d2fe43d793cdfb17f868bb3560c5485e4c25bc38d472304e61efdec6e806a3c4b450c46247decf59968b4a05ddc7714ea64f885
   languageName: node
   linkType: hard
 
@@ -1952,9 +1952,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.44.0":
-  version: 2.44.0
-  resolution: "eslint-plugin-svelte@npm:2.44.0"
+"eslint-plugin-svelte@npm:^2.44.1":
+  version: 2.44.1
+  resolution: "eslint-plugin-svelte@npm:2.44.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -1973,7 +1973,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/d38d26a3b3159da04cf494c5726d6370a7e1e77cf4d0fb26c774c73648ed7e7ceff7a3d666f8b7f4cf00248a87ceeb349053a070e17a2ccd8b39a7f3135bd11f
+  checksum: 10/e1267a99f89d85cddaea72c5f5f07e86de4f21a7f5712446d75830a08ba3709375be88c443357ba15d16c1c3677562dff5df698ef51a000d1d8cc3834c0c59e5
   languageName: node
   linkType: hard
 
