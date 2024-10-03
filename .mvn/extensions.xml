@@ -2,7 +2,7 @@
   <extension>
     <groupId>github.benslabbert</groupId>
     <artifactId>git-version-extension</artifactId>
-    <version>1.26.0</version>
+    <version>1.27.0</version>
   </extension>
   <extension>
     <groupId>org.apache.maven.extensions</groupId>
