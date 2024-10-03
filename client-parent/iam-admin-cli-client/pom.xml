@@ -154,6 +154,7 @@
             <configuration>
               <skip>${shade.skip}</skip>
               <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
                     <Main-Class>${exec.mainClass}</Main-Class>
