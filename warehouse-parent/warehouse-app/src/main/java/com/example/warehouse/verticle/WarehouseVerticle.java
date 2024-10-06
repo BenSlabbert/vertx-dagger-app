@@ -6,6 +6,8 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcService;
 import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcServiceVertxEBProxyHandler;
 import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcService_SecuredActions;
+import github.benslabbert.vertxdaggercodegen.commons.security.rpc.SecuredAction;
+import github.benslabbert.vertxdaggercodegen.commons.security.rpc.SecuredUnion;
 import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
@@ -31,8 +33,10 @@ import io.vertx.serviceproxy.impl.InterceptorHolder;
 import io.vertx.sqlclient.Pool;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,9 +91,13 @@ public class WarehouseVerticle extends AbstractVerticle {
 
     InterceptorHolder accessLogger = new InterceptorHolder(UserAccessLoggerInterceptor.create());
 
+    Map<String, SecuredAction> securedActionMap =
+        WarehouseRpcService_SecuredActions.getSecuredActions().entrySet().stream()
+            .filter(e -> SecuredUnion.Kind.SECURED_ACTION == e.getValue().getKind())
+            .collect(Collectors.toMap(Map.Entry::getKey, s -> s.getValue().securedAction()));
+
     ServiceInterceptor serviceInterceptor =
-        RpcServiceProxySecurityInterceptor.create(
-            WarehouseRpcService_SecuredActions.getSecuredActions());
+        RpcServiceProxySecurityInterceptor.create(securedActionMap);
     InterceptorHolder interceptorHolder = new InterceptorHolder(serviceInterceptor);
 
     this.consumer =
