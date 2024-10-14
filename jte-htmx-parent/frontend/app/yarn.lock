@@ -1017,12 +1017,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^4.0.0-next.7":
-  version: 4.0.0-next.7
-  resolution: "@sveltejs/vite-plugin-svelte@npm:4.0.0-next.7"
+"@sveltejs/vite-plugin-svelte@npm:^4.0.0-next.8":
+  version: 4.0.0-next.8
+  resolution: "@sveltejs/vite-plugin-svelte@npm:4.0.0-next.8"
   dependencies:
     "@sveltejs/vite-plugin-svelte-inspector": "npm:^3.0.0-next.0||^3.0.0"
-    debug: "npm:^4.3.6"
+    debug: "npm:^4.3.7"
     deepmerge: "npm:^4.3.1"
     kleur: "npm:^4.1.5"
     magic-string: "npm:^0.30.11"
@@ -1030,7 +1030,7 @@ __metadata:
   peerDependencies:
     svelte: ^5.0.0-next.96 || ^5.0.0
     vite: ^5.0.0
-  checksum: 10/115953ef5179ee5360a5f3067da8894dea3254ae4d3bc323531771528b3face05e0e4d0b50ca32ae617d993307beaec32cce3c2f3d7cbc38a1cac4a859e245ac
+  checksum: 10/6a54f5bf03208e76cacaaa1cf4338c59c502d6b9f16dffd98956f20df4c4a7961949bfca8dc9041c133d2068cb4cdfdf9f3dd767e138731de0f10bc96e31b4dc
   languageName: node
   linkType: hard
 
@@ -1359,7 +1359,7 @@ __metadata:
     "@sveltejs/adapter-static": "npm:^3.0.5"
     "@sveltejs/kit": "npm:^2.7.0"
     "@sveltejs/package": "npm:^2.3.5"
-    "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.7"
+    "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.8"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
     eslint: "npm:^9.12.0"
@@ -1664,7 +1664,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.3.5, debug@npm:^4.3.6":
+"debug@npm:^4.3.5, debug@npm:^4.3.6, debug@npm:^4.3.7":
   version: 4.3.7
   resolution: "debug@npm:4.3.7"
   dependencies:
