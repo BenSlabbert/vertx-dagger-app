@@ -721,14 +721,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.48.0":
-  version: 1.48.0
-  resolution: "@playwright/test@npm:1.48.0"
+"@playwright/test@npm:^1.48.1":
+  version: 1.48.1
+  resolution: "@playwright/test@npm:1.48.1"
   dependencies:
-    playwright: "npm:1.48.0"
+    playwright: "npm:1.48.1"
   bin:
     playwright: cli.js
-  checksum: 10/8845ed0f0b303e10ee0a0f04562ef83be3f9123fac91d722f697ad964a119af74cd5fb08e1139f1b20b27396479456c984bfdc699fadedd92af9c0490fb4c7c0
+  checksum: 10/26fe791868a965790bb39e434a799d743261fb073fa0bec49435e0f2d1aceca99dc2f408fc64b0e2d4c07984021059b27096d4477b989e990b551cf60e2652e6
   languageName: node
   linkType: hard
 
@@ -1161,9 +1161,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.7.0":
-  version: 2.7.0
-  resolution: "@sveltejs/kit@npm:2.7.0"
+"@sveltejs/kit@npm:^2.7.1":
+  version: 2.7.1
+  resolution: "@sveltejs/kit@npm:2.7.1"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -1175,7 +1175,7 @@ __metadata:
     mrmime: "npm:^2.0.0"
     sade: "npm:^1.8.1"
     set-cookie-parser: "npm:^2.6.0"
-    sirv: "npm:^2.0.4"
+    sirv: "npm:^3.0.0"
     tiny-glob: "npm:^0.2.9"
   peerDependencies:
     "@sveltejs/vite-plugin-svelte": ^3.0.0 || ^4.0.0-next.1
@@ -1183,7 +1183,7 @@ __metadata:
     vite: ^5.0.3
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/74631faf094cddcd22787aa1055ef299933ae2a490ab4d1cbef944d39d75ef02473aadb848f7112339b8d907074a4093eee3ad3e2189fcb7fff64ada30c5e7cb
+  checksum: 10/deba6bcbd7009480d7669d6812ed32c3461278918e1aed592eadb0f4839e88326e352800d4ed20bbd060a6100811d25dbd15cd5ad032c154fcda189a205655f0
   languageName: node
   linkType: hard
 
@@ -1584,26 +1584,26 @@ __metadata:
     "@benslabbert/vertx-dagger-ui-lib": "npm:^1.14.0"
     "@eslint/js": "npm:^9.12.0"
     "@picocss/pico": "npm:^2.0.6"
-    "@playwright/test": "npm:^1.48.0"
+    "@playwright/test": "npm:^1.48.1"
     "@sveltejs/adapter-node": "npm:^5.2.4"
     "@sveltejs/adapter-static": "npm:^3.0.5"
-    "@sveltejs/kit": "npm:^2.7.0"
+    "@sveltejs/kit": "npm:^2.7.1"
     "@sveltejs/package": "npm:^2.3.5"
     "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.7"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.0"
     eslint: "npm:^9.12.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^2.44.1"
+    eslint-plugin-svelte: "npm:^2.45.1"
     globals: "npm:^15.11.0"
     prettier: "npm:^3.3.3"
     prettier-plugin-svelte: "npm:^3.2.6"
     publint: "npm:^0.2.11"
     svelte: "npm:^5.0.0-next.262"
     svelte-check: "npm:^4.0.5"
-    tslib: "npm:^2.7.0"
+    tslib: "npm:^2.8.0"
     typescript: "npm:^5.6.3"
-    vite: "npm:^5.4.8"
+    vite: "npm:^5.4.9"
     vitest: "npm:^2.1.1"
     winston: "npm:^3.15.0"
     zod: "npm:^3.23.8"
@@ -2330,9 +2330,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.44.1":
-  version: 2.44.1
-  resolution: "eslint-plugin-svelte@npm:2.44.1"
+"eslint-plugin-svelte@npm:^2.45.1":
+  version: 2.45.1
+  resolution: "eslint-plugin-svelte@npm:2.45.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -2344,14 +2344,14 @@ __metadata:
     postcss-safe-parser: "npm:^6.0.0"
     postcss-selector-parser: "npm:^6.1.0"
     semver: "npm:^7.6.2"
-    svelte-eslint-parser: "npm:^0.41.1"
+    svelte-eslint-parser: "npm:^0.42.0"
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0-0 || ^9.0.0-0
     svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.191
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/e1267a99f89d85cddaea72c5f5f07e86de4f21a7f5712446d75830a08ba3709375be88c443357ba15d16c1c3677562dff5df698ef51a000d1d8cc3834c0c59e5
+  checksum: 10/698ca6f14f7ef7b0c6bcf4e7b043825b272348c24c367f2d25ab1a564e421344300ed4551b457695b21605d5e0439d78c7ffba5e03d3eda5492bc34f49451acd
   languageName: node
   linkType: hard
 
@@ -3812,27 +3812,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.48.0":
-  version: 1.48.0
-  resolution: "playwright-core@npm:1.48.0"
+"playwright-core@npm:1.48.1":
+  version: 1.48.1
+  resolution: "playwright-core@npm:1.48.1"
   bin:
     playwright-core: cli.js
-  checksum: 10/644489b4de9cc181e83eb639a283d3c4f8e4c3b1b1759d7c93b72fd0373b5a66ba376ee6a5ee3eca67f1b773bf15c5e01b6aeedd43c94c355bf4fc0d110713bc
+  checksum: 10/81b51d288be78b75898470eb192ef0bc65594eebfb5f7602d83ba2505e1d2163c9923a0d7bae46779d5f3a16e1daf392acfbccde01d9f302cdf90bf2b21b8988
   languageName: node
   linkType: hard
 
-"playwright@npm:1.48.0":
-  version: 1.48.0
-  resolution: "playwright@npm:1.48.0"
+"playwright@npm:1.48.1":
+  version: 1.48.1
+  resolution: "playwright@npm:1.48.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.48.0"
+    playwright-core: "npm:1.48.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/85b06ae8d0ab7a5a8c9a0d416007b18f35a59455fad40438bda98cbe07c48f338e97b98b1d9214e27f08d6ac284eba0eaab722f5684cd17dd4a47f5b69d004b9
+  checksum: 10/39e231af3d9e576ba835813c5319b8773d8536ba54c7e34c7004cf06fadb412b6bbfc91badf4bb5cda3f138e5a8994c314de4c76d06d9424430e415f86fb3dd1
   languageName: node
   linkType: hard
 
@@ -4416,14 +4416,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sirv@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "sirv@npm:2.0.4"
+"sirv@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "sirv@npm:3.0.0"
   dependencies:
     "@polka/url": "npm:^1.0.0-next.24"
     mrmime: "npm:^2.0.0"
     totalist: "npm:^3.0.0"
-  checksum: 10/24f42cf06895017e589c9d16fc3f1c6c07fe8b0dbafce8a8b46322cfba67b7f2498610183954cb0e9d089c8cb60002a7ee7e8bca6a91a0d7042bfbc3473c95c3
+  checksum: 10/94dbd5df7cf4965f7c5941767117cbf9709e1d25de1d619a114c3f77fc63c124b5a5255717af2a0de637bb83d0b0defd0822d01420764b56432b53281b1d675d
   languageName: node
   linkType: hard
 
@@ -4602,9 +4602,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-eslint-parser@npm:^0.41.1":
-  version: 0.41.1
-  resolution: "svelte-eslint-parser@npm:0.41.1"
+"svelte-eslint-parser@npm:^0.42.0":
+  version: 0.42.0
+  resolution: "svelte-eslint-parser@npm:0.42.0"
   dependencies:
     eslint-scope: "npm:^7.2.2"
     eslint-visitor-keys: "npm:^3.4.3"
@@ -4616,7 +4616,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/06505d4a0a97a1ad76f7d5cfe52fd0afd0e2ab02afb8225e81996cf622243b3f2167d29987371c55a9272581d969a0edc50258e01d3ef4d3a9b85141541c9301
+  checksum: 10/0a8d4e17bee32aa9deead1252bf2d745e7cfb30c5a86535baba917f48e170115c1f536170abef3eea6fd5b5ac1421264b57736d4be30ae59f9a1aa50f0cd1c88
   languageName: node
   linkType: hard
 
@@ -4755,10 +4755,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.7.0":
-  version: 2.7.0
-  resolution: "tslib@npm:2.7.0"
-  checksum: 10/9a5b47ddac65874fa011c20ff76db69f97cf90c78cff5934799ab8894a5342db2d17b4e7613a087046bc1d133d21547ddff87ac558abeec31ffa929c88b7fce6
+"tslib@npm:^2.8.0":
+  version: 2.8.0
+  resolution: "tslib@npm:2.8.0"
+  checksum: 10/1bc7c43937477059b4d26f2dbde7e49ef0fb4f38f3014e0603eaea76d6a885742c8b1762af45949145e5e7408a736d20ded949da99dabc8ccba1fc5531d2d927
   languageName: node
   linkType: hard
 
@@ -4907,9 +4907,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.4.8":
-  version: 5.4.8
-  resolution: "vite@npm:5.4.8"
+"vite@npm:^5.4.9":
+  version: 5.4.9
+  resolution: "vite@npm:5.4.9"
   dependencies:
     esbuild: "npm:^0.21.3"
     fsevents: "npm:~2.3.3"
@@ -4946,7 +4946,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/17fdffa558abaf854f04ead7d3ddd76e4556a59871f9ac63cca3fc20a79979984837d8dddaae4b171e3d73061f781e4eec0f6d3babdbce2b4d111d29cf474c1c
+  checksum: 10/60dfb3912ba6367d2d128e798d899caae3f4ec58990657b9f679c4d9de21ddec7eba5f6ad3d4fa0e8ea31771d477521b8e757a622ecc54829d73cb7f7c146bc4
   languageName: node
   linkType: hard
 
