@@ -1210,20 +1210,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^4.0.0-next.7":
-  version: 4.0.0-next.7
-  resolution: "@sveltejs/vite-plugin-svelte@npm:4.0.0-next.7"
+"@sveltejs/vite-plugin-svelte@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@sveltejs/vite-plugin-svelte@npm:4.0.0"
   dependencies:
     "@sveltejs/vite-plugin-svelte-inspector": "npm:^3.0.0-next.0||^3.0.0"
-    debug: "npm:^4.3.6"
+    debug: "npm:^4.3.7"
     deepmerge: "npm:^4.3.1"
     kleur: "npm:^4.1.5"
-    magic-string: "npm:^0.30.11"
-    vitefu: "npm:^1.0.2"
+    magic-string: "npm:^0.30.12"
+    vitefu: "npm:^1.0.3"
   peerDependencies:
     svelte: ^5.0.0-next.96 || ^5.0.0
     vite: ^5.0.0
-  checksum: 10/115953ef5179ee5360a5f3067da8894dea3254ae4d3bc323531771528b3face05e0e4d0b50ca32ae617d993307beaec32cce3c2f3d7cbc38a1cac4a859e245ac
+  checksum: 10/7c14cfbd10689b78f2a23a56c76388fa64cc838fa9b87bbf9acd73fa3eb8742b3e73d5de7a49dff8c908a8524319f40bdb5779d3c47e67113f01948c86171828
   languageName: node
   linkType: hard
 
@@ -1582,7 +1582,7 @@ __metadata:
     "@sveltejs/adapter-static": "npm:^3.0.6"
     "@sveltejs/kit": "npm:^2.8.0"
     "@sveltejs/package": "npm:^2.3.7"
-    "@sveltejs/vite-plugin-svelte": "npm:^4.0.0-next.7"
+    "@sveltejs/vite-plugin-svelte": "npm:^4.0.0"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.1"
     eslint: "npm:^9.14.0"
@@ -2008,7 +2008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.3.5, debug@npm:^4.3.6":
+"debug@npm:^4.3.5, debug@npm:^4.3.6, debug@npm:^4.3.7":
   version: 4.3.7
   resolution: "debug@npm:4.3.7"
   dependencies:
@@ -3304,6 +3304,15 @@ __metadata:
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
   checksum: 10/b784d2240252f5b1e755d487354ada4c672cbca16f045144f7185a75b059210e5fcca7be7be03ef1bac2ca754c4428b21d36ae64a9057ba429916f06b8c54eb2
+  languageName: node
+  linkType: hard
+
+"magic-string@npm:^0.30.12":
+  version: 0.30.12
+  resolution: "magic-string@npm:0.30.12"
+  dependencies:
+    "@jridgewell/sourcemap-codec": "npm:^1.5.0"
+  checksum: 10/98016180a52b28efc1362152b45671067facccdaead6b70c1c14c566cba98491bc2e1336474b0996397730dca24400e85649da84d3da62b2560ed03c067573e6
   languageName: node
   linkType: hard
 
@@ -4910,15 +4919,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitefu@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "vitefu@npm:1.0.2"
+"vitefu@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "vitefu@npm:1.0.3"
   peerDependencies:
-    vite: ^3.0.0 || ^4.0.0 || ^5.0.0
+    vite: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0-beta.0
   peerDependenciesMeta:
     vite:
       optional: true
-  checksum: 10/ed9b4498bfe45b20ba375ae7dad00bf32a8d1ea8da7b161186d50dfeea3786c8f394323a38bb8249100a1ddd8ccd41fd64669b43d1100819ec5dd52630fc2dd9
+  checksum: 10/008933407947fe00cb8f46476e8ae3b3f7f4e2f17416a12d1184a6cea2645e05852f3309e433ef284e7d11b923703dfa9c6fb3760cbd033375d5a89f8f4354e1
   languageName: node
   linkType: hard
 
