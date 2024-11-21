@@ -1357,9 +1357,9 @@ __metadata:
     eslint-plugin-svelte: "npm:^2.46.0"
     globals: "npm:^15.12.0"
     prettier: "npm:^3.3.3"
-    prettier-plugin-svelte: "npm:^3.2.8"
+    prettier-plugin-svelte: "npm:^3.3.0"
     publint: "npm:^0.2.12"
-    svelte: "npm:^5.2.3"
+    svelte: "npm:^5.2.7"
     svelte-check: "npm:^4.0.9"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.6.3"
@@ -3360,13 +3360,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^3.2.8":
-  version: 3.2.8
-  resolution: "prettier-plugin-svelte@npm:3.2.8"
+"prettier-plugin-svelte@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "prettier-plugin-svelte@npm:3.3.0"
   peerDependencies:
     prettier: ^3.0.0
     svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
-  checksum: 10/c9f575e65b20f21b892a7850d06a1cd3860b9f179fdf131066b08f5e6b4af88278026392e05b4981ab6cf49fb707c1051cbdea421b9486e208baee4599253b79
+  checksum: 10/d4fd96c53a0a222fe5e871f655ebdff072e3e72575da57b7711bca2fd8d244efc80c4a55f6fdd5e2737bd290166af3457305657b59b5350bc052235cad7cf4c0
   languageName: node
   linkType: hard
 
@@ -3900,9 +3900,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.2.3":
-  version: 5.2.3
-  resolution: "svelte@npm:5.2.3"
+"svelte@npm:^5.2.7":
+  version: 5.2.7
+  resolution: "svelte@npm:5.2.7"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3917,7 +3917,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/158c5c1e23537b6a122da25be7ac404fa093c5af40e1a2ea24231793ae18009672a350ac3263e0fa34a6865a7ae99e5c66c4f8eb1db0d7b287083bc060f2f361
+  checksum: 10/85fdcca566e19c9f1b53156a693dc2161acdb5a99ccb22c4a6cc7e69fbefba496d31f427d25e01b309923ca74c154d9ae5d0497aec30fd4b77f2d9bc8f50ef91
   languageName: node
   linkType: hard
 
