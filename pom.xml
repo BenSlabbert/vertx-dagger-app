@@ -34,12 +34,12 @@
     <dockerImageNameBase>ghcr.io/benslabbert/vertx-dagger-app</dockerImageNameBase>
 
     <!--deps-->
-    <jsonwriter.version>1.41.0</jsonwriter.version>
-    <vertx-dagger-commons.version>1.59.0</vertx-dagger-commons.version>
+    <jsonwriter.version>1.42.0</jsonwriter.version>
+    <vertx-dagger-commons.version>1.60.0</vertx-dagger-commons.version>
     <vertx-dagger-codegen.version>1.52.0</vertx-dagger-codegen.version>
-    <vertx-dagger-starter.version>1.46.0</vertx-dagger-starter.version>
-    <vertx-dagger-app-api.version>1.58.0</vertx-dagger-app-api.version>
-    <tx-manager.version>1.35.0</tx-manager.version>
+    <vertx-dagger-starter.version>1.47.0</vertx-dagger-starter.version>
+    <vertx-dagger-app-api.version>1.59.0</vertx-dagger-app-api.version>
+    <tx-manager.version>1.36.0</tx-manager.version>
   </properties>
 
   <dependencyManagement>
