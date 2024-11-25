@@ -19,7 +19,7 @@
 		"@playwright/test": "^1.48.2",
 		"@sveltejs/adapter-node": "^5.2.4",
 		"@sveltejs/adapter-static": "^3.0.6",
-		"@sveltejs/kit": "^2.8.1",
+		"@sveltejs/kit": "^2.8.3",
 		"@sveltejs/package": "^2.3.7",
 		"@sveltejs/vite-plugin-svelte": "^4.0.1",
 		"@types/eslint": "^9.6.1",
