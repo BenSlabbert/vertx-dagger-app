@@ -714,14 +714,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.48.2":
-  version: 1.48.2
-  resolution: "@playwright/test@npm:1.48.2"
+"@playwright/test@npm:^1.49.0":
+  version: 1.49.0
+  resolution: "@playwright/test@npm:1.49.0"
   dependencies:
-    playwright: "npm:1.48.2"
+    playwright: "npm:1.49.0"
   bin:
     playwright: cli.js
-  checksum: 10/8557f9d60b93b9a60b66599d46f991b56df26b691f9285e8755298dabd9f42d1421c330a7d7578b76445fdd56040fe790d3f1081daa80e5e89a380170e0fd217
+  checksum: 10/e87485ab4c02b6dc0bc20a43ea3965c949c45caa4e7f5beea4a0abd29be0a318662931e887072db0d165f8dde93709b97ea1b2c6f4c833b403aa13427d76dd22
   languageName: node
   linkType: hard
 
@@ -1154,9 +1154,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.8.1":
-  version: 2.8.1
-  resolution: "@sveltejs/kit@npm:2.8.1"
+"@sveltejs/kit@npm:^2.8.3":
+  version: 2.8.3
+  resolution: "@sveltejs/kit@npm:2.8.3"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -1176,7 +1176,7 @@ __metadata:
     vite: ^5.0.3
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/cd21a6b58c9d8cc19f9c282111b5795d5f5c7c8a680caeb582f97d2e242d04d7a699fab15a2797ac2458053b47dd5a859c0040e1347fe2040b65c5a1cfbae91f
+  checksum: 10/ec3e4d66888875497ffb8baded9155de6e02134227bf73bcd28e8501ef2d4222f2a5d4a1ad082a899c21630864ca65b674fb86c2c49c774c1024ea01cf1d1bef
   languageName: node
   linkType: hard
 
@@ -1210,9 +1210,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@sveltejs/vite-plugin-svelte@npm:4.0.1"
+"@sveltejs/vite-plugin-svelte@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@sveltejs/vite-plugin-svelte@npm:4.0.2"
   dependencies:
     "@sveltejs/vite-plugin-svelte-inspector": "npm:^3.0.0-next.0||^3.0.0"
     debug: "npm:^4.3.7"
@@ -1223,7 +1223,7 @@ __metadata:
   peerDependencies:
     svelte: ^5.0.0-next.96 || ^5.0.0
     vite: ^5.0.0
-  checksum: 10/0269839ae3565fbbb3d176746305debfdc89f6e06f3ebd9dc7a80ea9bf37ed7cccbd3ca2693af98213e456421f00cafc37c106d2f20490520ffa32d6fab282e3
+  checksum: 10/7a599e79e941127e94e30a51310ae9a5b066678e218bd862db17d89eaf767155a273a890f08682572150849d2d417c0b8a231da5944622ec97c8faae6bd749c9
   languageName: node
   linkType: hard
 
@@ -1577,12 +1577,12 @@ __metadata:
     "@benslabbert/vertx-dagger-ui-lib": "npm:^1.14.0"
     "@eslint/js": "npm:^9.15.0"
     "@picocss/pico": "npm:^2.0.6"
-    "@playwright/test": "npm:^1.48.2"
+    "@playwright/test": "npm:^1.49.0"
     "@sveltejs/adapter-node": "npm:^5.2.4"
     "@sveltejs/adapter-static": "npm:^3.0.6"
-    "@sveltejs/kit": "npm:^2.8.1"
+    "@sveltejs/kit": "npm:^2.8.3"
     "@sveltejs/package": "npm:^2.3.7"
-    "@sveltejs/vite-plugin-svelte": "npm:^4.0.1"
+    "@sveltejs/vite-plugin-svelte": "npm:^4.0.2"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.1"
     eslint: "npm:^9.15.0"
@@ -1592,10 +1592,10 @@ __metadata:
     prettier: "npm:^3.3.3"
     prettier-plugin-svelte: "npm:^3.2.6"
     publint: "npm:^0.2.12"
-    svelte: "npm:^5.2.3"
-    svelte-check: "npm:^4.0.9"
+    svelte: "npm:^5.2.8"
+    svelte-check: "npm:^4.1.0"
     tslib: "npm:^2.8.1"
-    typescript: "npm:^5.6.3"
+    typescript: "npm:^5.7.2"
     vite: "npm:^5.4.11"
     vitest: "npm:^2.1.1"
     winston: "npm:^3.17.0"
@@ -3810,27 +3810,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.48.2":
-  version: 1.48.2
-  resolution: "playwright-core@npm:1.48.2"
+"playwright-core@npm:1.49.0":
+  version: 1.49.0
+  resolution: "playwright-core@npm:1.49.0"
   bin:
     playwright-core: cli.js
-  checksum: 10/dd029f797b1afb2240713a032fecc50e1ffc5464a39c075570cf10e929c145da3a8d0951a3f2b279e33b2f09cbeb8ff4330822cb1078452c0c75cc4ce34ca171
+  checksum: 10/ef9c708293adab100337ed7fd8e61660be381707fc2b84f07b5f40d1ead44feb6a8e52fef98075e594522229d15a9ad56dd1471689cfa59409bec6447c22944d
   languageName: node
   linkType: hard
 
-"playwright@npm:1.48.2":
-  version: 1.48.2
-  resolution: "playwright@npm:1.48.2"
+"playwright@npm:1.49.0":
+  version: 1.49.0
+  resolution: "playwright@npm:1.49.0"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.48.2"
+    playwright-core: "npm:1.49.0"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/331af352504336f419cdf1369f0ef399c6f0e905fdb79a5e97c41f33e74766efd21430ab6ae2de0b237ae765ebfbe701e119a990d8dc01bcdac3bc43c1fa1fbf
+  checksum: 10/1fb198d09d388ec46cc2f0fc6b889a8bde8a75066ded82d35f08ba333091ebf3fc4ddf11263a86058a7078c7238ec4f23a86a9f1dc3ebd4f610c9eb07841fb32
   languageName: node
   linkType: hard
 
@@ -4563,9 +4563,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^4.0.9":
-  version: 4.0.9
-  resolution: "svelte-check@npm:4.0.9"
+"svelte-check@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "svelte-check@npm:4.1.0"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     chokidar: "npm:^4.0.1"
@@ -4577,7 +4577,7 @@ __metadata:
     typescript: ">=5.0.0"
   bin:
     svelte-check: bin/svelte-check
-  checksum: 10/4e62ae2bd905d0a5293d58fcf7dd45514f05743d30e75f7ae92d69bf79e7ad5b271181ec21a483caad8da628702aecc4870716e5fe390af73a8441a227da3d24
+  checksum: 10/67a4193eae7cabbfe4143e4dcd87c7c4627c5451af755846f1e6566d7860644f1afff6b5ba99d7d4425448fce38c036501e1bcf7d40a3d3730be02a99a9ae0c5
   languageName: node
   linkType: hard
 
@@ -4612,9 +4612,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.2.3":
-  version: 5.2.3
-  resolution: "svelte@npm:5.2.3"
+"svelte@npm:^5.2.8":
+  version: 5.2.8
+  resolution: "svelte@npm:5.2.8"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4629,7 +4629,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/158c5c1e23537b6a122da25be7ac404fa093c5af40e1a2ea24231793ae18009672a350ac3263e0fa34a6865a7ae99e5c66c4f8eb1db0d7b287083bc060f2f361
+  checksum: 10/88060029e543410f7c22ef570fd94a51697de21f2251984cbf8a52af7209906d03a356091fa1718a47fae20d9ef13224a6000dbd7273f4a5e5f1fdefccc01600
   languageName: node
   linkType: hard
 
@@ -4771,23 +4771,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.6.3":
-  version: 5.6.3
-  resolution: "typescript@npm:5.6.3"
+"typescript@npm:^5.7.2":
+  version: 5.7.2
+  resolution: "typescript@npm:5.7.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/c328e418e124b500908781d9f7b9b93cf08b66bf5936d94332b463822eea2f4e62973bfb3b8a745fdc038785cb66cf59d1092bac3ec2ac6a3e5854687f7833f1
+  checksum: 10/4caa3904df69db9d4a8bedc31bafc1e19ffb7b24fbde2997a1633ae1398d0de5bdbf8daf602ccf3b23faddf1aeeb9b795223a2ed9c9a4fdcaf07bfde114a401a
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.6.3#optional!builtin<compat/typescript>":
-  version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"
+"typescript@patch:typescript@npm%3A^5.7.2#optional!builtin<compat/typescript>":
+  version: 5.7.2
+  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=8c6c40"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/00504c01ee42d470c23495426af07512e25e6546bce7e24572e72a9ca2e6b2e9bea63de4286c3cfea644874da1467dcfca23f4f98f7caf20f8b03c0213bb6837
+  checksum: 10/ff27fc124bceb8969be722baa38af945b2505767cf794de3e2715e58f61b43780284060287d651fcbbdfb6f917f4653b20f4751991f17e0706db389b9bb3f75d
   languageName: node
   linkType: hard
 
