@@ -725,6 +725,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@publint/pack@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@publint/pack@npm:0.1.0"
+  checksum: 10/00458b3190c7b6b6640901a90d0d74a6091cdaaa5197213f0446db9fed888dd065efdd616db3e77c68bd4ac27667f5705a16361622aafe102af79c61d7568ece
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-commonjs@npm:^28.0.1":
   version: 28.0.2
   resolution: "@rollup/plugin-commonjs@npm:28.0.2"
@@ -1590,7 +1597,7 @@ __metadata:
     globals: "npm:^15.14.0"
     prettier: "npm:^3.4.2"
     prettier-plugin-svelte: "npm:^3.3.2"
-    publint: "npm:^0.2.12"
+    publint: "npm:^0.3.0"
     svelte: "npm:^5.16.2"
     svelte-check: "npm:^4.1.1"
     tslib: "npm:^2.8.1"
@@ -2859,15 +2866,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ignore-walk@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "ignore-walk@npm:5.0.1"
-  dependencies:
-    minimatch: "npm:^5.0.1"
-  checksum: 10/a88b3fbda155496363fb3db66c7c7b85cf04d614fb51146f0aa5fc6b35c65370c57f9e6c550cd6048651fc378985b7a2bb9015c9fcb3e0dc798fc0728746703c
-  languageName: node
-  linkType: hard
-
 "ignore@npm:^5.2.0":
   version: 5.3.1
   resolution: "ignore@npm:5.3.1"
@@ -3537,36 +3535,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-bundled@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "npm-bundled@npm:2.0.1"
-  dependencies:
-    npm-normalize-package-bin: "npm:^2.0.0"
-  checksum: 10/adf5d727915cbd61603e2171ba67e39319efa343ceb72868348232a36ad774a8365d5af5e1aad29acc41c3caeda4ebd80e5b7a3da319985509aeedf79e352c0d
-  languageName: node
-  linkType: hard
-
-"npm-normalize-package-bin@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "npm-normalize-package-bin@npm:2.0.0"
-  checksum: 10/7c5379f9b188b564c4332c97bdd9a5d6b7b15f02b5823b00989d6a0e6fb31eb0280f02b0a924f930e1fcaf00e60fae333aec8923d2a4c7747613c7d629d8aa25
-  languageName: node
-  linkType: hard
-
-"npm-packlist@npm:^5.1.3":
-  version: 5.1.3
-  resolution: "npm-packlist@npm:5.1.3"
-  dependencies:
-    glob: "npm:^8.0.1"
-    ignore-walk: "npm:^5.0.1"
-    npm-bundled: "npm:^2.0.0"
-    npm-normalize-package-bin: "npm:^2.0.0"
-  bin:
-    npm-packlist: bin/index.js
-  checksum: 10/78aa1c69a349c40cf7ba556581bff2dd5cbc1455614a44bd673e076f7f402096ac7c01660c45ec17cbd51bf0db3a4df7e9bc3a0a8e8e497ebf6d53848f33dfad
-  languageName: node
-  linkType: hard
-
 "npmlog@npm:^6.0.0":
   version: 6.0.2
   resolution: "npmlog@npm:6.0.2"
@@ -3651,6 +3619,13 @@ __metadata:
   dependencies:
     aggregate-error: "npm:^3.0.0"
   checksum: 10/7ba4a2b1e24c05e1fc14bbaea0fc6d85cf005ae7e9c9425d4575550f37e2e584b1af97bcde78eacd7559208f20995988d52881334db16cf77bc1bcf68e48ed7c
+  languageName: node
+  linkType: hard
+
+"package-manager-detector@npm:^0.2.8":
+  version: 0.2.8
+  resolution: "package-manager-detector@npm:0.2.8"
+  checksum: 10/deb7c5abeed0ac88c9014230355ab79695d2a600e6361d91f55fcb67cc359e7106b04b23d22dee18af1388daed7385c3260229602a33617d0247ad86d8ab69ec
   languageName: node
   linkType: hard
 
@@ -3896,16 +3871,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"publint@npm:^0.2.12":
-  version: 0.2.12
-  resolution: "publint@npm:0.2.12"
+"publint@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "publint@npm:0.3.0"
   dependencies:
-    npm-packlist: "npm:^5.1.3"
+    "@publint/pack": "npm:^0.1.0"
+    package-manager-detector: "npm:^0.2.8"
     picocolors: "npm:^1.1.1"
     sade: "npm:^1.8.1"
   bin:
-    publint: lib/cli.js
-  checksum: 10/7432845a760aa0c5843de4fdc8e53458e4f35502dcc8f785a3e78c652c9bf4a49a358d9b72220ba06bac823481bbfaf3020d168918148b88f5cbab9621ecd6b5
+    publint: src/cli.js
+  checksum: 10/06ccb26678b7079d4989e1164864e30ccee9c7396bf9b6e88561463864e1dec0d5210d0a4f66848fd887a8231e2e1c3dbb120791b4f26fd428e6343a5c3ff071
   languageName: node
   linkType: hard
 
