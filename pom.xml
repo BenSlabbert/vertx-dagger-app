@@ -45,19 +45,24 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>github.benslabbert.jsonwriter</groupId>
+        <artifactId>annotation</artifactId>
+        <version>${jsonwriter.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.jsonwriter</groupId>
+        <artifactId>processor</artifactId>
+        <version>${jsonwriter.version}</version>
+      </dependency>
+      <dependency>
         <groupId>github.benslabbert.txmanager</groupId>
         <artifactId>annotation</artifactId>
         <version>${tx-manager.version}</version>
       </dependency>
       <dependency>
-        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
-        <artifactId>annotation</artifactId>
-        <version>${vertx-dagger-codegen.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.jsonwriter</groupId>
-        <artifactId>annotation</artifactId>
-        <version>${jsonwriter.version}</version>
+        <groupId>github.benslabbert.txmanager</groupId>
+        <artifactId>txmanager</artifactId>
+        <version>${tx-manager.version}</version>
       </dependency>
       <dependency>
         <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
@@ -65,14 +70,39 @@
         <version>${vertx-dagger-app-api.version}</version>
       </dependency>
       <dependency>
-        <groupId>github.benslabbert.vertx-dagger-commons</groupId>
-        <artifactId>commons</artifactId>
-        <version>${vertx-dagger-commons.version}</version>
+        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+        <artifactId>iam-auth-api</artifactId>
+        <version>${vertx-dagger-app-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+        <artifactId>iam-rpc-api</artifactId>
+        <version>${vertx-dagger-app-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+        <artifactId>warehouse-rpc-api</artifactId>
+        <version>${vertx-dagger-app-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+        <artifactId>annotation</artifactId>
+        <version>${vertx-dagger-codegen.version}</version>
       </dependency>
       <dependency>
         <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
         <artifactId>commons</artifactId>
         <version>${vertx-dagger-codegen.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+        <artifactId>processor</artifactId>
+        <version>${vertx-dagger-codegen.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-commons</groupId>
+        <artifactId>commons</artifactId>
+        <version>${vertx-dagger-commons.version}</version>
       </dependency>
       <dependency>
         <groupId>github.benslabbert.vertx-dagger-commons</groupId>
@@ -85,34 +115,14 @@
         <version>${vertx-dagger-commons.version}</version>
       </dependency>
       <dependency>
-        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
-        <artifactId>iam-auth-api</artifactId>
-        <version>${vertx-dagger-app-api.version}</version>
-      </dependency>
-      <dependency>
         <groupId>github.benslabbert.vertx-dagger-starter</groupId>
         <artifactId>iam-auth-client-starter</artifactId>
         <version>${vertx-dagger-starter.version}</version>
       </dependency>
       <dependency>
-        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
-        <artifactId>iam-rpc-api</artifactId>
-        <version>${vertx-dagger-app-api.version}</version>
-      </dependency>
-      <dependency>
         <groupId>github.benslabbert.vertx-dagger-starter</groupId>
         <artifactId>jdbc-pool-starter</artifactId>
         <version>${vertx-dagger-starter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.jsonwriter</groupId>
-        <artifactId>processor</artifactId>
-        <version>${jsonwriter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
-        <artifactId>processor</artifactId>
-        <version>${vertx-dagger-codegen.version}</version>
       </dependency>
       <dependency>
         <groupId>github.benslabbert.vertx-dagger-starter</groupId>
@@ -123,16 +133,6 @@
         <groupId>github.benslabbert.vertx-dagger-starter</groupId>
         <artifactId>redis-starter</artifactId>
         <version>${vertx-dagger-starter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.txmanager</groupId>
-        <artifactId>txmanager</artifactId>
-        <version>${tx-manager.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
-        <artifactId>warehouse-rpc-api</artifactId>
-        <version>${vertx-dagger-app-api.version}</version>
       </dependency>
       <dependency>
         <groupId>github.benslabbert.txmanager</groupId>
@@ -198,7 +198,7 @@
               <keepBlankLines>true</keepBlankLines>
               <nrOfIndentSpace>2</nrOfIndentSpace>
               <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
-              <sortDependencies>scope,group,artifactId</sortDependencies>
+              <sortDependencies>scope,groupId,artifactId</sortDependencies>
               <sortPlugins>groupId,artifactId</sortPlugins>
             </sortPom>
           </pom>

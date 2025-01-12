@@ -1,22 +1,17 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/java:1-23",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
-      "version": "23",
-      "jdkDistro": "tem",
-      "installMaven": true,
-      "mavenVersion": "3.9.9"
     },
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
       "installDockerBuildx": true,
       "dockerDashComposeVersion": "v2"
     },
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
     },
     "ghcr.io/devcontainers-contrib/features/corepack:1": {
 
     },
-    "postCreateCommand": "mvn --version"
+    "postCreateCommand": "sdk env install && sdk env"
   }
 }
