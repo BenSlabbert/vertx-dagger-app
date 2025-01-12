@@ -12,6 +12,6 @@
     "ghcr.io/devcontainers-contrib/features/corepack:1": {
 
     },
-    "postCreateCommand": "sdk env install && sdk env"
+    "postCreateCommand": "sdk env install && sdk env && nvm use"
   }
 }
