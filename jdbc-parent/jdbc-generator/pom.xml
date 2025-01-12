@@ -11,6 +11,12 @@
   <artifactId>jdbc-generator</artifactId>
 
   <dependencies>
+    <!--must provide the migration wanted-->
+    <dependency>
+      <groupId>com.example.jdbc.migration</groupId>
+      <artifactId>jdbc-migration</artifactId>
+      <version>${revision}</version>
+    </dependency>
     <dependency>
       <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>entity-generator</artifactId>
@@ -18,12 +24,6 @@
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-database-postgresql</artifactId>
-    </dependency>
-    <!--must provide the migration wanted-->
-    <dependency>
-      <groupId>com.example.jdbc.migration</groupId>
-      <artifactId>jdbc-migration</artifactId>
-      <version>${revision}</version>
     </dependency>
   </dependencies>
 
