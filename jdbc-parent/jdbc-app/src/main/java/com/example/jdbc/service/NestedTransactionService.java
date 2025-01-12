@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-@Transactional
 public class NestedTransactionService {
 
   private static final Logger log = LoggerFactory.getLogger(NestedTransactionService.class);
