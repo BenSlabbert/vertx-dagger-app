@@ -1,0 +1,18 @@
+---
+name: "Rebase PRs on Main Merge"
+"on":
+  push:
+    branches:
+    - "main"
+jobs:
+  rebase:
+    runs-on: "ubuntu-latest"
+    steps:
+    - name: "Checkout repository"
+      uses: "actions/checkout@v2"
+    - name: "List open pull requests"
+      id: "list-prs"
+      run: "gh pr list --state open --json number -q '.[] | [.number] | @tsv' > prs.tsv\n"
+    - name: "Rebase each pull request"
+      run: "while IFS=$'\\t' read -r number\ndo\n  echo \"Rebasing PR #$number\"\n\
+        \  gh pr update-branch $number --rebase\ndone < prs.tsv\n"
