@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-@Transactional
 public class TransactionService {
 
   private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
