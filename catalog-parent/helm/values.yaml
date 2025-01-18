@@ -1,44 +1,39 @@
-name: catalog-app
-
+---
+name: "catalog-app"
 replicaCount: 1
-
 image:
-  repository: ghcr.io/benslabbert/vertx-dagger-app/catalog
-  tag: 0.0.0-snapshot
-  pullPolicy: Always
-
+  repository: "ghcr.io/benslabbert/vertx-dagger-app/catalog"
+  tag: "0.0.0-snapshot"
+  pullPolicy: "Always"
 probes:
   startupProbe:
-    httpGet:
-    path: /health/startup
+    httpGet: null
+    path: "/health/startup"
     port: 8080
     initialDelaySeconds: 5
     periodSeconds: 5
   livenessProbe:
-    httpGet:
-    path: /health/liveness
+    httpGet: null
+    path: "/health/liveness"
     port: 8080
     initialDelaySeconds: 5
     periodSeconds: 5
   readinessProbe:
-    httpGet:
-    path: /health/readiness
+    httpGet: null
+    path: "/health/readiness"
     port: 8080
     initialDelaySeconds: 5
     periodSeconds: 5
-
 service:
-  type: ClusterIP
+  type: "ClusterIP"
   port: 8080
-
 db:
-  host: db
+  host: "db"
   port: 5432
-  user: catalog
-  password: catalog
-  database: catalog
-
+  user: "catalog"
+  password: "catalog"
+  database: "catalog"
 redis:
-  host: redis
+  host: "redis"
   port: 6379
   database: 0
