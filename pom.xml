@@ -5,7 +5,7 @@
   <parent>
     <groupId>github.benslabbert</groupId>
     <artifactId>vertx-dagger-bom</artifactId>
-    <version>1.83.0</version>
+    <version>1.84.0</version>
   </parent>
 
   <groupId>com.example.parent</groupId>
@@ -39,11 +39,18 @@
     <vertx-dagger-codegen.version>1.52.0</vertx-dagger-codegen.version>
     <vertx-dagger-starter.version>1.54.0</vertx-dagger-starter.version>
     <vertx-dagger-app-api.version>1.67.0</vertx-dagger-app-api.version>
-    <tx-manager.version>1.49.0</tx-manager.version>
+    <tx-manager.version>1.51.0</tx-manager.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>github.benslabbert.txmanager</groupId>
+        <artifactId>bom</artifactId>
+        <version>${tx-manager.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>github.benslabbert.jsonwriter</groupId>
         <artifactId>annotation</artifactId>
@@ -53,16 +60,6 @@
         <groupId>github.benslabbert.jsonwriter</groupId>
         <artifactId>processor</artifactId>
         <version>${jsonwriter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.txmanager</groupId>
-        <artifactId>annotation</artifactId>
-        <version>${tx-manager.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.txmanager</groupId>
-        <artifactId>txmanager</artifactId>
-        <version>${tx-manager.version}</version>
       </dependency>
       <dependency>
         <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
@@ -135,12 +132,6 @@
         <version>${vertx-dagger-starter.version}</version>
       </dependency>
       <dependency>
-        <groupId>github.benslabbert.txmanager</groupId>
-        <artifactId>plugin</artifactId>
-        <version>${tx-manager.version}</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
         <groupId>github.benslabbert.vertx-dagger-commons</groupId>
         <artifactId>commons</artifactId>
         <version>${vertx-dagger-commons.version}</version>
@@ -152,40 +143,23 @@
   </dependencyManagement>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>github.benslabbert.txmanager</groupId>
-          <artifactId>plugin</artifactId>
-          <version>${tx-manager.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
+        <version>${spotless.version}</version>
         <configuration>
-          <skip>${quickBuild}</skip>
           <yaml>
             <includes>
               <include>**/*.yaml</include>
               <include>**/*.yml</include>
             </includes>
             <excludes>
-              <exclude>**/helm/**</exclude>
+              <exclude>**/helm/templates/**</exclude>
               <exclude>**/node_modules/**</exclude>
             </excludes>
             <jackson />
           </yaml>
-          <sql>
-            <dbeaver>
-              <configFile>dbeaver.properties</configFile>
-            </dbeaver>
-            <includes>
-              <include>**/*.sql</include>
-            </includes>
-          </sql>
           <pom>
             <includes>
               <include>pom.xml</include>
@@ -211,22 +185,6 @@
             </excludes>
             <flexmark />
           </markdown>
-          <java>
-            <includes>
-              <include>src/main/**/*.java</include>
-              <include>src/test/**/*.java</include>
-              <include>target/generated-sources/**/com/example/**/*.java</include>
-            </includes>
-            <googleJavaFormat>
-              <style>GOOGLE</style>
-              <reflowLongStrings>true</reflowLongStrings>
-            </googleJavaFormat>
-            <formatAnnotations />
-            <licenseHeader>
-              <content>/* Licensed under Apache-2.0 $YEAR. */</content>
-              <delimiter>package</delimiter>
-            </licenseHeader>
-          </java>
         </configuration>
       </plugin>
       <plugin>
