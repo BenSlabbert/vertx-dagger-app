@@ -37,8 +37,8 @@
     <jsonwriter.version>1.51.0</jsonwriter.version>
     <vertx-dagger-commons.version>1.71.0</vertx-dagger-commons.version>
     <vertx-dagger-codegen.version>1.52.0</vertx-dagger-codegen.version>
-    <vertx-dagger-starter.version>1.55.0</vertx-dagger-starter.version>
-    <vertx-dagger-app-api.version>1.68.0</vertx-dagger-app-api.version>
+    <vertx-dagger-starter.version>1.56.0</vertx-dagger-starter.version>
+    <vertx-dagger-app-api.version>1.69.0</vertx-dagger-app-api.version>
     <tx-manager.version>1.52.0</tx-manager.version>
   </properties>
 
