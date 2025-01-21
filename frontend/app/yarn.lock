@@ -1178,9 +1178,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.16.0":
-  version: 2.16.0
-  resolution: "@sveltejs/kit@npm:2.16.0"
+"@sveltejs/kit@npm:^2.16.1":
+  version: 2.16.1
+  resolution: "@sveltejs/kit@npm:2.16.1"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -1199,13 +1199,13 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/9d53459c4dbe20648ebdee5ef0bee09608404e43041524d6716b892d64b856cbfcaea5b8094e8468b5e004854e49fe8572300494b0409c92505173d817c36c6f
+  checksum: 10/bc3bfb02bd2211c188838b364233a97c1e65069e5be3d7a8a12582144d78315903878975ac595804f6e80735ae3c6e17b0561fe1f886ab645643254b2cb74780
   languageName: node
   linkType: hard
 
-"@sveltejs/package@npm:^2.3.7":
-  version: 2.3.7
-  resolution: "@sveltejs/package@npm:2.3.7"
+"@sveltejs/package@npm:^2.3.8":
+  version: 2.3.8
+  resolution: "@sveltejs/package@npm:2.3.8"
   dependencies:
     chokidar: "npm:^4.0.0"
     kleur: "npm:^4.1.5"
@@ -1216,7 +1216,7 @@ __metadata:
     svelte: ^3.44.0 || ^4.0.0 || ^5.0.0-next.1
   bin:
     svelte-package: svelte-package.js
-  checksum: 10/56d0c6893f57853d8fa5b0fcd91e606b880584b3a3f7775c83a54935d8a7116fbe0f484547a49c8bb7742de5f0d7e7ba53c37ee02ff270fe998beb3f032bd473
+  checksum: 10/5bfbb4106f2a35f7079a2535a026cd2be5983e731eae00fd3ed4e99f367ff1147a3a5036448954c1fe37c7bd03205daf5b695458e45a62611f851f051f925954
   languageName: node
   linkType: hard
 
@@ -1588,8 +1588,8 @@ __metadata:
     "@playwright/test": "npm:^1.49.1"
     "@sveltejs/adapter-node": "npm:^5.2.11"
     "@sveltejs/adapter-static": "npm:^3.0.8"
-    "@sveltejs/kit": "npm:^2.16.0"
-    "@sveltejs/package": "npm:^2.3.7"
+    "@sveltejs/kit": "npm:^2.16.1"
+    "@sveltejs/package": "npm:^2.3.8"
     "@sveltejs/vite-plugin-svelte": "npm:^5.0.3"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.1"
@@ -1600,11 +1600,11 @@ __metadata:
     prettier: "npm:^3.4.2"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.2"
-    svelte: "npm:^5.19.0"
+    svelte: "npm:^5.19.1"
     svelte-check: "npm:^4.1.4"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.7.3"
-    vite: "npm:^6.0.9"
+    vite: "npm:^6.0.11"
     vitest: "npm:^2.1.8"
     winston: "npm:^3.17.0"
     zod: "npm:^3.24.1"
@@ -4512,9 +4512,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.19.0":
-  version: 5.19.0
-  resolution: "svelte@npm:5.19.0"
+"svelte@npm:^5.19.1":
+  version: 5.19.1
+  resolution: "svelte@npm:5.19.1"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4530,7 +4530,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/10e62fd0ce36d95d2d81113aa89da3e4b5e978beebcf980c5e203f9e69ed9127da8e7e3c9bf80660495072d8fbf8ccec6e6c83025dce0baddb1b661d04518215
+  checksum: 10/cc0304c3eccaf21cdcf97288dec074d355251fad3fc0aefb7e3a91e01ea9a4ebbe597642a4d0b548c3de4b5f6491499165c2ce5c45b24f50f64ca5fa7d9f2e0b
   languageName: node
   linkType: hard
 
@@ -4771,9 +4771,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^6.0.9":
-  version: 6.0.9
-  resolution: "vite@npm:6.0.9"
+"vite@npm:^6.0.11":
+  version: 6.0.11
+  resolution: "vite@npm:6.0.11"
   dependencies:
     esbuild: "npm:^0.24.2"
     fsevents: "npm:~2.3.3"
@@ -4819,7 +4819,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/6f4f27c602f997537df26cc9665763b402f5978a7381146f6c0b146888ee257484a7f140df79e495b922082ca608bd1f563b0be9e272d22c689aad2b1e1da440
+  checksum: 10/753d06b07a4d90863d3478162cfb18fa5cd7f6eb22a74525348a8fd46593a82875d0f92352c2f4833e15cb6581fc97d6ab434c0c5d83d8d58cfbbe6e7267726d
   languageName: node
   linkType: hard
 
