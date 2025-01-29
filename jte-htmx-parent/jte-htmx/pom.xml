@@ -28,10 +28,6 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.hazelcast</groupId>
-      <artifactId>hazelcast</artifactId>
-    </dependency>
-    <dependency>
       <groupId>gg.jte</groupId>
       <artifactId>jte</artifactId>
     </dependency>
