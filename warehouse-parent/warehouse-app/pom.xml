@@ -37,10 +37,6 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.hazelcast</groupId>
-      <artifactId>hazelcast</artifactId>
-    </dependency>
-    <dependency>
       <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
       <artifactId>iam-rpc-api</artifactId>
     </dependency>
