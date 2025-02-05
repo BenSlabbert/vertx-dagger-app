@@ -866,9 +866,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.16.1":
-  version: 2.16.1
-  resolution: "@sveltejs/kit@npm:2.16.1"
+"@sveltejs/kit@npm:^2.17.1":
+  version: 2.17.1
+  resolution: "@sveltejs/kit@npm:2.17.1"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -887,15 +887,15 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/bc3bfb02bd2211c188838b364233a97c1e65069e5be3d7a8a12582144d78315903878975ac595804f6e80735ae3c6e17b0561fe1f886ab645643254b2cb74780
+  checksum: 10/df0d399f841be43b0132ddb2a3bc65a24ddbaa55bce5275a90d341d4f15833fc83f3f5235e32fe3e74ef363dbafcbdc12a1175fa8e712d172fc4acac064e3e1f
   languageName: node
   linkType: hard
 
-"@sveltejs/package@npm:^2.3.9":
-  version: 2.3.9
-  resolution: "@sveltejs/package@npm:2.3.9"
+"@sveltejs/package@npm:^2.3.10":
+  version: 2.3.10
+  resolution: "@sveltejs/package@npm:2.3.10"
   dependencies:
-    chokidar: "npm:^4.0.0"
+    chokidar: "npm:^4.0.3"
     kleur: "npm:^4.1.5"
     sade: "npm:^1.8.1"
     semver: "npm:^7.5.4"
@@ -904,7 +904,7 @@ __metadata:
     svelte: ^3.44.0 || ^4.0.0 || ^5.0.0-next.1
   bin:
     svelte-package: svelte-package.js
-  checksum: 10/87e7f7db3bb372c522d1546a6d87754b76549e5f74b1e09aed4c2206442bd7964c3fbd0db1fea723b1718067c39a1bbf4dae1bf3122e76012b88e6b4466b416b
+  checksum: 10/88659348ede94c6be64332261d8a4af46dac288cd1b84e461e51a7da82f096434f3cee36996a3deb3137909ddbf3a6581b57a2b12c825e4903066521fce285fc
   languageName: node
   linkType: hard
 
@@ -1251,8 +1251,8 @@ __metadata:
     "@picocss/pico": "npm:^2.0.6"
     "@playwright/test": "npm:^1.50.1"
     "@sveltejs/adapter-static": "npm:^3.0.8"
-    "@sveltejs/kit": "npm:^2.16.1"
-    "@sveltejs/package": "npm:^2.3.9"
+    "@sveltejs/kit": "npm:^2.17.1"
+    "@sveltejs/package": "npm:^2.3.10"
     "@sveltejs/vite-plugin-svelte": "npm:^5.0.3"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.1"
@@ -1262,8 +1262,8 @@ __metadata:
     globals: "npm:^15.14.0"
     prettier: "npm:^3.4.2"
     prettier-plugin-svelte: "npm:^3.3.3"
-    publint: "npm:^0.3.2"
-    svelte: "npm:^5.19.6"
+    publint: "npm:^0.3.3"
+    svelte: "npm:^5.19.7"
     svelte-check: "npm:^4.1.4"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.7.3"
@@ -1404,21 +1404,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "chokidar@npm:4.0.0"
-  dependencies:
-    readdirp: "npm:^4.0.1"
-  checksum: 10/e9a65db724a9ba2a40ad10f1d55caa5ccb5ba17533414271ec315004664860439348e51fa4faaa640fcc5f6427a410919fa1608892fbad41ed86fce682633cfa
-  languageName: node
-  linkType: hard
-
 "chokidar@npm:^4.0.1":
   version: 4.0.1
   resolution: "chokidar@npm:4.0.1"
   dependencies:
     readdirp: "npm:^4.0.1"
   checksum: 10/62749d2173a60cc5632d6c6e0b7024f33aadce47b06d02e55ad03c7b8daaaf2fc85d4296c047473d04387fd992dab9384cc5263c70a3dc3018b7ebecfb5b5217
+  languageName: node
+  linkType: hard
+
+"chokidar@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "chokidar@npm:4.0.3"
+  dependencies:
+    readdirp: "npm:^4.0.1"
+  checksum: 10/bf2a575ea5596000e88f5db95461a9d59ad2047e939d5a4aac59dd472d126be8f1c1ff3c7654b477cf532d18f42a97279ef80ee847972fd2a25410bf00b80b59
   languageName: node
   linkType: hard
 
@@ -2928,10 +2928,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"package-manager-detector@npm:^0.2.8":
-  version: 0.2.8
-  resolution: "package-manager-detector@npm:0.2.8"
-  checksum: 10/deb7c5abeed0ac88c9014230355ab79695d2a600e6361d91f55fcb67cc359e7106b04b23d22dee18af1388daed7385c3260229602a33617d0247ad86d8ab69ec
+"package-manager-detector@npm:^0.2.9":
+  version: 0.2.9
+  resolution: "package-manager-detector@npm:0.2.9"
+  checksum: 10/08f73184bef7740a0a826704bdd7647bf2b30682b142fc1346942fe48360ddb781494c369b339e1a89d78f9247f5c95c814862bcc038e11189be0ca96078aeb5
   languageName: node
   linkType: hard
 
@@ -3177,17 +3177,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"publint@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "publint@npm:0.3.2"
+"publint@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "publint@npm:0.3.3"
   dependencies:
     "@publint/pack": "npm:^0.1.1"
-    package-manager-detector: "npm:^0.2.8"
+    package-manager-detector: "npm:^0.2.9"
     picocolors: "npm:^1.1.1"
     sade: "npm:^1.8.1"
   bin:
     publint: src/cli.js
-  checksum: 10/e78f3fd69059b6fbd5ca575b6f3a349a291870036abd673fc32a378fe7797c9f01215872960bf87d986220e7d5fe7fc6845f470d01ea5f88baa6a7df2e4b51e2
+  checksum: 10/8526557e3f92f7e38120a77feef8f2ce713614a56534a2607d90120990656b40979d83ab6b00663072b4066e47dceaa26396abc5fc69d70aaeb05fbdcc30f33c
   languageName: node
   linkType: hard
 
@@ -3700,9 +3700,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.19.6":
-  version: 5.19.6
-  resolution: "svelte@npm:5.19.6"
+"svelte@npm:^5.19.7":
+  version: 5.19.7
+  resolution: "svelte@npm:5.19.7"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3718,7 +3718,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/4f9bcd852c9184fe0e4726eda14bdfd81b6706369370216c69a8a96f0eaa537793d42d852b5051c4ffe5eabd8bab43b6d3e30d813fc1184e04c0214689db416c
+  checksum: 10/851014568d8cd52785cc710315679425cbd715ac76272615f72d4a8f83fe37caec35c5a6e6ab74ae585bc9cd9459eef27261b4a96f35ab253f54c0c255799260
   languageName: node
   linkType: hard
 
