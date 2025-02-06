@@ -1,13 +1,12 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.service;
 
-import static github.benslabbert.vertxdaggercommons.mesage.Headers.SAGA_ID_HEADER;
-import static github.benslabbert.vertxdaggercommons.mesage.Headers.SAGA_ROLLBACK_HEADER;
+import static github.benslabbert.vertxdaggercommons.saga.Headers.SAGA_ID_HEADER;
+import static github.benslabbert.vertxdaggercommons.saga.Headers.SAGA_ROLLBACK_HEADER;
 
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderRequest;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderResponse;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderSuccessResponse;
-import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;

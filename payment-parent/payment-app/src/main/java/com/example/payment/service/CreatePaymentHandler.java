@@ -1,14 +1,13 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.service;
 
-import static github.benslabbert.vertxdaggercommons.mesage.Headers.SAGA_ID_HEADER;
-import static github.benslabbert.vertxdaggercommons.mesage.Headers.SAGA_ROLLBACK_HEADER;
+import static github.benslabbert.vertxdaggercommons.saga.Headers.SAGA_ID_HEADER;
+import static github.benslabbert.vertxdaggercommons.saga.Headers.SAGA_ROLLBACK_HEADER;
 
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentFailedResponse;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentRequest;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentResponse;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentSuccessResponse;
-import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.ThreadingModel;
@@ -24,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-public class CreatePaymentHandler implements Consumer {
+class CreatePaymentHandler implements Consumer {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentHandler.class);
   private static final String CMD_ADDRESS = CreatePaymentRequest.CREATE_PAYMENT_TOPIC;

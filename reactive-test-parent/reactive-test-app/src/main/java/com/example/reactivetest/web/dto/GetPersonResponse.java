@@ -1,15 +1,13 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.reactivetest.web.dto;
 
-import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 
-public record GetPersonResponse(long id, String name) implements JsonWriter {
+public record GetPersonResponse(long id, String name) {
 
   public static String ID_FIELD = "id";
   public static String NAME_FIELD = "name";
 
-  @Override
   public JsonObject toJson() {
     return new JsonObject().put(ID_FIELD, id).put(NAME_FIELD, name);
   }

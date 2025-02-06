@@ -1,12 +1,11 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web.route.dto;
 
-import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import java.util.List;
 
-public record SuggestResponseDto(List<String> suggestions) implements JsonWriter {
+public record SuggestResponseDto(List<String> suggestions) {
 
   public static String SUGGESTIONS_FIELD = "suggestions";
 
@@ -18,7 +17,6 @@ public record SuggestResponseDto(List<String> suggestions) implements JsonWriter
     return jsonArray.stream().map(Object::toString).toList();
   }
 
-  @Override
   public JsonObject toJson() {
     JsonArray array = new JsonArray(suggestions);
     return new JsonObject().put(SUGGESTIONS_FIELD, array);

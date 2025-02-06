@@ -3,23 +3,20 @@ package com.example.catalog.ioc;
 
 import com.example.catalog.mapper.MapperModule;
 import com.example.catalog.repository.RepositoryModule;
+import com.example.catalog.service.Consumer;
 import com.example.catalog.service.ItemService;
 import com.example.catalog.service.ServiceModule;
 import com.example.catalog.verticle.ApiVerticle;
 import com.example.catalog.web.WebModule;
-import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.HandlerModule;
-import com.example.catalog.web.route.handler.ItemHandler;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcApiModule;
 import github.benslabbert.vertxdaggercommons.closer.CloserModule;
-import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.jooq.StaticSqlDslContextModule;
-import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import github.benslabbert.vertxdaggercommons.saga.SagaModule;
 import github.benslabbert.vertxdaggerstarter.reactivedbpool.PoolModule;
 import github.benslabbert.vertxdaggerstarter.redis.RedisModule;
@@ -55,21 +52,13 @@ public interface Provider {
 
   Set<Consumer> consumers();
 
-  AuthHandler authHandler();
-
   Config config();
-
-  ItemHandler itemHandler();
 
   ItemService itemService();
 
   Pool pool();
 
-  RedisAPI redisAPI();
-
   ApiVerticle apiVerticle();
-
-  ClosingService closingService();
 
   @Component.Builder
   interface Builder {

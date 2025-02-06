@@ -27,6 +27,10 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
+      <artifactId>commons</artifactId>
+    </dependency>
+    <dependency>
       <groupId>github.benslabbert.vertx-dagger-starter</groupId>
       <artifactId>iam-auth-client-starter</artifactId>
     </dependency>

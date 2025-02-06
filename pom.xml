@@ -5,7 +5,7 @@
   <parent>
     <groupId>github.benslabbert</groupId>
     <artifactId>vertx-dagger-bom</artifactId>
-    <version>1.92.0</version>
+    <version>1.96.0</version>
   </parent>
 
   <groupId>com.example.parent</groupId>
@@ -34,12 +34,12 @@
     <dockerImageNameBase>ghcr.io/benslabbert/vertx-dagger-app</dockerImageNameBase>
 
     <!--deps-->
-    <jsonwriter.version>1.57.0</jsonwriter.version>
-    <vertx-dagger-commons.version>1.77.0</vertx-dagger-commons.version>
-    <vertx-dagger-codegen.version>1.52.0</vertx-dagger-codegen.version>
-    <vertx-dagger-starter.version>1.62.0</vertx-dagger-starter.version>
-    <vertx-dagger-app-api.version>1.74.0</vertx-dagger-app-api.version>
-    <tx-manager.version>1.58.0</tx-manager.version>
+    <vertx-json-writer.version>1.61.0</vertx-json-writer.version>
+    <vertx-dagger-commons.version>1.89.0</vertx-dagger-commons.version>
+    <vertx-dagger-codegen.version>1.53.0</vertx-dagger-codegen.version>
+    <vertx-dagger-starter.version>1.67.0</vertx-dagger-starter.version>
+    <vertx-dagger-app-api.version>1.78.0</vertx-dagger-app-api.version>
+    <tx-manager.version>1.60.0</tx-manager.version>
   </properties>
 
   <dependencyManagement>
@@ -52,92 +52,39 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>github.benslabbert.jsonwriter</groupId>
+        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
+        <artifactId>bom</artifactId>
+        <version>${vertx-dagger-app-api.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
+        <artifactId>bom</artifactId>
+        <version>${vertx-dagger-codegen.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-commons</groupId>
+        <artifactId>bom</artifactId>
+        <version>${vertx-dagger-commons.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
+        <artifactId>bom</artifactId>
+        <version>${vertx-dagger-starter.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>github.benslabbert.vertx-json-writer</groupId>
         <artifactId>annotation</artifactId>
-        <version>${jsonwriter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.jsonwriter</groupId>
-        <artifactId>processor</artifactId>
-        <version>${jsonwriter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
-        <artifactId>catalog-saga-api</artifactId>
-        <version>${vertx-dagger-app-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
-        <artifactId>iam-auth-api</artifactId>
-        <version>${vertx-dagger-app-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
-        <artifactId>iam-rpc-api</artifactId>
-        <version>${vertx-dagger-app-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
-        <artifactId>warehouse-rpc-api</artifactId>
-        <version>${vertx-dagger-app-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
-        <artifactId>annotation</artifactId>
-        <version>${vertx-dagger-codegen.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
-        <artifactId>commons</artifactId>
-        <version>${vertx-dagger-codegen.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-codegen</groupId>
-        <artifactId>processor</artifactId>
-        <version>${vertx-dagger-codegen.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-commons</groupId>
-        <artifactId>commons</artifactId>
-        <version>${vertx-dagger-commons.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-commons</groupId>
-        <artifactId>db-migration</artifactId>
-        <version>${vertx-dagger-commons.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-commons</groupId>
-        <artifactId>entity-generator</artifactId>
-        <version>${vertx-dagger-commons.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
-        <artifactId>iam-auth-client-starter</artifactId>
-        <version>${vertx-dagger-starter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
-        <artifactId>jdbc-pool-starter</artifactId>
-        <version>${vertx-dagger-starter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
-        <artifactId>reactive-db-pool-starter</artifactId>
-        <version>${vertx-dagger-starter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-starter</groupId>
-        <artifactId>redis-starter</artifactId>
-        <version>${vertx-dagger-starter.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>github.benslabbert.vertx-dagger-commons</groupId>
-        <artifactId>commons</artifactId>
-        <version>${vertx-dagger-commons.version}</version>
-        <classifier>tests</classifier>
-        <type>test-jar</type>
-        <scope>test</scope>
+        <version>${vertx-json-writer.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

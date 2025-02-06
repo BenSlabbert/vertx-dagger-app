@@ -4,7 +4,6 @@ package com.example.catalog.service;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoSet;
-import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 
 @Module
 interface ServiceModuleBindings {

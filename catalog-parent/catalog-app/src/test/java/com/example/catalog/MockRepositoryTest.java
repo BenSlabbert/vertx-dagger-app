@@ -1,7 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog;
 
-import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -31,8 +30,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(VertxExtension.class)
 public abstract class MockRepositoryTest {
-
-  protected static final int HTTP_PORT = getPort();
 
   protected TestMockRepositoryProvider provider;
 
@@ -67,7 +64,7 @@ public abstract class MockRepositoryTest {
 
     Config config =
         Config.builder()
-            .httpConfig(HttpConfig.builder().port(HTTP_PORT).build())
+            .httpConfig(HttpConfig.builder().port(0).build())
             .redisConfig(RedisConfig.builder().host("127.0.0.1").port(6379).database(0).build())
             .postgresConfig(
                 PostgresConfig.builder()

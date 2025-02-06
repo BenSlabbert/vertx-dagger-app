@@ -2,13 +2,11 @@
 package com.example.vt.handler;
 
 import github.benslabbert.vertxdaggercodegen.annotation.url.RestHandler;
-import github.benslabbert.vertxdaggercommons.annotation.RunOnVirtualThread;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RunOnVirtualThread
 public class RequestHandler {
 
   private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);

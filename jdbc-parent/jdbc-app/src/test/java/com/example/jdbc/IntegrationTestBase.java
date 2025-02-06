@@ -1,14 +1,12 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.jdbc;
 
-import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
-
 import com.example.jdbc.ioc.DaggerProvider;
 import com.example.jdbc.ioc.Provider;
-import github.benslabbert.vertxdaggercommons.ConfigEncoder;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.dbmigration.FlywayProvider;
-import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
+import github.benslabbert.vertxdaggercommons.test.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.test.DockerContainers;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -23,13 +21,12 @@ import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 
 @ExtendWith(VertxExtension.class)
-public class IntegrationTestBase {
+public abstract class IntegrationTestBase {
 
   private static final GenericContainer<?> postgres = DockerContainers.POSTGRES;
   private static final AtomicInteger counter = new AtomicInteger(0);
 
   protected Provider provider;
-  protected int httpPort;
 
   static {
     postgres.start();
@@ -42,7 +39,6 @@ public class IntegrationTestBase {
 
   @BeforeEach
   protected void prepare(Vertx vertx, VertxTestContext testContext) throws Exception {
-    httpPort = getPort();
     final String dbName = "testing" + counter.incrementAndGet();
 
     // create a new database for each test
@@ -61,7 +57,7 @@ public class IntegrationTestBase {
 
     Config config =
         Config.builder()
-            .httpConfig(Config.HttpConfig.builder().port(httpPort).build())
+            .httpConfig(Config.HttpConfig.builder().port(0).build())
             .postgresConfig(
                 Config.PostgresConfig.builder()
                     .host("127.0.0.1")

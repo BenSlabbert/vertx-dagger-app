@@ -79,7 +79,7 @@ class ItemHandlerImpl implements ItemHandler {
               log.error("failed get next page", err);
               ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto.toJson(), OK));
   }
 
   @RestHandler(path = "/previous?fromId={long:fromId=0L}&size={int:size=10}")
@@ -93,7 +93,7 @@ class ItemHandlerImpl implements ItemHandler {
               log.error("failed to get previous", err);
               ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto.toJson(), OK));
   }
 
   @RestHandler(path = "/suggest?s={string:s}")
@@ -107,7 +107,7 @@ class ItemHandlerImpl implements ItemHandler {
               log.error("failed to find suggestion: " + params.s(), err);
               ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(dto -> ResponseWriter.write(ctx, dto, OK));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto.toJson(), OK));
   }
 
   @RestHandler(path = "/{long:id}")
@@ -128,7 +128,7 @@ class ItemHandlerImpl implements ItemHandler {
                 return;
               }
 
-              ResponseWriter.write(ctx, dto.get(), OK);
+              ResponseWriter.write(ctx, dto.get().toJson(), OK);
             });
   }
 
@@ -164,7 +164,7 @@ class ItemHandlerImpl implements ItemHandler {
               log.error("failed to create item", err);
               ResponseWriter.writeInternalError(ctx);
             })
-        .onSuccess(dto -> ResponseWriter.write(ctx, dto, CREATED));
+        .onSuccess(dto -> ResponseWriter.write(ctx, dto.toJson(), CREATED));
   }
 
   @RestHandler(path = "/{long:id}")

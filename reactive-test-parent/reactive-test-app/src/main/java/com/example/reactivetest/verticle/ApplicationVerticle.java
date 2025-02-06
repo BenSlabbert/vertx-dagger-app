@@ -7,10 +7,12 @@ import com.example.reactivetest.web.handler.PersonHandler;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.future.FutureUtil;
+import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
 import github.benslabbert.vertxdaggercommons.security.SecurityHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
@@ -32,6 +34,8 @@ public class ApplicationVerticle extends AbstractVerticle {
   private final ClosingService closingService;
   private final PersonHandler personHandler;
   private final Config config;
+
+  private HttpServer httpServer;
 
   @Inject
   ApplicationVerticle(ClosingService closingService, PersonHandler personHandler, Config config) {
@@ -108,12 +112,17 @@ public class ApplicationVerticle extends AbstractVerticle {
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");
+                httpServer = res.result();
                 startPromise.complete();
               } else {
                 log.error("failed to start verticle", res.cause());
                 startPromise.fail(res.cause());
               }
             });
+  }
+
+  public int getPort() {
+    return httpServer.actualPort();
   }
 
   @SuppressWarnings("java:S106") // logger is not available
@@ -134,12 +143,16 @@ public class ApplicationVerticle extends AbstractVerticle {
       }
     }
 
+    MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
+
+    httpServer.close(multiCompletePromise::complete);
+
     System.err.println("awaitTermination...start");
     FutureUtil.awaitTermination()
         .onComplete(
             ar -> {
               System.err.printf("awaitTermination...end: %b%n", ar.result());
-              stopPromise.complete();
+              multiCompletePromise.complete();
             });
   }
 }

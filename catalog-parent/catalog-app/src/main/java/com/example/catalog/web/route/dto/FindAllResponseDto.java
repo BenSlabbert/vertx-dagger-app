@@ -1,12 +1,11 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web.route.dto;
 
-import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import java.util.List;
 
-public record FindAllResponseDto(List<FindOneResponseDto> dtos) implements JsonWriter {
+public record FindAllResponseDto(List<FindOneResponseDto> dtos) {
 
   public static String ITEMS_FIELD = "items";
 
@@ -22,7 +21,6 @@ public record FindAllResponseDto(List<FindOneResponseDto> dtos) implements JsonW
         .toList();
   }
 
-  @Override
   public JsonObject toJson() {
     JsonArray array = new JsonArray();
     dtos.stream().map(FindOneResponseDto::toJson).forEach(array::add);

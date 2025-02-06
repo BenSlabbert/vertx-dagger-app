@@ -1,16 +1,14 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.reactivetest.verticle;
 
-import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
-
 import com.example.reactivetest.ioc.DaggerProvider;
 import com.example.reactivetest.ioc.Provider;
-import github.benslabbert.vertxdaggercommons.ConfigEncoder;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.config.Config.HttpConfig;
 import github.benslabbert.vertxdaggercommons.config.Config.PostgresConfig;
 import github.benslabbert.vertxdaggercommons.dbmigration.FlywayProvider;
-import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
+import github.benslabbert.vertxdaggercommons.test.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.test.DockerContainers;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -29,8 +27,6 @@ import org.testcontainers.containers.GenericContainer;
 class ApplicationVerticleTest {
 
   private static final Logger log = LoggerFactory.getLogger(ApplicationVerticleTest.class);
-
-  protected static final int HTTP_PORT = getPort();
 
   private static final AtomicInteger counter = new AtomicInteger(0);
 
@@ -66,7 +62,7 @@ class ApplicationVerticleTest {
 
     Config config =
         Config.builder()
-            .httpConfig(HttpConfig.builder().port(HTTP_PORT).build())
+            .httpConfig(HttpConfig.builder().port(0).build())
             .postgresConfig(
                 PostgresConfig.builder()
                     .host("127.0.0.1")
