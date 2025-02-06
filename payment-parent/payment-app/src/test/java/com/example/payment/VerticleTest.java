@@ -3,7 +3,7 @@ package com.example.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import github.benslabbert.vertxdaggercommons.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.test.ConfigEncoder;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.ThreadingModel;
 import io.vertx.core.Vertx;

@@ -3,6 +3,7 @@ package com.example.payment.ioc;
 
 import com.example.payment.repository.RepositoryModule;
 import com.example.payment.scope.TransactionModule;
+import com.example.payment.service.Consumer;
 import com.example.payment.service.ServiceModule;
 import com.example.payment.service.TestingScopeService;
 import com.example.payment.verticle.WorkerVerticle;
@@ -14,7 +15,6 @@ import github.benslabbert.vertxdaggercommons.closer.CloserModule;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.jooq.DataSourceDslContextModule;
-import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import github.benslabbert.vertxdaggerstarter.jdbcpool.JdbcPoolModule;
 import io.vertx.core.Vertx;
 import java.util.Set;

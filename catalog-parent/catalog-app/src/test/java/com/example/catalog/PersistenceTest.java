@@ -1,7 +1,6 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog;
 
-import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -9,14 +8,15 @@ import static org.mockito.Mockito.when;
 
 import com.example.catalog.ioc.DaggerTestPersistenceProvider;
 import com.example.catalog.ioc.TestPersistenceProvider;
+import com.example.catalog.verticle.ApiVerticle;
 import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcService;
 import github.benslabbert.vertxdaggerapp.api.rpc.iam.IamRpcServiceVertxEBProxyHandler;
 import github.benslabbert.vertxdaggerapp.api.rpc.iam.dto.CheckTokenResponseDto;
-import github.benslabbert.vertxdaggercommons.ConfigEncoder;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.config.Config.RedisConfig;
 import github.benslabbert.vertxdaggercommons.dbmigration.FlywayProvider;
-import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
+import github.benslabbert.vertxdaggercommons.test.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.test.DockerContainers;
 import github.benslabbert.vertxdaggercommons.transaction.reactive.TransactionBoundary;
 import io.restassured.RestAssured;
 import io.vertx.core.DeploymentOptions;
@@ -47,8 +47,6 @@ import org.testcontainers.lifecycle.Startables;
 public abstract class PersistenceTest {
 
   private static final Logger log = LoggerFactory.getLogger(PersistenceTest.class);
-
-  protected static final int HTTP_PORT = getPort();
 
   protected TestPersistenceProvider provider;
 
@@ -108,7 +106,7 @@ public abstract class PersistenceTest {
 
     Config config =
         Config.builder()
-            .httpConfig(Config.HttpConfig.builder().port(HTTP_PORT).build())
+            .httpConfig(Config.HttpConfig.builder().port(0).build())
             .redisConfig(
                 RedisConfig.builder()
                     .host("127.0.0.1")
@@ -139,7 +137,7 @@ public abstract class PersistenceTest {
     register =
         new IamRpcServiceVertxEBProxyHandler(
                 vertx,
-                request ->
+                _ ->
                     Future.succeededFuture(
                         CheckTokenResponseDto.builder()
                             .valid(true)
@@ -149,16 +147,19 @@ public abstract class PersistenceTest {
             .register(vertx.eventBus(), IamRpcService.ADDRESS);
 
     JsonObject cfg = ConfigEncoder.encode(config);
+    ApiVerticle verticle = provider.apiVerticle();
     vertx.deployVerticle(
-        provider.apiVerticle(),
+        verticle,
         new DeploymentOptions().setConfig(cfg),
-        testContext.succeedingThenComplete());
-  }
-
-  @BeforeEach
-  void before() {
-    RestAssured.baseURI = "http://127.0.0.1";
-    RestAssured.port = HTTP_PORT;
+        ar -> {
+          if (ar.succeeded()) {
+            RestAssured.baseURI = "http://127.0.0.1";
+            RestAssured.port = verticle.getPort();
+            testContext.completeNow();
+          } else {
+            testContext.failNow(ar.cause());
+          }
+        });
   }
 
   @AfterEach
@@ -182,7 +183,7 @@ public abstract class PersistenceTest {
       {
         doInTransaction(function)
             .onFailure(err -> fail("failure while persisting", err))
-            .onSuccess(projection -> latch.countDown());
+            .onSuccess(_ -> latch.countDown());
       }
     };
 

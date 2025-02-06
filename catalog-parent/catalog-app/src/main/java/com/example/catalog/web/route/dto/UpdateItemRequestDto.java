@@ -1,12 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web.route.dto;
 
-import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 
-public record UpdateItemRequestDto(String name, long priceInCents, long version)
-    implements JsonWriter {
+public record UpdateItemRequestDto(String name, long priceInCents, long version) {
 
   public static String NAME_FIELD = "name";
   public static String PRICE_IN_CENTS_FIELD = "priceInCents";
@@ -19,7 +17,6 @@ public record UpdateItemRequestDto(String name, long priceInCents, long version)
         Objects.requireNonNull(jsonObject.getLong(VERSION_FIELD)));
   }
 
-  @Override
   public JsonObject toJson() {
     return new JsonObject()
         .put(NAME_FIELD, name)

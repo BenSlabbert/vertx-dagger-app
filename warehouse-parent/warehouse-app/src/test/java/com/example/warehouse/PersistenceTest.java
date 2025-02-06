@@ -1,15 +1,13 @@
 /* Licensed under Apache-2.0 2024. */
 package com.example.warehouse;
 
-import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
-
 import com.example.warehouse.ioc.DaggerTestProvider;
 import com.example.warehouse.ioc.TestProvider;
-import github.benslabbert.vertxdaggercommons.ConfigEncoder;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.dbmigration.FlywayProvider;
-import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
 import github.benslabbert.vertxdaggercommons.security.rpc.ACL;
+import github.benslabbert.vertxdaggercommons.test.ConfigEncoder;
+import github.benslabbert.vertxdaggercommons.test.DockerContainers;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -28,16 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
 import org.testcontainers.lifecycle.Startables;
 
 @ExtendWith(VertxExtension.class)
 public abstract class PersistenceTest {
 
   private static final Logger log = LoggerFactory.getLogger(PersistenceTest.class);
-  protected static final int HTTP_PORT = getPort();
   private static final AtomicInteger counter = new AtomicInteger(0);
-  private static final Network network = Network.newNetwork();
 
   protected TestProvider provider;
   protected String validJwtToken;
@@ -78,7 +73,7 @@ public abstract class PersistenceTest {
 
     Config config =
         Config.builder()
-            .httpConfig(Config.HttpConfig.builder().port(HTTP_PORT).build())
+            .httpConfig(Config.HttpConfig.builder().port(0).build())
             .postgresConfig(
                 Config.PostgresConfig.builder()
                     .host("127.0.0.1")

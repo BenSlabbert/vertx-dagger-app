@@ -1,13 +1,11 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web.route.dto;
 
-import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import java.util.List;
 
-public record PaginatedResponseDto(boolean more, long total, List<FindOneResponseDto> items)
-    implements JsonWriter {
+public record PaginatedResponseDto(boolean more, long total, List<FindOneResponseDto> items) {
 
   public static String MORE_FIELD = "more";
   public static String TOTAL_FIELD = "total";
@@ -28,10 +26,9 @@ public record PaginatedResponseDto(boolean more, long total, List<FindOneRespons
         .toList();
   }
 
-  @Override
   public JsonObject toJson() {
     JsonArray array = new JsonArray();
-    items.stream().map(JsonWriter::toJson).forEach(array::add);
+    items.stream().map(FindOneResponseDto::toJson).forEach(array::add);
     return new JsonObject().put(MORE_FIELD, more).put(ITEMS_FIELD, array).put(TOTAL_FIELD, total);
   }
 }

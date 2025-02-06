@@ -1,14 +1,13 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment;
 
-import static github.benslabbert.vertxdaggercommons.FreePortUtility.getPort;
 import static org.assertj.core.api.Assertions.fail;
 
 import com.example.payment.ioc.DaggerTestPersistenceProvider;
 import com.example.payment.ioc.TestPersistenceProvider;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.dbmigration.FlywayProvider;
-import github.benslabbert.vertxdaggercommons.docker.DockerContainers;
+import github.benslabbert.vertxdaggercommons.test.DockerContainers;
 import github.benslabbert.vertxdaggercommons.transaction.blocking.TransactionBoundary;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
@@ -24,20 +23,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
 import org.testcontainers.lifecycle.Startables;
 
 @ExtendWith(VertxExtension.class)
 public abstract class PersistenceTest {
 
   private static final Logger log = LoggerFactory.getLogger(PersistenceTest.class);
-  protected static final int HTTP_PORT = getPort();
 
   protected TestPersistenceProvider provider;
   protected Config config;
 
   private static final AtomicInteger counter = new AtomicInteger(0);
-  private static final Network network = Network.newNetwork();
 
   protected static final GenericContainer<?> postgres = DockerContainers.POSTGRES;
 
@@ -69,7 +65,7 @@ public abstract class PersistenceTest {
 
     config =
         Config.builder()
-            .httpConfig(Config.HttpConfig.builder().port(HTTP_PORT).build())
+            .httpConfig(Config.HttpConfig.builder().port(0).build())
             .postgresConfig(
                 Config.PostgresConfig.builder()
                     .host("127.0.0.1")

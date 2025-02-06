@@ -1,12 +1,10 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.catalog.web.route.dto;
 
-import github.benslabbert.vertxdaggercommons.web.serialization.JsonWriter;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 
-public record FindOneResponseDto(long id, String name, long priceInCents, long version)
-    implements JsonWriter {
+public record FindOneResponseDto(long id, String name, long priceInCents, long version) {
 
   public static String ID_FIELD = "id";
   public static String NAME_FIELD = "name";
@@ -21,7 +19,6 @@ public record FindOneResponseDto(long id, String name, long priceInCents, long v
         Objects.requireNonNull(jsonObject.getLong(VERSION_FIELD)));
   }
 
-  @Override
   public JsonObject toJson() {
     return new JsonObject()
         .put(ID_FIELD, id)

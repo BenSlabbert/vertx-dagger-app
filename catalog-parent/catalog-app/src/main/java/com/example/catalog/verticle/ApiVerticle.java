@@ -3,17 +3,18 @@ package com.example.catalog.verticle;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
+import com.example.catalog.service.Consumer;
 import com.example.catalog.web.route.handler.AuthHandler;
 import com.example.catalog.web.route.handler.ItemHandler;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.future.FutureUtil;
 import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
-import github.benslabbert.vertxdaggercommons.mesage.Consumer;
 import github.benslabbert.vertxdaggercommons.security.SecurityHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
@@ -40,6 +41,8 @@ public class ApiVerticle extends AbstractVerticle {
   private final RedisAPI redisAPI;
   private final Config config;
   private final Pool pool;
+
+  private HttpServer httpServer;
 
   @Inject
   ApiVerticle(
@@ -80,6 +83,7 @@ public class ApiVerticle extends AbstractVerticle {
                           log.info("started http server");
                           log.info("register consumers");
                           consumers.forEach(Consumer::register);
+                          httpServer = res.result();
                           startPromise.complete();
                         } else {
                           log.error("failed to start verticle", res.cause());
@@ -142,18 +146,24 @@ public class ApiVerticle extends AbstractVerticle {
     return redisAPI.ping(List.of()).onFailure(startPromise::fail);
   }
 
+  public int getPort() {
+    return httpServer.actualPort();
+  }
+
   @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void stop(Promise<Void> stopPromise) {
     System.err.println("stopping");
-    MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
+    MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 3);
+
+    httpServer.close(multiCompletePromise::complete);
 
     Set<AutoCloseable> closeables = closingService.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());
 
     Future.all(consumers.stream().map(Consumer::unregister).toList())
         .onComplete(
-            ar -> {
+            _ -> {
               System.err.println("all eventbus consumers unregistered");
               multiCompletePromise.complete();
             });
