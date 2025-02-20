@@ -1271,7 +1271,7 @@ __metadata:
     globals: "npm:^15.15.0"
     prettier: "npm:^3.5.1"
     prettier-plugin-svelte: "npm:^3.3.3"
-    publint: "npm:^0.3.5"
+    publint: "npm:^0.3.6"
     svelte: "npm:^5.20.2"
     svelte-check: "npm:^4.1.4"
     tslib: "npm:^2.8.1"
@@ -3186,9 +3186,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"publint@npm:^0.3.5":
-  version: 0.3.5
-  resolution: "publint@npm:0.3.5"
+"publint@npm:^0.3.6":
+  version: 0.3.6
+  resolution: "publint@npm:0.3.6"
   dependencies:
     "@publint/pack": "npm:^0.1.1"
     package-manager-detector: "npm:^0.2.9"
@@ -3196,7 +3196,7 @@ __metadata:
     sade: "npm:^1.8.1"
   bin:
     publint: src/cli.js
-  checksum: 10/71b366e9c33a3be570519c370a44fbfc63c9000d21555e02470d2a2f871b24a8428b9c66bcd8992fcda90afbde267787f7b9fa9f79bbfd846cef20730c067266
+  checksum: 10/dcd66a26bccebe73723b4854bc58dd8dbca28a1d71d5a98111a95a1d0cbb6f8466149d9e09aa434a9a3e7616fb25e315b5bed21b4f983a136ae739a1a80d4410
   languageName: node
   linkType: hard
 
