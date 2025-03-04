@@ -1043,6 +1043,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sveltejs/acorn-typescript@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@sveltejs/acorn-typescript@npm:1.0.5"
+  peerDependencies:
+    acorn: ^8.9.0
+  checksum: 10/23c4c58a0336f44802609dea5ac7ed71d2bc02b8a3b001b03a0accf96a70f2f3d357b1677fd50fbf195d5ed772afed8757451b11c3eda3319fe57925160865d8
+  languageName: node
+  linkType: hard
+
 "@sveltejs/adapter-static@npm:^3.0.8":
   version: 3.0.8
   resolution: "@sveltejs/adapter-static@npm:3.0.8"
@@ -1052,9 +1061,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.17.3":
-  version: 2.17.3
-  resolution: "@sveltejs/kit@npm:2.17.3"
+"@sveltejs/kit@npm:^2.18.0":
+  version: 2.18.0
+  resolution: "@sveltejs/kit@npm:2.18.0"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -1073,7 +1082,7 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/27d9ea6c80ee67078614edd06152a76b84649ff661bbd7d5f0f1f958d1899ddbaf5ae93f861c38c1d45b0aa3a2d348d0bac30657587f6585d6ededa1a8a7f295
+  checksum: 10/829532df9378aa40243e5ecbe17401a2ec96bc8d1cdad593632b23d9faa6f516343304d97a136cc76e3cbcb53a782db17b8bf7b917be4d2283485c2e5aed91d6
   languageName: node
   linkType: hard
 
@@ -1299,15 +1308,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn-typescript@npm:^1.4.13":
-  version: 1.4.13
-  resolution: "acorn-typescript@npm:1.4.13"
-  peerDependencies:
-    acorn: ">=8.9.0"
-  checksum: 10/d39da8596e630e2937b3aa034b147b036f3317e0b116e7f5240f944eec841bd4125118794c87bfef4f8a9352891192c460b72abe2028aa4daa1f75bd79ce30e1
-  languageName: node
-  linkType: hard
-
 "acorn@npm:^8.11.3":
   version: 8.11.3
   resolution: "acorn@npm:8.11.3"
@@ -1437,7 +1437,7 @@ __metadata:
     "@picocss/pico": "npm:^2.0.6"
     "@playwright/test": "npm:^1.50.1"
     "@sveltejs/adapter-static": "npm:^3.0.8"
-    "@sveltejs/kit": "npm:^2.17.3"
+    "@sveltejs/kit": "npm:^2.18.0"
     "@sveltejs/package": "npm:^2.3.10"
     "@sveltejs/vite-plugin-svelte": "npm:^5.0.3"
     "@types/eslint": "npm:^9.6.1"
@@ -1449,7 +1449,7 @@ __metadata:
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.8"
-    svelte: "npm:^5.21.0"
+    svelte: "npm:^5.22.1"
     svelte-check: "npm:^4.1.4"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.2"
@@ -3931,15 +3931,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.21.0":
-  version: 5.21.0
-  resolution: "svelte@npm:5.21.0"
+"svelte@npm:^5.22.1":
+  version: 5.22.1
+  resolution: "svelte@npm:5.22.1"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
+    "@sveltejs/acorn-typescript": "npm:^1.0.5"
     "@types/estree": "npm:^1.0.5"
     acorn: "npm:^8.12.1"
-    acorn-typescript: "npm:^1.4.13"
     aria-query: "npm:^5.3.1"
     axobject-query: "npm:^4.1.0"
     clsx: "npm:^2.1.1"
@@ -3949,7 +3949,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/6294348c521dbbe01a7593b8e9568b1a12cf20d0f2547bfede1d76262f284e105375920ffc1496d25da8ce39d7d23a38765b960f0c71b8ce5c1679adfcc91c0f
+  checksum: 10/64cc68aee9727047d8ef9866e2c93439073d8d9dd2e8b54650191eb0588756cbc85dbbcbff017977d70a4a955fca1b8cb614a5db0a6975ba7e9af744c5f29515
   languageName: node
   linkType: hard
 
