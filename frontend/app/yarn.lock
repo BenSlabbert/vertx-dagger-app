@@ -721,14 +721,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.50.1":
-  version: 1.50.1
-  resolution: "@playwright/test@npm:1.50.1"
+"@playwright/test@npm:^1.51.0":
+  version: 1.51.0
+  resolution: "@playwright/test@npm:1.51.0"
   dependencies:
-    playwright: "npm:1.50.1"
+    playwright: "npm:1.51.0"
   bin:
     playwright: cli.js
-  checksum: 10/0d8d2291d6554c492cb163b4d463e1e9cc6d3ae50680d790473f693f36a243c16c3620406849dd40115046c47a6ad5cc36a24511caec6d054dc1a1d9fffb4138
+  checksum: 10/48916bb0af52430f0140dc3f110934d141acbb6c00a94b1295648cec8398f5599459704fc98e40445db74d12ca55a20ebf68a1d891cef2b8dfd5ee0a8f21b267
   languageName: node
   linkType: hard
 
@@ -1596,7 +1596,7 @@ __metadata:
     "@benslabbert/vertx-dagger-ui-lib": "npm:^1.14.0"
     "@eslint/js": "npm:^9.21.0"
     "@picocss/pico": "npm:^2.0.6"
-    "@playwright/test": "npm:^1.50.1"
+    "@playwright/test": "npm:^1.51.0"
     "@sveltejs/adapter-node": "npm:^5.2.12"
     "@sveltejs/adapter-static": "npm:^3.0.8"
     "@sveltejs/kit": "npm:^2.18.0"
@@ -1606,13 +1606,13 @@ __metadata:
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.2"
     eslint: "npm:^9.21.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^3.0.2"
+    eslint-plugin-svelte: "npm:^3.0.3"
     globals: "npm:^16.0.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.8"
-    svelte: "npm:^5.22.1"
-    svelte-check: "npm:^4.1.4"
+    svelte: "npm:^5.22.5"
+    svelte-check: "npm:^4.1.5"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.2"
     vite: "npm:^6.2.0"
@@ -2353,9 +2353,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "eslint-plugin-svelte@npm:3.0.2"
+"eslint-plugin-svelte@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "eslint-plugin-svelte@npm:3.0.3"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -2366,14 +2366,14 @@ __metadata:
     postcss-load-config: "npm:^3.1.4"
     postcss-safe-parser: "npm:^7.0.0"
     semver: "npm:^7.6.3"
-    svelte-eslint-parser: "npm:^1.0.0"
+    svelte-eslint-parser: "npm:^1.0.1"
   peerDependencies:
     eslint: ^8.57.1 || ^9.0.0
     svelte: ^3.37.0 || ^4.0.0 || ^5.0.0
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/63dadc6291b3307439a861cd50ac45edddab013e83009e1e9784b3055aa6c02acfa680ed937e68503120a52d0d3fa8f552bc7670417fb7b4a131cbe58bdef458
+  checksum: 10/52dddbc1b23f8ff865429222df5eaf74165d8f9dade8858bfe5fa7fb878fe71011cc9239e61aab7f1fa1e68ae4945d996a05c8fb8d26f97bf7c328454c118fae
   languageName: node
   linkType: hard
 
@@ -3718,27 +3718,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.50.1":
-  version: 1.50.1
-  resolution: "playwright-core@npm:1.50.1"
+"playwright-core@npm:1.51.0":
+  version: 1.51.0
+  resolution: "playwright-core@npm:1.51.0"
   bin:
     playwright-core: cli.js
-  checksum: 10/9a310b8a66bf7fd926e620c1c8e27be29bdbdce91640e5f975b2fd4dc706d0307faec2bb0456cc8e7dedb1e71c0b5eb35c6a58acd5cedc7d8fd849a9067e637b
+  checksum: 10/2e2bb4e9625a7a08d305078d383200d9f3457fc4c51d3fac9443b94a0b820233ebe0dc0434f77da96a8ce278bc9806463194066dec942d1ac0de001d4b325bfb
   languageName: node
   linkType: hard
 
-"playwright@npm:1.50.1":
-  version: 1.50.1
-  resolution: "playwright@npm:1.50.1"
+"playwright@npm:1.51.0":
+  version: 1.51.0
+  resolution: "playwright@npm:1.51.0"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.50.1"
+    playwright-core: "npm:1.51.0"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/a3687614ac3238a81cbe3018e4f4a2ae92c71f3f65110cc6087068c020f6134f0628308da33177b9b08102644706e835d4053f6890beeb4a935f433bc4ac107a
+  checksum: 10/350f9e1cf8deff992f08d63aac88ed49aed1963d0b33a6f0a1354069734d028328acb3f156e25e57a78522bd3f42f687155ea3f39cb7fc4a83b15efce39b53f9
   languageName: node
   linkType: hard
 
@@ -4459,9 +4459,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^4.1.4":
-  version: 4.1.4
-  resolution: "svelte-check@npm:4.1.4"
+"svelte-check@npm:^4.1.5":
+  version: 4.1.5
+  resolution: "svelte-check@npm:4.1.5"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     chokidar: "npm:^4.0.1"
@@ -4473,13 +4473,13 @@ __metadata:
     typescript: ">=5.0.0"
   bin:
     svelte-check: bin/svelte-check
-  checksum: 10/5e43ebabe3a2b89b12b8f835e2bc9d78a140767e644e6ed9d64cf88a824b3813bf45e0644fa6618e3741433ea07649fced4be53d1c878efd5bf738979c5afb84
+  checksum: 10/8f718d796f05bd137ba36a741d7692c5cf71a171ff575cacd7c656582816850408122f7f10fb82eab79181df7bcd102b42cf32365351c7cf9d4639eb0f421328
   languageName: node
   linkType: hard
 
-"svelte-eslint-parser@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "svelte-eslint-parser@npm:1.0.0"
+"svelte-eslint-parser@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "svelte-eslint-parser@npm:1.0.1"
   dependencies:
     eslint-scope: "npm:^8.2.0"
     eslint-visitor-keys: "npm:^4.0.0"
@@ -4492,7 +4492,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/a2a9af5602ca3761ae326206a6806910e55408f0078ba657ad34a3d2f8a654f3fa6efd5655ac8c09e47384fe2c13d37f7cf648b097f0dd60306d7c8a8463396c
+  checksum: 10/83bc199b7bf7ba8b82be5754fc1eeef78f7de305d70b1467fdd472c56b78e23df1ee9a82201a8f47068f5c92f222c8b6bee2d3096bd54b5c18191ac88b4fd529
   languageName: node
   linkType: hard
 
@@ -4509,9 +4509,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.22.1":
-  version: 5.22.1
-  resolution: "svelte@npm:5.22.1"
+"svelte@npm:^5.22.5":
+  version: 5.22.5
+  resolution: "svelte@npm:5.22.5"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4527,7 +4527,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/64cc68aee9727047d8ef9866e2c93439073d8d9dd2e8b54650191eb0588756cbc85dbbcbff017977d70a4a955fca1b8cb614a5db0a6975ba7e9af744c5f29515
+  checksum: 10/93ed44c6e852c82a1092a6a0473e486982dbea79dcb673bdb3203300a1baf838fd0a95b94f506b6aa42ec229b8329fc5118883f8360ba50117e5dbac14e452fa
   languageName: node
   linkType: hard
 
