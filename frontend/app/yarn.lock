@@ -1173,6 +1173,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rvf/set-get@npm:^7.0.0":
+  version: 7.0.1
+  resolution: "@rvf/set-get@npm:7.0.1"
+  checksum: 10/6e7dc5f997b8595073508945bb6763716791f580cb08b3bf27124e6b3c8bc0c1ad4c92e2f2873a01f315184df196a4102f2fb8c5c7733ab913cde631555051af
+  languageName: node
+  linkType: hard
+
 "@sveltejs/acorn-typescript@npm:^1.0.5":
   version: 1.0.5
   resolution: "@sveltejs/acorn-typescript@npm:1.0.5"
@@ -1618,7 +1625,7 @@ __metadata:
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.9"
-    svelte: "npm:^5.22.6"
+    svelte: "npm:^5.23.0"
     svelte-check: "npm:^4.1.5"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.2"
@@ -1626,7 +1633,7 @@ __metadata:
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
     zod: "npm:^3.24.2"
-    zod-form-data: "npm:^2.0.5"
+    zod-form-data: "npm:^2.0.7"
   languageName: unknown
   linkType: soft
 
@@ -4527,9 +4534,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.22.6":
-  version: 5.22.6
-  resolution: "svelte@npm:5.22.6"
+"svelte@npm:^5.23.0":
+  version: 5.23.0
+  resolution: "svelte@npm:5.23.0"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4545,7 +4552,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/aa1d3c944c34b1aca65e801c34a4b02f3e06c023099436df6bc253ad5d08d558840e8df7ee084dac50a3cba25f8465892c95d5e6c78224c77224b9db68cd7b24
+  checksum: 10/1a37617166e915c189d97d744feefe6c3c9430b9831da600ae64cab279d56901e8a3c6aea28254c1216c69c6897127798e57705785ea561d965d6cb3213f4e41
   languageName: node
   linkType: hard
 
@@ -5048,12 +5055,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod-form-data@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "zod-form-data@npm:2.0.5"
+"zod-form-data@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "zod-form-data@npm:2.0.7"
+  dependencies:
+    "@rvf/set-get": "npm:^7.0.0"
   peerDependencies:
     zod: ">= 3.11.0"
-  checksum: 10/25c7a6cf12d01e52cb81ff61e4904da383f339a6aee1585b90c0a0e29bcc31efbf81bd81bd18b77c1a995fa51ea0848c9eabdc8dc51dbcb590ff49cda5bef976
+  checksum: 10/394250e3df8079ec7199874851b81f8b434d2ee1337caccc8fa3d6a2a94bfad827b791db0baa4707f398a60d8354313574bb5c7b92f7552bd9a55bf84cc4ba86
   languageName: node
   linkType: hard
 
