@@ -1068,9 +1068,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.20.0":
-  version: 2.20.0
-  resolution: "@sveltejs/kit@npm:2.20.0"
+"@sveltejs/kit@npm:^2.20.1":
+  version: 2.20.1
+  resolution: "@sveltejs/kit@npm:2.20.1"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -1089,7 +1089,7 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/2de0040cfddafa50759e80391e4cf93b930af6bd816d95719d796b0d25017749de4b25812b921367356ae446fd724e45edc085e1e299c7a36bf1e8ef2a91b741
+  checksum: 10/69a3553a52e478e674e3f5208cb4137cc439a3aea39a7bc74fe54fa81f93584873b16ddde7802a3ae21641f7a649185b1ec0351d89ab38ac275926a9707967e5
   languageName: node
   linkType: hard
 
@@ -1444,14 +1444,14 @@ __metadata:
     "@picocss/pico": "npm:^2.1.1"
     "@playwright/test": "npm:^1.51.1"
     "@sveltejs/adapter-static": "npm:^3.0.8"
-    "@sveltejs/kit": "npm:^2.20.0"
+    "@sveltejs/kit": "npm:^2.20.1"
     "@sveltejs/package": "npm:^2.3.10"
     "@sveltejs/vite-plugin-svelte": "npm:^5.0.3"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.2"
     eslint: "npm:^9.22.0"
     eslint-config-prettier: "npm:^10.1.1"
-    eslint-plugin-svelte: "npm:^3.3.0"
+    eslint-plugin-svelte: "npm:^3.3.2"
     globals: "npm:^16.0.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
@@ -2094,9 +2094,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "eslint-plugin-svelte@npm:3.3.0"
+"eslint-plugin-svelte@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "eslint-plugin-svelte@npm:3.3.2"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -2114,7 +2114,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/5812f33357fddeed34562c6130473cad4c83d71d931ad9946abf877c65451e844b2d6e7949d561ccf53919cd32e01f7c8b22ee5e81ee4f1cfd2fe5f2f0487b79
+  checksum: 10/f9c2dfea1cc3f47635a44622e4c1ff71e6bbe1bbdb4a1b91aab5ab130d59cc0d736f991f5c999dba59588418013d2a692b391f86681da6ddc6b54f4bcf405b9e
   languageName: node
   linkType: hard
 
