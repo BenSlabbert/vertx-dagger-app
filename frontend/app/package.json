@@ -26,7 +26,7 @@
 		"@yarnpkg/plugin-interactive-tools": "^4.0.2",
 		"eslint": "^9.22.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "^3.3.2",
+		"eslint-plugin-svelte": "^3.3.3",
 		"globals": "^16.0.0",
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.3.3",
