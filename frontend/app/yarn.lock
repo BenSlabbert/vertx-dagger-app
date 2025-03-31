@@ -1620,7 +1620,7 @@ __metadata:
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.2"
     eslint: "npm:^9.23.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^3.3.3"
+    eslint-plugin-svelte: "npm:^3.4.1"
     globals: "npm:^16.0.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
@@ -1629,7 +1629,7 @@ __metadata:
     svelte-check: "npm:^4.1.5"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.2"
-    vite: "npm:^6.2.3"
+    vite: "npm:^6.2.4"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
     zod: "npm:^3.24.2"
@@ -2367,9 +2367,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.3.3":
-  version: 3.3.3
-  resolution: "eslint-plugin-svelte@npm:3.3.3"
+"eslint-plugin-svelte@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "eslint-plugin-svelte@npm:3.4.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -2380,14 +2380,14 @@ __metadata:
     postcss-load-config: "npm:^3.1.4"
     postcss-safe-parser: "npm:^7.0.0"
     semver: "npm:^7.6.3"
-    svelte-eslint-parser: "npm:^1.0.1"
+    svelte-eslint-parser: "npm:^1.1.1"
   peerDependencies:
     eslint: ^8.57.1 || ^9.0.0
     svelte: ^3.37.0 || ^4.0.0 || ^5.0.0
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/c3a77efe4710c12e5b95b6bedafa16ed6000b1572e7f8346deb7e9f7f53f632d2a1332a252c598973d227f82a9b886ddc462e3fc291029ff0373b47ce5258a62
+  checksum: 10/08d24943b43767feebb9eaad6d71dbe52f895a28f6480230fa107fecd483f2a37eed6fc8004dc86b4221ac15124f87881efacdcac3b05d4e492852eeff715e45
   languageName: node
   linkType: hard
 
@@ -4502,9 +4502,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-eslint-parser@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "svelte-eslint-parser@npm:1.0.1"
+"svelte-eslint-parser@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "svelte-eslint-parser@npm:1.1.1"
   dependencies:
     eslint-scope: "npm:^8.2.0"
     eslint-visitor-keys: "npm:^4.0.0"
@@ -4517,7 +4517,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/83bc199b7bf7ba8b82be5754fc1eeef78f7de305d70b1467fdd472c56b78e23df1ee9a82201a8f47068f5c92f222c8b6bee2d3096bd54b5c18191ac88b4fd529
+  checksum: 10/84bc0e87c2ef906affbed13c5dc094d4dfe1935fcf7c02146738d3358ab8820505e0f19a1b382854bfa781f5a349b2ed36b9479eb5fe5fa09c5b69ba99755b04
   languageName: node
   linkType: hard
 
@@ -4793,9 +4793,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^6.2.3":
-  version: 6.2.3
-  resolution: "vite@npm:6.2.3"
+"vite@npm:^6.2.4":
+  version: 6.2.4
+  resolution: "vite@npm:6.2.4"
   dependencies:
     esbuild: "npm:^0.25.0"
     fsevents: "npm:~2.3.3"
@@ -4841,7 +4841,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/3cd7b3a8d9a31c8eb7141004ddb1c9489afa0cdaf0ccbf41dacee121a8f13062d0fb2cee160589aaf1c534a02402aac674f1b1618876ba0bd299b55f69b2b495
+  checksum: 10/3734c8695b4d35a5b3ea617159594835e370b428745f37e90d9c1daf82b53af5248578c1f1d9977fc1460320c0cdd4aef135095d378b2eba2736c03e2cfa019e
   languageName: node
   linkType: hard
 
