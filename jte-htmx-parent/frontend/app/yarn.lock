@@ -1068,9 +1068,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.20.2":
-  version: 2.20.2
-  resolution: "@sveltejs/kit@npm:2.20.2"
+"@sveltejs/kit@npm:^2.20.3":
+  version: 2.20.3
+  resolution: "@sveltejs/kit@npm:2.20.3"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -1089,7 +1089,7 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/13d779a588ae25189ac212d47e2339ccc4a84bc4cd78832ae99ef5329cdd2f425ec471d8f651e081769bd64178b130f39d1e6b5504cc5f11c3d6861365052aef
+  checksum: 10/da3dffe6c265db36a809f6f60d84d89e6687aa30f02cc071b0d387189c531e091329bd047a9dd8d0ab3cbd814a7d6a3f6960db7f9325d444c768176ba4d42421
   languageName: node
   linkType: hard
 
@@ -1444,19 +1444,19 @@ __metadata:
     "@picocss/pico": "npm:^2.1.1"
     "@playwright/test": "npm:^1.51.1"
     "@sveltejs/adapter-static": "npm:^3.0.8"
-    "@sveltejs/kit": "npm:^2.20.2"
+    "@sveltejs/kit": "npm:^2.20.3"
     "@sveltejs/package": "npm:^2.3.10"
     "@sveltejs/vite-plugin-svelte": "npm:^5.0.3"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.2"
     eslint: "npm:^9.23.0"
     eslint-config-prettier: "npm:^10.1.1"
-    eslint-plugin-svelte: "npm:^3.4.1"
+    eslint-plugin-svelte: "npm:^3.5.0"
     globals: "npm:^16.0.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.9"
-    svelte: "npm:^5.25.3"
+    svelte: "npm:^5.25.6"
     svelte-check: "npm:^4.1.5"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.2"
@@ -2094,9 +2094,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.4.1":
-  version: 3.4.1
-  resolution: "eslint-plugin-svelte@npm:3.4.1"
+"eslint-plugin-svelte@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "eslint-plugin-svelte@npm:3.5.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -2114,7 +2114,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/08d24943b43767feebb9eaad6d71dbe52f895a28f6480230fa107fecd483f2a37eed6fc8004dc86b4221ac15124f87881efacdcac3b05d4e492852eeff715e45
+  checksum: 10/ecd8f4ab2470a0a89588fee86bcc5c417b79ccbc11c5e54452a6a888a8794245b72e260d9ac4dbd6fa70efb6b96ab99c1cfea7799268188566e36057b4f16bd4
   languageName: node
   linkType: hard
 
@@ -2254,12 +2254,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esrap@npm:^1.4.3":
-  version: 1.4.3
-  resolution: "esrap@npm:1.4.3"
+"esrap@npm:^1.4.6":
+  version: 1.4.6
+  resolution: "esrap@npm:1.4.6"
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-  checksum: 10/c0f473aab71db2c78886ab6b88c13e0796660af759db26984b8f64db67fe482d02917223c296f210c3ad42f6d5face761774a804ea899b74d5adfa0eea8dc04d
+  checksum: 10/0fc113a930512af470cf9ed2d49950f3b4b3456ab1f3cce56f69322a9815fbe1fbe33713dd5bafff6ed957767afce49d427043d680768727c6ca1e2c11692e5f
   languageName: node
   linkType: hard
 
@@ -3949,9 +3949,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.25.3":
-  version: 5.25.3
-  resolution: "svelte@npm:5.25.3"
+"svelte@npm:^5.25.6":
+  version: 5.25.6
+  resolution: "svelte@npm:5.25.6"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3962,12 +3962,12 @@ __metadata:
     axobject-query: "npm:^4.1.0"
     clsx: "npm:^2.1.1"
     esm-env: "npm:^1.2.1"
-    esrap: "npm:^1.4.3"
+    esrap: "npm:^1.4.6"
     is-reference: "npm:^3.0.3"
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/e9c872ffcfa3b7ec91563ba2be8c8a1ad941360ccc5f42b075ac0ba88973ead76b02bf24aa7b23af48f2603c16116fb780a43251a2aa6465623c6a03fda0a494
+  checksum: 10/a780557594ac34ff3827de2fee890beabbc0907b3ee098721eb69e0c7b1032db9e065dd44374f9aefacfbd85d859167141e5dcd798c7488f778fd05c57c6412c
   languageName: node
   linkType: hard
 
