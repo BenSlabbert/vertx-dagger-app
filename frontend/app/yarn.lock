@@ -1624,12 +1624,12 @@ __metadata:
     globals: "npm:^16.0.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
-    publint: "npm:^0.3.9"
+    publint: "npm:^0.3.10"
     svelte: "npm:^5.25.6"
     svelte-check: "npm:^4.1.5"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.2"
-    vite: "npm:^6.2.4"
+    vite: "npm:^6.2.5"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
     zod: "npm:^3.24.2"
@@ -3640,10 +3640,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"package-manager-detector@npm:^0.2.9":
-  version: 0.2.9
-  resolution: "package-manager-detector@npm:0.2.9"
-  checksum: 10/08f73184bef7740a0a826704bdd7647bf2b30682b142fc1346942fe48360ddb781494c369b339e1a89d78f9247f5c95c814862bcc038e11189be0ca96078aeb5
+"package-manager-detector@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "package-manager-detector@npm:1.1.0"
+  checksum: 10/c72162e11dd2ec89588541d74e2814f5b0a92f05e25f44e74b1c3556c0232ea6873c6ca5417c12baeb86d54622979b2858e8696d2dcb25fe0242574a7438e377
   languageName: node
   linkType: hard
 
@@ -3878,17 +3878,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"publint@npm:^0.3.9":
-  version: 0.3.9
-  resolution: "publint@npm:0.3.9"
+"publint@npm:^0.3.10":
+  version: 0.3.10
+  resolution: "publint@npm:0.3.10"
   dependencies:
     "@publint/pack": "npm:^0.1.2"
-    package-manager-detector: "npm:^0.2.9"
+    package-manager-detector: "npm:^1.1.0"
     picocolors: "npm:^1.1.1"
     sade: "npm:^1.8.1"
   bin:
     publint: src/cli.js
-  checksum: 10/bfa96a78e38df964422602d22afd52561a47591bc5e06ffe39e0029ee0953205ad379506dd643dfbbf89f443b7ae753150b5e6cc03872c2fc852f9a755533c48
+  checksum: 10/204bad3fbc9ed58aa82c1595eb1355c6cb6148d6ffb912935aaa0746a73be970474c575e20470b133a002c0231fa8551e9ab0012a39b4832a7ec2bb7dff8d7e4
   languageName: node
   linkType: hard
 
@@ -4793,9 +4793,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^6.2.4":
-  version: 6.2.4
-  resolution: "vite@npm:6.2.4"
+"vite@npm:^6.2.5":
+  version: 6.2.5
+  resolution: "vite@npm:6.2.5"
   dependencies:
     esbuild: "npm:^0.25.0"
     fsevents: "npm:~2.3.3"
@@ -4841,7 +4841,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/3734c8695b4d35a5b3ea617159594835e370b428745f37e90d9c1daf82b53af5248578c1f1d9977fc1460320c0cdd4aef135095d378b2eba2736c03e2cfa019e
+  checksum: 10/354023589439e7e2bcb77af79d24cd06ce20cfc48b409e663c44e515b373b89eb8f29362223eac16a3ff080d3114e40bc5df158372279d92ad03eb270f9e9762
   languageName: node
   linkType: hard
 
