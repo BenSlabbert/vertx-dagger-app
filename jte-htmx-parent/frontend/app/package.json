@@ -16,7 +16,7 @@
 	},
 	"devDependencies": {
 		"@benslabbert/vertx-dagger-ui-lib": "^1.14.0",
-		"@eslint/js": "^9.24.0",
+		"@eslint/js": "^9.25.1",
 		"@playwright/test": "^1.52.0",
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "^2.20.7",
@@ -24,7 +24,7 @@
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@types/eslint": "^9.6.1",
 		"@yarnpkg/plugin-interactive-tools": "^4.0.2",
-		"eslint": "^9.24.0",
+		"eslint": "^9.25.1",
 		"eslint-config-prettier": "^10.1.2",
 		"eslint-plugin-svelte": "^3.5.1",
 		"globals": "^16.0.0",
@@ -36,7 +36,7 @@
 		"tslib": "^2.8.1",
 		"typescript": "^5.8.3",
 		"vite": "^6.3.2",
-		"vitest": "^3.1.1"
+		"vitest": "^3.1.2"
 	},
 	"type": "module",
 	"dependencies": {
