@@ -1474,7 +1474,7 @@ __metadata:
     svelte-check: "npm:^4.1.6"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
-    vite: "npm:^6.3.2"
+    vite: "npm:^6.3.3"
     vitest: "npm:^3.1.2"
   languageName: unknown
   linkType: soft
@@ -2341,18 +2341,6 @@ __metadata:
     picomatch:
       optional: true
   checksum: 10/baa3a476a8407cc77bc77e3c946aea5ca0aa48f080f2c434b70196a37ddcd57bbc4c12d75164f9e6d947f6e148c297c9fa65f507178d0e9204d98ef83d776dcc
-  languageName: node
-  linkType: hard
-
-"fdir@npm:^6.4.3":
-  version: 6.4.3
-  resolution: "fdir@npm:6.4.3"
-  peerDependencies:
-    picomatch: ^3 || ^4
-  peerDependenciesMeta:
-    picomatch:
-      optional: true
-  checksum: 10/8e6d20f4590dc168de1374a9cadaa37e20ca6e0b822aa247c230e7ea1d9e9674a68cd816146435e4ecc98f9285091462ab7e5e56eebc9510931a1794e4db68b2
   languageName: node
   linkType: hard
 
@@ -4035,16 +4023,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyglobby@npm:^0.2.12":
-  version: 0.2.12
-  resolution: "tinyglobby@npm:0.2.12"
-  dependencies:
-    fdir: "npm:^6.4.3"
-    picomatch: "npm:^4.0.2"
-  checksum: 10/4ad28701fa9118b32ef0e27f409e0a6c5741e8b02286d50425c1f6f71e6d6c6ded9dd5bbbbb714784b08623c4ec4d150151f1d3d996cfabe0495f908ab4f7002
-  languageName: node
-  linkType: hard
-
 "tinyglobby@npm:^0.2.13":
   version: 0.2.13
   resolution: "tinyglobby@npm:0.2.13"
@@ -4255,17 +4233,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^6.3.2":
-  version: 6.3.2
-  resolution: "vite@npm:6.3.2"
+"vite@npm:^6.3.3":
+  version: 6.3.3
+  resolution: "vite@npm:6.3.3"
   dependencies:
     esbuild: "npm:^0.25.0"
-    fdir: "npm:^6.4.3"
+    fdir: "npm:^6.4.4"
     fsevents: "npm:~2.3.3"
     picomatch: "npm:^4.0.2"
     postcss: "npm:^8.5.3"
     rollup: "npm:^4.34.9"
-    tinyglobby: "npm:^0.2.12"
+    tinyglobby: "npm:^0.2.13"
   peerDependencies:
     "@types/node": ^18.0.0 || ^20.0.0 || >=22.0.0
     jiti: ">=1.21.0"
@@ -4306,7 +4284,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/05ea5e03d86d950e53af6b11e444b31846bccdc44e45b8d693d06eba7d3a4fe2e8003a6948cdbcf7e54779f7ca851f29e96be6369e9c9413d34de7539ad6af8c
+  checksum: 10/442e518d9da847db80bd19a9792d1d9a106a31d18f74bfd06574776932dd0907f7205b99e34d455ba505a7dd9e57a807354633b90acd46a11db849a15ae26ad4
   languageName: node
   linkType: hard
 
