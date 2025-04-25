@@ -137,7 +137,7 @@ public abstract class PersistenceTest {
     register =
         new IamRpcServiceVertxEBProxyHandler(
                 vertx,
-                _ ->
+                ignore ->
                     Future.succeededFuture(
                         CheckTokenResponseDto.builder()
                             .valid(true)
@@ -183,7 +183,7 @@ public abstract class PersistenceTest {
       {
         doInTransaction(function)
             .onFailure(err -> fail("failure while persisting", err))
-            .onSuccess(_ -> latch.countDown());
+            .onSuccess(ignore -> latch.countDown());
       }
     };
 
