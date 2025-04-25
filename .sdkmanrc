@@ -1,4 +1,4 @@
-java=23-zulu
+java=21-zulu
 maven=3.9.9
 mvnd=1.0.2
 visualvm=2.1.10

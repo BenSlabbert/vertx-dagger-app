@@ -5,7 +5,7 @@
   <parent>
     <groupId>github.benslabbert</groupId>
     <artifactId>vertx-dagger-bom</artifactId>
-    <version>1.113.0</version>
+    <version>3.3.0</version>
   </parent>
 
   <groupId>com.example.parent</groupId>
@@ -34,12 +34,12 @@
     <dockerImageNameBase>ghcr.io/benslabbert/vertx-dagger-app</dockerImageNameBase>
 
     <!--deps-->
-    <vertx-json-writer.version>1.91.0</vertx-json-writer.version>
-    <vertx-dagger-commons.version>1.109.0</vertx-dagger-commons.version>
-    <vertx-dagger-codegen.version>1.54.0</vertx-dagger-codegen.version>
-    <vertx-dagger-starter.version>1.113.0</vertx-dagger-starter.version>
-    <vertx-dagger-app-api.version>1.110.0</vertx-dagger-app-api.version>
-    <tx-manager.version>1.95.0</tx-manager.version>
+    <vertx-json-writer.version>1.95.0</vertx-json-writer.version>
+    <vertx-dagger-commons.version>1.114.0</vertx-dagger-commons.version>
+    <vertx-dagger-codegen.version>2.1.0</vertx-dagger-codegen.version>
+    <vertx-dagger-starter.version>1.119.0</vertx-dagger-starter.version>
+    <vertx-dagger-app-api.version>1.111.0</vertx-dagger-app-api.version>
+    <tx-manager.version>1.99.0</tx-manager.version>
   </properties>
 
   <dependencyManagement>
@@ -81,85 +81,12 @@
       </dependency>
       <dependency>
         <groupId>github.benslabbert.vertx-json-writer</groupId>
-        <artifactId>annotation</artifactId>
+        <artifactId>bom</artifactId>
         <version>${vertx-json-writer.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.diffplug.spotless</groupId>
-        <artifactId>spotless-maven-plugin</artifactId>
-        <version>${spotless.version}</version>
-        <configuration>
-          <yaml>
-            <includes>
-              <include>**/*.yaml</include>
-              <include>**/*.yml</include>
-            </includes>
-            <excludes>
-              <exclude>**/helm/templates/**</exclude>
-              <exclude>**/node_modules/**</exclude>
-            </excludes>
-            <jackson />
-          </yaml>
-          <pom>
-            <includes>
-              <include>pom.xml</include>
-            </includes>
-            <sortPom>
-              <encoding>UTF-8</encoding>
-              <lineSeparator>${line.separator}</lineSeparator>
-              <expandEmptyElements>false</expandEmptyElements>
-              <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
-              <keepBlankLines>true</keepBlankLines>
-              <nrOfIndentSpace>2</nrOfIndentSpace>
-              <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
-              <sortDependencies>scope,groupId,artifactId</sortDependencies>
-              <sortPlugins>groupId,artifactId</sortPlugins>
-            </sortPom>
-          </pom>
-          <markdown>
-            <includes>
-              <include>**/*.md</include>
-            </includes>
-            <excludes>
-              <exclude>**/node_modules/**</exclude>
-            </excludes>
-            <flexmark />
-          </markdown>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>flatten-maven-plugin</artifactId>
-        <configuration>
-          <updatePomFile>true</updatePomFile>
-          <flattenMode>resolveCiFriendliesOnly</flattenMode>
-          <outputDirectory>${project.build.directory}</outputDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>flatten</id>
-            <goals>
-              <goal>flatten</goal>
-            </goals>
-            <phase>process-resources</phase>
-          </execution>
-          <execution>
-            <id>flatten.clean</id>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-            <phase>clean</phase>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>
