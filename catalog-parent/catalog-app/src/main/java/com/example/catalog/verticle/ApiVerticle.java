@@ -163,7 +163,7 @@ public class ApiVerticle extends AbstractVerticle {
 
     Future.all(consumers.stream().map(Consumer::unregister).toList())
         .onComplete(
-            _ -> {
+            ignore -> {
               System.err.println("all eventbus consumers unregistered");
               multiCompletePromise.complete();
             });
