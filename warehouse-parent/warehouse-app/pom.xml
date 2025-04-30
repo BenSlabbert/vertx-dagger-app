@@ -41,10 +41,6 @@
       <artifactId>iam-rpc-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
-      <artifactId>launcher</artifactId>
-    </dependency>
-    <dependency>
       <groupId>github.benslabbert.vertx-dagger-app-api</groupId>
       <artifactId>warehouse-rpc-api</artifactId>
     </dependency>
@@ -59,6 +55,10 @@
     <dependency>
       <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>jooq</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
+      <artifactId>launcher</artifactId>
     </dependency>
     <dependency>
       <groupId>github.benslabbert.vertx-dagger-commons</groupId>

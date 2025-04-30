@@ -44,6 +44,10 @@
       <artifactId>commons</artifactId>
     </dependency>
     <dependency>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
+      <artifactId>launcher</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-transport-native-epoll</artifactId>
       <classifier>linux-x86_64</classifier>
@@ -67,10 +71,6 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
-      <artifactId>launcher</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.auto.value</groupId>

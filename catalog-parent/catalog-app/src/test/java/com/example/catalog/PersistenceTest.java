@@ -148,18 +148,18 @@ public abstract class PersistenceTest {
 
     JsonObject cfg = ConfigEncoder.encode(config);
     ApiVerticle verticle = provider.apiVerticle();
-    vertx.deployVerticle(
-        verticle,
-        new DeploymentOptions().setConfig(cfg))
-      .onComplete(        ar -> {
-          if (ar.succeeded()) {
-            RestAssured.baseURI = "http://127.0.0.1";
-            RestAssured.port = verticle.getPort();
-            testContext.completeNow();
-          } else {
-            testContext.failNow(ar.cause());
-          }
-        });
+    vertx
+        .deployVerticle(verticle, new DeploymentOptions().setConfig(cfg))
+        .onComplete(
+            ar -> {
+              if (ar.succeeded()) {
+                RestAssured.baseURI = "http://127.0.0.1";
+                RestAssured.port = verticle.getPort();
+                testContext.completeNow();
+              } else {
+                testContext.failNow(ar.cause());
+              }
+            });
   }
 
   @AfterEach
