@@ -78,9 +78,8 @@ class ApplicationVerticleTest {
     provider.init();
 
     JsonObject cfg = ConfigEncoder.encode(config);
-    vertx.deployVerticle(
-        provider.applicationVerticle(),
-        new DeploymentOptions().setConfig(cfg),
-        testContext.succeedingThenComplete());
+    vertx
+        .deployVerticle(provider.applicationVerticle(), new DeploymentOptions().setConfig(cfg))
+        .onComplete(testContext.succeedingThenComplete());
   }
 }

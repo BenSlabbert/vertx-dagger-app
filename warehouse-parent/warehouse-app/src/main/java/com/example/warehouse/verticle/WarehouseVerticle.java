@@ -8,7 +8,6 @@ import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcServiceVe
 import github.benslabbert.vertxdaggerapp.api.rpc.warehouse.WarehouseRpcService_SecuredActions;
 import github.benslabbert.vertxdaggercodegen.commons.security.rpc.SecuredAction;
 import github.benslabbert.vertxdaggercodegen.commons.security.rpc.SecuredUnion;
-import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.future.FutureUtil;
@@ -22,7 +21,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.authentication.AuthenticationProvider;
-import io.vertx.ext.healthchecks.HealthCheckHandler;
+import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -106,7 +105,6 @@ public class WarehouseVerticle extends AbstractVerticle {
                 vertx,
                 WarehouseRpcService.ADDRESS,
                 List.of(authenticationInterceptor, accessLogger, interceptorHolder))
-            .setMaxBufferedMessages(100)
             .fetch(10)
             .exceptionHandler(err -> log.error("exception in event bus", err))
             .endHandler(ignore -> log.info("end handler"));
@@ -121,18 +119,31 @@ public class WarehouseVerticle extends AbstractVerticle {
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
     // main routes
-    mainRouter.get("/health*").handler(getHealthCheckHandler());
-    mainRouter.get("/ping*").handler(getPingHandler());
+    mainRouter
+        .get("/health*")
+        .handler(
+            ctx ->
+                getHealthCheckHandler()
+                    .checkStatus()
+                    .onComplete(r -> ctx.response().write(r.result().getData().toBuffer())));
+    mainRouter
+        .get("/ping*")
+        .handler(
+            ctx ->
+                getPingHandler()
+                    .checkStatus()
+                    .onComplete(r -> ctx.response().write(r.result().getData().toBuffer())));
 
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
 
     Config.HttpConfig httpConfig = config.httpConfig();
-    log.info("starting on port: " + httpConfig.port());
+    log.info("starting on port: {}", httpConfig.port());
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
         .requestHandler(mainRouter)
-        .listen(
+        .listen()
+        .onComplete(
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");
@@ -144,13 +155,12 @@ public class WarehouseVerticle extends AbstractVerticle {
             });
   }
 
-  private HealthCheckHandler getPingHandler() {
-    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
-        .register("ping", promise -> promise.complete(Status.OK()));
+  private HealthChecks getPingHandler() {
+    return HealthChecks.create(vertx).register("ping", promise -> promise.complete(Status.OK()));
   }
 
-  private HealthCheckHandler getHealthCheckHandler() {
-    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
+  private HealthChecks getHealthCheckHandler() {
+    return HealthChecks.create(vertx)
         .register(
             "db",
             Duration.ofSeconds(5L).toMillis(),

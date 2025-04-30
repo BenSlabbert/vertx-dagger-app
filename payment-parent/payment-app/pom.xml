@@ -60,6 +60,10 @@
     </dependency>
     <dependency>
       <groupId>github.benslabbert.vertx-dagger-commons</groupId>
+      <artifactId>launcher</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>github.benslabbert.vertx-dagger-commons</groupId>
       <artifactId>jooq</artifactId>
     </dependency>
     <dependency>

@@ -150,8 +150,8 @@ public abstract class PersistenceTest {
     ApiVerticle verticle = provider.apiVerticle();
     vertx.deployVerticle(
         verticle,
-        new DeploymentOptions().setConfig(cfg),
-        ar -> {
+        new DeploymentOptions().setConfig(cfg))
+      .onComplete(        ar -> {
           if (ar.succeeded()) {
             RestAssured.baseURI = "http://127.0.0.1";
             RestAssured.port = verticle.getPort();

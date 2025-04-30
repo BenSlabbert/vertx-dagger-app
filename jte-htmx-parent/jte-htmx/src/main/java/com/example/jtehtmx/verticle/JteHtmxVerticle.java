@@ -6,7 +6,6 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 import com.example.jtehtmx.web.handler.ExampleHandler;
-import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.future.FutureUtil;
 import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
@@ -16,12 +15,13 @@ import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.ext.healthchecks.HealthCheckHandler;
+import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.StaticHandler;
+import java.util.Objects;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +54,20 @@ public class JteHtmxVerticle extends AbstractVerticle {
         // 100kB max body size
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
-    mainRouter.get("/health*").handler(getHealthCheckHandler());
-    mainRouter.get("/ping*").handler(getPingHandler());
+    mainRouter
+        .get("/health*")
+        .handler(
+            ctx ->
+                getHealthCheckHandler()
+                    .checkStatus()
+                    .onComplete(r -> ctx.response().write(r.result().getData().toBuffer())));
+    mainRouter
+        .get("/ping*")
+        .handler(
+            ctx ->
+                getPingHandler()
+                    .checkStatus()
+                    .onComplete(r -> ctx.response().write(r.result().getData().toBuffer())));
     mainRouter
         .route("/api/*")
         .handler(
@@ -104,8 +116,8 @@ public class JteHtmxVerticle extends AbstractVerticle {
 
               vertx
                   .fileSystem()
-                  .readFile(
-                      "svelte/index.html",
+                  .readFile("svelte/index.html")
+                  .onComplete(
                       ar -> {
                         if (ar.failed()) {
                           ctx.response().setStatusCode(NOT_FOUND.code()).end();
@@ -119,11 +131,13 @@ public class JteHtmxVerticle extends AbstractVerticle {
     exampleHandler.configureRoutes(mainRouter);
 
     Config.HttpConfig httpConfig = config.httpConfig();
+    Objects.requireNonNull(httpConfig);
     log.info("starting api verticle on port: {}", httpConfig.port());
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
         .requestHandler(mainRouter)
-        .listen(
+        .listen()
+        .onComplete(
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");
@@ -140,13 +154,12 @@ public class JteHtmxVerticle extends AbstractVerticle {
     return server.actualPort();
   }
 
-  private HealthCheckHandler getPingHandler() {
-    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
-        .register("ping", promise -> promise.complete(Status.OK()));
+  private HealthChecks getPingHandler() {
+    return HealthChecks.create(vertx).register("ping", promise -> promise.complete(Status.OK()));
   }
 
-  private HealthCheckHandler getHealthCheckHandler() {
-    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
+  private HealthChecks getHealthCheckHandler() {
+    return HealthChecks.create(vertx)
         .register("available", promise -> promise.complete(Status.OK()));
   }
 
@@ -160,7 +173,7 @@ public class JteHtmxVerticle extends AbstractVerticle {
     if (null == server) {
       multiCompletePromise.complete();
     } else {
-      server.close(multiCompletePromise::complete);
+      server.close().onComplete(multiCompletePromise::complete);
     }
 
     FutureUtil.awaitTermination()

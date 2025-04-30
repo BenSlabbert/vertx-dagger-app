@@ -141,7 +141,7 @@ public abstract class PersistenceTest {
     JsonObject cfg = ConfigEncoder.encode(config);
     vertx.deployVerticle(
         provider.warehouseVerticle(),
-        new DeploymentOptions().setConfig(cfg),
-        testContext.succeedingThenComplete());
+        new DeploymentOptions().setConfig(cfg))
+      .onComplete(testContext.succeedingThenComplete());
   }
 }

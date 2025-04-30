@@ -10,16 +10,23 @@ import github.benslabbert.vertxdaggercommons.future.FutureUtil;
 import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
 import github.benslabbert.vertxdaggercommons.security.SecurityHandler;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
+import io.vertx.ext.auth.authentication.AuthenticationProvider;
+import io.vertx.ext.auth.authentication.Credentials;
+import io.vertx.ext.auth.authorization.AuthorizationProvider;
 import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
-import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
+import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.AuthenticationHandler;
+import io.vertx.ext.web.handler.AuthorizationHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -60,22 +67,33 @@ public class ApplicationVerticle extends AbstractVerticle {
         .route()
         .handler(
             ctx -> {
-              // authentication start
-              ctx.setUser(
-                  User.create(
-                      new JsonObject().put("username", "test"),
-                      new JsonObject().put("attr-1", "value")));
-              User user = ctx.user();
-              JsonObject principal = user.principal();
-              JsonObject attributes = user.attributes();
-              log.info("principal: " + principal);
-              log.info("attributes: " + attributes);
-              // add user roles
-              user.authorizations()
-                  .add("role-provider-id", RoleBasedAuthorization.create("my-role"));
+              AuthenticationProvider ap =
+                  credentials -> {
+                    User user =
+                        User.create(
+                            new JsonObject().put("username", "test"),
+                            new JsonObject().put("attr-1", "value"));
+                    return Future.succeededFuture(user);
+                  };
 
-              ctx.next();
-            });
+              ap.authenticate(null);
+            })
+        .handler(
+            AuthorizationHandler.create(RoleBasedAuthorization.create("my-role"))
+                .addAuthorizationProvider(
+                    new AuthorizationProvider() {
+                      @Override
+                      public String getId() {
+                        return "role-provider-id";
+                      }
+
+                      @Override
+                      public Future<Void> getAuthorizations(User user) {
+                        user.authorizations()
+                            .put("role-provider-id", RoleBasedAuthorization.create("my-role"));
+                        return Future.succeededFuture();
+                      }
+                    }));
 
     // 100kB max body size
     mainRouter
@@ -94,10 +112,13 @@ public class ApplicationVerticle extends AbstractVerticle {
     apiRouter.route("/persons/*").subRouter(personRouter);
     personHandler.configureRoutes(personRouter);
 
-    // https://vertx.io/docs/vertx-health-check/java/
     mainRouter
         .get("/health*")
-        .handler(HealthCheckHandler.createWithHealthChecks(HealthChecks.create(vertx)));
+        .handler(
+            ctx ->
+                getHealthCheckHandler()
+                    .checkStatus()
+                    .onComplete(r -> ctx.response().write(r.result().getData().toBuffer())));
 
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
@@ -108,7 +129,8 @@ public class ApplicationVerticle extends AbstractVerticle {
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
         .requestHandler(mainRouter)
-        .listen(
+        .listen()
+        .onComplete(
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");
@@ -119,6 +141,11 @@ public class ApplicationVerticle extends AbstractVerticle {
                 startPromise.fail(res.cause());
               }
             });
+  }
+
+  private HealthChecks getHealthCheckHandler() {
+    return HealthChecks.create(vertx)
+        .register("available", promise -> promise.complete(Status.OK()));
   }
 
   public int getPort() {
@@ -145,7 +172,7 @@ public class ApplicationVerticle extends AbstractVerticle {
 
     MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
 
-    httpServer.close(multiCompletePromise::complete);
+    httpServer.close().onComplete(multiCompletePromise::complete);
 
     System.err.println("awaitTermination...start");
     FutureUtil.awaitTermination()

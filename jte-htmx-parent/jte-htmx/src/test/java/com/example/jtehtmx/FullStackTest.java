@@ -66,7 +66,8 @@ class FullStackTest {
     JsonObject cfg = ConfigEncoder.encode(config);
     verticle = provider.jteHtmxVerticle();
     vertx.deployVerticle(
-        verticle, new DeploymentOptions().setConfig(cfg), testContext.succeedingThenComplete());
+        verticle, new DeploymentOptions().setConfig(cfg))
+      .onComplete(testContext.succeedingThenComplete());
   }
 
   @AfterEach

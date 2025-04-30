@@ -31,7 +31,8 @@ public class DefaultVerticle extends AbstractVerticle {
         .createHttpServer(new HttpServerOptions().setPort(8080).setHost("0.0.0.0"))
         .exceptionHandler(err -> log.error("http server error", err))
         .requestHandler(router)
-        .listen(
+        .listen()
+        .onComplete(
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");

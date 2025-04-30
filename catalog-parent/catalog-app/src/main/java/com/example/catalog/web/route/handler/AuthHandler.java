@@ -81,7 +81,7 @@ public class AuthHandler implements Handler<RoutingContext> {
               // todo: read the principal and attributes
               //  to determine the proper roles
               User user = User.create(principal, attributes);
-              user.authorizations().add("role-provider-id", ROLE);
+              user.authorizations().put("role-provider-id", ROLE);
 
               ctx.setUser(user);
               ctx.next();

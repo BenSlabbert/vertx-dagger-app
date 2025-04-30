@@ -20,8 +20,8 @@ public class VerticleTest extends PersistenceTest {
         provider.workerVerticle(),
         new DeploymentOptions()
             .setThreadingModel(ThreadingModel.VIRTUAL_THREAD)
-            .setConfig(ConfigEncoder.encode(config)),
-        testContext.succeedingThenComplete());
+            .setConfig(ConfigEncoder.encode(config)))
+      .onComplete(testContext.succeedingThenComplete());
   }
 
   @AfterEach
