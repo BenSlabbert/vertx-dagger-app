@@ -103,7 +103,7 @@ class ApiVerticlePersistenceTest extends PersistenceTest {
   }
 
   @Test
-  @Disabled("fix autentication")
+  @Disabled("fix authentication")
   void apiTest() {
     log.info("starting apiTest");
     persist(conn -> provider.itemRepository().create(conn, "name1", 1L));
