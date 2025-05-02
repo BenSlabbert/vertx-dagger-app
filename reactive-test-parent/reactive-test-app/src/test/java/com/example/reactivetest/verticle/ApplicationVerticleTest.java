@@ -44,7 +44,7 @@ class ApplicationVerticleTest {
   @Test
   void test(Vertx vertx, VertxTestContext testContext) throws Exception {
     final String dbName = "testing" + counter.incrementAndGet();
-    log.info("creating db: " + dbName);
+    log.info("creating db: {}", dbName);
 
     // create a new database for each test
     Container.ExecResult execResult =
@@ -78,9 +78,8 @@ class ApplicationVerticleTest {
     provider.init();
 
     JsonObject cfg = ConfigEncoder.encode(config);
-    vertx.deployVerticle(
-        provider.applicationVerticle(),
-        new DeploymentOptions().setConfig(cfg),
-        testContext.succeedingThenComplete());
+    vertx
+        .deployVerticle(provider.applicationVerticle(), new DeploymentOptions().setConfig(cfg))
+        .onComplete(testContext.succeedingThenComplete());
   }
 }

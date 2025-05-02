@@ -47,7 +47,7 @@ public abstract class PersistenceTest {
   @BeforeEach
   void prepare(Vertx vertx) throws Exception {
     final String dbName = "testing" + counter.incrementAndGet();
-    log.info("creating db: " + dbName);
+    log.info("creating db: {}", dbName);
 
     // create a new database for each test
     Container.ExecResult execResult =
@@ -92,7 +92,7 @@ public abstract class PersistenceTest {
       try {
         closeable.close();
       } catch (Exception e) {
-        log.warn("failed to close " + closeable);
+        log.warn("failed to close {}", closeable);
       }
     }
   }

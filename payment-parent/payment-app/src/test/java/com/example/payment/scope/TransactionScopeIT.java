@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.payment.PersistenceTest;
 import com.example.payment.repository.PaymentRepositoryImpl;
 import com.example.payment.scope.repo.Repo;
-import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.VertxException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -22,9 +22,9 @@ class TransactionScopeIT extends PersistenceTest {
       assertThat(newId).isPositive();
 
       // implicit rollback called
-      throw new NoStackTraceException("planned exception");
+      throw VertxException.noStackTrace("planned exception");
     } catch (Exception e) {
-      assertThat(e).isInstanceOf(NoStackTraceException.class).hasMessage("planned exception");
+      assertThat(e).isInstanceOf(VertxException.class).hasMessage("planned exception");
     }
 
     // need a new scope

@@ -6,7 +6,6 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 import com.example.jtehtmx.web.handler.ExampleHandler;
-import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.future.FutureUtil;
 import github.benslabbert.vertxdaggercommons.future.MultiCompletePromise;
@@ -16,8 +15,6 @@ import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.ext.healthchecks.HealthCheckHandler;
-import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
@@ -54,8 +51,6 @@ public class JteHtmxVerticle extends AbstractVerticle {
         // 100kB max body size
         .handler(BodyHandler.create().setBodyLimit(1024L * 100L));
 
-    mainRouter.get("/health*").handler(getHealthCheckHandler());
-    mainRouter.get("/ping*").handler(getPingHandler());
     mainRouter
         .route("/api/*")
         .handler(
@@ -104,8 +99,8 @@ public class JteHtmxVerticle extends AbstractVerticle {
 
               vertx
                   .fileSystem()
-                  .readFile(
-                      "svelte/index.html",
+                  .readFile("svelte/index.html")
+                  .onComplete(
                       ar -> {
                         if (ar.failed()) {
                           ctx.response().setStatusCode(NOT_FOUND.code()).end();
@@ -123,7 +118,8 @@ public class JteHtmxVerticle extends AbstractVerticle {
     vertx
         .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
         .requestHandler(mainRouter)
-        .listen(
+        .listen()
+        .onComplete(
             res -> {
               if (res.succeeded()) {
                 log.info("started http server");
@@ -140,16 +136,6 @@ public class JteHtmxVerticle extends AbstractVerticle {
     return server.actualPort();
   }
 
-  private HealthCheckHandler getPingHandler() {
-    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
-        .register("ping", promise -> promise.complete(Status.OK()));
-  }
-
-  private HealthCheckHandler getHealthCheckHandler() {
-    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
-        .register("available", promise -> promise.complete(Status.OK()));
-  }
-
   @SuppressWarnings("java:S106") // logger is not available
   @Override
   public void stop(Promise<Void> stopPromise) {
@@ -160,7 +146,7 @@ public class JteHtmxVerticle extends AbstractVerticle {
     if (null == server) {
       multiCompletePromise.complete();
     } else {
-      server.close(multiCompletePromise::complete);
+      server.close().onComplete(multiCompletePromise::complete);
     }
 
     FutureUtil.awaitTermination()

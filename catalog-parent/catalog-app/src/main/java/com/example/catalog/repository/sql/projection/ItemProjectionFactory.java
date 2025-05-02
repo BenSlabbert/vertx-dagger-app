@@ -5,7 +5,7 @@ import static com.example.catalog.generator.entity.generated.jooq.tables.Item.IT
 
 import com.example.catalog.projection.item.ItemProjection;
 import github.benslabbert.vertxdaggercommons.sql.Projection;
-import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.VertxException;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowIterator;
 import io.vertx.sqlclient.RowSet;
@@ -71,7 +71,7 @@ public class ItemProjectionFactory {
       RowIterator<Row> iterator = rowSet.iterator();
 
       if (!iterator.hasNext()) {
-        throw new NoStackTraceException("no item for id: " + id);
+        throw VertxException.noStackTrace("no item for id: " + id);
       }
 
       return null;
@@ -107,7 +107,7 @@ public class ItemProjectionFactory {
       RowIterator<Row> iterator = rowSet.iterator();
 
       if (!iterator.hasNext()) {
-        throw new NoStackTraceException("no item for id: " + id);
+        throw VertxException.noStackTrace("no item for id: " + id);
       }
 
       return null;

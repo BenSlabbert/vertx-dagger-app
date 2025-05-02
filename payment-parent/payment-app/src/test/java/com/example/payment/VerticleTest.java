@@ -16,12 +16,13 @@ public class VerticleTest extends PersistenceTest {
 
   @BeforeEach
   void before(Vertx vertx, VertxTestContext testContext) {
-    vertx.deployVerticle(
-        provider.workerVerticle(),
-        new DeploymentOptions()
-            .setThreadingModel(ThreadingModel.VIRTUAL_THREAD)
-            .setConfig(ConfigEncoder.encode(config)),
-        testContext.succeedingThenComplete());
+    vertx
+        .deployVerticle(
+            provider.workerVerticle(),
+            new DeploymentOptions()
+                .setThreadingModel(ThreadingModel.VIRTUAL_THREAD)
+                .setConfig(ConfigEncoder.encode(config)))
+        .onComplete(testContext.succeedingThenComplete());
   }
 
   @AfterEach

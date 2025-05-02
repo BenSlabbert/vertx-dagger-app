@@ -78,7 +78,7 @@ public abstract class PersistenceTest {
   @BeforeEach
   void prepare(Vertx vertx, VertxTestContext testContext) throws Exception {
     final String dbName = "testing" + counter.incrementAndGet();
-    log.info("creating db: " + dbName);
+    log.info("creating db: {}", dbName);
 
     // create a new database for each test
     Container.ExecResult execResult =
@@ -148,18 +148,18 @@ public abstract class PersistenceTest {
 
     JsonObject cfg = ConfigEncoder.encode(config);
     ApiVerticle verticle = provider.apiVerticle();
-    vertx.deployVerticle(
-        verticle,
-        new DeploymentOptions().setConfig(cfg),
-        ar -> {
-          if (ar.succeeded()) {
-            RestAssured.baseURI = "http://127.0.0.1";
-            RestAssured.port = verticle.getPort();
-            testContext.completeNow();
-          } else {
-            testContext.failNow(ar.cause());
-          }
-        });
+    vertx
+        .deployVerticle(verticle, new DeploymentOptions().setConfig(cfg))
+        .onComplete(
+            ar -> {
+              if (ar.succeeded()) {
+                RestAssured.baseURI = "http://127.0.0.1";
+                RestAssured.port = verticle.getPort();
+                testContext.completeNow();
+              } else {
+                testContext.failNow(ar.cause());
+              }
+            });
   }
 
   @AfterEach
@@ -170,7 +170,7 @@ public abstract class PersistenceTest {
       try {
         closeable.close();
       } catch (Exception e) {
-        log.warn("failed to close " + closeable);
+        log.warn("failed to close {}", closeable);
       }
     }
   }

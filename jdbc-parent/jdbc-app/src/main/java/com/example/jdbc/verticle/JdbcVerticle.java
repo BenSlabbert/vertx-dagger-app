@@ -4,7 +4,6 @@ package com.example.jdbc.verticle;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 import com.example.jdbc.ioc.Provider;
-import github.benslabbert.vertxdaggercommons.auth.NoAuthRequiredAuthenticationProvider;
 import github.benslabbert.vertxdaggercommons.closer.ClosingService;
 import github.benslabbert.vertxdaggercommons.config.Config;
 import github.benslabbert.vertxdaggercommons.future.FutureUtil;
@@ -13,7 +12,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
@@ -49,20 +47,21 @@ public class JdbcVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) {
     Config.HttpConfig httpConfig = config.httpConfig();
 
-    this.httpServer =
-        vertx
-            .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
-            .requestHandler(setupRoutes())
-            .listen(
-                res -> {
-                  if (res.succeeded()) {
-                    log.info("started http server");
-                    startPromise.complete();
-                  } else {
-                    log.error("failed to start verticle", res.cause());
-                    startPromise.fail(res.cause());
-                  }
-                });
+    vertx
+        .createHttpServer(new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
+        .requestHandler(setupRoutes())
+        .listen()
+        .onComplete(
+            res -> {
+              if (res.succeeded()) {
+                log.info("started http server");
+                this.httpServer = res.result();
+                startPromise.complete();
+              } else {
+                log.error("failed to start verticle", res.cause());
+                startPromise.fail(res.cause());
+              }
+            });
   }
 
   private Router setupRoutes() {
@@ -78,19 +77,11 @@ public class JdbcVerticle extends AbstractVerticle {
           }
         });
 
-    HealthCheckHandler withHealthChecks = HealthCheckHandler.createWithHealthChecks(hc);
     Router mainRouter = Router.router(vertx);
-    mainRouter.get("/health").handler(withHealthChecks);
-    mainRouter.get("/ping").handler(getPingHandler());
 
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
     return mainRouter;
-  }
-
-  private HealthCheckHandler getPingHandler() {
-    return HealthCheckHandler.create(vertx, NoAuthRequiredAuthenticationProvider.create())
-        .register("ping", promise -> promise.complete(Status.OK()));
   }
 
   @SuppressWarnings("java:S106") // logger is not available
@@ -113,7 +104,7 @@ public class JdbcVerticle extends AbstractVerticle {
 
     provider.close();
     var multiCompletePromise = MultiCompletePromise.create(stopPromise, 2);
-    httpServer.close(multiCompletePromise::complete);
+    httpServer.close().onComplete(multiCompletePromise::complete);
     FutureUtil.awaitTermination().onComplete(multiCompletePromise::complete);
   }
 }
