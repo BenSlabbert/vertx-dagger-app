@@ -78,9 +78,8 @@ public abstract class IntegrationTestBase {
     provider.init();
 
     JsonObject cfg = ConfigEncoder.encode(config);
-    vertx.deployVerticle(
-        provider.jdbcVerticle(),
-        new DeploymentOptions().setConfig(cfg),
-        testContext.succeedingThenComplete());
+    vertx
+        .deployVerticle(provider.jdbcVerticle(), new DeploymentOptions().setConfig(cfg))
+        .onComplete(testContext.succeedingThenComplete());
   }
 }

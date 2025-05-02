@@ -1,7 +1,7 @@
 /* Licensed under Apache-2.0 2023. */
 package com.example.payment.scope;
 
-import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.VertxException;
 import java.sql.Connection;
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -36,7 +36,7 @@ public class TransactionManager implements DslProvider, AutoCloseable {
     try {
       connection = dataSource.getConnection();
     } catch (Exception e) {
-      throw new NoStackTraceException(e);
+      throw VertxException.noStackTrace(e);
     }
   }
 
@@ -49,7 +49,7 @@ public class TransactionManager implements DslProvider, AutoCloseable {
       connection.commit();
       commitCalled = true;
     } catch (Exception e) {
-      throw new NoStackTraceException(e);
+      throw VertxException.noStackTrace(e);
     }
   }
 
@@ -85,7 +85,7 @@ public class TransactionManager implements DslProvider, AutoCloseable {
       connection.close();
       reset();
     } catch (Exception e) {
-      throw new NoStackTraceException(e);
+      throw VertxException.noStackTrace(e);
     }
   }
 
@@ -101,7 +101,7 @@ public class TransactionManager implements DslProvider, AutoCloseable {
     try {
       connection.rollback();
     } catch (Exception e) {
-      throw new NoStackTraceException(e);
+      throw VertxException.noStackTrace(e);
     }
   }
 

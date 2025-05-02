@@ -64,19 +64,8 @@ class CreatePaymentConsumer implements Consumer {
         vertx
             .eventBus()
             .consumer(CMD_ADDRESS, this::handle)
-            .setMaxBufferedMessages(1_000)
             .exceptionHandler(err -> log.error("unhandled exception", err))
             .endHandler(ignore -> log.warn("read stream closed"));
-
-    consumer.completionHandler(
-        ar -> {
-          if (ar.failed()) {
-            log.error("failed to register consumer for address: " + CMD_ADDRESS, ar.cause());
-            return;
-          }
-
-          log.info("successfully registered consumer for address: " + CMD_ADDRESS);
-        });
   }
 
   @Override

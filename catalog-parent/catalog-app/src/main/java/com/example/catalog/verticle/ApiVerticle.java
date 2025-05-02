@@ -16,8 +16,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.ext.healthchecks.HealthCheckHandler;
-import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
@@ -77,7 +75,8 @@ public class ApiVerticle extends AbstractVerticle {
                   .createHttpServer(
                       new HttpServerOptions().setPort(httpConfig.port()).setHost("0.0.0.0"))
                   .requestHandler(setupRoutes())
-                  .listen(
+                  .listen()
+                  .onComplete(
                       res -> {
                         if (res.succeeded()) {
                           log.info("started http server");
@@ -118,11 +117,6 @@ public class ApiVerticle extends AbstractVerticle {
     // api routes
     itemHandler.configureRoutes(apiRouter);
 
-    // https://vertx.io/docs/vertx-health-check/java/
-    mainRouter
-        .get("/health*")
-        .handler(HealthCheckHandler.createWithHealthChecks(HealthChecks.create(vertx)));
-
     // all unmatched requests go here
     mainRouter.route("/*").handler(ctx -> ctx.response().setStatusCode(NOT_FOUND.code()).end());
     return mainRouter;
@@ -156,7 +150,7 @@ public class ApiVerticle extends AbstractVerticle {
     System.err.println("stopping");
     MultiCompletePromise multiCompletePromise = MultiCompletePromise.create(stopPromise, 3);
 
-    httpServer.close(multiCompletePromise::complete);
+    httpServer.close().onComplete(multiCompletePromise::complete);
 
     Set<AutoCloseable> closeables = closingService.closeables();
     System.err.printf("closing created resources [%d]...%n", closeables.size());

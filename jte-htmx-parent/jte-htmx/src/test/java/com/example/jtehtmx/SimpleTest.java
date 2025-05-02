@@ -32,9 +32,8 @@ class SimpleTest {
             .build();
 
     JsonObject cfg = ConfigEncoder.encode(config);
-    vertx.deployVerticle(
-        provider.jteHtmxVerticle(),
-        new DeploymentOptions().setConfig(cfg),
-        testContext.succeedingThenComplete());
+    vertx
+        .deployVerticle(provider.jteHtmxVerticle(), new DeploymentOptions().setConfig(cfg))
+        .onComplete(testContext.succeedingThenComplete());
   }
 }

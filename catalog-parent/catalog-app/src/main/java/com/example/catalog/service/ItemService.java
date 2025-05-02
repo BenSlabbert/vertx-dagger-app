@@ -12,7 +12,7 @@ import com.example.catalog.web.route.dto.SuggestResponseDto;
 import com.example.catalog.web.route.dto.UpdateItemRequestDto;
 import github.benslabbert.vertxdaggercommons.transaction.reactive.TransactionBoundary;
 import io.vertx.core.Future;
-import io.vertx.core.impl.NoStackTraceException;
+import io.vertx.core.VertxException;
 import io.vertx.sqlclient.Pool;
 import java.util.List;
 import java.util.Optional;
@@ -117,7 +117,7 @@ public class ItemService extends TransactionBoundary {
                     .compose(
                         maybeItem -> {
                           if (maybeItem.isEmpty()) {
-                            throw new NoStackTraceException("no item for id: " + id);
+                            throw VertxException.noStackTrace("no item for id: " + id);
                           }
 
                           return itemRepository
@@ -136,7 +136,7 @@ public class ItemService extends TransactionBoundary {
                     .compose(
                         maybeItem -> {
                           if (maybeItem.isEmpty()) {
-                            throw new NoStackTraceException("no item for id: " + id);
+                            throw VertxException.noStackTrace("no item for id: " + id);
                           }
 
                           return itemRepository.delete(conn, id).map(ignore1 -> maybeItem.get());
