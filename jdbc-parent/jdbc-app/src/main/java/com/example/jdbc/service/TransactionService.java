@@ -5,9 +5,11 @@ import static com.example.jdbc.generator.entity.generated.jooq.tables.Person.PER
 
 import github.benslabbert.txmanager.annotation.Transactional;
 import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcUtils;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcUtilsFactory;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import org.apache.commons.dbutils.StatementConfiguration;
 import org.jooq.DSLContext;
 import org.jooq.conf.ParamType;
 import org.slf4j.Logger;
@@ -22,8 +24,10 @@ public class TransactionService {
   private final DSLContext staticDslContext;
 
   @Inject
-  TransactionService(JdbcUtils jdbcUtils, @Named("static") DSLContext staticDslContext) {
-    this.jdbcUtils = jdbcUtils;
+  TransactionService(
+      JdbcUtilsFactory jdbcUtilsFactory, @Named("static") DSLContext staticDslContext) {
+    this.jdbcUtils =
+        jdbcUtilsFactory.create(new StatementConfiguration.Builder().fetchSize(10).build());
     this.staticDslContext = staticDslContext;
   }
 
