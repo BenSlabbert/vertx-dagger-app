@@ -6,8 +6,10 @@ import static com.example.jdbc.generator.entity.generated.jooq.tables.Person.PER
 
 import com.example.jdbc.generator.entity.generated.jooq.tables.records.PersonRecord;
 import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcQueryRunner;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcQueryRunnerFactory;
 import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcTransactionManager;
 import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcUtils;
+import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.JdbcUtilsFactory;
 import github.benslabbert.vertxdaggercommons.transaction.blocking.jdbc.QueryException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import org.apache.commons.dbutils.StatementConfiguration;
 import org.jooq.DSLContext;
 import org.jooq.InsertResultStep;
 import org.jooq.conf.ParamType;
@@ -36,13 +39,14 @@ public class JdbcService {
   @Inject
   JdbcService(
       JdbcTransactionManager jdbcTransactionManager,
-      JdbcUtils jdbcUtils,
-      JdbcQueryRunner jdbcQueryRunner,
+      JdbcUtilsFactory jdbcUtilsFactory,
+      JdbcQueryRunnerFactory jdbcQueryRunnerFactory,
       @Named("prepared") DSLContext preparedDslContext,
       @Named("static") DSLContext staticDslContext) {
     this.jdbcTransactionManager = jdbcTransactionManager;
-    this.jdbcUtils = jdbcUtils;
-    this.jdbcQueryRunner = jdbcQueryRunner;
+    StatementConfiguration cfg = new StatementConfiguration.Builder().fetchSize(25).build();
+    this.jdbcUtils = jdbcUtilsFactory.create(cfg);
+    this.jdbcQueryRunner = jdbcQueryRunnerFactory.create(cfg);
     this.preparedDslContext = preparedDslContext;
     this.staticDslContext = staticDslContext;
   }
