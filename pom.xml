@@ -35,10 +35,10 @@
 
     <!--deps-->
     <vertx-json-writer.version>1.111.0</vertx-json-writer.version>
-    <vertx-dagger-commons.version>1.132.0</vertx-dagger-commons.version>
-    <vertx-dagger-codegen.version>2.14.0</vertx-dagger-codegen.version>
-    <vertx-dagger-starter.version>1.135.0</vertx-dagger-starter.version>
-    <vertx-dagger-app-api.version>1.123.0</vertx-dagger-app-api.version>
+    <vertx-dagger-commons.version>1.133.0</vertx-dagger-commons.version>
+    <vertx-dagger-codegen.version>2.15.0</vertx-dagger-codegen.version>
+    <vertx-dagger-starter.version>1.136.0</vertx-dagger-starter.version>
+    <vertx-dagger-app-api.version>1.124.0</vertx-dagger-app-api.version>
     <tx-manager.version>1.113.0</tx-manager.version>
   </properties>
 
