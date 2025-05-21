@@ -1644,19 +1644,19 @@ __metadata:
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.2"
     eslint: "npm:^9.27.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^3.8.2"
+    eslint-plugin-svelte: "npm:^3.9.0"
     globals: "npm:^16.1.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.12"
-    svelte: "npm:^5.32.0"
+    svelte: "npm:^5.32.1"
     svelte-check: "npm:^4.2.1"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
     vite: "npm:^6.3.5"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
-    zod: "npm:^3.25.7"
+    zod: "npm:^3.25.17"
     zod-form-data: "npm:^2.0.7"
   languageName: unknown
   linkType: soft
@@ -2380,9 +2380,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.8.2":
-  version: 3.8.2
-  resolution: "eslint-plugin-svelte@npm:3.8.2"
+"eslint-plugin-svelte@npm:^3.9.0":
+  version: 3.9.0
+  resolution: "eslint-plugin-svelte@npm:3.9.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.6.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -2400,7 +2400,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/310db80ebf177ce13f16682111af2c340c2111a8ef71b519657b73dff6521b275e8306d84886f65034e3d1834bee7de4a3ada896a59eb5ff1e436d21f1fa4434
+  checksum: 10/b978eb3c1eb46aa81f535a1617d641a08552f19d35bc61f60d8aecf6dadd88715e615f73eaa12f34d3302214eb527d9b5eff3c5a1592aaaa4ad1ac716c8e15c2
   languageName: node
   linkType: hard
 
@@ -4555,9 +4555,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.32.0":
-  version: 5.32.0
-  resolution: "svelte@npm:5.32.0"
+"svelte@npm:^5.32.1":
+  version: 5.32.1
+  resolution: "svelte@npm:5.32.1"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4573,7 +4573,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/9545517e0deb06013338540ab5c48fd93c858a98535df722f7b6eabd5af2c9d804a23eeb3d2eab4e808d14507fdd62b88866d5dc338041dcc71690d3a08e83e0
+  checksum: 10/b1b2be5f1b8e90fa2184d4a232b500c08dc574fac303c9f6a41de95bcaa39cd81b2ac0715f47e3e2e548750465e77ac9152b3f35c4eba68ee88d164a04467492
   languageName: node
   linkType: hard
 
@@ -5100,9 +5100,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.7":
-  version: 3.25.7
-  resolution: "zod@npm:3.25.7"
-  checksum: 10/276350c5e58b4fe29924c813fbbad12f4297177d6edee3cc719ed265e237f922f8a1068538226c88c62c1ed2ed96855536d8e50f27fe3dbc67b7bcaefeac1a6e
+"zod@npm:^3.25.17":
+  version: 3.25.17
+  resolution: "zod@npm:3.25.17"
+  checksum: 10/132a61be241c9c09b90ed85ec3cbe2a8c9146b96048ca2c3e62f53fcec4fc06c0047f00ef49521cd63bf133a6a6ed54ff733e68d3b4dc375fc1e34d9ad182a16
   languageName: node
   linkType: hard
