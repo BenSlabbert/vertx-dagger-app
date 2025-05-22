@@ -1649,14 +1649,14 @@ __metadata:
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.12"
-    svelte: "npm:^5.32.1"
+    svelte: "npm:^5.33.0"
     svelte-check: "npm:^4.2.1"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
     vite: "npm:^6.3.5"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
-    zod: "npm:^3.25.17"
+    zod: "npm:^3.25.20"
     zod-form-data: "npm:^2.0.7"
   languageName: unknown
   linkType: soft
@@ -4555,9 +4555,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.32.1":
-  version: 5.32.1
-  resolution: "svelte@npm:5.32.1"
+"svelte@npm:^5.33.0":
+  version: 5.33.0
+  resolution: "svelte@npm:5.33.0"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4573,7 +4573,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/b1b2be5f1b8e90fa2184d4a232b500c08dc574fac303c9f6a41de95bcaa39cd81b2ac0715f47e3e2e548750465e77ac9152b3f35c4eba68ee88d164a04467492
+  checksum: 10/8828c9453796edcf92a3e1ccdf979d53dab3f1d13adf9145fdff1c48543e60f33c3e217c811a58f1f0cb9f9bac1c2bfad4faaa4d62cb5cf3a853c5a62447efe3
   languageName: node
   linkType: hard
 
@@ -5100,9 +5100,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.17":
-  version: 3.25.17
-  resolution: "zod@npm:3.25.17"
-  checksum: 10/132a61be241c9c09b90ed85ec3cbe2a8c9146b96048ca2c3e62f53fcec4fc06c0047f00ef49521cd63bf133a6a6ed54ff733e68d3b4dc375fc1e34d9ad182a16
+"zod@npm:^3.25.20":
+  version: 3.25.20
+  resolution: "zod@npm:3.25.20"
+  checksum: 10/530819cc55a4f5c1e9ce1e0507b8ca12dda1a30ef6f08272d99eb918112f840aec8404832326faab36e6838efc35c5a376302843a1b5ddced073ff6cd80ea601
   languageName: node
   linkType: hard
