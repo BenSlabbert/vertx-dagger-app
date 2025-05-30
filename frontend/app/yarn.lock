@@ -1657,7 +1657,7 @@ __metadata:
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
     zod: "npm:^3.25.42"
-    zod-form-data: "npm:^2.0.7"
+    zod-form-data: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
 
@@ -5096,14 +5096,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod-form-data@npm:^2.0.7":
-  version: 2.0.7
-  resolution: "zod-form-data@npm:2.0.7"
+"zod-form-data@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "zod-form-data@npm:3.0.0"
   dependencies:
     "@rvf/set-get": "npm:^7.0.0"
   peerDependencies:
-    zod: ">= 3.11.0"
-  checksum: 10/394250e3df8079ec7199874851b81f8b434d2ee1337caccc8fa3d6a2a94bfad827b791db0baa4707f398a60d8354313574bb5c7b92f7552bd9a55bf84cc4ba86
+    zod: ">= 3.25.0"
+  checksum: 10/fc276144f7d569aaa117dbe2ec6ffb9ab703e1a1dcc376ee7b87b36b82f4c9a22541f167288e03d6061215e1676e6806efae305a1344b5bd8f4d4fc889cb7036
   languageName: node
   linkType: hard
 
