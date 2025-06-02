@@ -583,10 +583,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.27.0, @eslint/js@npm:^9.27.0":
-  version: 9.27.0
-  resolution: "@eslint/js@npm:9.27.0"
-  checksum: 10/cdbe380fd31bb325b9ec65ae310fb92a57efb796d3cc5d8bc9dafef447d634c64e497bedade6a49e0cf44a5b14560ab6ac9ed9da5a38e2415b31ae01ae5b758e
+"@eslint/js@npm:9.28.0, @eslint/js@npm:^9.28.0":
+  version: 9.28.0
+  resolution: "@eslint/js@npm:9.28.0"
+  checksum: 10/c2ab0416aef01f28f189525c9a86253f531852a1ed45db94a97f01bcc51d15720f38a8c201af7a7331eb1e80c991a7ef54c4be193b17540e48044672dba69bd8
   languageName: node
   linkType: hard
 
@@ -1632,7 +1632,7 @@ __metadata:
   resolution: "app@workspace:."
   dependencies:
     "@benslabbert/vertx-dagger-ui-lib": "npm:^1.14.0"
-    "@eslint/js": "npm:^9.27.0"
+    "@eslint/js": "npm:^9.28.0"
     "@picocss/pico": "npm:^2.1.1"
     "@playwright/test": "npm:^1.52.0"
     "@sveltejs/adapter-node": "npm:^5.2.12"
@@ -1642,21 +1642,21 @@ __metadata:
     "@sveltejs/vite-plugin-svelte": "npm:^5.0.3"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.2"
-    eslint: "npm:^9.27.0"
+    eslint: "npm:^9.28.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^3.9.0"
+    eslint-plugin-svelte: "npm:^3.9.1"
     globals: "npm:^16.2.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.12"
-    svelte: "npm:^5.33.10"
+    svelte: "npm:^5.33.13"
     svelte-check: "npm:^4.2.1"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
     vite: "npm:^6.3.5"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
-    zod: "npm:^3.25.42"
+    zod: "npm:^3.25.48"
     zod-form-data: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
@@ -2380,9 +2380,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.9.0":
-  version: 3.9.0
-  resolution: "eslint-plugin-svelte@npm:3.9.0"
+"eslint-plugin-svelte@npm:^3.9.1":
+  version: 3.9.1
+  resolution: "eslint-plugin-svelte@npm:3.9.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.6.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -2400,7 +2400,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/b978eb3c1eb46aa81f535a1617d641a08552f19d35bc61f60d8aecf6dadd88715e615f73eaa12f34d3302214eb527d9b5eff3c5a1592aaaa4ad1ac716c8e15c2
+  checksum: 10/edd3f54d5d2444e1e0e3f167330c6af42f21645bd36a511292902f634f95c477fe55d5d43890892cb57197570811c1e55e050c8b2c9facb3a33b541f081e2cda
   languageName: node
   linkType: hard
 
@@ -2445,9 +2445,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.27.0":
-  version: 9.27.0
-  resolution: "eslint@npm:9.27.0"
+"eslint@npm:^9.28.0":
+  version: 9.28.0
+  resolution: "eslint@npm:9.28.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.2.0"
     "@eslint-community/regexpp": "npm:^4.12.1"
@@ -2455,7 +2455,7 @@ __metadata:
     "@eslint/config-helpers": "npm:^0.2.1"
     "@eslint/core": "npm:^0.14.0"
     "@eslint/eslintrc": "npm:^3.3.1"
-    "@eslint/js": "npm:9.27.0"
+    "@eslint/js": "npm:9.28.0"
     "@eslint/plugin-kit": "npm:^0.3.1"
     "@humanfs/node": "npm:^0.16.6"
     "@humanwhocodes/module-importer": "npm:^1.0.1"
@@ -2491,7 +2491,7 @@ __metadata:
       optional: true
   bin:
     eslint: bin/eslint.js
-  checksum: 10/75f02b851c6f8534d1289de1bd957637a56725754bea03a0a710d6740a036aca81d5e600557633fca7ab774275aa94044ca05772f88c4f464cd42834eff37145
+  checksum: 10/0cce6dd3a53724d849253992477fd9b05bf6de3dd6bb761605e07beb14f63b6d2eb38f83aeb4a026ff2e3eeb687ac84c1d4a23a9f3186bc15564f5e75fed908c
   languageName: node
   linkType: hard
 
@@ -4562,9 +4562,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.33.10":
-  version: 5.33.10
-  resolution: "svelte@npm:5.33.10"
+"svelte@npm:^5.33.13":
+  version: 5.33.13
+  resolution: "svelte@npm:5.33.13"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4580,7 +4580,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/e79890c3a03d40bb951800e208c8e1f0acf1d63376d0fc20f59db4ca2a4557a50f4179a73ee3ab434a5c312b83f32b4417388e94be4cf397875484f366528434
+  checksum: 10/9869438d4459d74bd870949fabb74aeb8a6dfd823e71952d777d4e715606722af234ed9060117aaff13b1dac48a4aeb3248c75997b02a318be5f95ea8bb8bab0
   languageName: node
   linkType: hard
 
@@ -5107,9 +5107,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.42":
-  version: 3.25.42
-  resolution: "zod@npm:3.25.42"
-  checksum: 10/eb1f86ef6c29f1cb35245b671a1f2a6ad1a40b3b56acd98d72afb1775c12d72631ad161fdf5e5041bcc78560df6a135096244f74734885458ee0aeec8ccb288d
+"zod@npm:^3.25.48":
+  version: 3.25.48
+  resolution: "zod@npm:3.25.48"
+  checksum: 10/9e169c69745312d053251cf015f9c3ea6cc664cca8298ef5b37e221fcb936b7126efbfbb7319a01b9f1b7d148d46d4f658ff955ecb142ff1f768327cc9086f22
   languageName: node
   linkType: hard
