@@ -1465,9 +1465,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/plugin-interactive-tools@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "@yarnpkg/plugin-interactive-tools@npm:4.0.2"
+"@yarnpkg/plugin-interactive-tools@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "@yarnpkg/plugin-interactive-tools@npm:4.0.3"
   dependencies:
     "@yarnpkg/libui": "npm:^3.0.2"
     algoliasearch: "npm:^4.2.0"
@@ -1479,10 +1479,10 @@ __metadata:
     semver: "npm:^7.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@yarnpkg/cli": ^4.7.0
-    "@yarnpkg/core": ^4.2.1
-    "@yarnpkg/plugin-essentials": ^4.3.1
-  checksum: 10/f479fe834bc50f28636da0fb876212c7fdb444057c71c228060b40f7db9a586a5deb132b2989b185d2769d94c227698219be4d603ac33c17abf12f3927840c14
+    "@yarnpkg/cli": ^4.9.2
+    "@yarnpkg/core": ^4.4.2
+    "@yarnpkg/plugin-essentials": ^4.4.1
+  checksum: 10/4f3e20e00fd48f8485340794c67be1f3f34c47ed10705135cd04e12841cf1aca4d16f59a31e90d47cc3da60676ffdfc02a52f8d26f87704b8c213e50eee11927
   languageName: node
   linkType: hard
 
@@ -1641,7 +1641,7 @@ __metadata:
     "@sveltejs/package": "npm:^2.3.11"
     "@sveltejs/vite-plugin-svelte": "npm:^5.1.0"
     "@types/eslint": "npm:^9.6.1"
-    "@yarnpkg/plugin-interactive-tools": "npm:^4.0.2"
+    "@yarnpkg/plugin-interactive-tools": "npm:^4.0.3"
     eslint: "npm:^9.28.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-svelte: "npm:^3.9.1"
@@ -1656,7 +1656,7 @@ __metadata:
     vite: "npm:^6.3.5"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
-    zod: "npm:^3.25.49"
+    zod: "npm:^3.25.51"
     zod-form-data: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
@@ -5107,9 +5107,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.49":
-  version: 3.25.49
-  resolution: "zod@npm:3.25.49"
-  checksum: 10/213aafecfb0db407ee304015b9d22435be555aff0f52eaa83011b3273b9cd681423ef78acd77b44013f4cad616ce05c3abd9428ba469aaff1c3f5e5d452acebe
+"zod@npm:^3.25.51":
+  version: 3.25.51
+  resolution: "zod@npm:3.25.51"
+  checksum: 10/88172dae4c14194bba23c006ae63dd64b96a0e885d9bdb00f8495d1191a4bfd6ed545ab9c60de579b1979589d52253f1bbca6637813fb6890124784c877baf01
   languageName: node
   linkType: hard

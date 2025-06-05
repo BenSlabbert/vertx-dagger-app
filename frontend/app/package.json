@@ -23,7 +23,7 @@
 		"@sveltejs/package": "^2.3.11",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@types/eslint": "^9.6.1",
-		"@yarnpkg/plugin-interactive-tools": "^4.0.2",
+		"@yarnpkg/plugin-interactive-tools": "^4.0.3",
 		"eslint": "^9.28.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^3.9.1",
@@ -42,7 +42,7 @@
 	"dependencies": {
 		"@picocss/pico": "^2.1.1",
 		"winston": "^3.17.0",
-		"zod": "^3.25.49",
+		"zod": "^3.25.51",
 		"zod-form-data": "^3.0.0"
 	},
 	"packageManager": "yarn@4.6.0"
