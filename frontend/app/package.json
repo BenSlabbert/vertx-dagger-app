@@ -16,7 +16,7 @@
 	"devDependencies": {
 		"@benslabbert/vertx-dagger-ui-lib": "^1.14.0",
 		"@eslint/js": "^9.28.0",
-		"@playwright/test": "^1.52.0",
+		"@playwright/test": "^1.53.0",
 		"@sveltejs/adapter-node": "^5.2.12",
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "^2.21.4",
@@ -42,7 +42,7 @@
 	"dependencies": {
 		"@picocss/pico": "^2.1.1",
 		"winston": "^3.17.0",
-		"zod": "^3.25.57",
+		"zod": "^3.25.61",
 		"zod-form-data": "^3.0.0"
 	},
 	"packageManager": "yarn@4.6.0"
