@@ -1219,9 +1219,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.22.0":
-  version: 2.22.0
-  resolution: "@sveltejs/kit@npm:2.22.0"
+"@sveltejs/kit@npm:^2.22.2":
+  version: 2.22.2
+  resolution: "@sveltejs/kit@npm:2.22.2"
   dependencies:
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
     "@types/cookie": "npm:^0.6.0"
@@ -1242,13 +1242,13 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0 || ^7.0.0-beta.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/ef698c7ac1a92adc68d68e59748fa7dbc3b1c5135f06ac57839de95ddfea5fcc7b535cbf8fb7ca588be82b7c0139d70290a228007dc72323df5307b039251b45
+  checksum: 10/316d0395d96e26a82f57cf0540b1465ea166a1b8afb05b4e52fb7648afe7523c0df816e9280dacd046547635643e6416e782d825e4fae6053f120b150d31cff6
   languageName: node
   linkType: hard
 
-"@sveltejs/package@npm:^2.3.11":
-  version: 2.3.11
-  resolution: "@sveltejs/package@npm:2.3.11"
+"@sveltejs/package@npm:^2.3.12":
+  version: 2.3.12
+  resolution: "@sveltejs/package@npm:2.3.12"
   dependencies:
     chokidar: "npm:^4.0.3"
     kleur: "npm:^4.1.5"
@@ -1259,7 +1259,7 @@ __metadata:
     svelte: ^3.44.0 || ^4.0.0 || ^5.0.0-next.1
   bin:
     svelte-package: svelte-package.js
-  checksum: 10/58e050641f0e87ed04aacf51131f03755844c8addec315e02c9c101fbb34220e9c2209e4526f3b1d3f0ed160cd86fd0e6e8604d771d0eb061bc922577aed77e9
+  checksum: 10/8e436ccffd0e01ba8a2cf965478fa9daae35d6b7d23eef3310f7e90513f8059264b7c5543f659ef48de84aa9d3bbc58158bfa04b2fee3eca5ad60780528eaddb
   languageName: node
   linkType: hard
 
@@ -1647,14 +1647,14 @@ __metadata:
     "@playwright/test": "npm:^1.53.1"
     "@sveltejs/adapter-node": "npm:^5.2.12"
     "@sveltejs/adapter-static": "npm:^3.0.8"
-    "@sveltejs/kit": "npm:^2.22.0"
-    "@sveltejs/package": "npm:^2.3.11"
+    "@sveltejs/kit": "npm:^2.22.2"
+    "@sveltejs/package": "npm:^2.3.12"
     "@sveltejs/vite-plugin-svelte": "npm:^5.1.0"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.3"
     eslint: "npm:^9.29.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^3.9.3"
+    eslint-plugin-svelte: "npm:^3.10.0"
     globals: "npm:^16.2.0"
     prettier: "npm:^3.6.1"
     prettier-plugin-svelte: "npm:^3.3.3"
@@ -2390,9 +2390,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.9.3":
-  version: 3.9.3
-  resolution: "eslint-plugin-svelte@npm:3.9.3"
+"eslint-plugin-svelte@npm:^3.10.0":
+  version: 3.10.0
+  resolution: "eslint-plugin-svelte@npm:3.10.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.6.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -2410,7 +2410,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/4a447d0546401261f986568192fe66a8cd1953cda69bdf783fc39a76aad6cca54e711117b52e7fd1b38bfaab06c151348df4452ba7bba82735b1834431f1630e
+  checksum: 10/04f7a50ecfc62b9701dead244bca640df45d3bd8b73b5f60b4b9a7d8a06c916bfc7cfadded370bf6e549cdbb0134da11e8322a4be0493c3c40ab844f304fd654
   languageName: node
   linkType: hard
 
