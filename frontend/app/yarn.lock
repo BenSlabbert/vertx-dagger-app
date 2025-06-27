@@ -1654,9 +1654,9 @@ __metadata:
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.3"
     eslint: "npm:^9.29.0"
     eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-svelte: "npm:^3.10.0"
+    eslint-plugin-svelte: "npm:^3.10.1"
     globals: "npm:^16.2.0"
-    prettier: "npm:^3.6.1"
+    prettier: "npm:^3.6.2"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.12"
     svelte: "npm:^5.34.8"
@@ -2390,9 +2390,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^3.10.0":
-  version: 3.10.0
-  resolution: "eslint-plugin-svelte@npm:3.10.0"
+"eslint-plugin-svelte@npm:^3.10.1":
+  version: 3.10.1
+  resolution: "eslint-plugin-svelte@npm:3.10.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.6.1"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -2410,7 +2410,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 10/04f7a50ecfc62b9701dead244bca640df45d3bd8b73b5f60b4b9a7d8a06c916bfc7cfadded370bf6e549cdbb0134da11e8322a4be0493c3c40ab844f304fd654
+  checksum: 10/b20831bf6ad9eb3746df593b55554062d767a3408b96ce0d4feff1bc97a92ddc91483539bb55cf0aacd7c761ec123bfee3710d312f634346a5fee2ee7a164369
   languageName: node
   linkType: hard
 
@@ -3937,12 +3937,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.6.1":
-  version: 3.6.1
-  resolution: "prettier@npm:3.6.1"
+"prettier@npm:^3.6.2":
+  version: 3.6.2
+  resolution: "prettier@npm:3.6.2"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10/e2c4b47bf1bda4f932143e52e0f57239dd60cfef08296b56d4073426e2d310edc353a7daa5285a546bd3c1619c76894759cc98d82d4ac710f72a711ae2899bcc
+  checksum: 10/1213691706bcef1371d16ef72773c8111106c3533b660b1cc8ec158bd109cdf1462804125f87f981f23c4a3dba053b6efafda30ab0114cc5b4a725606bb9ff26
   languageName: node
   linkType: hard
 
