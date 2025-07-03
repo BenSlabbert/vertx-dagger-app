@@ -1200,11 +1200,11 @@ __metadata:
     prettier: "npm:^3.6.2"
     prettier-plugin-svelte: "npm:^3.4.0"
     publint: "npm:^0.3.12"
-    svelte: "npm:^5.35.0"
+    svelte: "npm:^5.35.2"
     svelte-check: "npm:^4.2.2"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
-    vite: "npm:^7.0.0"
+    vite: "npm:^7.0.1"
     vitest: "npm:^3.2.4"
   languageName: unknown
   linkType: soft
@@ -1919,12 +1919,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esrap@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "esrap@npm:2.0.1"
+"esrap@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "esrap@npm:2.1.0"
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-  checksum: 10/a2359fc313a9c30fb6a8160d09021240fe63fc264d4bc2a22dbe8a981af61ad0cf5c1a21356ee8ac5fa2225334ed93a7f9448e7f2a7035f3865a6d05e25e9d60
+  checksum: 10/32c1eff1819ec4d6ed0b8232375a106947d71bd8b0d175cd984d64b22f5734ae0acaf8ce94ad1ad693730f6cc057a6be75b14a4ff31beafe683266e81a600b08
   languageName: node
   linkType: hard
 
@@ -3612,9 +3612,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.35.0":
-  version: 5.35.0
-  resolution: "svelte@npm:5.35.0"
+"svelte@npm:^5.35.2":
+  version: 5.35.2
+  resolution: "svelte@npm:5.35.2"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3625,12 +3625,12 @@ __metadata:
     axobject-query: "npm:^4.1.0"
     clsx: "npm:^2.1.1"
     esm-env: "npm:^1.2.1"
-    esrap: "npm:^2.0.0"
+    esrap: "npm:^2.1.0"
     is-reference: "npm:^3.0.3"
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/24d7e0e915af122ac83bab23696ee913a22be3c4224d46be646479876fd52947c49147d30b409c90f7f40904c72578d12bb3ca15fa8d72eb126d26420ff8621b
+  checksum: 10/03a7a83de1b4264d0ebf8cf2754b0026c0abf5c0ad51dc5d1e9935cc59ee8f69c59a71b8e62fe264122d29f49d110fcbeb18ac9e59e4f10b4a51ca8744dffaf8
   languageName: node
   linkType: hard
 
@@ -3875,9 +3875,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "vite@npm:7.0.0"
+"vite@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "vite@npm:7.0.1"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.4.6"
@@ -3926,7 +3926,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/2501b706dc481529efb16c6241794a66d68ea7a074d49f22e45b701769fbeeccc721c58272c9fce743d3b1472a3de497f85ca18cb059b1b8b906b2b295e524dc
+  checksum: 10/c4f5be940e5794cae0a62528c7e4b636334eaa2a3dac41ba199cdb51c4048ffe6760ee85e7f20e141bb10338f8dd35d6e5154071db4f62ae4814a8f1b9af0393
   languageName: node
   linkType: hard
 
