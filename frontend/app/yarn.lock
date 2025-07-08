@@ -1659,14 +1659,14 @@ __metadata:
     prettier: "npm:^3.6.2"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.12"
-    svelte: "npm:^5.35.2"
+    svelte: "npm:^5.35.4"
     svelte-check: "npm:^4.2.2"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
-    vite: "npm:^7.0.2"
+    vite: "npm:^7.0.3"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
-    zod: "npm:^3.25.73"
+    zod: "npm:^3.25.76"
     zod-form-data: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
@@ -4622,9 +4622,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.35.2":
-  version: 5.35.2
-  resolution: "svelte@npm:5.35.2"
+"svelte@npm:^5.35.4":
+  version: 5.35.4
+  resolution: "svelte@npm:5.35.4"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4640,7 +4640,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/03a7a83de1b4264d0ebf8cf2754b0026c0abf5c0ad51dc5d1e9935cc59ee8f69c59a71b8e62fe264122d29f49d110fcbeb18ac9e59e4f10b4a51ca8744dffaf8
+  checksum: 10/c2513485d9d1f2e63e65b9a50f65182e65bd66974be2c07c99029517649bcad62c50beb22a8fefbb07d71e40be74d957626598dc1de6dd7c671d6f3149ffcbff
   languageName: node
   linkType: hard
 
@@ -4891,9 +4891,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "vite@npm:7.0.2"
+"vite@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "vite@npm:7.0.3"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.4.6"
@@ -4942,7 +4942,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/7042e7abae4f1dad83d504f3e23936eacde97d7e45dac8761fa06966eff2b0ac739abe89bf7c59617de799e43cdb89d96ec14dd52b444c1be5d8ecc79c7097d1
+  checksum: 10/75068d79283e46be98395dd3a42eac9db4c92d550a9458049fc1501eb47944ac4bded55ce304d760f84dc91baf223e4d77069ccb222d2eb468644bed571c11a0
   languageName: node
   linkType: hard
 
@@ -5167,9 +5167,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.73":
-  version: 3.25.73
-  resolution: "zod@npm:3.25.73"
-  checksum: 10/dafcaf1b3e697dce99e8c1343381fffeb09557c32a78b644a0e9ad8dd06d1006673c7f7d0682babc1db68ac5a7a8bd18748fa49d9c3014461e4725c42912a0c0
+"zod@npm:^3.25.76":
+  version: 3.25.76
+  resolution: "zod@npm:3.25.76"
+  checksum: 10/f0c963ec40cd96858451d1690404d603d36507c1fc9682f2dae59ab38b578687d542708a7fdbf645f77926f78c9ed558f57c3d3aa226c285f798df0c4da16995
   languageName: node
   linkType: hard
