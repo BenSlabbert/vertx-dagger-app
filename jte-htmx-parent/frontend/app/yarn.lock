@@ -584,14 +584,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.53.2":
-  version: 1.53.2
-  resolution: "@playwright/test@npm:1.53.2"
+"@playwright/test@npm:^1.54.0":
+  version: 1.54.0
+  resolution: "@playwright/test@npm:1.54.0"
   dependencies:
-    playwright: "npm:1.53.2"
+    playwright: "npm:1.54.0"
   bin:
     playwright: cli.js
-  checksum: 10/063c4fd82e5022db7f53e85a3b31caa1c302e7d3f874b3acc751ee5fcf8f102068693e393dc5146cdeeb5850f2321366de4ebc5ef12ab81dae52e2c7113a6b49
+  checksum: 10/0c168896a5d47d41c32b7d738e0881a7d9e8586736ef40d752a2faad938042a22f32e3826e0a06c2a275a59b093c11b6182e3998fa2c86c106ef70b7fc499acb
   languageName: node
   linkType: hard
 
@@ -767,9 +767,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.22.3":
-  version: 2.22.3
-  resolution: "@sveltejs/kit@npm:2.22.3"
+"@sveltejs/kit@npm:^2.22.5":
+  version: 2.22.5
+  resolution: "@sveltejs/kit@npm:2.22.5"
   dependencies:
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
     "@types/cookie": "npm:^0.6.0"
@@ -789,7 +789,7 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0 || ^7.0.0-beta.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/3821800a5ce021e30581ea3e726ef6f367426570669a8407aed724121ca0cf48421a149e52aad2376810c701b9c21d0465d1a40cdd00d9bee97ef3022818bd60
+  checksum: 10/62796d07c907d199ea16e7c62cf4c8882e44ce2609d125b092ece25e1ad99d708ce9d2828c48062676863d902b0219b0f7ff4a2d0f6b7a4f4e02be2bbcf09d1e
   languageName: node
   linkType: hard
 
@@ -1185,9 +1185,9 @@ __metadata:
     "@benslabbert/vertx-dagger-ui-lib": "npm:^1.14.0"
     "@eslint/js": "npm:^9.30.1"
     "@picocss/pico": "npm:^2.1.1"
-    "@playwright/test": "npm:^1.53.2"
+    "@playwright/test": "npm:^1.54.0"
     "@sveltejs/adapter-static": "npm:^3.0.8"
-    "@sveltejs/kit": "npm:^2.22.3"
+    "@sveltejs/kit": "npm:^2.22.5"
     "@sveltejs/package": "npm:^2.3.12"
     "@sveltejs/vite-plugin-svelte": "npm:^5.1.0"
     "@types/eslint": "npm:^9.6.1"
@@ -1203,7 +1203,7 @@ __metadata:
     svelte-check: "npm:^4.2.2"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
-    vite: "npm:^7.0.3"
+    vite: "npm:^7.0.4"
     vitest: "npm:^3.2.4"
   languageName: unknown
   linkType: soft
@@ -2992,27 +2992,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.53.2":
-  version: 1.53.2
-  resolution: "playwright-core@npm:1.53.2"
+"playwright-core@npm:1.54.0":
+  version: 1.54.0
+  resolution: "playwright-core@npm:1.54.0"
   bin:
     playwright-core: cli.js
-  checksum: 10/575c37b66aa62e1300d8b42d4b021c9304a35266ea47b6f0c36b429c40674082700b7172ee3641de7451cd2a4c736c42e0e39fd5f6a7ba4c81a6eefd8c104efd
+  checksum: 10/aeadf16b4e43f20a20d1caf0bc8c88e7ea6dc5090b15b96feff0fe7ff70cc10128eede186e64042d9edac9255efef753230b954df3ca0cba8395dd2a9a0fa2b5
   languageName: node
   linkType: hard
 
-"playwright@npm:1.53.2":
-  version: 1.53.2
-  resolution: "playwright@npm:1.53.2"
+"playwright@npm:1.54.0":
+  version: 1.54.0
+  resolution: "playwright@npm:1.54.0"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.53.2"
+    playwright-core: "npm:1.54.0"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/1c860c52a77f32793d7b1b5f5b15da9b809b8a09a82e5c89f79442fe9708ff6314b6ee6d13aa0961a6c9fddc9209f0a109ac524bdf586e0df52b641e96fa759d
+  checksum: 10/404bdc4e316efa10affa1e889fcae5b589f34c2b75c3c91239b16fd750b7a47b728af82e2b00f5c008c10384b6a169ff8480ae9beefeb4c4dc2003d10ef87e1a
   languageName: node
   linkType: hard
 
@@ -3874,9 +3874,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^7.0.3":
-  version: 7.0.3
-  resolution: "vite@npm:7.0.3"
+"vite@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "vite@npm:7.0.4"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.4.6"
@@ -3925,7 +3925,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/75068d79283e46be98395dd3a42eac9db4c92d550a9458049fc1501eb47944ac4bded55ce304d760f84dc91baf223e4d77069ccb222d2eb468644bed571c11a0
+  checksum: 10/e5609e6b67658d0f4bb807d21290c515e3a1c2e085aa9507404f17d836a5b830d0a8bff36f67a0509361044843c9ccb4a0b7033a511dfb5d1dc5ded49aedaa91
   languageName: node
   linkType: hard
 
