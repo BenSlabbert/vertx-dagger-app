@@ -566,6 +566,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/core@npm:^0.15.0":
+  version: 0.15.1
+  resolution: "@eslint/core@npm:0.15.1"
+  dependencies:
+    "@types/json-schema": "npm:^7.0.15"
+  checksum: 10/f00062f0f18fbbfcf080315532340b01e18b729277245899844adb5bec3c9fe2991e1f134c633a15fdfbc4e8b631c2df167d241c49b37e02e937f8c22edfcd3a
+  languageName: node
+  linkType: hard
+
 "@eslint/eslintrc@npm:^3.3.1":
   version: 3.3.1
   resolution: "@eslint/eslintrc@npm:3.3.1"
@@ -583,10 +592,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.30.1, @eslint/js@npm:^9.30.1":
-  version: 9.30.1
-  resolution: "@eslint/js@npm:9.30.1"
-  checksum: 10/f32c8a42b1343b03613b92a4a7c4745d19a93e66ffb8fac18ccd066deaa200b2fc55f476bf0407d7748f663bc947ca78c0518f13f60cd9ed08d0ba8b7bb74370
+"@eslint/js@npm:9.31.0, @eslint/js@npm:^9.31.0":
+  version: 9.31.0
+  resolution: "@eslint/js@npm:9.31.0"
+  checksum: 10/83b45c707d9a6c62b79a9fb69b7ebcb31e8163647c0fdcae5972b4b2fcbbb1e8eac543986e0cca3582f8462a6587f6b6dc48e362b2ce3feb74282606c3d425ea
   languageName: node
   linkType: hard
 
@@ -1219,9 +1228,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.22.5":
-  version: 2.22.5
-  resolution: "@sveltejs/kit@npm:2.22.5"
+"@sveltejs/kit@npm:^2.24.0":
+  version: 2.24.0
+  resolution: "@sveltejs/kit@npm:2.24.0"
   dependencies:
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
     "@types/cookie": "npm:^0.6.0"
@@ -1241,13 +1250,13 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0 || ^7.0.0-beta.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/62796d07c907d199ea16e7c62cf4c8882e44ce2609d125b092ece25e1ad99d708ce9d2828c48062676863d902b0219b0f7ff4a2d0f6b7a4f4e02be2bbcf09d1e
+  checksum: 10/17aad5e7db46158cdb2d411adac57b3974ac91c1209b93d9eb212a74bbfa06659a01065e0fc31156321aaff3f43ca4d6bee3abdc78e0409185c6da988971ef08
   languageName: node
   linkType: hard
 
-"@sveltejs/package@npm:^2.3.12":
-  version: 2.3.12
-  resolution: "@sveltejs/package@npm:2.3.12"
+"@sveltejs/package@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@sveltejs/package@npm:2.4.0"
   dependencies:
     chokidar: "npm:^4.0.3"
     kleur: "npm:^4.1.5"
@@ -1258,7 +1267,7 @@ __metadata:
     svelte: ^3.44.0 || ^4.0.0 || ^5.0.0-next.1
   bin:
     svelte-package: svelte-package.js
-  checksum: 10/8e436ccffd0e01ba8a2cf965478fa9daae35d6b7d23eef3310f7e90513f8059264b7c5543f659ef48de84aa9d3bbc58158bfa04b2fee3eca5ad60780528eaddb
+  checksum: 10/c13baa877fa54d5025f24f9e04773b221f66559c635b7abb8428e0b3c79f73a34db719a90f3ab481e53e902b0b13b87d8c57552f4c5db9d69c148bef733dd4ee
   languageName: node
   linkType: hard
 
@@ -1641,31 +1650,31 @@ __metadata:
   resolution: "app@workspace:."
   dependencies:
     "@benslabbert/vertx-dagger-ui-lib": "npm:^1.14.0"
-    "@eslint/js": "npm:^9.30.1"
+    "@eslint/js": "npm:^9.31.0"
     "@picocss/pico": "npm:^2.1.1"
     "@playwright/test": "npm:^1.54.1"
     "@sveltejs/adapter-node": "npm:^5.2.12"
     "@sveltejs/adapter-static": "npm:^3.0.8"
-    "@sveltejs/kit": "npm:^2.22.5"
-    "@sveltejs/package": "npm:^2.3.12"
+    "@sveltejs/kit": "npm:^2.24.0"
+    "@sveltejs/package": "npm:^2.4.0"
     "@sveltejs/vite-plugin-svelte": "npm:^5.1.0"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.3"
-    eslint: "npm:^9.30.1"
+    eslint: "npm:^9.31.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-svelte: "npm:^3.10.1"
     globals: "npm:^16.3.0"
     prettier: "npm:^3.6.2"
     prettier-plugin-svelte: "npm:^3.3.3"
     publint: "npm:^0.3.12"
-    svelte: "npm:^5.35.6"
+    svelte: "npm:^5.36.1"
     svelte-check: "npm:^4.2.2"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
     vite: "npm:^7.0.4"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
-    zod: "npm:^4.0.2"
+    zod: "npm:^4.0.5"
     zod-form-data: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
@@ -2461,17 +2470,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.30.1":
-  version: 9.30.1
-  resolution: "eslint@npm:9.30.1"
+"eslint@npm:^9.31.0":
+  version: 9.31.0
+  resolution: "eslint@npm:9.31.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.2.0"
     "@eslint-community/regexpp": "npm:^4.12.1"
     "@eslint/config-array": "npm:^0.21.0"
     "@eslint/config-helpers": "npm:^0.3.0"
-    "@eslint/core": "npm:^0.14.0"
+    "@eslint/core": "npm:^0.15.0"
     "@eslint/eslintrc": "npm:^3.3.1"
-    "@eslint/js": "npm:9.30.1"
+    "@eslint/js": "npm:9.31.0"
     "@eslint/plugin-kit": "npm:^0.3.1"
     "@humanfs/node": "npm:^0.16.6"
     "@humanwhocodes/module-importer": "npm:^1.0.1"
@@ -2507,7 +2516,7 @@ __metadata:
       optional: true
   bin:
     eslint: bin/eslint.js
-  checksum: 10/bd3024f730c88a2d099455f5ec5be2d6293eaf1412eb5111427282e1060b7f87891168ccbded10b71fc7182e05151e42511ec29d4e0d4ece5e3151eaf8d54763
+  checksum: 10/badfe1b62ee44dd389838ab27d6ca4f8a3159743a28c3145edd68af15db33fdacb13f096acdc2c559e9c8774d42fe3e1c513d5539d3297bfe8f342e3e4cfee33
   languageName: node
   linkType: hard
 
@@ -4621,9 +4630,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.35.6":
-  version: 5.35.6
-  resolution: "svelte@npm:5.35.6"
+"svelte@npm:^5.36.1":
+  version: 5.36.1
+  resolution: "svelte@npm:5.36.1"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -4639,7 +4648,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/0f9fbe8630bb29f9599faff01a5ce71c431883a56425e552d1f088e9fd5c7bfc0b2d07b305514682ef9337ece1206b642363734bfc823509ebd1eb473f2b575c
+  checksum: 10/8cb0fb497598c055a685c70c26bbca9c051a17b18409395dd0d9f8c91f36c89f2b9ec997ad2749b6b2973a6ab2a75658b53ab49e7841fa3cf54083de9a3b07c3
   languageName: node
   linkType: hard
 
@@ -5166,9 +5175,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "zod@npm:4.0.2"
-  checksum: 10/031d5dc1d47480da32fe69ac3eb2669c3a35f936ff5937136c80e9eaa61e4b4ef0efc04f160afd4872ceec97211a1003d01a8853ad874c83fa8c054bb138a22a
+"zod@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "zod@npm:4.0.5"
+  checksum: 10/f057f46e685e91ea280039ecda026c91facabdcbf869b3bae482ed13d34dce2efe9ee1f513fb1c8c0fde3b32e5904391f5ca015ec50b0924abf83a2b6f9dba65
   languageName: node
   linkType: hard
