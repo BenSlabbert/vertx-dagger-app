@@ -40,6 +40,9 @@
     <vertx-dagger-starter.version>1.146.0</vertx-dagger-starter.version>
     <vertx-dagger-app-api.version>1.129.0</vertx-dagger-app-api.version>
     <tx-manager.version>1.121.0</tx-manager.version>
+
+    <!--plugins-->
+    <flatten-maven-plugin.version>1.7.0</flatten-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
