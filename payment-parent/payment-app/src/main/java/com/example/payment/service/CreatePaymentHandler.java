@@ -5,7 +5,6 @@ import static github.benslabbert.vertxdaggercommons.saga.Headers.SAGA_ID_HEADER;
 import static github.benslabbert.vertxdaggercommons.saga.Headers.SAGA_ROLLBACK_HEADER;
 
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentFailedResponse;
-import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentRequest;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentResponse;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentSuccessResponse;
 import io.vertx.core.Future;
@@ -26,7 +25,7 @@ import org.slf4j.LoggerFactory;
 class CreatePaymentHandler implements Consumer {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentHandler.class);
-  private static final String CMD_ADDRESS = CreatePaymentRequest.CREATE_PAYMENT_TOPIC;
+  private static final String CMD_ADDRESS = "CREATE_PAYMENT_TOPIC";
 
   private final PaymentService paymentService;
   private final Vertx vertx;

@@ -3,8 +3,6 @@ package com.example.catalog.service;
 
 import com.example.catalog.service.saga.CreatePaymentHandler;
 import com.example.catalog.service.saga.CreatePurchaseOrderHandler;
-import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePaymentRequest;
-import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderRequest;
 import github.benslabbert.vertxdaggercommons.saga.SagaBuilder;
 import github.benslabbert.vertxdaggercommons.saga.SagaExecutor;
 import javax.inject.Inject;
@@ -30,10 +28,10 @@ class SagaService {
   public SagaExecutor createPurchaseOrderSaga() {
     return sagaBuilder
         .withStage()
-        .withCommandAddress(CreatePurchaseOrderRequest.CREATE_PURCHASE_ORDER_TOPIC)
+        .withCommandAddress("CREATE_PURCHASE_ORDER_TOPIC")
         .withHandler(createPurchaseOrderHandler)
         .withStage()
-        .withCommandAddress(CreatePaymentRequest.CREATE_PAYMENT_TOPIC)
+        .withCommandAddress("CREATE_PAYMENT_TOPIC")
         .withHandler(createPaymentHandler)
         .build();
   }
