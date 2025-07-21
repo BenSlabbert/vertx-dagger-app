@@ -1202,13 +1202,13 @@ __metadata:
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.3"
     eslint: "npm:^9.31.0"
-    eslint-config-prettier: "npm:^10.1.7"
+    eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-svelte: "npm:^3.11.0"
     globals: "npm:^16.3.0"
     prettier: "npm:^3.6.2"
     prettier-plugin-svelte: "npm:^3.4.0"
     publint: "npm:^0.3.12"
-    svelte: "npm:^5.36.8"
+    svelte: "npm:^5.36.13"
     svelte-check: "npm:^4.3.0"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.8.3"
@@ -1738,14 +1738,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^10.1.7":
-  version: 10.1.7
-  resolution: "eslint-config-prettier@npm:10.1.7"
+"eslint-config-prettier@npm:^10.1.8":
+  version: 10.1.8
+  resolution: "eslint-config-prettier@npm:10.1.8"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
     eslint-config-prettier: bin/cli.js
-  checksum: 10/32ae65689aa0f4da8f77235a14399e0f90f9206de93b32069c03f65d575fca341fcfd1a9cc0581a75bd6adf31646a8b2d23fbe43c1b8c750a90fae1dcfd70411
+  checksum: 10/03f8e6ea1a6a9b8f9eeaf7c8c52a96499ec4b275b9ded33331a6cc738ed1d56de734097dbd0091f136f0e84bc197388bd8ec22a52a4658105883f8c8b7d8921a
   languageName: node
   linkType: hard
 
@@ -3620,9 +3620,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.36.8":
-  version: 5.36.8
-  resolution: "svelte@npm:5.36.8"
+"svelte@npm:^5.36.13":
+  version: 5.36.13
+  resolution: "svelte@npm:5.36.13"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3638,7 +3638,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/06d7ea13fe63b6f246d60bf4587cc1afb857534bf7da4a94fa9761fa4265edb5b1eaca02d1b963e9d31bf6d2cb51569d639bc3d49961ca915408230c2cfdd88f
+  checksum: 10/3ff4d886d262c23f86bc5934f789dd111a37e98e459ae1bbd4e8aa825cd6510a2aaf1edea05bd8eecea18a47adb889bccf3ff0840430fc78822fe309b1b54c3f
   languageName: node
   linkType: hard
 
