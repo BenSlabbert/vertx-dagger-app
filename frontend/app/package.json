@@ -15,16 +15,16 @@
 	},
 	"devDependencies": {
 		"@benslabbert/vertx-dagger-ui-lib": "^1.14.0",
-		"@eslint/js": "^9.31.0",
+		"@eslint/js": "^9.32.0",
 		"@playwright/test": "^1.54.1",
 		"@sveltejs/adapter-node": "^5.2.12",
 		"@sveltejs/adapter-static": "^3.0.8",
-		"@sveltejs/kit": "^2.26.0",
+		"@sveltejs/kit": "^2.26.1",
 		"@sveltejs/package": "^2.4.0",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@types/eslint": "^9.6.1",
 		"@yarnpkg/plugin-interactive-tools": "^4.0.3",
-		"eslint": "^9.31.0",
+		"eslint": "^9.32.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^3.11.0",
 		"globals": "^16.3.0",
@@ -42,7 +42,7 @@
 	"dependencies": {
 		"@picocss/pico": "^2.1.1",
 		"winston": "^3.17.0",
-		"zod": "^4.0.8",
+		"zod": "^4.0.10",
 		"zod-form-data": "^3.0.0"
 	},
 	"packageManager": "yarn@4.6.0"
