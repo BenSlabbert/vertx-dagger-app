@@ -42,7 +42,7 @@
 	"dependencies": {
 		"@picocss/pico": "^2.1.1",
 		"winston": "^3.17.0",
-		"zod": "^4.0.13",
+		"zod": "^4.0.14",
 		"zod-form-data": "^3.0.0"
 	},
 	"packageManager": "yarn@4.6.0"
