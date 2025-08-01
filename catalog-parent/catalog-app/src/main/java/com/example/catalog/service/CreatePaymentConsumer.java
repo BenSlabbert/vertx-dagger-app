@@ -4,7 +4,6 @@ package com.example.catalog.service;
 import static github.benslabbert.vertxdaggercommons.saga.Headers.SAGA_ID_HEADER;
 import static github.benslabbert.vertxdaggercommons.saga.Headers.SAGA_ROLLBACK_HEADER;
 
-import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderRequest;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderResponse;
 import github.benslabbert.vertxdaggerapp.api.catalog.saga.CreatePurchaseOrderSuccessResponse;
 import io.vertx.core.Future;
@@ -22,7 +21,7 @@ import org.slf4j.LoggerFactory;
 class CreatePaymentConsumer implements Consumer {
 
   private static final Logger log = LoggerFactory.getLogger(CreatePaymentConsumer.class);
-  private static final String CMD_ADDRESS = CreatePurchaseOrderRequest.CREATE_PURCHASE_ORDER_TOPIC;
+  private static final String CMD_ADDRESS = "CREATE_PURCHASE_ORDER_TOPIC";
 
   private final Vertx vertx;
 
