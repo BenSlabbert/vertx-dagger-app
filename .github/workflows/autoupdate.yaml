@@ -11,7 +11,7 @@ jobs:
       GH_TOKEN: "${{ secrets.GH_TOKEN }}"
     steps:
     - name: "Checkout repository"
-      uses: "actions/checkout@v4"
+      uses: "actions/checkout@v5"
     - name: "List open pull requests"
       id: "list-prs"
       run: "gh pr list --state open --json number -q '.[] | [.number] | @tsv' > prs.tsv\n"
