@@ -17,10 +17,10 @@
 	"devDependencies": {
 		"@benslabbert/vertx-dagger-ui-lib": "^1.14.0",
 		"@eslint/js": "^9.33.0",
-		"@playwright/test": "^1.54.2",
+		"@playwright/test": "^1.55.0",
 		"@sveltejs/adapter-static": "^3.0.9",
-		"@sveltejs/kit": "^2.33.1",
-		"@sveltejs/package": "^2.4.1",
+		"@sveltejs/kit": "^2.35.0",
+		"@sveltejs/package": "^2.5.0",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@types/eslint": "^9.6.1",
 		"@yarnpkg/plugin-interactive-tools": "^4.0.3",
