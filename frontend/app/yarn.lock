@@ -1091,33 +1091,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte-inspector@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@sveltejs/vite-plugin-svelte-inspector@npm:4.0.1"
+"@sveltejs/vite-plugin-svelte-inspector@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "@sveltejs/vite-plugin-svelte-inspector@npm:5.0.1"
   dependencies:
-    debug: "npm:^4.3.7"
+    debug: "npm:^4.4.1"
   peerDependencies:
-    "@sveltejs/vite-plugin-svelte": ^5.0.0
+    "@sveltejs/vite-plugin-svelte": ^6.0.0-next.0
     svelte: ^5.0.0
-    vite: ^6.0.0
-  checksum: 10/af851fbeeaa8fd014ab09bd2ff2960593c200ed4673180e44aff21253b5324218853b3782fff7c90755d3f95e8fb073ce2ea533d4acce3d71febf42451024e2d
+    vite: ^6.3.0 || ^7.0.0
+  checksum: 10/08b5b59e3c4052713860add542f565e8c651f00c3ba4b39b31f9ee7d69461fcda086a0bb1fa3abb0d00fb4cae6728c32f5053860b0aa886b486cb6badc8c973d
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "@sveltejs/vite-plugin-svelte@npm:5.1.1"
+"@sveltejs/vite-plugin-svelte@npm:^6.1.4":
+  version: 6.1.4
+  resolution: "@sveltejs/vite-plugin-svelte@npm:6.1.4"
   dependencies:
-    "@sveltejs/vite-plugin-svelte-inspector": "npm:^4.0.1"
+    "@sveltejs/vite-plugin-svelte-inspector": "npm:^5.0.0"
     debug: "npm:^4.4.1"
     deepmerge: "npm:^4.3.1"
-    kleur: "npm:^4.1.5"
     magic-string: "npm:^0.30.17"
-    vitefu: "npm:^1.0.6"
+    vitefu: "npm:^1.1.1"
   peerDependencies:
     svelte: ^5.0.0
-    vite: ^6.0.0
-  checksum: 10/81ad848edc69fb55f30cedcf4d928eccc1149bfbb661bad3810884aa56a6d0fb81b01ecc7eb8c5ecc3541594d8fba365f61978abd24970e1d06f0c513a64bda3
+    vite: ^6.3.0 || ^7.0.0
+  checksum: 10/15c1f686b9be80a2f54ca9932cf7a7e3553c022ee465fbd1afdaed41851776bec4d18db9fe3ef014810e3c0e40e134a190e2970aa320ebdead109d919ab715c6
   languageName: node
   linkType: hard
 
@@ -1405,7 +1404,7 @@ __metadata:
     "@sveltejs/adapter-static": "npm:^3.0.9"
     "@sveltejs/kit": "npm:^2.37.1"
     "@sveltejs/package": "npm:^2.5.0"
-    "@sveltejs/vite-plugin-svelte": "npm:^5.1.1"
+    "@sveltejs/vite-plugin-svelte": "npm:^6.1.4"
     "@types/eslint": "npm:^9.6.1"
     "@yarnpkg/plugin-interactive-tools": "npm:^4.0.3"
     eslint: "npm:^9.35.0"
@@ -4244,7 +4243,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitefu@npm:^1.0.6":
+"vitefu@npm:^1.1.1":
   version: 1.1.1
   resolution: "vitefu@npm:1.1.1"
   peerDependencies:
