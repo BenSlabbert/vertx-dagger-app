@@ -1043,9 +1043,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.38.0":
-  version: 2.38.0
-  resolution: "@sveltejs/kit@npm:2.38.0"
+"@sveltejs/kit@npm:^2.38.1":
+  version: 2.38.1
+  resolution: "@sveltejs/kit@npm:2.38.1"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
@@ -1070,7 +1070,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/b7b49f7e11f48d8fd96d6b2a3b02e1595e87649c60ae0f603d80fbf7e0e4f78a5eb5180e0bbe9c60f4d050bcfb3d5d5a3afd27b0560948d1e3081dbb0142b0c7
+  checksum: 10/f4367ae009b27d95db30bf36ae9895d9d63968317b534a63d29a61dc708084b1bd98ad4436208bd1fb651bef236f04dbbec508040964075c2d0c46f80589b4d2
   languageName: node
   linkType: hard
 
@@ -1403,7 +1403,7 @@ __metadata:
     "@playwright/test": "npm:^1.55.0"
     "@sveltejs/adapter-node": "npm:^5.2.14"
     "@sveltejs/adapter-static": "npm:^3.0.9"
-    "@sveltejs/kit": "npm:^2.38.0"
+    "@sveltejs/kit": "npm:^2.38.1"
     "@sveltejs/package": "npm:^2.5.0"
     "@sveltejs/vite-plugin-svelte": "npm:^5.1.1"
     "@types/eslint": "npm:^9.6.1"
@@ -1415,14 +1415,14 @@ __metadata:
     prettier: "npm:^3.6.2"
     prettier-plugin-svelte: "npm:^3.4.0"
     publint: "npm:^0.3.12"
-    svelte: "npm:^5.38.8"
+    svelte: "npm:^5.38.10"
     svelte-check: "npm:^4.3.1"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.9.2"
     vite: "npm:^7.1.5"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.17.0"
-    zod: "npm:^4.1.5"
+    zod: "npm:^4.1.7"
     zod-form-data: "npm:^3.0.1"
   languageName: unknown
   linkType: soft
@@ -3928,9 +3928,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.38.8":
-  version: 5.38.8
-  resolution: "svelte@npm:5.38.8"
+"svelte@npm:^5.38.10":
+  version: 5.38.10
+  resolution: "svelte@npm:5.38.10"
   dependencies:
     "@jridgewell/remapping": "npm:^2.3.4"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3946,7 +3946,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/f88f23b2bf601e7741af63dd953058233fdc9114ca44479a3069348edbac9513e732c0228dc651a3289b0360f88ecf907039893c681ca4613ffc704a698995f9
+  checksum: 10/2be80bad3c4f2d066637d6fd31115ac842cd99449f3b5c12666b83492a186915af3ca38a6895eecb83c6c765742e3b67186f4ab38d5c7f89e108b59bbe484326
   languageName: node
   linkType: hard
 
@@ -4496,9 +4496,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^4.1.5":
-  version: 4.1.5
-  resolution: "zod@npm:4.1.5"
-  checksum: 10/2ac6bef2d6647de6e673b6fa07ee392b71eb6fd6ccb2be8899d8d853084dd8b3992d4d2cf267eba6f8495a35803e2ec254509194fd0849ed0a822dea7ae4a765
+"zod@npm:^4.1.7":
+  version: 4.1.7
+  resolution: "zod@npm:4.1.7"
+  checksum: 10/8d8bfd45814d5aa565baeddfcbbad198f69815ce139e3c333247e5336996b84e694d218b2dc38871137e6194517066d7df5436b32c8cf4ed3519803902f11fa9
   languageName: node
   linkType: hard
