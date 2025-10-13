@@ -1055,9 +1055,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.46.4":
-  version: 2.46.4
-  resolution: "@sveltejs/kit@npm:2.46.4"
+"@sveltejs/kit@npm:^2.46.5":
+  version: 2.46.5
+  resolution: "@sveltejs/kit@npm:2.46.5"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
@@ -1082,7 +1082,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/fa67f6e21dc1c6385dc08b0a09a18b2b4a751f0fb3e97daddcee3a2e766b30c8777e342b27ef07886d3bef063faaed0cdcb94642a7643a5b6d12ab68ca031896
+  checksum: 10/97b6ae008701b168359fcb26304969bfbd8ea93fc90d0c1a87754e209daa068936db7c0c191d4990bb403144fb0a441d4dbdb6fbfc615bdd3f0d69ae1cba4cd6
   languageName: node
   linkType: hard
 
@@ -1415,7 +1415,7 @@ __metadata:
     "@playwright/test": "npm:^1.56.0"
     "@sveltejs/adapter-node": "npm:^5.2.14"
     "@sveltejs/adapter-static": "npm:^3.0.10"
-    "@sveltejs/kit": "npm:^2.46.4"
+    "@sveltejs/kit": "npm:^2.46.5"
     "@sveltejs/package": "npm:^2.5.4"
     "@sveltejs/vite-plugin-svelte": "npm:^5.1.1"
     "@types/eslint": "npm:^9.6.1"
