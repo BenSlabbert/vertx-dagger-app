@@ -1427,11 +1427,11 @@ __metadata:
     prettier: "npm:^3.6.2"
     prettier-plugin-svelte: "npm:^3.4.0"
     publint: "npm:^0.3.14"
-    svelte: "npm:^5.39.11"
+    svelte: "npm:^5.39.13"
     svelte-check: "npm:^4.3.3"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.9.3"
-    vite: "npm:^7.1.9"
+    vite: "npm:^7.1.10"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.18.3"
     zod: "npm:^4.1.12"
@@ -3913,9 +3913,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.39.11":
-  version: 5.39.11
-  resolution: "svelte@npm:5.39.11"
+"svelte@npm:^5.39.13":
+  version: 5.39.13
+  resolution: "svelte@npm:5.39.13"
   dependencies:
     "@jridgewell/remapping": "npm:^2.3.4"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3931,7 +3931,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/65742a0420dd05d396d0a27aa2b4b8f525a771c9405d9bb1cb9c1e6988f17c219056d8979296410d53b422e3a611abffa03552ad1e70d5cfc31e6407856f52af
+  checksum: 10/b4bc2f57299831eba151293afaccc64800c179b8a3e6eaf02dc735af642d31209c8da83a08b6a3e13d5ee03e3dd346841fb3cf7e0c3e372ac012e07668fb2cb9
   languageName: node
   linkType: hard
 
@@ -4181,9 +4181,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^7.1.9":
-  version: 7.1.9
-  resolution: "vite@npm:7.1.9"
+"vite@npm:^7.1.10":
+  version: 7.1.10
+  resolution: "vite@npm:7.1.10"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.5.0"
@@ -4232,7 +4232,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/361b8dfea414233927761fdb63ec38c2cc4630007efc33a7a02ef9a5c033552c41b2e95f7fcc9acf427da5a3cf194d62dc5f0853bc31e940a13528d0fb180132
+  checksum: 10/34482c3698a6e10986036caa91c0114fc59f5a4bdda571d19b863a44a8b231dda09b0e3c63eb459e3b27ce453e695bce476f504b160451706563ce97e841ac5a
   languageName: node
   linkType: hard
 
