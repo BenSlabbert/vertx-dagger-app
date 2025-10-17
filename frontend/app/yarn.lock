@@ -766,14 +766,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.56.0":
-  version: 1.56.0
-  resolution: "@playwright/test@npm:1.56.0"
+"@playwright/test@npm:^1.56.1":
+  version: 1.56.1
+  resolution: "@playwright/test@npm:1.56.1"
   dependencies:
-    playwright: "npm:1.56.0"
+    playwright: "npm:1.56.1"
   bin:
     playwright: cli.js
-  checksum: 10/9ccfe7962f0e7b14b2a60d2db89fc6a21165957512b87fe8b1cf496683680468aecbbd0e41238c6d02c880ab10c5263bea2483b8d0f964e830d652504c31ece8
+  checksum: 10/9933fa9f8eb9e775e792421b99c984c310b92092e65de57508ae1951a2589d87bbb5f1c4114bfdf7f69c15c0a3acb3f31259e143fa597aa28e97f4b223e37637
   languageName: node
   linkType: hard
 
@@ -1055,9 +1055,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.47.0":
-  version: 2.47.0
-  resolution: "@sveltejs/kit@npm:2.47.0"
+"@sveltejs/kit@npm:^2.47.1":
+  version: 2.47.1
+  resolution: "@sveltejs/kit@npm:2.47.1"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
@@ -1082,7 +1082,7 @@ __metadata:
       optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10/e0e3186618260252446b69aaed520aadb115f370729df801895b086d55f60f856c9276e65304f260ee8d3a6f65ed81993eb2103925e20ea0e739ed0b2ed7e688
+  checksum: 10/1b95e513fe6fcf839a31339dade30e64e273e42de8b8d8327c81b562a37b48760d480c2c966dad34ac9bd636fd77070e2fb3056a4ce87d461e5ab7b9470504c9
   languageName: node
   linkType: hard
 
@@ -1412,10 +1412,10 @@ __metadata:
     "@benslabbert/vertx-dagger-ui-lib": "npm:^1.14.0"
     "@eslint/js": "npm:^9.37.0"
     "@picocss/pico": "npm:^2.1.1"
-    "@playwright/test": "npm:^1.56.0"
+    "@playwright/test": "npm:^1.56.1"
     "@sveltejs/adapter-node": "npm:^5.2.14"
     "@sveltejs/adapter-static": "npm:^3.0.10"
-    "@sveltejs/kit": "npm:^2.47.0"
+    "@sveltejs/kit": "npm:^2.47.1"
     "@sveltejs/package": "npm:^2.5.4"
     "@sveltejs/vite-plugin-svelte": "npm:^5.1.1"
     "@types/eslint": "npm:^9.6.1"
@@ -1427,7 +1427,7 @@ __metadata:
     prettier: "npm:^3.6.2"
     prettier-plugin-svelte: "npm:^3.4.0"
     publint: "npm:^0.3.14"
-    svelte: "npm:^5.40.1"
+    svelte: "npm:^5.40.2"
     svelte-check: "npm:^4.3.3"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.9.3"
@@ -3267,27 +3267,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.56.0":
-  version: 1.56.0
-  resolution: "playwright-core@npm:1.56.0"
+"playwright-core@npm:1.56.1":
+  version: 1.56.1
+  resolution: "playwright-core@npm:1.56.1"
   bin:
     playwright-core: cli.js
-  checksum: 10/4859f49952f3cf1fc1cab01e4edd1df971eca0f4d49fb4287c65a234c47ec6fa51bfebd3946adca5af70a47faa8e97c7ef568c67100d7bec7c4a23639299b7f8
+  checksum: 10/df785eb3b3a8392b10dcde5f768e09b7fe459a7b06ed81180da69e048f2154b761f86d79572c2b62037a1f18a44e4ace72f5b6547f4f473b4ab13ab1d94007d2
   languageName: node
   linkType: hard
 
-"playwright@npm:1.56.0":
-  version: 1.56.0
-  resolution: "playwright@npm:1.56.0"
+"playwright@npm:1.56.1":
+  version: 1.56.1
+  resolution: "playwright@npm:1.56.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.56.0"
+    playwright-core: "npm:1.56.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/1b6bc464f281007e912a726bbf13b88c90afaef8ccf07690b2148a9a3ab832eac21259b93c47a8538838f74c1f2fd8bc591c49f0e081746de7282adff86786d4
+  checksum: 10/f1743f93b26f1d497257771428d93f3c9ed2d75b00d935f0cd1556ff2dc61d47f2df8b381d752fbd2c47082b685f0ffe4cc4b7ba440d7b4ba3a08572aec58fba
   languageName: node
   linkType: hard
 
@@ -3913,9 +3913,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.40.1":
-  version: 5.40.1
-  resolution: "svelte@npm:5.40.1"
+"svelte@npm:^5.40.2":
+  version: 5.40.2
+  resolution: "svelte@npm:5.40.2"
   dependencies:
     "@jridgewell/remapping": "npm:^2.3.4"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3931,7 +3931,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/ce1529593fa809d0a0749319e36eb3b9892cbfb2b4f17be68615e42dd09953aab0dc8f6d5b224c4afd7ad16e81afe1ad5fc9e6feea367fcb14dff7b49c4fb745
+  checksum: 10/76c7b6ae5f5cc51711a2fbf13b20aebbf51f6e5d6efd53721048d15c85a7c956e697c996e015d926aa87512fae7edaba2ce4ffe71fd0790a6dcf8f59b43fc92a
   languageName: node
   linkType: hard
 
