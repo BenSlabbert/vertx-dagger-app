@@ -28,6 +28,7 @@
     <!--config-->
     <quickBuild>false</quickBuild>
     <docker.skip>${quickBuild}</docker.skip>
+    <docker.exec>docker</docker.exec>
     <shade.skip>${quickBuild}</shade.skip>
     <copyJarDeps.skip>${quickBuild}</copyJarDeps.skip>
     <skipJooqGeneration>false</skipJooqGeneration>

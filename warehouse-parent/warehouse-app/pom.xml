@@ -204,7 +204,7 @@
             <phase>package</phase>
             <configuration>
               <skip>${docker.skip}</skip>
-              <executable>docker</executable>
+              <executable>${docker.exec}</executable>
               <workingDirectory>${project.basedir}</workingDirectory>
               <arguments>
                 <argument>buildx</argument>
@@ -237,7 +237,7 @@
                 <phase>validate</phase>
                 <configuration>
                   <skip>${docker.skip}</skip>
-                  <executable>docker</executable>
+                  <executable>${docker.exec}</executable>
                   <workingDirectory>${project.basedir}</workingDirectory>
                   <arguments>
                     <argument>push</argument>
