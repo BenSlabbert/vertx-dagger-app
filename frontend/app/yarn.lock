@@ -1431,7 +1431,7 @@ __metadata:
     svelte-check: "npm:^4.3.3"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.9.3"
-    vite: "npm:^7.1.12"
+    vite: "npm:^7.2.0"
     vitest: "npm:^2.1.9"
     winston: "npm:^3.18.3"
     zod: "npm:^4.1.12"
@@ -4180,9 +4180,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^7.1.12":
-  version: 7.1.12
-  resolution: "vite@npm:7.1.12"
+"vite@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "vite@npm:7.2.0"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.5.0"
@@ -4231,7 +4231,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/827a18e7365871532af74b2ec65cccecff1effccbf6fb5c32fa1f8d7bcea26f4403d6988db3fa39e9c09c8091b04654b6cfbcc6da5c5dc449eed2b07afc22d81
+  checksum: 10/d2ad129f87502d98b4cf46d3352b4fab6b1a7674327dda75241c3f20d93a66765b41565edd6e1a62bbd61610678d6536f1e2080af496e7d79ef62d037339af26
   languageName: node
   linkType: hard
 
