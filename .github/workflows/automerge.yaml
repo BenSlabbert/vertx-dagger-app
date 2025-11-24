@@ -15,7 +15,7 @@ jobs:
       GH_TOKEN: "${{ secrets.GH_TOKEN }}"
     steps:
     - name: "Checkout repository"
-      uses: "actions/checkout@v5"
+      uses: "actions/checkout@v6"
     - name: "Auto-merge Dependabot PRs"
       run: "PR_LABEL=$(gh pr view ${{ github.event.pull_request.number }} --json labels\
         \ --jq '.labels[].name' | grep -i 'automerge')\nif [ \"$PR_LABEL\" == \"automerge\"\
