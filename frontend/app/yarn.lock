@@ -1427,13 +1427,13 @@ __metadata:
     prettier: "npm:^3.7.4"
     prettier-plugin-svelte: "npm:^3.4.0"
     publint: "npm:^0.3.15"
-    svelte: "npm:^5.45.5"
+    svelte: "npm:^5.45.6"
     svelte-check: "npm:^4.3.4"
     tslib: "npm:^2.8.1"
     typescript: "npm:^5.9.3"
-    vite: "npm:^7.2.6"
+    vite: "npm:^7.2.7"
     vitest: "npm:^2.1.9"
-    winston: "npm:^3.18.3"
+    winston: "npm:^3.19.0"
     zod: "npm:^4.1.13"
     zod-form-data: "npm:^3.0.1"
   languageName: unknown
@@ -3935,9 +3935,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.45.5":
-  version: 5.45.5
-  resolution: "svelte@npm:5.45.5"
+"svelte@npm:^5.45.6":
+  version: 5.45.6
+  resolution: "svelte@npm:5.45.6"
   dependencies:
     "@jridgewell/remapping": "npm:^2.3.4"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -3954,7 +3954,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/871c6098d0ca680a37546b1e90943f32cb0a5cccd3a0a90e6945ffff0bbd10b1cb3120dee83fbf5e5fad0de96e8cb1cdf8595614c475d3b5063b936316a9d3b4
+  checksum: 10/2d878c058d191835b855089a88e04fb4a7db39b02ccd0b08e1314c9907f2b6faa91d8ef80748cf3b3309eac8b3958efbc1bb79822b75cfabadd6334f3d27c97f
   languageName: node
   linkType: hard
 
@@ -4204,9 +4204,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^7.2.6":
-  version: 7.2.6
-  resolution: "vite@npm:7.2.6"
+"vite@npm:^7.2.7":
+  version: 7.2.7
+  resolution: "vite@npm:7.2.7"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.5.0"
@@ -4255,7 +4255,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10/c640ed9c91957749287af2f483f5b5024a56718ba7cf32b0e2c398772fdf7fdb9fd5f97665c41712d4e9422c14009e283d0b69ac1b64b4f91474625bebe324de
+  checksum: 10/ec7c588db66c8a3e50a24fc26422c6ef27c2e08a0ceccd200162e45be90d7d12c0a06d8ccc8c88139a657d51be5e10ddc83df9807daf6a1362c2e5ecdaf2a07e
   languageName: node
   linkType: hard
 
@@ -4375,9 +4375,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.18.3":
-  version: 3.18.3
-  resolution: "winston@npm:3.18.3"
+"winston@npm:^3.19.0":
+  version: 3.19.0
+  resolution: "winston@npm:3.19.0"
   dependencies:
     "@colors/colors": "npm:^1.6.0"
     "@dabh/diagnostics": "npm:^2.0.8"
@@ -4390,7 +4390,7 @@ __metadata:
     stack-trace: "npm:0.0.x"
     triple-beam: "npm:^1.3.0"
     winston-transport: "npm:^4.9.0"
-  checksum: 10/0d94690e051c625ff5a2731b3057ddaa709445cc791c707c56f99ad7b5bf3eebe634656f707c01c9409dc21dbc118903464f80e29c0cb438b1cc2739c0135e51
+  checksum: 10/8279e221d8017da601a725939d31d65de71504d8328051312a85b1b4d7ddc68634329f8d611fb1ff91cb797643409635f3e97ef5b4a650c587639e080af76b7b
   languageName: node
   linkType: hard
 
