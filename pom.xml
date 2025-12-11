@@ -5,7 +5,7 @@
   <parent>
     <groupId>github.benslabbert</groupId>
     <artifactId>vertx-dagger-bom</artifactId>
-    <version>3.59.0</version>
+    <version>3.138.0</version>
   </parent>
 
   <groupId>com.example.parent</groupId>
@@ -36,11 +36,11 @@
 
     <!--deps-->
     <vertx-json-writer.version>1.142.0</vertx-json-writer.version>
-    <vertx-dagger-commons.version>1.175.0</vertx-dagger-commons.version>
-    <vertx-dagger-codegen.version>2.48.0</vertx-dagger-codegen.version>
-    <vertx-dagger-starter.version>1.154.0</vertx-dagger-starter.version>
-    <vertx-dagger-app-api.version>1.153.0</vertx-dagger-app-api.version>
-    <tx-manager.version>1.142.0</tx-manager.version>
+    <vertx-dagger-commons.version>1.223.0</vertx-dagger-commons.version>
+    <vertx-dagger-codegen.version>2.131.0</vertx-dagger-codegen.version>
+    <vertx-dagger-starter.version>1.268.0</vertx-dagger-starter.version>
+    <vertx-dagger-app-api.version>1.236.0</vertx-dagger-app-api.version>
+    <tx-manager.version>1.219.0</tx-manager.version>
 
     <!--plugins-->
     <flatten-maven-plugin.version>1.7.0</flatten-maven-plugin.version>
